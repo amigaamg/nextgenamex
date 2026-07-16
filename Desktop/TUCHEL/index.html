@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Europe Sponsor Jobs — International Visa Sponsorship Placement</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Uploadcare Widget -->
+    <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js"
+            }
+        }
+    </script>
+
+    <style>
+        /* ============================================================
+           DESIGN TOKENS — Europe Sponsor Jobs: blue / white / maroon
+           ============================================================ */
+        :root {
+            --blue-950: #06132b;
+            --blue-900: #0A1F44;
+            --blue-800: #0E2C5C;
+            --blue-700: #133C79;
+            --blue-600: #1B4F99;
+            --blue-500: #2E68B8;
+            --maroon-700: #6E0F1F;
+            --maroon-600: #8A1226;
+            --maroon-500: #A8172F;
+            --maroon-400: #C42D45;
+            --maroon-50: #FBEAEC;
+            --emerald-600: #0F9D58;
+            --emerald-500: #1ab46a;
+            --emerald-50: #E8F7EE;
+            --rose-600: #e11d48;
+            --rose-50: #fce7eb;
+            --amber-600: #D97706;
+            --amber-50: #FEF3E2;
+            --slate-900: #0F172A;
+            --slate-800: #1E293B;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-500: #64748B;
+            --slate-400: #94A3B8;
+            --slate-300: #CBD5E1;
+            --slate-200: #E2E8F0;
+            --slate-100: #F1F5F9;
+            --slate-50: #F8FAFC;
+            --bg: #F6F8FB;
+            --white: #FFFFFF;
+            --radius: 12px;
+            --radius-lg: 18px;
+            --shadow-sm: 0 1px 3px rgba(10, 31, 68, .06), 0 1px 2px rgba(10, 31, 68, .04);
+            --shadow-md: 0 6px 20px rgba(10, 31, 68, .08);
+            --shadow-lg: 0 20px 50px rgba(10, 31, 68, .14);
+            --shadow-xl: 0 30px 70px rgba(10, 31, 68, .20);
+            --font-head: 'Sora', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --transition: .25s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--slate-900);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4, .font-head { font-family: var(--font-head); letter-spacing: -0.01em; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+        img, svg { display: block; }
+        ::selection { background: var(--maroon-400); color: #fff; }
+        :focus-visible { outline: 2px solid var(--maroon-500); outline-offset: 2px; }
+
+        .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .grid { display: grid; gap: 24px; }
+        .card { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius); box-shadow: var(--shadow-sm); transition: var(--transition); }
+        .card:hover { box-shadow: var(--shadow-md); }
+        .card-glow { border-color: var(--maroon-400); box-shadow: 0 0 0 1px rgba(168, 23, 47, .15), var(--shadow-md); }
+        .pad { padding: 28px 30px; }
+        .pad-sm { padding: 18px 20px; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; border: 1.5px solid transparent; transition: var(--transition); white-space: nowrap; line-height: 1.2; }
+        .btn-primary { background: var(--blue-800); color: #fff; border-color: var(--blue-800); }
+        .btn-primary:hover { background: var(--blue-700); border-color: var(--blue-700); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-maroon { background: var(--maroon-600); color: #fff; border-color: var(--maroon-600); }
+        .btn-maroon:hover { background: var(--maroon-500); border-color: var(--maroon-500); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-outline { background: transparent; border-color: var(--slate-300); color: var(--slate-700); }
+        .btn-outline:hover { border-color: var(--blue-600); background: var(--slate-50); color: var(--blue-800); }
+        .btn-outline-light { background: transparent; border-color: rgba(255, 255, 255, .35); color: #fff; }
+        .btn-outline-light:hover { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .6); }
+        .btn-danger { background: var(--rose-50); color: var(--rose-600); border-color: #f5c6c6; }
+        .btn-danger:hover { background: #fbdada; border-color: var(--rose-600); }
+        .btn-success { background: var(--emerald-50); color: var(--emerald-600); border-color: #b8e6cc; }
+        .btn-success:hover { background: #d4f0e3; border-color: var(--emerald-600); }
+        .btn-google { background: #fff; color: var(--slate-800); border-color: var(--slate-300); }
+        .btn-google:hover { background: var(--slate-50); border-color: var(--slate-400); }
+        .btn-sm { padding: 8px 16px; font-size: 12.5px; }
+        .btn-block { width: 100%; }
+        .btn[disabled] { opacity: .5; cursor: not-allowed; pointer-events: none; }
+
+        label { display: block; font-size: 12.5px; font-weight: 600; color: var(--slate-700); margin-bottom: 5px; }
+        .req { color: var(--maroon-500); }
+
+        input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="date"], input[type="number"], select, textarea {
+            width: 100%; padding: 11px 14px; border: 1.5px solid var(--slate-200); border-radius: 8px; font-size: 14px; font-family: inherit; background: #fff; color: var(--slate-900); transition: var(--transition);
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--blue-500); outline: none; box-shadow: 0 0 0 3px rgba(46, 104, 184, .12); }
+        textarea { resize: vertical; min-height: 90px; }
+
+        .field { margin-bottom: 18px; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .hint { font-size: 12px; color: var(--slate-500); margin-top: 5px; }
+        .error-text { font-size: 12px; color: var(--maroon-500); margin-top: 4px; font-weight: 600; }
+        .divider-or { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--slate-400); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+        .divider-or::before, .divider-or::after { content: ""; flex: 1; height: 1px; background: var(--slate-200); }
+
+        .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; padding: 4px 12px; border-radius: 100px; white-space: nowrap; text-transform: uppercase; letter-spacing: .02em; }
+        .badge-blue { background: var(--blue-800); color: #fff; }
+        .badge-maroon { background: var(--maroon-600); color: #fff; }
+        .badge-green { background: var(--emerald-50); color: var(--emerald-600); }
+        .badge-amber { background: var(--amber-50); color: var(--amber-600); }
+        .badge-rose { background: var(--rose-50); color: var(--rose-600); }
+        .badge-slate { background: var(--slate-100); color: var(--slate-700); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--slate-500); padding: 12px 16px; border-bottom: 2px solid var(--slate-200); font-weight: 700; }
+        td { padding: 14px 16px; border-bottom: 1px solid var(--slate-100); vertical-align: middle; }
+        tr:hover td { background: var(--slate-50); }
+
+        #navbar { position: sticky; top: 0; z-index: 500; background: rgba(255, 255, 255, .94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--slate-200); }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 800; font-size: 19px; color: var(--blue-900); }
+        .brand-mark { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--blue-800), var(--maroon-600)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 17px; box-shadow: var(--shadow-sm); flex-shrink: 0; }
+        .nav-links { display: flex; align-items: center; gap: 4px; }
+        .nav-link { padding: 9px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: var(--slate-600); transition: var(--transition); }
+        .nav-link:hover { background: var(--slate-100); color: var(--blue-900); }
+        .nav-link.active { color: var(--blue-800); background: var(--slate-100); }
+        .nav-cta { display: flex; align-items: center; gap: 10px; }
+        .nav-mobile-toggle { display: none; background: none; border: none; font-size: 22px; color: var(--blue-800); padding: 8px; }
+
+        @media (max-width: 900px) {
+            .nav-links { position: fixed; top: 72px; left: 0; right: 0; background: #fff; flex-direction: column; align-items: stretch; padding: 12px 20px 20px; border-bottom: 1px solid var(--slate-200); box-shadow: var(--shadow-md); display: none; gap: 2px; }
+            .nav-links.open { display: flex; }
+            .nav-mobile-toggle { display: block; }
+            .field-row { grid-template-columns: 1fr; }
+        }
+
+        .hero { position: relative; background: radial-gradient(1200px 600px at 10% -20%, #16407a 0%, transparent 65%), linear-gradient(155deg, var(--blue-950), var(--blue-800) 55%, var(--maroon-700)); color: #fff; overflow: hidden; }
+        .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 900px 500px at 70% 20%, black, transparent 72%); pointer-events: none; }
+        .hero-inner { position: relative; padding: 80px 24px 68px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: center; }
+        .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(196, 45, 69, .18); border: 1px solid rgba(196, 45, 69, .4); color: #F3B9C2; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 100px; margin-bottom: 20px; letter-spacing: .02em; text-transform: uppercase; }
+        .hero h1 { font-size: 44px; line-height: 1.1; margin: 0 0 16px; font-weight: 800; }
+        .hero h1 em { font-style: normal; color: #F3B9C2; }
+        .hero .lead { font-size: 16.5px; color: #CBD9EB; max-width: 560px; margin: 0 0 28px; line-height: 1.7; }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+        .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+        .hero-stat b { display: block; font-family: var(--font-head); font-size: 26px; color: #fff; line-height: 1.2; }
+        .hero-stat span { font-size: 12.5px; color: #9FB4CE; font-weight: 500; }
+
+        .stamp-panel { position: relative; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14); border-radius: var(--radius-lg); padding: 28px 26px; backdrop-filter: blur(8px); }
+        .stamp-panel h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: #9FB4CE; margin: 0 0 18px; }
+        .stamp-row { display: flex; align-items: center; gap: 0; margin-bottom: 2px; }
+        .stamp { width: 40px; height: 40px; border-radius: 50%; border: 2px dashed rgba(196, 45, 69, .6); display: flex; align-items: center; justify-content: center; color: #F3B9C2; font-size: 13px; flex: none; background: rgba(196, 45, 69, .1); font-weight: 700; }
+        .stamp.done { border-style: solid; background: var(--maroon-500); color: #fff; }
+        .stamp-line { flex: 1; height: 2px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .2) 0 6px, transparent 6px 12px); }
+
+        .section { padding: 72px 24px; }
+        .section-sm { padding: 48px 24px; }
+        .section-head { text-align: center; max-width: 660px; margin: 0 auto 44px; }
+        .section-head .eyebrow { background: var(--slate-100); border-color: var(--slate-200); color: var(--blue-700); }
+        .section-head h2 { font-size: 32px; margin: 0 0 10px; color: var(--blue-900); }
+        .section-head p { color: var(--slate-500); font-size: 15.5px; margin: 0; }
+        .section-alt { background: var(--white); border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200); }
+
+        .country-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .country-card { border-radius: var(--radius-lg); overflow: hidden; background: var(--white); border: 1px solid var(--slate-200); box-shadow: var(--shadow-sm); transition: var(--transition); }
+        .country-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--maroon-400); }
+        .country-flagbar { height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; color: #fff; font-family: var(--font-head); font-weight: 700; font-size: 18px; position: relative; background: linear-gradient(135deg, var(--blue-800), var(--blue-600)); }
+        .country-flagbar .flag-img { width: 36px; height: 24px; border-radius: 3px; object-fit: cover; box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+        .country-body { padding: 22px 22px 24px; }
+        .country-body ul { margin: 0 0 16px; padding: 0; list-style: none; }
+        .country-body li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--slate-700); margin-bottom: 7px; }
+        .country-body li i { color: var(--emerald-600); margin-top: 3px; font-size: 12px; flex-shrink: 0; }
+        .country-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--slate-100); }
+        .country-foot .count { font-size: 12.5px; color: var(--slate-500); font-weight: 600; }
+
+        .job-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .job-card { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 22px; transition: var(--transition); }
+        .job-card:hover { border-color: var(--blue-500); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .job-cat-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--slate-100); color: var(--blue-800); display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 14px; }
+        .job-title { font-family: var(--font-head); font-weight: 700; font-size: 16px; color: var(--blue-900); margin: 0 0 6px; }
+        .job-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .job-meta .badge { font-size: 10.5px; padding: 3px 10px; }
+        .job-desc { font-size: 13px; color: var(--slate-500); margin: 0 0 16px; line-height: 1.6; }
+        .job-foot { display: flex; justify-content: space-between; align-items: center; }
+        .job-salary { font-weight: 700; color: var(--blue-800); font-size: 13.5px; }
+
+        .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .chip { padding: 7px 18px; border-radius: 100px; border: 1.5px solid var(--slate-200); background: #fff; font-size: 12.5px; font-weight: 600; color: var(--slate-700); transition: var(--transition); }
+        .chip:hover { border-color: var(--blue-500); color: var(--blue-800); }
+        .chip.active { background: var(--blue-800); border-color: var(--blue-800); color: #fff; }
+
+        .fee-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+        .fee-card { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 22px 20px; text-align: center; transition: var(--transition); }
+        .fee-card:hover { border-color: var(--maroon-400); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .fee-card .fee-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--emerald-50); color: var(--emerald-600); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 20px; }
+        .fee-card .fee-amount { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--blue-900); }
+        .fee-card .fee-label { font-size: 12px; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+        .fee-card .fee-desc { font-size: 12.5px; color: var(--slate-600); margin-top: 6px; }
+        .fee-card.paid-by-employer { border-color: var(--emerald-600); background: var(--emerald-50); }
+        .fee-card.paid-by-employer .fee-icon { background: var(--white); }
+
+        .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .why-item { text-align: center; padding: 24px 16px; background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); transition: var(--transition); }
+        .why-item:hover { border-color: var(--maroon-400); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+        .why-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, var(--blue-800), var(--maroon-600)); color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 22px; }
+        .why-item h4 { font-size: 15px; margin: 0 0 6px; color: var(--blue-900); }
+        .why-item p { font-size: 13px; color: var(--slate-500); margin: 0; line-height: 1.5; }
+
+        .process-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+        .process-step { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 20px 18px; transition: var(--transition); text-align: center; }
+        .process-step:hover { border-color: var(--maroon-400); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .process-num { font-family: var(--font-head); font-size: 11px; font-weight: 800; color: var(--maroon-500); letter-spacing: .06em; margin-bottom: 8px; text-transform: uppercase; }
+        .process-step h4 { font-size: 14px; margin: 0 0 6px; color: var(--blue-900); }
+        .process-step p { font-size: 12px; color: var(--slate-500); margin: 0; line-height: 1.5; }
+
+        .trust-banner { background: var(--emerald-50); border: 1px solid #bfe6cc; border-radius: var(--radius); padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start; }
+        .trust-banner i { color: var(--emerald-600); font-size: 22px; margin-top: 2px; flex-shrink: 0; }
+        .trust-banner b { color: #0b6b3c; }
+        .trust-banner p { margin: 2px 0 0; font-size: 13.5px; color: #0b6b3c; }
+
+        .form-shell { display: grid; grid-template-columns: 1.5fr .9fr; gap: 28px; align-items: start; }
+        .upload-box { border: 2px dashed var(--slate-300); border-radius: var(--radius); padding: 24px; text-align: center; background: var(--slate-50); cursor: pointer; transition: var(--transition); }
+        .upload-box:hover { border-color: var(--blue-500); background: #EEF3F9; }
+        .upload-box i { font-size: 24px; color: var(--blue-700); margin-bottom: 8px; }
+        .upload-box .u-title { font-size: 13.5px; font-weight: 600; color: var(--blue-800); }
+        .upload-box .u-sub { font-size: 11.5px; color: var(--slate-500); margin-top: 3px; }
+        .upload-box.filled { border-style: solid; border-color: var(--emerald-600); background: var(--emerald-50); }
+        .upload-box.filled i { color: var(--emerald-600); }
+
+        .tip-card ul { list-style: none; padding: 0; margin: 0; }
+        .tip-card li { display: flex; gap: 10px; font-size: 13px; color: var(--slate-700); margin-bottom: 10px; align-items: flex-start; }
+        .tip-card li i { color: var(--maroon-500); margin-top: 3px; font-size: 12px; flex-shrink: 0; }
+
+        .checkbox-row { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--slate-600); font-weight: 400 !important; }
+        .checkbox-row input { margin-top: 3px; flex-shrink: 0; }
+
+        .timeline { position: relative; padding-left: 4px; }
+        .tl-item { position: relative; padding: 0 0 24px 34px; border-left: 2.5px solid var(--slate-200); }
+        .tl-item:last-child { border-color: transparent; padding-bottom: 2px; }
+        .tl-dot { position: absolute; left: -13px; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--slate-200); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--slate-200); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; }
+        .tl-item.done .tl-dot { background: var(--emerald-600); box-shadow: 0 0 0 2px var(--emerald-600); }
+        .tl-item.current .tl-dot { background: var(--maroon-500); box-shadow: 0 0 0 4px rgba(168, 23, 47, .25); }
+        .tl-item.rejected .tl-dot { background: var(--rose-600); box-shadow: 0 0 0 2px var(--rose-600); }
+        .tl-title { font-weight: 700; font-size: 14px; color: var(--blue-900); }
+        .tl-date { font-size: 11.5px; color: var(--slate-500); margin-top: 2px; }
+        .tl-note { font-size: 13px; color: var(--slate-600); margin-top: 6px; background: var(--slate-100); padding: 8px 12px; border-radius: 7px; }
+
+        .dash-shell { display: grid; grid-template-columns: 230px 1fr; gap: 0; min-height: calc(100vh - 72px); }
+        .dash-side { background: var(--blue-950); color: #fff; padding: 24px 16px; }
+        .dash-side .side-title { font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: #7C93B3; padding: 8px 12px 12px; font-weight: 700; }
+        .side-link { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #C9D6E8; margin-bottom: 2px; transition: var(--transition); }
+        .side-link i { width: 18px; text-align: center; font-size: 15px; }
+        .side-link:hover { background: rgba(255, 255, 255, .06); color: #fff; }
+        .side-link.active { background: var(--maroon-600); color: #fff; }
+
+        .dash-main { padding: 28px 32px; background: var(--bg); }
+        .dash-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
+        .dash-topbar h2 { margin: 0; font-size: 22px; color: var(--blue-900); }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+        .stat-card { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 16px 18px; transition: var(--transition); }
+        .stat-card:hover { border-color: var(--blue-500); box-shadow: var(--shadow-sm); }
+        .stat-card .n { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: var(--blue-900); line-height: 1.2; }
+        .stat-card .l { font-size: 11.5px; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+
+        .search-input { position: relative; flex: 1; min-width: 220px; max-width: 340px; }
+        .search-input i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--slate-400); }
+        .search-input input { padding-left: 38px; border-radius: 8px; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 31, 68, .55); backdrop-filter: blur(4px); display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; z-index: 1000; overflow: auto; }
+        .modal { background: #fff; border-radius: var(--radius-lg); max-width: 780px; width: 100%; box-shadow: var(--shadow-xl); margin: auto; }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 20px 26px; border-bottom: 1px solid var(--slate-200); }
+        .modal-head h3 { margin: 0; font-size: 17px; color: var(--blue-900); }
+        .modal-close { background: var(--slate-100); border: none; width: 34px; height: 34px; border-radius: 8px; color: var(--slate-600); font-size: 16px; transition: var(--transition); }
+        .modal-close:hover { background: var(--slate-200); }
+        .modal-body { padding: 24px 26px; max-height: 70vh; overflow: auto; }
+        .modal-foot { padding: 16px 26px; border-top: 1px solid var(--slate-200); display: flex; justify-content: flex-end; gap: 10px; }
+
+        .doc-row { display: flex; align-items: center; justify-content: space-between; background: var(--slate-50); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .doc-row .di { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; color: var(--blue-800); }
+        .doc-row .di i { color: var(--blue-700); }
+
+        .toast-wrap { position: fixed; top: 84px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; max-width: 380px; }
+        .toast { background: var(--blue-900); color: #fff; padding: 14px 20px; border-radius: 10px; font-size: 13.5px; font-weight: 600; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; animation: slideIn .25s ease; }
+        .toast i { color: #F3B9C2; font-size: 18px; }
+        .toast.err { background: var(--rose-600); }
+        .toast.err i { color: #fff; }
+        .toast.ok { background: var(--emerald-600); }
+        .toast.ok i { color: #fff; }
+        @keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .auth-shell { max-width: 440px; margin: 56px auto; padding: 0 20px; }
+        .auth-shell .card { padding: 34px 32px; }
+        .auth-icon { width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(135deg, var(--blue-800), var(--maroon-600)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+        .tab-row { display: flex; gap: 6px; background: var(--slate-100); padding: 4px; border-radius: 10px; margin-bottom: 22px; }
+        .tab-btn { flex: 1; text-align: center; padding: 9px 12px; border-radius: 7px; font-size: 13px; font-weight: 700; color: var(--slate-500); background: transparent; border: none; transition: var(--transition); }
+        .tab-btn.active { background: #fff; color: var(--blue-900); box-shadow: var(--shadow-sm); }
+        .tab-btn:hover:not(.active) { color: var(--slate-700); }
+
+        footer { background: var(--blue-950); color: #B9C8DC; padding: 56px 24px 28px; border-top: 1px solid rgba(255, 255, 255, .05); }
+        .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 36px; }
+        .foot-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 800; font-size: 19px; color: #fff; margin-bottom: 12px; }
+        footer h5 { color: #fff; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 14px; font-weight: 700; }
+        footer a { display: block; font-size: 13px; color: #B9C8DC; margin-bottom: 10px; transition: var(--transition); }
+        footer a:hover { color: #F3B9C2; }
+        .foot-bottom { border-top: 1px solid rgba(255, 255, 255, .06); padding-top: 20px; font-size: 12px; color: #7C93B3; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+        .legal-body h3 { color: var(--blue-900); font-size: 17px; margin-top: 28px; }
+        .legal-body p, .legal-body li { color: var(--slate-700); font-size: 14px; line-height: 1.8; }
+        .legal-body { max-width: 800px; margin: 0 auto; }
+        .legal-body ul { padding-left: 20px; }
+
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--slate-500); }
+        .empty-state i { font-size: 32px; color: var(--slate-300); margin-bottom: 12px; }
+
+        @media (max-width: 1024px) {
+            .country-grid, .job-grid, .why-grid, .fee-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-grid { grid-template-columns: repeat(3, 1fr); }
+            .stat-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 820px) {
+            .hero-inner { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
+            .hero h1 { font-size: 32px; }
+            .form-shell { grid-template-columns: 1fr; }
+            .dash-shell { grid-template-columns: 1fr; }
+            .dash-side { display: flex; overflow: auto; gap: 4px; padding: 12px 16px; }
+            .dash-side .side-title { display: none; }
+            .side-link { padding: 8px 14px; font-size: 12.5px; white-space: nowrap; }
+            .foot-grid { grid-template-columns: 1fr 1fr; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .country-grid, .job-grid, .why-grid, .fee-grid, .process-grid, .stat-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 26px; }
+            .field-row { grid-template-columns: 1fr; }
+            .foot-grid { grid-template-columns: 1fr; }
+            .dash-main { padding: 20px 16px; }
+            .modal { margin: 10px; }
+            .modal-body { padding: 16px; }
+            .modal-head { padding: 16px; }
+            .modal-foot { padding: 14px 16px; flex-wrap: wrap; }
+            .search-input { max-width: 100%; }
+        }
+
+        .text-center { text-align: center; }
+        .mt-8 { margin-top: 8px; }
+        .mt-16 { margin-top: 16px; }
+        .mb-16 { margin-bottom: 16px; }
+        .gap-8 { gap: 8px; }
+        .flex-wrap { flex-wrap: wrap; }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="navbar"></div>
+    <div id="app"></div>
+    <div id="modal-root"></div>
+    <div class="toast-wrap" id="toast-wrap"></div>
+
+    <script type="module">
+        // =============================================================
+        // IMPORTS
+        // =============================================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+        import {
+            getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
+            onAuthStateChanged, sendPasswordResetEmail, updateProfile,
+            GoogleAuthProvider, signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+        import {
+            getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc,
+            query, where, orderBy, onSnapshot, Timestamp, serverTimestamp, arrayUnion, arrayRemove
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        // =============================================================
+        // FIREBASE CONFIG (public client identifiers — safe to expose;
+        // access is controlled by Firestore/Storage security rules,
+        // NOT by keeping this object secret)
+        // =============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAKCZJTAq_NeLmo5toNjYVHFqZFSQxNzE",
+            authDomain: "tuchel-98f49.firebaseapp.com",
+            projectId: "tuchel-98f49",
+            storageBucket: "tuchel-98f49.firebasestorage.app",
+            messagingSenderId: "150337843790",
+            appId: "1:150337843790:web:ae748271b1ffae423f491f",
+            measurementId: "G-NZMF0WDKVK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        const UPLOADCARE_PUBLIC_KEY = "a86c7a60e542a9af46c4";
+
+        // =============================================================
+        // GLOBALS
+        // =============================================================
+        let currentUser = null;
+        let currentUserData = null;
+        let allJobs = [];
+        let allApps = [];
+        let allFees = [];
+        let unsubscribeApps = null;
+        let unsubscribeJobs = null;
+        let unsubscribeFees = null;
+
+        // =============================================================
+        // CONSTANTS
+        // =============================================================
+        const COUNTRIES = [
+            "Germany", "United Kingdom", "Netherlands", "Sweden",
+            "Ireland", "Luxembourg", "France", "Poland"
+        ];
+        const COUNTRY_META = {
+            "Germany": { flag: "de", dial: "+49", currency: "EUR" },
+            "United Kingdom": { flag: "gb", dial: "+44", currency: "GBP" },
+            "Netherlands": { flag: "nl", dial: "+31", currency: "EUR" },
+            "Sweden": { flag: "se", dial: "+46", currency: "SEK" },
+            "Ireland": { flag: "ie", dial: "+353", currency: "EUR" },
+            "Luxembourg": { flag: "lu", dial: "+352", currency: "EUR" },
+            "France": { flag: "fr", dial: "+33", currency: "EUR" },
+            "Poland": { flag: "pl", dial: "+48", currency: "PLN" }
+        };
+        const CATEGORIES = [
+            "Construction & Manual Labor", "Hospitality & Domestic Services", "Healthcare",
+            "Skilled Trades", "Logistics & Drivers", "Engineering & Technical",
+            "IT & Professional Services", "Agriculture & Farm Work",
+            "Education & Teaching", "Finance & Accounting"
+        ];
+        const CATEGORY_ICON = {
+            "Construction & Manual Labor": "fa-solid fa-helmet-safety",
+            "Hospitality & Domestic Services": "fa-solid fa-concierge-bell",
+            "Healthcare": "fa-solid fa-notes-medical",
+            "Skilled Trades": "fa-solid fa-screwdriver-wrench",
+            "Logistics & Drivers": "fa-solid fa-truck-fast",
+            "Engineering & Technical": "fa-solid fa-drafting-compass",
+            "IT & Professional Services": "fa-solid fa-laptop-code",
+            "Agriculture & Farm Work": "fa-solid fa-wheat-awn",
+            "Education & Teaching": "fa-solid fa-chalkboard-user",
+            "Finance & Accounting": "fa-solid fa-calculator"
+        };
+        const STATUS_STEPS = [
+            "Application Received", "Document Verification", "Screening Interview",
+            "Employer Matching", "Job Offer Extended", "Contract Signing",
+            "Visa Sponsorship Processing", "Medical & Police Clearance",
+            "Travel & Deployment", "Placed — Active Employment"
+        ];
+        const TERMINAL_ALT = ["On Hold", "Rejected", "Withdrawn by Applicant"];
+        const ALL_STATUSES = [...STATUS_STEPS, ...TERMINAL_ALT];
+        const FLAG_BASE = "https://flagcdn.com/";
+
+        // =============================================================
+        // HELPERS
+        // =============================================================
+        function flagUrl(code) { return `${FLAG_BASE}${code}.svg`; }
+        function esc(s) { if (!s) return ""; return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+        function fmtDate(ts) {
+            if (!ts) return "—";
+            if (ts.toDate) ts = ts.toDate();
+            const d = new Date(ts);
+            return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) + " · " + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        }
+        function genAppId() {
+            const yr = new Date().getFullYear();
+            const rand = Math.floor(100000 + Math.random() * 899999);
+            return `ESJ-${yr}-${rand}`;
+        }
+        function toast(msg, type) {
+            const wrap = document.getElementById('toast-wrap');
+            const el = document.createElement('div');
+            el.className = 'toast' + (type ? ' ' + type : '');
+            const icon = type === 'err' ? 'fa-circle-exclamation' : type === 'ok' ? 'fa-circle-check' : 'fa-bell';
+            el.innerHTML = `<i class="fa-solid ${icon}"></i><span>${esc(msg)}</span>`;
+            wrap.appendChild(el);
+            setTimeout(() => { el.style.opacity = '0'; el.style.transition = '.3s'; setTimeout(() => el.remove(), 300); }, 3600);
+        }
+        function statusTone(status) {
+            if (status === "Placed — Active Employment") return "green";
+            if (status === "Rejected") return "rose";
+            if (status === "On Hold" || status === "Withdrawn by Applicant") return "amber";
+            return "maroon";
+        }
+        function statusBadge(status) {
+            const tone = statusTone(status);
+            const cls = tone === 'green' ? 'badge-green' : tone === 'rose' ? 'badge-rose' : tone === 'amber' ? 'badge-amber' : 'badge-maroon';
+            const icon = tone === 'green' ? 'fa-circle-check' : tone === 'rose' ? 'fa-circle-xmark' : tone === 'amber' ? 'fa-triangle-exclamation' : 'fa-circle';
+            return `<span class="badge ${cls}"><i class="fa-solid ${icon}" style="font-size:7px"></i> ${esc(status)}</span>`;
+        }
+        function simulateEmail(to, subject, body) {
+            console.log(`📧 [SIMULATED] To: ${to}\nSubject: ${subject}\nBody: ${body}`);
+            toast(`📧 Email notification sent to ${to}`, 'ok');
+        }
+
+        // =============================================================
+        // FIRESTORE DATA ACCESS
+        // =============================================================
+        async function loadJobs() {
+            const snapshot = await getDocs(collection(db, "jobs"));
+            allJobs = [];
+            snapshot.forEach(d => allJobs.push({ id: d.id, ...d.data() }));
+            return allJobs;
+        }
+        async function addJob(jobData) {
+            const ref = doc(collection(db, "jobs"));
+            await setDoc(ref, { ...jobData, createdAt: serverTimestamp() });
+            await loadJobs();
+            return ref.id;
+        }
+        async function deleteJob(jobId) { await deleteDoc(doc(db, "jobs", jobId)); await loadJobs(); }
+
+        async function loadApps() {
+            const snapshot = await getDocs(collection(db, "applications"));
+            allApps = [];
+            snapshot.forEach(d => allApps.push({ id: d.id, ...d.data() }));
+            return allApps;
+        }
+        async function getApp(appId) {
+            const docSnap = await getDoc(doc(db, "applications", appId));
+            if (docSnap.exists()) return { id: docSnap.id, ...docSnap.data() };
+            return null;
+        }
+        async function createApp(appData) {
+            const appId = genAppId();
+            const ref = doc(db, "applications", appId);
+            const newApp = {
+                ...appData, id: appId,
+                timeline: [{ status: "Application Received", date: new Date().toISOString(), note: "Application submitted." }],
+                internalNotes: [], archived: false,
+                createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+                status: "Application Received",
+                documentsVerified: { cv: false, passport: false }
+            };
+            await setDoc(ref, newApp);
+            await loadApps();
+            return newApp;
+        }
+        async function updateApp(appId, patch) {
+            const ref = doc(db, "applications", appId);
+            await updateDoc(ref, { ...patch, updatedAt: serverTimestamp() });
+            await loadApps();
+            return await getApp(appId);
+        }
+
+        async function loadFees() {
+            const snapshot = await getDocs(collection(db, "fees"));
+            allFees = [];
+            snapshot.forEach(d => allFees.push({ id: d.id, ...d.data() }));
+            return allFees;
+        }
+        async function addFee(feeData) {
+            const ref = doc(collection(db, "fees"));
+            await setDoc(ref, { ...feeData, createdAt: serverTimestamp() });
+            await loadFees();
+            return ref.id;
+        }
+        async function deleteFee(feeId) { await deleteDoc(doc(db, "fees", feeId)); await loadFees(); }
+
+        // --- Admins are looked up by Firestore doc, NEVER by a
+        // hardcoded credential check in client code. See the
+        // ADMIN BOOTSTRAP note at the bottom of this file for how
+        // to create the real admin account. ---
+        async function getAdminUser(uid) {
+            const docSnap = await getDoc(doc(db, "admins", uid));
+            if (docSnap.exists()) return { id: docSnap.id, ...docSnap.data() };
+            return null;
+        }
+
+        // =============================================================
+        // AUTH STATE
+        // =============================================================
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            if (user) {
+                const adminData = await getAdminUser(user.uid);
+                if (adminData) {
+                    currentUserData = { ...adminData, type: 'admin' };
+                    await loadJobs(); await loadApps(); await loadFees();
+                    subscribeToRealtime();
+                } else {
+                    const appData = await getApp(user.uid);
+                    if (appData) {
+                        currentUserData = { ...appData, type: 'applicant' };
+                        await loadJobs(); await loadFees();
+                        subscribeToRealtime();
+                    } else if (ROUTE.view === 'complete-profile') {
+                        // mid-signup via Google — let the profile-completion view handle it
+                    } else {
+                        currentUserData = { type: 'needs-profile' };
+                        navigate("complete-profile");
+                        return;
+                    }
+                }
+            } else {
+                currentUserData = null;
+                if (unsubscribeApps) { unsubscribeApps(); unsubscribeApps = null; }
+                if (unsubscribeJobs) { unsubscribeJobs(); unsubscribeJobs = null; }
+                if (unsubscribeFees) { unsubscribeFees(); unsubscribeFees = null; }
+            }
+            renderNavbar();
+            renderCurrentView();
+        });
+
+        function subscribeToRealtime() {
+            if (unsubscribeApps) unsubscribeApps();
+            unsubscribeApps = onSnapshot(collection(db, "applications"), (snapshot) => {
+                allApps = [];
+                snapshot.forEach(d => allApps.push({ id: d.id, ...d.data() }));
+                if (ROUTE.view === "admin-dashboard" || ROUTE.view === "applicant-dashboard") renderCurrentView();
+            });
+            if (unsubscribeJobs) unsubscribeJobs();
+            unsubscribeJobs = onSnapshot(collection(db, "jobs"), (snapshot) => {
+                allJobs = [];
+                snapshot.forEach(d => allJobs.push({ id: d.id, ...d.data() }));
+                if (ROUTE.view === "jobs" || ROUTE.view === "admin-jobs" || ROUTE.view === "home") renderCurrentView();
+            });
+            if (unsubscribeFees) unsubscribeFees();
+            unsubscribeFees = onSnapshot(collection(db, "fees"), (snapshot) => {
+                allFees = [];
+                snapshot.forEach(d => allFees.push({ id: d.id, ...d.data() }));
+                if (ROUTE.view === "fees" || ROUTE.view === "admin-fees") renderCurrentView();
+            });
+        }
+
+        // =============================================================
+        // ROUTER
+        // =============================================================
+        let ROUTE = { view: "home", params: {} };
+        function navigate(view, params = {}) {
+            ROUTE = { view, params };
+            window.scrollTo({ top: 0, behavior: "instant" });
+            renderCurrentView();
+        }
+
+        // =============================================================
+        // NAVBAR
+        // =============================================================
+        function renderNavbar() {
+            const nav = document.getElementById('navbar');
+            const links = [
+                { v: "home", label: "Home" },
+                { v: "jobs", label: "Browse Jobs" },
+                { v: "status", label: "Check Status" },
+                { v: "fees", label: "Fees" },
+                { v: "faq", label: "FAQ" }
+            ];
+            let rightHtml = "";
+            if (currentUser && currentUserData) {
+                if (currentUserData.type === 'applicant') {
+                    rightHtml = `<a class="nav-link" data-nav="applicant-dashboard"><i class="fa-solid fa-user"></i> My Portal</a>
+                <button class="btn btn-outline btn-sm" data-action="logout">Log out</button>`;
+                } else if (currentUserData.type === 'admin') {
+                    rightHtml = `<a class="nav-link" data-nav="admin-dashboard"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+                <button class="btn btn-outline btn-sm" data-action="logout">Log out</button>`;
+                }
+            } else {
+                rightHtml = `<a class="btn btn-outline btn-sm" data-nav="login">Log In</a>
+              <a class="btn btn-maroon btn-sm" data-nav="apply"><i class="fa-solid fa-paper-plane"></i> Apply Now</a>`;
+            }
+            const html = `
+            <div class="wrap nav-inner">
+              <a class="brand" data-nav="home">
+                <span class="brand-mark"><i class="fa-solid fa-earth-europe"></i></span>
+                Europe Sponsor Jobs
+              </a>
+              <div class="nav-links" id="navLinks">
+                ${links.map(l => `<a class="nav-link ${ROUTE.view === l.v ? 'active' : ''}" data-nav="${l.v}">${l.label}</a>`).join("")}
+                <div class="nav-cta" style="margin-top:6px">${rightHtml}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="nav-cta" style="display:flex">${rightHtml}</div>
+                <button class="nav-mobile-toggle" id="mobileToggle"><i class="fa-solid fa-bars"></i></button>
+              </div>
+            </div>`;
+            nav.innerHTML = html;
+            nav.querySelectorAll('[data-nav]').forEach(el => el.addEventListener('click', () => navigate(el.getAttribute('data-nav'))));
+            nav.querySelectorAll('[data-action="logout"]').forEach(el => el.addEventListener('click', async () => {
+                await signOut(auth); currentUserData = null; toast("You have been logged out.", "ok"); navigate("home");
+            }));
+            const mt = document.getElementById('mobileToggle');
+            if (mt) mt.addEventListener('click', () => document.getElementById('navLinks').classList.toggle('open'));
+            const cta = document.querySelectorAll('.nav-cta')[1];
+            if (window.innerWidth <= 900 && cta) cta.style.display = 'none';
+        }
+
+        // =============================================================
+        // RENDER ENGINE
+        // =============================================================
+        function renderCurrentView() {
+            const appEl = document.getElementById('app');
+            let html = "";
+            switch (ROUTE.view) {
+                case "home": html = viewHome(); break;
+                case "jobs": html = viewJobs(); break;
+                case "apply": html = viewApply(); break;
+                case "confirmation": html = viewConfirmation(); break;
+                case "status": html = viewStatus(); break;
+                case "fees": html = viewFees(); break;
+                case "login": html = viewLogin(); break;
+                case "complete-profile": html = viewCompleteProfile(); break;
+                case "applicant-dashboard": html = viewApplicantDashboard(); break;
+                case "admin-dashboard": html = viewAdminDashboard(); break;
+                case "admin-jobs": html = viewAdminJobs(); break;
+                case "admin-fees": html = viewAdminFees(); break;
+                case "faq": html = viewFaq(); break;
+                case "terms": html = viewTerms(); break;
+                case "privacy": html = viewPrivacy(); break;
+                case "about-demo": html = viewAboutDemo(); break;
+                default: html = viewHome();
+            }
+            appEl.innerHTML = html + renderFooter();
+            wireGlobalNav();
+            if (ROUTE.view === "apply") wireApplyForm();
+            if (ROUTE.view === "status") wireStatusForm();
+            if (ROUTE.view === "login") wireLogin();
+            if (ROUTE.view === "complete-profile") wireCompleteProfile();
+            if (ROUTE.view === "admin-dashboard") wireAdminDashboard();
+            if (ROUTE.view === "admin-jobs") wireAdminJobs();
+            if (ROUTE.view === "admin-fees") wireAdminFees();
+            if (ROUTE.view === "jobs") wireJobsFilters();
+        }
+
+        function wireGlobalNav() {
+            document.querySelectorAll('[data-nav]').forEach(el => {
+                el.addEventListener('click', () => {
+                    const view = el.getAttribute('data-nav');
+                    const jobid = el.getAttribute('data-jobid');
+                    const country = el.getAttribute('data-country');
+                    if (view === 'jobs' && country) { jobFilter = { country, category: "All" }; }
+                    navigate(view, jobid ? { jobid } : {});
+                });
+            });
+            document.querySelectorAll('[data-action="logout"]').forEach(el => el.addEventListener('click', async () => {
+                await signOut(auth); currentUserData = null; toast("You have been logged out.", "ok"); navigate("home");
+            }));
+        }
+
+        function renderFooter() {
+            return `
+          <footer>
+            <div class="wrap">
+              <div class="foot-grid">
+                <div>
+                  <div class="foot-brand"><span class="brand-mark"><i class="fa-solid fa-earth-europe"></i></span> Europe Sponsor Jobs</div>
+                  <p style="font-size:13.5px;line-height:1.7;max-width:320px">Connecting global talent with verified European employers offering visa sponsorship — ethically, transparently, and free of charge to job seekers.</p>
+                </div>
+                <div>
+                  <h5>Quick Links</h5>
+                  <a data-nav="home">Home</a><a data-nav="jobs">Browse Jobs</a><a data-nav="status">Check Status</a><a data-nav="fees">Fees</a><a data-nav="faq">FAQ</a>
+                </div>
+                <div>
+                  <h5>Contact</h5>
+                  <a><i class="fa-solid fa-phone"></i> &nbsp;+254 103 387012</a>
+                  <a><i class="fa-solid fa-envelope"></i> &nbsp;support@europesponsorjobs.com</a>
+                  <a><i class="fa-solid fa-location-dot"></i> &nbsp;Nairobi &amp; Luxembourg City</a>
+                </div>
+                <div>
+                  <h5>Legal</h5>
+                  <a data-nav="terms">Terms &amp; Conditions</a><a data-nav="privacy">Privacy Policy</a><a data-nav="about-demo">About This Platform</a>
+                </div>
+              </div>
+              <div class="foot-bottom">
+                <span>© 2026 Europe Sponsor Jobs. All rights reserved.</span>
+                <span>Ethical International Recruitment &amp; Visa Sponsorship</span>
+              </div>
+            </div>
+          </footer>`;
+        }
+
+        // =============================================================
+        // VIEWS
+        // =============================================================
+        function viewHome() {
+            const jobs = allJobs;
+            return `
+          <section class="hero">
+            <div class="wrap hero-inner">
+              <div>
+                <div class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Licensed International Recruitment Agency</div>
+                <h1>Connecting Global Talent with <em>European Visa Sponsorship</em> Opportunities</h1>
+                <p class="lead">Europe Sponsor Jobs connects skilled and manual workers with verified European employers offering genuine visa sponsorship — from construction and hospitality to healthcare and engineering. Ethical, transparent, end-to-end support.</p>
+                <div class="hero-actions">
+                  <a class="btn btn-maroon" data-nav="apply"><i class="fa-solid fa-paper-plane"></i> Start Your Application</a>
+                  <a class="btn btn-outline-light" data-nav="jobs"><i class="fa-solid fa-briefcase"></i> Browse ${jobs.length} Roles</a>
+                </div>
+                <div class="hero-stats">
+                  <div class="hero-stat"><b>${COUNTRIES.length}</b><span>Destination Countries</span></div>
+                  <div class="hero-stat"><b>${jobs.length}+</b><span>Active Job Listings</span></div>
+                  <div class="hero-stat"><b>0%</b><span>Placement Fee to Workers</span></div>
+                </div>
+              </div>
+              <div class="stamp-panel">
+                <h4>Your Journey, Tracked End-to-End</h4>
+                ${["Application Received","Document Verification","Visa Processing","Deployment"].map((s,i) => `
+                  <div class="stamp-row">
+                    <div class="stamp ${i<2?'done':''}">${i<2?'<i class="fa-solid fa-check"></i>':i+1}</div>
+                    ${i<3?'<div class="stamp-line"></div>':''}
+                  </div>`).join("")}
+                <div style="display:flex;justify-content:space-between;margin-top:2px">
+                  ${["Received","Verified","Visa","Deployed"].map(l => `<span style="font-size:11px;color:#9FB4CE;width:38px;text-align:center">${l}</span>`).join("")}
+                </div>
+                <p style="color:#B9C8DC;font-size:13px;margin-top:20px;line-height:1.6">Every applicant gets a real-time status page and a personal portal — no guessing where your file stands.</p>
+                <a class="btn btn-outline-light btn-block" data-nav="status" style="margin-top:8px"><i class="fa-solid fa-magnifying-glass"></i> Check an Application</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="wrap">
+              <div class="section-head">
+                <div class="eyebrow"><i class="fa-solid fa-earth-europe"></i> Destinations</div>
+                <h2>Where We Place Talent</h2>
+                <p>Every partner employer is vetted for legal compliance, genuine visa sponsorship, fair wages and safe working conditions.</p>
+              </div>
+              <div class="country-grid">${COUNTRIES.map(c => countryCard(c)).join("")}</div>
+            </div>
+          </section>
+
+          <section class="section section-alt">
+            <div class="wrap">
+              <div class="section-head">
+                <div class="eyebrow"><i class="fa-solid fa-layer-group"></i> Every Skill Level</div>
+                <h2>From Manual Labor to Skilled Professionals</h2>
+                <p>We recruit across the full spectrum of overseas job categories.</p>
+              </div>
+              <div class="why-grid">
+                ${CATEGORIES.slice(0, 8).map(c => `
+                  <div class="why-item"><div class="why-icon"><i class="${CATEGORY_ICON[c]}"></i></div><h4>${c}</h4></div>`).join("")}
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="wrap">
+              <div class="section-head">
+                <div class="eyebrow"><i class="fa-solid fa-route"></i> How It Works</div>
+                <h2>Your Placement Journey</h2>
+              </div>
+              <div class="process-grid">
+                ${["Apply Online","Document Review","Interview & Matching","Visa Sponsorship & Contract","Fly Out & Start Work"].map((t,i) => `
+                  <div class="process-step">
+                    <div class="process-num">STEP ${String(i+1).padStart(2,'0')}</div>
+                    <h4>${t}</h4>
+                    <p>${["Submit your details, CV and passport copy in minutes.","Our team verifies your documents and eligibility.","We match you to employers and arrange interviews.","Offer, contract signing and visa sponsorship begins.","We coordinate travel and confirm your first day."][i]}</p>
+                  </div>`).join("")}
+              </div>
+            </div>
+          </section>
+
+          <section class="section" style="padding-top:0">
+            <div class="wrap">
+              <div class="trust-banner">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <div>
+                  <b>Our Ethical Recruitment Promise</b>
+                  <p>Europe Sponsor Jobs never charges job seekers a placement fee, in line with ILO Fair Recruitment principles. Legitimate costs (visas, medicals) are disclosed up front and, where applicable, covered or advanced by the employer. Report any request for payment to our compliance team immediately.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" style="background:var(--blue-900);color:#fff;text-align:center">
+            <div class="wrap" style="max-width:640px">
+              <h2 style="color:#fff;margin-bottom:12px">Ready to work in Europe?</h2>
+              <p style="color:#B9C8DC;margin-bottom:26px">It takes less than 10 minutes to submit your application.</p>
+              <a class="btn btn-maroon" data-nav="apply"><i class="fa-solid fa-paper-plane"></i> Apply Now</a>
+            </div>
+          </section>`;
+        }
+
+        function countryCard(country) {
+            const meta = COUNTRY_META[country];
+            const jobCount = allJobs.filter(j => j.country === country).length;
+            const points = {
+                "Germany": ["EU Blue Card visa sponsorship pathway", "Strong social security system", "Excellent economy", "Free education for children"],
+                "United Kingdom": ["Skilled Worker visa sponsorship", "NHS healthcare access", "Strong worker rights", "Path to settlement"],
+                "Netherlands": ["Highly Skilled Migrant visa route", "High quality of life", "English widely spoken", "Strong labor protections"],
+                "Sweden": ["Clear work permit sponsorship route", "Excellent welfare system", "Path to permanent residency", "Family-friendly policies"],
+                "Ireland": ["Critical Skills / General Employment permits", "English-speaking EU member", "Strong tech & healthcare sectors", "Path to residency"],
+                "Luxembourg": ["EU labor standards & benefits", "High salary-to-cost-of-living ratio", "French / English support", "Excellent pension system"],
+                "France": ["Talent Passport visa sponsorship", "Universal healthcare access", "Strong labor protections", "Rich cultural life"],
+                "Poland": ["Fast-growing labor market", "EU work permit sponsorship", "Lower cost of living", "Central European access"]
+            };
+            const p = points[country] || ["Fair wages", "Safe working conditions", "Legal compliance", "Transparent process"];
+            return `
+            <div class="country-card">
+              <div class="country-flagbar">
+                <span><img class="flag-img" src="${flagUrl(meta.flag)}" alt="${country}" loading="lazy"> ${country}</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </div>
+              <div class="country-body">
+                <ul>${p.map(pt => `<li><i class="fa-solid fa-circle-check"></i> ${pt}</li>`).join("")}</ul>
+                <div class="country-foot">
+                  <span class="count">${jobCount} open role${jobCount === 1 ? '' : 's'}</span>
+                  <a class="btn btn-outline btn-sm" data-nav="jobs" data-country="${esc(country)}">View Jobs</a>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        let jobFilter = { country: "All", category: "All" };
+
+        function viewJobs() {
+            const jobs = allJobs.filter(j =>
+                (jobFilter.country === "All" || j.country === jobFilter.country) &&
+                (jobFilter.category === "All" || j.category === jobFilter.category)
+            );
+            return `
+          <section class="section" style="padding-top:38px">
+            <div class="wrap">
+              <div class="section-head" style="margin-bottom:26px">
+                <div class="eyebrow"><i class="fa-solid fa-briefcase"></i> Open Roles</div>
+                <h2>Browse Available Jobs</h2>
+                <p>${allJobs.length} active listings across ${COUNTRIES.length} destination countries.</p>
+              </div>
+              <div class="filter-bar">
+                ${["All", ...COUNTRIES].map(c => `<button class="chip ${jobFilter.country === c ? 'active' : ''}" data-country="${esc(c)}">${c === 'All' ? 'All Countries' : c}</button>`).join("")}
+              </div>
+              <div class="filter-bar">
+                ${["All", ...CATEGORIES].map(c => `<button class="chip ${jobFilter.category === c ? 'active' : ''}" data-cat="${esc(c)}">${c}</button>`).join("")}
+              </div>
+              <div class="job-grid">
+                ${jobs.length ? jobs.map(jobCard).join("") : `<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-inbox"></i><p>No roles match these filters right now.</p></div>`}
+              </div>
+            </div>
+          </section>`;
+        }
+
+        function jobCard(j) {
+            const meta = COUNTRY_META[j.country];
+            return `
+            <div class="job-card">
+              <div class="job-cat-icon"><i class="${CATEGORY_ICON[j.category]}"></i></div>
+              <h4 class="job-title">${esc(j.title)}</h4>
+              <div class="job-meta">
+                <span class="badge badge-blue"><img src="${flagUrl(meta.flag)}" style="width:16px;height:12px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:4px;"> ${esc(j.country)}</span>
+                <span class="badge badge-slate">${esc(j.category)}</span>
+              </div>
+              <p class="job-desc">${esc(j.desc)}</p>
+              <div class="job-foot">
+                <span class="job-salary">${esc(j.salary)}</span>
+                <a class="btn btn-primary btn-sm" data-nav="apply" data-jobid="${j.id}">Apply <i class="fa-solid fa-arrow-right"></i></a>
+              </div>
+            </div>`;
+        }
+
+        function wireJobsFilters() {
+            document.querySelectorAll('[data-country]').forEach(b => b.addEventListener('click', () => { jobFilter.country = b.getAttribute('data-country'); renderCurrentView(); }));
+            document.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => { jobFilter.category = b.getAttribute('data-cat'); renderCurrentView(); }));
+        }
+
+        function viewApply() {
+            const jobs = allJobs;
+            const preselectJob = ROUTE.params.jobid || "";
+            const byCountry = {};
+            jobs.forEach(j => { byCountry[j.country] = byCountry[j.country] || []; byCountry[j.country].push(j); });
+            return `
+          <section class="section" style="padding-top:38px">
+            <div class="wrap">
+              <div class="section-head" style="margin-bottom:26px;max-width:720px">
+                <div class="eyebrow"><i class="fa-solid fa-file-signature"></i> Application</div>
+                <h2>Job Application Form</h2>
+                <p>Fields marked <span class="req">*</span> are required. Your data is used only for recruitment purposes — see our <a data-nav="privacy" style="text-decoration:underline">Privacy Policy</a>.</p>
+              </div>
+              <div class="form-shell">
+                <div class="card pad">
+                  <form id="applyForm" novalidate>
+                    <div class="field-row">
+                      <div class="field"><label>Full Name <span class="req">*</span></label><input type="text" name="fullName" placeholder="As shown on passport" required></div>
+                      <div class="field"><label>Email Address <span class="req">*</span></label><input type="email" name="email" placeholder="you@example.com" required></div>
+                    </div>
+                    <div class="field-row">
+                      <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" name="phone" placeholder="+254 7xx xxx xxx" required></div>
+                      <div class="field"><label>Country of Residence <span class="req">*</span></label>
+                        <select name="residence" required>
+                          <option value="">Select Country</option>
+                          ${["Kenya","Uganda","Tanzania","Nigeria","Ghana","Philippines","India","South Africa","Other"].map(c => `<option>${c}</option>`).join("")}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="field-row">
+                      <div class="field"><label>City <span class="req">*</span></label><input type="text" name="city" placeholder="Your current city" required></div>
+                      <div class="field"><label>Job Selection <span class="req">*</span></label>
+                        <select name="jobId" id="jobSelect" required>
+                          <option value="">Select a Job</option>
+                          ${COUNTRIES.map(c => `<optgroup label="${c}">${(byCountry[c]||[]).map(j => `<option value="${j.id}" ${j.id === preselectJob ? 'selected' : ''}>${esc(j.title)} — ${esc(j.salary)}</option>`).join("")}</optgroup>`).join("")}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="field-row">
+                      <div class="field">
+                        <label>CV / Resume (PDF, DOC, DOCX) <span class="req">*</span></label>
+                        <div class="upload-box" id="cvBox">
+                          <i class="fa-solid fa-cloud-arrow-up"></i>
+                          <div class="u-title">Click to upload CV/Resume</div>
+                          <div class="u-sub" id="cvSub">Upload via Uploadcare — PDF, DOC, DOCX</div>
+                        </div>
+                        <input type="hidden" id="cvUploaded" name="cvUrl" />
+                      </div>
+                      <div class="field">
+                        <label>Passport Copy (Optional)</label>
+                        <div class="upload-box" id="passBox">
+                          <i class="fa-solid fa-cloud-arrow-up"></i>
+                          <div class="u-title">Click to upload Passport Copy</div>
+                          <div class="u-sub" id="passSub">Upload via Uploadcare — JPG, PNG, PDF</div>
+                        </div>
+                        <input type="hidden" id="passUploaded" name="passportUrl" />
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label>Cover Letter / Message (Optional)</label>
+                      <textarea name="cover" placeholder="Write your cover letter or additional message here..."></textarea>
+                    </div>
+                    <div class="field">
+                      <label>Create a Portal Password <span class="req">*</span></label>
+                      <input type="password" name="password" placeholder="Minimum 6 characters" required minlength="6">
+                      <div class="hint">Use this with your email (or Application ID) to log into your applicant portal.</div>
+                    </div>
+                    <div class="field">
+                      <label class="checkbox-row"><input type="checkbox" name="terms" required> I agree to the <a data-nav="terms" style="text-decoration:underline">Terms &amp; Conditions</a> and consent to the processing of my personal data for recruitment purposes, in accordance with the <a data-nav="privacy" style="text-decoration:underline">Privacy Policy</a>.</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Submit Application</button>
+                  </form>
+                </div>
+                <div>
+                  <div class="card pad tip-card" style="margin-bottom:18px">
+                    <h4 style="margin:0 0 14px;font-size:14px;color:var(--blue-900)"><i class="fa-solid fa-circle-info" style="color:var(--blue-700)"></i> Application Tips</h4>
+                    <ul>
+                      <li><i class="fa-solid fa-check"></i> Ensure all fields are correctly filled</li>
+                      <li><i class="fa-solid fa-check"></i> Upload CV in PDF or Word format</li>
+                      <li><i class="fa-solid fa-check"></i> Double-check your contact information</li>
+                      <li><i class="fa-solid fa-check"></i> Save your Application ID for tracking</li>
+                    </ul>
+                  </div>
+                  <div class="card pad">
+                    <h4 style="margin:0 0 14px;font-size:14px;color:var(--blue-900)"><i class="fa-solid fa-shield-halved" style="color:var(--emerald-600)"></i> No Fees to Apply</h4>
+                    <p style="font-size:13px;color:var(--slate-600);margin:0">Europe Sponsor Jobs never charges job seekers to apply, interview, or be placed. Never send money to anyone claiming to guarantee a job.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>`;
+        }
+
+        function wireApplyForm() {
+            const cvBox = document.getElementById('cvBox');
+            const passBox = document.getElementById('passBox');
+            if (!cvBox) return;
+
+            cvBox.addEventListener('click', () => {
+                const dialog = uploadcare.openDialog(null, {
+                    publicKey: UPLOADCARE_PUBLIC_KEY, multiple: false, imgOnly: false,
+                    accept: 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                });
+                dialog.done((result) => {
+                    result.files[0].promise().then((info) => {
+                        document.getElementById('cvUploaded').value = info.cdnUrl;
+                        cvBox.classList.add('filled');
+                        document.getElementById('cvSub').textContent = info.name || 'CV uploaded';
+                        toast('CV uploaded successfully!', 'ok');
+                    });
+                });
+                dialog.fail(() => toast('Upload cancelled or failed.', 'err'));
+            });
+
+            passBox.addEventListener('click', () => {
+                const dialog = uploadcare.openDialog(null, {
+                    publicKey: UPLOADCARE_PUBLIC_KEY, multiple: false, imgOnly: false,
+                    accept: 'image/jpeg,image/png,application/pdf'
+                });
+                dialog.done((result) => {
+                    result.files[0].promise().then((info) => {
+                        document.getElementById('passUploaded').value = info.cdnUrl;
+                        passBox.classList.add('filled');
+                        document.getElementById('passSub').textContent = info.name || 'Passport uploaded';
+                        toast('Passport uploaded successfully!', 'ok');
+                    });
+                });
+                dialog.fail(() => toast('Upload cancelled or failed.', 'err'));
+            });
+
+            document.getElementById('applyForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const fullName = fd.get('fullName').trim();
+                const email = fd.get('email').trim();
+                const phone = fd.get('phone').trim();
+                const residence = fd.get('residence');
+                const city = fd.get('city').trim();
+                const jobId = fd.get('jobId');
+                const cover = fd.get('cover').trim();
+                const password = fd.get('password');
+                const terms = fd.get('terms');
+                const cvUrl = fd.get('cvUrl');
+                const passportUrl = fd.get('passportUrl');
+
+                if (!fullName || !email || !phone || !residence || !city || !jobId) { toast("Please complete all required fields.", "err"); return; }
+                if (!/^\S+@\S+\.\S+$/.test(email)) { toast("Please enter a valid email address.", "err"); return; }
+                if (!cvUrl) { toast("Please upload your CV/Resume.", "err"); return; }
+                if (!password || password.length < 6) { toast("Password must be at least 6 characters.", "err"); return; }
+                if (!terms) { toast("Please accept the Terms & Conditions to continue.", "err"); return; }
+
+                try {
+                    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCred.user;
+                    await updateProfile(user, { displayName: fullName });
+                    const job = allJobs.find(j => j.id === jobId);
+                    const appData = {
+                        uid: user.uid, fullName, email, phone, country: job.country, city, jobId,
+                        jobTitle: job.title, coverLetter: cover, cvUrl, passportUrl: passportUrl || '',
+                        status: "Application Received",
+                        documentsVerified: { cv: true, passport: !!passportUrl },
+                        timeline: [{ status: "Application Received", date: new Date().toISOString(), note: "Application submitted via the Europe Sponsor Jobs website." }],
+                        internalNotes: [], archived: false
+                    };
+                    await createApp(appData);
+                    simulateEmail(email, "Application Received – Europe Sponsor Jobs",
+                        `Dear ${fullName},\n\nThank you for applying with Europe Sponsor Jobs. Your Application ID is ${user.uid}.\n\nYou can check your status anytime by logging into your portal.\n\nBest regards,\nEurope Sponsor Jobs Team`);
+                    currentUserData = { ...appData, type: 'applicant' };
+                    toast(`Application submitted! Your ID: ${user.uid}`, 'ok');
+                    navigate("confirmation", { appId: user.uid });
+                } catch (error) {
+                    console.error("Application error:", error);
+                    toast(error.message || "Failed to submit application. Please try again.", "err");
+                }
+            });
+        }
+
+        function viewConfirmation() {
+            const appId = ROUTE.params.appId;
+            const found = allApps.find(a => a.id === appId || a.uid === appId);
+            if (!found) return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Application not found.</p></div></div></div>`;
+            return `
+          <section class="section" style="padding-top:56px">
+            <div class="wrap" style="max-width:600px">
+              <div class="card pad" style="text-align:center">
+                <div style="width:64px;height:64px;border-radius:50%;background:var(--emerald-50);color:var(--emerald-600);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 18px"><i class="fa-solid fa-check"></i></div>
+                <h2 style="margin:0 0 8px;color:var(--blue-900)">Application Submitted!</h2>
+                <p style="color:var(--slate-500);margin:0 0 22px">Thank you, ${esc(found.fullName)}. Save your Application ID below — you'll need it to check your status or log in.</p>
+                <div style="background:var(--slate-100);border-radius:10px;padding:16px;font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--blue-900);letter-spacing:.03em;margin-bottom:22px">${found.id || found.uid}</div>
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+                  <a class="btn btn-primary" data-nav="applicant-dashboard"><i class="fa-solid fa-user"></i> Go to My Portal</a>
+                  <a class="btn btn-outline" data-nav="status"><i class="fa-solid fa-magnifying-glass"></i> Check Status Page</a>
+                </div>
+              </div>
+            </div>
+          </section>`;
+        }
+
+        function viewStatus() {
+            const found = ROUTE.params.found;
+            return `
+          <section class="section" style="padding-top:44px">
+            <div class="wrap" style="max-width:700px">
+              <div class="section-head" style="margin-bottom:26px">
+                <div class="eyebrow"><i class="fa-solid fa-magnifying-glass"></i> Application Status</div>
+                <h2>Check Your Application</h2>
+                <p>Enter your Application ID or the email you applied with.</p>
+              </div>
+              <div class="card pad" style="margin-bottom:26px">
+                <form id="statusForm" style="display:flex;gap:10px;flex-wrap:wrap">
+                  <input type="text" id="statusQuery" placeholder="Application ID or Email" style="flex:1;min-width:220px">
+                  <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Check Status</button>
+                </form>
+              </div>
+              ${found === false ? `<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><p>No application found matching that ID or email.</p></div>` : ""}
+              ${found ? renderStatusResult(found) : ""}
+            </div>
+          </section>`;
+        }
+
+        function renderStatusResult(app) {
+            return `
+            <div class="card pad">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+                <div>
+                  <div style="font-size:12px;color:var(--slate-500);font-weight:700;letter-spacing:.03em">${app.id || app.uid}</div>
+                  <h3 style="margin:4px 0 4px;color:var(--blue-900)">${esc(app.fullName)}</h3>
+                  <div style="font-size:13.5px;color:var(--slate-500)">${esc(app.jobTitle)} · ${esc(app.country)}</div>
+                </div>
+                ${statusBadge(app.status)}
+              </div>
+              ${renderTimeline(app)}
+            </div>`;
+        }
+
+        function renderTimeline(app) {
+            const timeline = app.timeline || [];
+            const isTerminalAlt = TERMINAL_ALT.includes(app.status);
+            const items = timeline.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+            return `<div class="timeline">
+            ${items.map((t,i) => {
+              const isLast = i === items.length - 1;
+              const cls = TERMINAL_ALT.includes(t.status) && t.status === 'Rejected' ? 'rejected' : (isLast ? (isTerminalAlt ? '' : 'current') : 'done');
+              const iconDone = cls === 'done' ? '<i class="fa-solid fa-check"></i>' : cls === 'rejected' ? '<i class="fa-solid fa-xmark"></i>' : '';
+              return `<div class="tl-item ${cls}">
+                <div class="tl-dot">${iconDone}</div>
+                <div class="tl-title">${esc(t.status)}</div>
+                <div class="tl-date">${fmtDate(t.date)}</div>
+                ${t.note ? `<div class="tl-note">${esc(t.note)}</div>` : ''}
+              </div>`;
+            }).join("")}
+            ${!isTerminalAlt && items.length < STATUS_STEPS.length ? `
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-title" style="color:var(--slate-400)">${esc(STATUS_STEPS[items.length] || "")}</div>
+                <div class="tl-date">Upcoming</div>
+              </div>` : ""}
+          </div>`;
+        }
+
+        function wireStatusForm() {
+            const f = document.getElementById('statusForm');
+            if (!f) return;
+            f.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const q = document.getElementById('statusQuery').value.trim().toLowerCase();
+                if (!q) { toast("Please enter an Application ID or email.", "err"); return; }
+                let found = allApps.find(a => (a.id && a.id.toLowerCase() === q) || (a.uid && a.uid.toLowerCase() === q) || (a.email && a.email.toLowerCase() === q));
+                if (!found) {
+                    try {
+                        const docSnap = await getDoc(doc(db, "applications", q));
+                        if (docSnap.exists()) found = { id: docSnap.id, ...docSnap.data() };
+                    } catch (e) {}
+                }
+                navigate("status", { found: found || false });
+            });
+        }
+
+        function viewFees() {
+            const fees = allFees;
+            return `
+          <section class="section" style="padding-top:44px">
+            <div class="wrap">
+              <div class="section-head">
+                <div class="eyebrow"><i class="fa-solid fa-coins"></i> Transparent Pricing</div>
+                <h2>Service Fee Structure</h2>
+                <p>Europe Sponsor Jobs is committed to full transparency. All costs are disclosed clearly — no hidden charges.</p>
+              </div>
+              <div class="fee-grid">
+                ${fees.length ? fees.map(f => `
+                  <div class="fee-card ${f.paidBy === 'Employer' ? 'paid-by-employer' : ''}">
+                    <div class="fee-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                    <div class="fee-amount">${esc(f.amount)}</div>
+                    <div class="fee-label">${esc(f.label)}</div>
+                    <div class="fee-desc">${esc(f.desc || '')}</div>
+                    <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--slate-500)">Paid by: ${esc(f.paidBy)}</div>
+                  </div>`).join("") : `<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-coins"></i><p>No fee items added yet.</p></div>`}
+              </div>
+              <div class="trust-banner" style="margin-top:32px">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                  <b>Our Commitment</b>
+                  <p>We believe in ethical recruitment. Job seekers are never charged placement fees. Any legitimate third-party costs (visa fees, medicals) are disclosed in writing before you are asked to pay, and are often covered or advanced by the employer.</p>
+                </div>
+              </div>
+            </div>
+          </section>`;
+        }
+
+        // --- LOGIN ---
+        let loginTab = "applicant";
+
+        function viewLogin() {
+            return `
+          <div class="auth-shell">
+            <div class="card">
+              <div class="pad" style="padding-bottom:0">
+                <div class="auth-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
+                <h2 style="margin:0 0 4px;color:var(--blue-900)">Welcome Back</h2>
+                <p style="color:var(--slate-500);font-size:13.5px;margin:0 0 20px">Log in to track your application or manage the platform.</p>
+              </div>
+              <div class="pad" style="padding-top:0">
+                <div class="tab-row">
+                  <button class="tab-btn ${loginTab === 'applicant' ? 'active' : ''}" data-tab="applicant">Applicant Login</button>
+                  <button class="tab-btn ${loginTab === 'admin' ? 'active' : ''}" data-tab="admin">Admin Login</button>
+                </div>
+                ${loginTab === 'applicant' ? `
+                <button class="btn btn-google btn-block" id="googleLoginBtn"><i class="fa-brands fa-google"></i> Continue with Google</button>
+                <div class="divider-or">or use email &amp; password</div>
+                <form id="applicantLoginForm">
+                  <div class="field"><label>Email or Username <span class="req">*</span></label><input type="text" name="email" placeholder="you@example.com" required></div>
+                  <div class="field"><label>Password <span class="req">*</span></label><input type="password" name="password" required></div>
+                  <button class="btn btn-primary btn-block" type="submit">Log In to My Portal</button>
+                  <p class="hint" style="text-align:center;margin-top:14px">Signed up with your phone number instead? Use the email linked to your application.</p>
+                </form>` : `
+                <form id="adminLoginForm">
+                  <div class="field"><label>Admin Email <span class="req">*</span></label><input type="email" name="email" placeholder="admin@yourdomain.com" required></div>
+                  <div class="field"><label>Password <span class="req">*</span></label><input type="password" name="password" required></div>
+                  <button class="btn btn-primary btn-block" type="submit"><i class="fa-solid fa-shield-halved"></i> Log In to Admin</button>
+                  <p class="hint" style="text-align:center;margin-top:14px">Admin access requires an account registered in the "admins" collection. See the ADMIN BOOTSTRAP guide shipped with this file.</p>
+                </form>`}
+              </div>
+            </div>
+          </div>`;
+        }
+
+        function wireLogin() {
+            document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { loginTab = b.getAttribute('data-tab'); renderCurrentView(); }));
+
+            const gBtn = document.getElementById('googleLoginBtn');
+            if (gBtn) gBtn.addEventListener('click', async () => {
+                try {
+                    await signInWithPopup(auth, googleProvider);
+                    toast("Signed in with Google!", "ok");
+                } catch (error) {
+                    toast(error.message || "Google sign-in failed.", "err");
+                }
+            });
+
+            const af = document.getElementById('applicantLoginForm');
+            if (af) af.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                try {
+                    await signInWithEmailAndPassword(auth, fd.get('email').trim(), fd.get('password'));
+                    toast("Login successful!", "ok");
+                } catch (error) {
+                    toast(error.message || "Login failed. Please check your credentials.", "err");
+                }
+            });
+
+            const adf = document.getElementById('adminLoginForm');
+            if (adf) adf.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                try {
+                    await signInWithEmailAndPassword(auth, fd.get('email').trim(), fd.get('password'));
+                    toast("Admin login successful!", "ok");
+                } catch (error) {
+                    toast(error.message || "Login failed. Please check your credentials.", "err");
+                }
+            });
+        }
+
+        // --- COMPLETE PROFILE (for brand-new Google sign-ins with no application yet) ---
+        function viewCompleteProfile() {
+            if (!currentUser) return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-lock"></i><p>Please log in first.</p></div></div></div>`;
+            return `
+          <div class="auth-shell">
+            <div class="card pad">
+              <div class="auth-icon"><i class="fa-solid fa-id-card"></i></div>
+              <h2 style="margin:0 0 4px;color:var(--blue-900)">One More Step</h2>
+              <p style="color:var(--slate-500);font-size:13.5px;margin:0 0 20px">We need a few more details and a job selection to finish setting up your applicant profile, ${esc(currentUser.displayName || currentUser.email)}.</p>
+              <form id="completeProfileForm">
+                <div class="field"><label>Full Name <span class="req">*</span></label><input type="text" name="fullName" value="${esc(currentUser.displayName || '')}" required></div>
+                <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" name="phone" placeholder="+254 7xx xxx xxx" required></div>
+                <div class="field"><label>City <span class="req">*</span></label><input type="text" name="city" required></div>
+                <div class="field"><label>Job of Interest <span class="req">*</span></label>
+                  <select name="jobId" required>
+                    <option value="">Select a Job</option>
+                    ${allJobs.map(j => `<option value="${j.id}">${esc(j.title)} — ${esc(j.country)}</option>`).join("")}
+                  </select>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Complete Profile &amp; Submit Application</button>
+              </form>
+            </div>
+          </div>`;
+        }
+
+        function wireCompleteProfile() {
+            const f = document.getElementById('completeProfileForm');
+            if (!f) return;
+            f.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                const jobId = fd.get('jobId');
+                const job = allJobs.find(j => j.id === jobId);
+                if (!job) { toast("Please select a job.", "err"); return; }
+                const appData = {
+                    uid: currentUser.uid, fullName: fd.get('fullName').trim(), email: currentUser.email,
+                    phone: fd.get('phone').trim(), country: job.country, city: fd.get('city').trim(),
+                    jobId, jobTitle: job.title, coverLetter: '', cvUrl: '', passportUrl: '',
+                    status: "Application Received",
+                    documentsVerified: { cv: false, passport: false },
+                    timeline: [{ status: "Application Received", date: new Date().toISOString(), note: "Profile completed via Google sign-in." }],
+                    internalNotes: [], archived: false
+                };
+                await createApp(appData);
+                currentUserData = { ...appData, type: 'applicant' };
+                await loadJobs(); await loadFees(); subscribeToRealtime();
+                toast("Profile completed! You can now upload your CV from your portal.", "ok");
+                navigate("applicant-dashboard");
+            });
+        }
+
+        // --- APPLICANT DASHBOARD ---
+        function viewApplicantDashboard() {
+            if (!currentUser || !currentUserData || currentUserData.type !== 'applicant') {
+                return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-lock"></i><p>Please log in to view your dashboard.</p><a class="btn btn-primary" data-nav="login">Log In</a></div></div></div>`;
+            }
+            const app = currentUserData;
+            return `
+          <div class="dash-shell">
+            <div class="dash-side">
+              <div class="side-title">My Portal</div>
+              <a class="side-link active"><i class="fa-solid fa-gauge"></i> Application Overview</a>
+              <a class="side-link" data-nav="jobs"><i class="fa-solid fa-briefcase"></i> Browse More Jobs</a>
+              <a class="side-link" data-nav="faq"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+              <div class="side-title" style="margin-top:20px">Account</div>
+              <a class="side-link" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            </div>
+            <div class="dash-main">
+              <div class="dash-topbar">
+                <div>
+                  <h2>Hello, ${esc(app.fullName?.split(' ')[0] || '')} 👋</h2>
+                  <div style="font-size:13px;color:var(--slate-500)">Application ${app.id || app.uid} · Last updated ${fmtDate(app.updatedAt)}</div>
+                </div>
+                ${statusBadge(app.status)}
+              </div>
+              <div class="grid" style="grid-template-columns:1.4fr .9fr">
+                <div class="card pad">
+                  <h4 style="margin:0 0 18px;color:var(--blue-900)"><i class="fa-solid fa-timeline" style="color:var(--maroon-500)"></i> Status Timeline</h4>
+                  ${renderTimeline(app)}
+                </div>
+                <div>
+                  <div class="card pad" style="margin-bottom:18px">
+                    <h4 style="margin:0 0 14px;font-size:14px;color:var(--blue-900)">Job Details</h4>
+                    <div style="font-size:13.5px;color:var(--slate-600);line-height:1.9">
+                      <div><b>Position:</b> ${esc(app.jobTitle)}</div>
+                      <div><b>Country:</b> ${esc(app.country)}</div>
+                      <div><b>Applied:</b> ${fmtDate(app.createdAt)}</div>
+                    </div>
+                  </div>
+                  <div class="card pad">
+                    <h4 style="margin:0 0 14px;font-size:14px;color:var(--blue-900)">Documents</h4>
+                    <div class="doc-row"><div class="di"><i class="fa-solid fa-file-lines"></i> CV / Resume</div>${app.documentsVerified?.cv ? '<span class="badge badge-green">Verified</span>' : '<span class="badge badge-amber">Pending</span>'}</div>
+                    <div class="doc-row"><div class="di"><i class="fa-solid fa-passport"></i> Passport Copy</div>${app.passportUrl ? (app.documentsVerified?.passport ? '<span class="badge badge-green">Verified</span>' : '<span class="badge badge-amber">Pending</span>') : '<span class="badge badge-slate">Not Uploaded</span>'}</div>
+                    ${app.cvUrl ? `<div class="doc-row"><div class="di"><i class="fa-solid fa-link"></i> CV Link</div><a href="${app.cvUrl}" target="_blank" class="btn btn-outline btn-sm">View</a></div>` : ''}
+                    ${app.passportUrl ? `<div class="doc-row"><div class="di"><i class="fa-solid fa-link"></i> Passport Link</div><a href="${app.passportUrl}" target="_blank" class="btn btn-outline btn-sm">View</a></div>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="card pad" style="margin-top:22px">
+                <h4 style="margin:0 0 6px;color:var(--blue-900)">Need help?</h4>
+                <p style="font-size:13.5px;color:var(--slate-500);margin:0 0 14px">Contact our support team referencing your Application ID <b>${app.id || app.uid}</b>.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <span class="badge badge-slate"><i class="fa-solid fa-envelope"></i> support@europesponsorjobs.com</span>
+                  <span class="badge badge-slate"><i class="fa-solid fa-phone"></i> +254 103 387012</span>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        // --- ADMIN DASHBOARD ---
+        let adminFilters = { status: "All", country: "All", search: "" };
+
+        function viewAdminDashboard() {
+            if (!currentUser || !currentUserData || currentUserData.type !== 'admin') {
+                return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-lock"></i><p>Admin access required.</p><a class="btn btn-primary" data-nav="login">Log In</a></div></div></div>`;
+            }
+            const apps = allApps.filter(a => !a.archived);
+            const stats = {
+                total: apps.length,
+                received: apps.filter(a => a.status === "Application Received").length,
+                inProgress: apps.filter(a => !TERMINAL_ALT.includes(a.status) && a.status !== "Placed — Active Employment" && a.status !== "Application Received").length,
+                placed: apps.filter(a => a.status === "Placed — Active Employment").length,
+                rejected: apps.filter(a => a.status === "Rejected").length,
+            };
+            let filtered = apps.filter(a =>
+                (adminFilters.status === "All" || a.status === adminFilters.status) &&
+                (adminFilters.country === "All" || a.country === adminFilters.country) &&
+                (adminFilters.search === "" || (a.fullName + a.email + a.id + a.uid + a.jobTitle).toLowerCase().includes(adminFilters.search.toLowerCase()))
+            ).sort((a, b) => { const da = a.updatedAt ? new Date(a.updatedAt) : new Date(0); const db = b.updatedAt ? new Date(b.updatedAt) : new Date(0); return db - da; });
+
+            return `
+          <div class="dash-shell">
+            <div class="dash-side">
+              <div class="side-title">Admin Console</div>
+              <a class="side-link active"><i class="fa-solid fa-gauge"></i> Applications</a>
+              <a class="side-link" data-nav="admin-jobs"><i class="fa-solid fa-briefcase"></i> Manage Jobs</a>
+              <a class="side-link" data-nav="admin-fees"><i class="fa-solid fa-coins"></i> Fee Structure</a>
+              <div class="side-title" style="margin-top:20px">Account</div>
+              <a class="side-link" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            </div>
+            <div class="dash-main">
+              <div class="dash-topbar">
+                <h2>Applications Dashboard</h2>
+                <div class="search-input"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="adminSearch" placeholder="Search name, email, ID, job..." value="${esc(adminFilters.search)}"></div>
+              </div>
+              <div class="stat-grid">
+                <div class="stat-card"><div class="n">${stats.total}</div><div class="l">Total</div></div>
+                <div class="stat-card"><div class="n">${stats.received}</div><div class="l">New</div></div>
+                <div class="stat-card"><div class="n">${stats.inProgress}</div><div class="l">In Progress</div></div>
+                <div class="stat-card"><div class="n">${stats.placed}</div><div class="l">Placed</div></div>
+                <div class="stat-card"><div class="n">${stats.rejected}</div><div class="l">Rejected</div></div>
+              </div>
+              <div class="filter-bar">${["All", ...COUNTRIES].map(c => `<button class="chip ${adminFilters.country === c ? 'active' : ''}" data-afcountry="${esc(c)}">${c}</button>`).join("")}</div>
+              <div class="filter-bar">${["All", ...ALL_STATUSES].map(s => `<button class="chip ${adminFilters.status === s ? 'active' : ''}" data-afstatus="${esc(s)}">${s}</button>`).join("")}</div>
+              <div class="card">
+                <table>
+                  <thead><tr><th>Applicant</th><th>Job / Country</th><th>Status</th><th>Docs</th><th>Updated</th><th></th></tr></thead>
+                  <tbody>
+                    ${filtered.length ? filtered.map(a => `
+                      <tr>
+                        <td><b style="color:var(--blue-900)">${esc(a.fullName)}</b><br><span style="font-size:12px;color:var(--slate-500)">${a.id || a.uid}</span></td>
+                        <td>${esc(a.jobTitle)}<br><span style="font-size:12px;color:var(--slate-500)">${esc(a.country)}</span></td>
+                        <td>${statusBadge(a.status)}</td>
+                        <td>
+                          ${a.documentsVerified?.cv ? '<i class="fa-solid fa-circle-check" style="color:var(--emerald-600)" title="CV verified"></i>' : '<i class="fa-solid fa-circle-half-stroke" style="color:var(--amber-600)" title="CV pending"></i>'}
+                          ${a.passportUrl ? (a.documentsVerified?.passport ? ' <i class="fa-solid fa-circle-check" style="color:var(--emerald-600)" title="Passport verified"></i>' : ' <i class="fa-solid fa-circle-half-stroke" style="color:var(--amber-600)" title="Passport pending"></i>') : ' <i class="fa-solid fa-circle-minus" style="color:var(--slate-300)" title="No passport"></i>'}
+                        </td>
+                        <td style="font-size:12px;color:var(--slate-500)">${fmtDate(a.updatedAt)}</td>
+                        <td><button class="btn btn-outline btn-sm" data-openapp="${a.id || a.uid}">Review <i class="fa-solid fa-chevron-right"></i></button></td>
+                      </tr>`).join("") : `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No applications match these filters.</p></div></td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        function wireAdminDashboard() {
+            const s = document.getElementById('adminSearch');
+            if (s) s.addEventListener('input', () => { adminFilters.search = s.value; renderList(); });
+            document.querySelectorAll('[data-afcountry]').forEach(b => b.addEventListener('click', () => { adminFilters.country = b.getAttribute('data-afcountry'); renderCurrentView(); }));
+            document.querySelectorAll('[data-afstatus]').forEach(b => b.addEventListener('click', () => { adminFilters.status = b.getAttribute('data-afstatus'); renderCurrentView(); }));
+            document.querySelectorAll('[data-openapp]').forEach(b => b.addEventListener('click', () => openAdminAppModal(b.getAttribute('data-openapp'))));
+            function renderList() {
+                renderCurrentView();
+                setTimeout(() => { const el = document.getElementById('adminSearch'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 0);
+            }
+        }
+
+        async function openAdminAppModal(appId) {
+            let app = allApps.find(a => a.id === appId || a.uid === appId);
+            if (!app) { try { const docSnap = await getDoc(doc(db, "applications", appId)); if (docSnap.exists()) app = { id: docSnap.id, ...docSnap.data() }; } catch (e) {} }
+            if (!app) { toast("Application not found.", "err"); return; }
+            const root = document.getElementById('modal-root');
+            root.innerHTML = `
+          <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+              <div class="modal-head">
+                <h3><i class="fa-solid fa-folder-open" style="color:var(--blue-700)"></i> ${esc(app.fullName)} — ${app.id || app.uid}</h3>
+                <button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body">
+                <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px">
+                  <div>
+                    <div style="font-size:12px;color:var(--slate-500)">Email</div>
+                    <div style="font-size:14px;font-weight:600;margin-bottom:10px">${esc(app.email)}</div>
+                    <div style="font-size:12px;color:var(--slate-500)">Phone</div>
+                    <div style="font-size:14px;font-weight:600;margin-bottom:10px">${esc(app.phone || '—')}</div>
+                    <div style="font-size:12px;color:var(--slate-500)">City / Residence</div>
+                    <div style="font-size:14px;font-weight:600">${esc(app.city || '—')}</div>
+                  </div>
+                  <div>
+                    <div style="font-size:12px;color:var(--slate-500)">Position</div>
+                    <div style="font-size:14px;font-weight:600;margin-bottom:10px">${esc(app.jobTitle)}</div>
+                    <div style="font-size:12px;color:var(--slate-500)">Destination</div>
+                    <div style="font-size:14px;font-weight:600;margin-bottom:10px">${esc(app.country)}</div>
+                    <div style="font-size:12px;color:var(--slate-500)">Applied</div>
+                    <div style="font-size:14px;font-weight:600">${fmtDate(app.createdAt)}</div>
+                  </div>
+                </div>
+                ${app.coverLetter ? `<div style="margin-bottom:20px"><div style="font-size:12px;color:var(--slate-500);margin-bottom:6px">Cover Letter</div><div style="font-size:13.5px;background:var(--slate-100);padding:12px 14px;border-radius:8px;color:var(--slate-700)">${esc(app.coverLetter)}</div></div>` : ""}
+                <div style="margin-bottom:20px">
+                  <div style="font-size:12px;color:var(--slate-500);margin-bottom:8px">Documents</div>
+                  <div class="doc-row">
+                    <div class="di"><i class="fa-solid fa-file-lines"></i> CV / Resume</div>
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                      <label style="font-size:12px;display:flex;gap:5px;align-items:center;font-weight:600;color:var(--slate-600)"><input type="checkbox" id="verifyCv" ${app.documentsVerified?.cv ? 'checked' : ''}> Verified</label>
+                      ${app.cvUrl ? `<a href="${app.cvUrl}" target="_blank" class="btn btn-outline btn-sm"><i class="fa-solid fa-eye"></i> View</a>` : '<span class="badge badge-slate">No file</span>'}
+                    </div>
+                  </div>
+                  <div class="doc-row">
+                    <div class="di"><i class="fa-solid fa-passport"></i> Passport Copy</div>
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                      ${app.passportUrl ? `<label style="font-size:12px;display:flex;gap:5px;align-items:center;font-weight:600;color:var(--slate-600)"><input type="checkbox" id="verifyPass" ${app.documentsVerified?.passport ? 'checked' : ''}> Verified</label>` : ''}
+                      ${app.passportUrl ? `<a href="${app.passportUrl}" target="_blank" class="btn btn-outline btn-sm"><i class="fa-solid fa-eye"></i> View</a>` : '<span class="badge badge-slate">Not uploaded</span>'}
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-bottom:20px">
+                  <div style="font-size:12px;color:var(--slate-500);margin-bottom:8px">Update Status</div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                    <select id="statusSelect" style="max-width:280px">${ALL_STATUSES.map(s => `<option value="${esc(s)}" ${s === app.status ? 'selected' : ''}>${s}</option>`).join("")}</select>
+                    <input type="text" id="statusNote" placeholder="Optional note..." style="flex:1;min-width:180px">
+                    <button class="btn btn-primary btn-sm" id="applyStatusBtn"><i class="fa-solid fa-arrows-rotate"></i> Update</button>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:12px;color:var(--slate-500);margin-bottom:8px">Internal Notes</div>
+                  <div id="internalNotesList" style="margin-bottom:10px">${(app.internalNotes || []).length ? app.internalNotes.map(n => `<div class="tl-note" style="margin-bottom:8px"><b>${esc(n.author)}</b> · ${fmtDate(n.date)}<br>${esc(n.note)}</div>`).join("") : `<div class="hint">No internal notes yet.</div>`}</div>
+                  <div style="display:flex;gap:10px"><input type="text" id="newNote" placeholder="Add an internal note..."><button class="btn btn-outline btn-sm" id="addNoteBtn">Add</button></div>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn btn-danger btn-sm" id="archiveBtn"><i class="fa-solid fa-box-archive"></i> Archive</button>
+                <button class="btn btn-outline" id="modalCloseBtn2">Close</button>
+              </div>
+            </div>
+          </div>`;
+
+            document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+            document.getElementById('modalCloseBtn2').addEventListener('click', closeModal);
+            document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+            const appIdKey = app.id || app.uid;
+
+            document.getElementById('verifyCv').addEventListener('change', async (e) => {
+                await updateApp(appIdKey, { documentsVerified: { ...app.documentsVerified, cv: e.target.checked } });
+                toast("Document verification updated.", "ok"); await loadApps(); closeModal(); renderCurrentView();
+            });
+            const vp = document.getElementById('verifyPass');
+            if (vp) vp.addEventListener('change', async (e) => {
+                await updateApp(appIdKey, { documentsVerified: { ...app.documentsVerified, passport: e.target.checked } });
+                toast("Document verification updated.", "ok"); await loadApps(); closeModal(); renderCurrentView();
+            });
+            document.getElementById('applyStatusBtn').addEventListener('click', async () => {
+                const newStatus = document.getElementById('statusSelect').value;
+                const note = document.getElementById('statusNote').value.trim();
+                const fresh = await getApp(appIdKey);
+                const timeline = [...(fresh?.timeline || []), { status: newStatus, date: new Date().toISOString(), note: note || undefined }];
+                await updateApp(appIdKey, { status: newStatus, timeline });
+                simulateEmail(app.email, `Application Status Update – ${newStatus}`,
+                    `Dear ${app.fullName},\n\nYour application (${app.id || app.uid}) status has been updated to: ${newStatus}.\n\n${note ? 'Note: ' + note : ''}\n\nLog in to your portal for more details.\n\nBest regards,\nEurope Sponsor Jobs Team`);
+                toast(`Status updated to "${newStatus}".`, "ok"); await loadApps(); closeModal(); renderCurrentView();
+            });
+            document.getElementById('addNoteBtn').addEventListener('click', async () => {
+                const val = document.getElementById('newNote').value.trim();
+                if (!val) return;
+                const fresh = await getApp(appIdKey);
+                const internalNotes = [...(fresh?.internalNotes || []), { date: new Date().toISOString(), author: currentUserData?.name || currentUser?.email || 'admin', note: val }];
+                await updateApp(appIdKey, { internalNotes });
+                toast("Internal note added.", "ok"); await loadApps(); closeModal(); openAdminAppModal(appIdKey);
+            });
+            document.getElementById('archiveBtn').addEventListener('click', async () => {
+                if (confirm("Archive this application?")) { await updateApp(appIdKey, { archived: true }); toast("Application archived.", "ok"); await loadApps(); closeModal(); renderCurrentView(); }
+            });
+        }
+
+        function closeModal() { document.getElementById('modal-root').innerHTML = ""; }
+
+        // --- ADMIN JOBS ---
+        function viewAdminJobs() {
+            if (!currentUser || !currentUserData || currentUserData.type !== 'admin') return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-lock"></i><p>Admin access required.</p></div></div></div>`;
+            const jobs = allJobs;
+            return `
+          <div class="dash-shell">
+            <div class="dash-side">
+              <div class="side-title">Admin Console</div>
+              <a class="side-link" data-nav="admin-dashboard"><i class="fa-solid fa-gauge"></i> Applications</a>
+              <a class="side-link active"><i class="fa-solid fa-briefcase"></i> Manage Jobs</a>
+              <a class="side-link" data-nav="admin-fees"><i class="fa-solid fa-coins"></i> Fee Structure</a>
+              <div class="side-title" style="margin-top:20px">Account</div>
+              <a class="side-link" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            </div>
+            <div class="dash-main">
+              <div class="dash-topbar"><h2>Manage Job Listings</h2></div>
+              <div class="card pad" style="margin-bottom:22px">
+                <h4 style="margin:0 0 14px;color:var(--blue-900)">Add New Job</h4>
+                <form id="newJobForm">
+                  <div class="field-row">
+                    <div class="field"><label>Job Title <span class="req">*</span></label><input type="text" name="title" required></div>
+                    <div class="field"><label>Country <span class="req">*</span></label><select name="country" required>${COUNTRIES.map(c => `<option>${c}</option>`).join("")}</select></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field"><label>Category <span class="req">*</span></label><select name="category" required>${CATEGORIES.map(c => `<option>${c}</option>`).join("")}</select></div>
+                    <div class="field"><label>Salary <span class="req">*</span></label><input type="text" name="salary" placeholder="e.g. EUR 2,000 – 2,600 / month" required></div>
+                  </div>
+                  <div class="field"><label>Description <span class="req">*</span></label><textarea name="desc" required></textarea></div>
+                  <button class="btn btn-primary" type="submit"><i class="fa-solid fa-plus"></i> Add Job</button>
+                </form>
+              </div>
+              <div class="card">
+                <table>
+                  <thead><tr><th>Title</th><th>Country</th><th>Category</th><th>Salary</th><th></th></tr></thead>
+                  <tbody>
+                    ${jobs.length ? jobs.map(j => `
+                      <tr>
+                        <td><b>${esc(j.title)}</b></td>
+                        <td>${esc(j.country)}</td>
+                        <td>${esc(j.category)}</td>
+                        <td>${esc(j.salary)}</td>
+                        <td><button class="btn btn-danger btn-sm" data-deljob="${j.id}"><i class="fa-solid fa-trash"></i></button></td>
+                      </tr>`).join("") : `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-briefcase"></i><p>No jobs added yet.</p></div></td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        function wireAdminJobs() {
+            const f = document.getElementById('newJobForm');
+            if (f) f.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                await addJob({ title: fd.get('title'), country: fd.get('country'), category: fd.get('category'), salary: fd.get('salary'), desc: fd.get('desc') });
+                toast("Job listing added.", "ok"); renderCurrentView();
+            });
+            document.querySelectorAll('[data-deljob]').forEach(b => b.addEventListener('click', async () => {
+                if (confirm("Remove this job listing?")) { await deleteJob(b.getAttribute('data-deljob')); toast("Job listing removed.", "ok"); renderCurrentView(); }
+            }));
+        }
+
+        // --- ADMIN FEES ---
+        function viewAdminFees() {
+            if (!currentUser || !currentUserData || currentUserData.type !== 'admin') return `<div class="section"><div class="wrap"><div class="empty-state"><i class="fa-solid fa-lock"></i><p>Admin access required.</p></div></div></div>`;
+            const fees = allFees;
+            return `
+          <div class="dash-shell">
+            <div class="dash-side">
+              <div class="side-title">Admin Console</div>
+              <a class="side-link" data-nav="admin-dashboard"><i class="fa-solid fa-gauge"></i> Applications</a>
+              <a class="side-link" data-nav="admin-jobs"><i class="fa-solid fa-briefcase"></i> Manage Jobs</a>
+              <a class="side-link active"><i class="fa-solid fa-coins"></i> Fee Structure</a>
+              <div class="side-title" style="margin-top:20px">Account</div>
+              <a class="side-link" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            </div>
+            <div class="dash-main">
+              <div class="dash-topbar"><h2>Fee Structure Management</h2></div>
+              <div class="card pad" style="margin-bottom:22px">
+                <h4 style="margin:0 0 14px;color:var(--blue-900)">Add Fee Item</h4>
+                <form id="newFeeForm">
+                  <div class="field-row">
+                    <div class="field"><label>Fee Label <span class="req">*</span></label><input type="text" name="label" placeholder="e.g. Visa Sponsorship Processing" required></div>
+                    <div class="field"><label>Amount <span class="req">*</span></label><input type="text" name="amount" placeholder="e.g. €0 or Varies" required></div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field"><label>Paid By <span class="req">*</span></label>
+                      <select name="paidBy" required><option value="Employer">Employer</option><option value="Employer/Shared">Employer/Shared</option><option value="Worker">Worker</option></select>
+                    </div>
+                    <div class="field"><label>Description</label><input type="text" name="desc" placeholder="Brief description"></div>
+                  </div>
+                  <button class="btn btn-primary" type="submit"><i class="fa-solid fa-plus"></i> Add Fee</button>
+                </form>
+              </div>
+              <div class="card">
+                <table>
+                  <thead><tr><th>Label</th><th>Amount</th><th>Paid By</th><th>Description</th><th></th></tr></thead>
+                  <tbody>
+                    ${fees.length ? fees.map(f => `
+                      <tr>
+                        <td><b>${esc(f.label)}</b></td>
+                        <td>${esc(f.amount)}</td>
+                        <td>${esc(f.paidBy)}</td>
+                        <td>${esc(f.desc || '—')}</td>
+                        <td><button class="btn btn-danger btn-sm" data-delfee="${f.id}"><i class="fa-solid fa-trash"></i></button></td>
+                      </tr>`).join("") : `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-coins"></i><p>No fee items added yet.</p></div></td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        function wireAdminFees() {
+            const f = document.getElementById('newFeeForm');
+            if (f) f.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                await addFee({ label: fd.get('label'), amount: fd.get('amount'), paidBy: fd.get('paidBy'), desc: fd.get('desc') || '' });
+                toast("Fee item added.", "ok"); renderCurrentView();
+            });
+            document.querySelectorAll('[data-delfee]').forEach(b => b.addEventListener('click', async () => {
+                if (confirm("Remove this fee item?")) { await deleteFee(b.getAttribute('data-delfee')); toast("Fee item removed.", "ok"); renderCurrentView(); }
+            }));
+        }
+
+        // --- FAQ / TERMS / PRIVACY / ABOUT ---
+        function viewFaq() {
+            const faqs = [
+                ["Does Europe Sponsor Jobs charge job seekers a fee?", "No. In line with ILO Fair Recruitment principles, we do not charge workers placement fees. Any legitimate third-party costs (e.g. government visa fees, medical exams) are disclosed transparently."],
+                ["How long does visa sponsorship processing take?", "Typically 4–10 weeks depending on destination country and role, though this can vary based on embassy processing times and document readiness."],
+                ["What documents do I need to apply?", "A CV/Resume is required to apply. A passport copy speeds up processing but can be added later. Additional documents (medical, police clearance) are requested once you reach the relevant stage."],
+                ["Can I apply for more than one job?", "Yes — you're welcome to submit separate applications for different roles. Our team will match you to the most suitable opportunity."],
+                ["Is accommodation provided?", "Many employer partners provide or subsidise accommodation. This is specified per job listing."],
+                ["How do I check my application status?", "Use the 'Check Status' page with your Application ID or email, or log into your applicant portal for full details and document status."]
+            ];
+            return `<section class="section" style="padding-top:44px"><div class="wrap legal-body">
+            <div class="section-head"><div class="eyebrow"><i class="fa-solid fa-circle-question"></i> FAQ</div><h2>Frequently Asked Questions</h2></div>
+            <div>${faqs.map(([q,a]) => `<div class="card pad" style="margin-bottom:14px"><h3 style="margin:0 0 8px;font-size:15px">${q}</h3><p style="margin:0">${a}</p></div>`).join("")}</div>
+          </div></section>`;
+        }
+
+        function viewTerms() {
+            return `<section class="section" style="padding-top:44px"><div class="wrap legal-body">
+            <div class="section-head"><div class="eyebrow"><i class="fa-solid fa-scale-balanced"></i> Legal</div><h2>Terms &amp; Conditions</h2><p>Last updated: July 2026</p></div>
+            <h3>1. About Europe Sponsor Jobs</h3><p>Europe Sponsor Jobs ("the Agency") facilitates the recruitment and placement of job seekers with verified European employers offering visa sponsorship. Use of this platform constitutes acceptance of these Terms.</p>
+            <h3>2. No Placement Fees to Workers</h3><p>The Agency does not charge job seekers for registration, interviews, or placement. Any legitimate government or third-party cost will be clearly disclosed in writing.</p>
+            <h3>3. Eligibility &amp; Accuracy</h3><p>Applicants must be of legal working age and must provide accurate, truthful information. Misrepresentation may result in disqualification.</p>
+            <h3>4. Selection &amp; Placement</h3><p>Submitting an application does not guarantee an interview, job offer, or visa approval. Final hiring decisions rest with partner employers.</p>
+            <h3>5. Data Processing</h3><p>Personal data is processed solely for recruitment purposes, as described in our Privacy Policy.</p>
+            <h3>6. Governing Law</h3><p>These Terms are governed by the laws of the jurisdiction in which Europe Sponsor Jobs is registered.</p>
+            <h3>7. Contact</h3><p>Questions can be directed to support@europesponsorjobs.com.</p>
+          </div></section>`;
+        }
+
+        function viewPrivacy() {
+            return `<section class="section" style="padding-top:44px"><div class="wrap legal-body">
+            <div class="section-head"><div class="eyebrow"><i class="fa-solid fa-lock"></i> Legal</div><h2>Privacy &amp; Data Protection</h2><p>Last updated: July 2026</p></div>
+            <h3>1. Information We Collect</h3><p>Name, contact details (including phone number), residence/city, CV/resume, passport copy (if provided), cover letter, and application status history.</p>
+            <h3>2. How We Use It</h3><p>To evaluate your application, match you with employers, process visa sponsorship documentation, and communicate with you about your application status.</p>
+            <h3>3. Who We Share It With</h3><p>Relevant details are shared with prospective employers and, where required, government or immigration authorities, solely for recruitment and deployment purposes.</p>
+            <h3>4. Data Protection Principles</h3><p>We apply data minimisation, purpose limitation, and reasonable security safeguards consistent with international data protection standards, including GDPR for EU-based data flows.</p>
+            <h3>5. Your Rights</h3><p>You may request access to, correction of, or deletion of your personal data by contacting support@europesponsorjobs.com.</p>
+          </div></section>`;
+        }
+
+        function viewAboutDemo() {
+            return `<section class="section" style="padding-top:44px"><div class="wrap legal-body">
+            <div class="section-head"><div class="eyebrow"><i class="fa-solid fa-flask"></i> Platform</div><h2>About This Platform</h2></div>
+            <p>Europe Sponsor Jobs is built with Firebase and Uploadcare.</p>
+            <h3>Tech Stack</h3>
+            <ul>
+              <li><b>Firebase Authentication</b> — Email/password and Google sign-in for applicants; email/password for admins</li>
+              <li><b>Firestore</b> — Real-time NoSQL database for applications, jobs, and fees</li>
+              <li><b>Uploadcare</b> — Professional file uploads with CDN delivery</li>
+              <li><b>Pure HTML/CSS/JS</b> — No frameworks, fast and lightweight</li>
+            </ul>
+            <h3>Security &amp; Compliance</h3>
+            <ul>
+              <li>Passwords are hashed and handled entirely by Firebase Auth — never stored or checked in this file</li>
+              <li>Admin access is granted via a Firestore "admins" document keyed to a real Firebase Auth UID, not a password embedded in the code</li>
+              <li>Real-time data synchronization across devices</li>
+              <li>GDPR-ready consent management</li>
+            </ul>
+          </div></section>`;
+        }
+
+        // =============================================================
+        // BOOT
+        // =============================================================
+        await loadJobs();
+        await loadFees();
+        await loadApps();
+        subscribeToRealtime();
+        renderNavbar();
+        renderCurrentView();
+
+        console.log("🌍 Europe Sponsor Jobs is live with Firebase + Uploadcare!");
+        console.log("📊 Firestore collections: jobs, applications, fees, admins");
+        console.log("📁 Uploadcare public key:", UPLOADCARE_PUBLIC_KEY);
+    </script>
+
+    <!-- =====================================================================
+    ADMIN BOOTSTRAP — READ THIS BEFORE GOING LIVE
+    =====================================================================
+
+    Admin access in this app is gated by a Firestore document at
+    admins/{uid} — the code checks for that document, NOT a hardcoded
+    password. That's the only way "admin login" can actually mean
+    something: a hardcoded string in client-side JS is visible to
+    anyone who opens dev tools, so it can never function as real
+    security.
+
+    To create the real admin account (do this once, outside of any
+    chat/prompt, then delete this block):
+
+    1. Firebase Console → Authentication → Users → Add user.
+       Email:    admin@europesponsorjobs.com  (use your real domain)
+       Password: set a strong password privately — do not reuse
+                 anything that has ever appeared in a chat or repo.
+
+    2. Copy the generated User UID.
+
+    3. Firebase Console → Firestore Database → Start collection
+       "admins" → Document ID = that UID → add fields:
+         name: "Admin"
+         role: "superadmin"
+         createdAt: (timestamp, now)
+
+    4. Log in on the Admin tab of this site with that email/password.
+       onAuthStateChanged will find the admins/{uid} doc and unlock
+       the dashboard.
+
+    Alternatively, run this once from a trusted machine (not this
+    file, not committed to git):
+
+      import { initializeApp } from "firebase/app";
+      import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+      import { getFirestore, doc, setDoc } from "firebase/firestore";
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const cred = await createUserWithEmailAndPassword(auth, "admin@europesponsorjobs.com", "<your-strong-password>");
+      await setDoc(doc(db, "admins", cred.user.uid), { name: "Admin", role: "superadmin", createdAt: new Date() });
+
+    Also lock down Firestore Security Rules so only signed-in admins
+    can write to "jobs", "fees", and other applicants' "applications"
+    docs — right now this file assumes rules do that server-side;
+    client code alone cannot enforce permissions.
+    ===================================================================== -->
+</body>
+</html>
