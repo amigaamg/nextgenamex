@@ -55,16 +55,19 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/024_knowledge_hpi_documentation_groups.sql` | full internal-medicine HPI group order (adds chronology, previous, health_seeking, severity) |
 | `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1 (locked spec): source → version → section → chapter → chunk → claim + `extraction_job` + `provenance` bridge |
 | `database/migrations/026_h2_universal_history_ontology.sql` | Medical Knowledge Compiler H2 (universal history ontology): `history_concept`, `symptom_history_dimension`, `history_context_rule`, `question_variant`, `question_priority_rule`, `functional_impact`, three-state `fact_value.value_state` (TRUE/FALSE/UNKNOWN vs NOT_ASKED), `clinical_event` timeline, `patient_perspective` (IDEA/CONCERN/EXPECTATION/GOAL), `history_reliability`, `question.history_concept_id` + `question_mode` |
+| `database/migrations/027_h3_question_rule_engine.sql` | Medical Knowledge Compiler H3 (question & rule engine): `question_rule` (fact/context triggers → ACTIVATE/DEACTIVATE question/symptom/module), `question_module` + `question_module_member`, `question_dependency` (blocking prerequisites), `question_rationale` (clinical/safety/differential/documentation/context/educational), `question_differential_weight` (condition-scored answers), `documentation_requirement` (per-section required facts), `history_completion_rule` (and/or completion tree), plus `question_requirement` level CHECK extended with `safety` + `high_priority` |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
 | `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source map — source/version/section/chapter/chunk/extraction_job (generated) |
 | `database/seed/seed_zknowledge_zpf_hutchison_claims.sql` | compiled Hutchison claims ch 1/2/12 — `HC-000001..`, `H1-Cxx`, printed pages (generated) |
 | `database/seed/seed_zknowledge_zq1_history_concepts.sql` | H2 universal history vocabulary — `history_concept` HC001..HC057 (28 universal + 29 symptom dimensions), 9 `functional_impact` domains, symptom dimension maps (cough/chest pain/dyspnoea/fever/abdo pain), `provenance` H1→H2 derivation edges |
 | `database/seed/seed_zknowledge_zq2_history_engine.sql` | H2 universal question engine — 5 universal questions (Q001-Q005) with `question_mode` (OPEN/DIRECT/SCALE), `question_variant` context/language wordings (QV001+), `question_priority_rule` P001-P010, `history_context_rule` R001-R007 |
+| `database/seed/seed_zknowledge_zq3_question_rule_engine.sql` | H3 engine content — 10 `question_module`s (COUGH_CORE, SPUTUM, DYSPNOEA, CHEST_PAIN, FEVER, CHRONIC_COUGH, HAEMOPTYSIS, PAEDIATRIC_RESPIRATORY, ADULT_RESPIRATORY, PREGNANCY_CONTEXT), 36 members, 13 `question_rule`s QR001-QR013 (cough/dyspnoea/haemoptysis/fever/context modules), 13 `question_dependency`s (blocking sputum/dyspnoea/fever/chest-pain probes), 12 `question_rationale`s, 18 `question_differential_weight`s (vs PNEUMONIA, TUBERCULOSIS, HEART-FAILURE, ASTHMA, ACUTE-BRONCHITIS, GERD), 9 `documentation_requirement`s (HPI/RED_FLAGS), 2 `history_completion_rule`s (HCR-COUGH, HCR-CHEST-PAIN), 7 `question_requirement` safety/high_priority rows, 67 `provenance` edges — all sourced from H1/H12 claims |
+| `database/seed/seed_zknowledge_zq4_question_engine_worked_example.sql` | H3 worked example — makes the L1 universal foundation askable: binds Q001-Q005 to universal facts (REASON_PRESENTATION, SYMPTOM_ONSET_TEXT, SYMPTOM_DURATION_DAYS, SYMPTOM_SEVERITY_SCORE, SYMPTOM_ASSOCIATED_TEXT), marks them MANDATORY, adds provenance |
 
 ## Knowledge compiler
 
-`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2 ontology done, symptom modules planned). The locked H1 hierarchy is:
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2 done, H3 done). The locked H1 hierarchy is:
 
 ```
 source (HUTCHISON_CM) → version (HUTCHISON_24_2018)
@@ -112,6 +115,28 @@ Connection defaults (override via env vars):
 | `AMEXAN_PGDATABASE`      | `amexan`             |
 | `AMEXAN_PGROLE`          | `amexan`             |
 | `AMEXAN_PGROLEPASSWORD`  | `amexan`             |
+
+## Question engine (H3)
+
+The CPU (`clinical-cpu/src/questions/QuestionSelector.ts`) turns the H3 tables into
+an adaptive "next best question" queue. Ordering combines mandatory levels,
+symptom activation, blocking dependencies, and module rules:
+
+| Level              | Rank | Meaning                                              |
+| ------------------ | ---- | ---------------------------------------------------- |
+| `safety`           | 0    | red-flag probes always first (e.g. haemoptysis)      |
+| `mandatory`        | 1    | L1 universal foundation + symptom-cardinal probes    |
+| `conditionally_required` | 2 | required once their gating fact is present         |
+| `high_priority`    | 3    | clinically important but conditional                 |
+| `optional`         | 4    | fill-in depth                                        |
+| `informational`    | 5    | non-essential                                        |
+
+Within a level, score = rank·1000 + question priority − info gain − safety
+boost − H3 rule delta (ACTIVATE pulls up). A fired `question_rule` with
+DEACTIVATE suppresses its target; a blocking `question_dependency` that is not
+yet satisfied hides its question. `question_requirement` conditions only rule a
+question *out* (dry cough hides sputum probes; unknown gating fact never
+suppresses). The L1 universal foundation (Q001-Q005) is always asked first.
 
 ## Acceptance criteria
 
