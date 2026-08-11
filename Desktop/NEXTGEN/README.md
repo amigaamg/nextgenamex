@@ -53,8 +53,20 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/022_knowledge_symptom_engine.sql` | symptom-centric junction tables (etiology, risk, HPI templates, activation) |
 | `database/migrations/023_knowledge_hpi_documentation_group.sql` | `documentation_group` on HPI templates |
 | `database/migrations/024_knowledge_hpi_documentation_groups.sql` | full internal-medicine HPI group order (adds chronology, previous, health_seeking, severity) |
+| `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1: source → document → chapter → section → chunk → claim + `provenance` bridge |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
+| `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source layer (generated) |
+| `database/seed/seed_zknowledge_zpf_hutchison_claims.sql` | compiled Hutchison claims ch 1/2/12 (generated) |
+
+## Knowledge compiler
+
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2+ planned). Regenerate:
+
+```powershell
+python knowledge-compiler/build_h1_source.py <toc.txt> <full.txt> database/seed/seed_zknowledge_zpe_hutchison_source.sql
+python knowledge-compiler/build_h2_claims.py <toc.txt> <full.txt> database/seed/seed_zknowledge_zpf_hutchison_claims.sql
+```
 
 ## Running
 
