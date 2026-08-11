@@ -56,6 +56,7 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1 (locked spec): source → version → section → chapter → chunk → claim + `extraction_job` + `provenance` bridge |
 | `database/migrations/026_h2_universal_history_ontology.sql` | Medical Knowledge Compiler H2 (universal history ontology): `history_concept`, `symptom_history_dimension`, `history_context_rule`, `question_variant`, `question_priority_rule`, `functional_impact`, three-state `fact_value.value_state` (TRUE/FALSE/UNKNOWN vs NOT_ASKED), `clinical_event` timeline, `patient_perspective` (IDEA/CONCERN/EXPECTATION/GOAL), `history_reliability`, `question.history_concept_id` + `question_mode` |
 | `database/migrations/027_h3_question_rule_engine.sql` | Medical Knowledge Compiler H3 (question & rule engine): `question_rule` (fact/context triggers → ACTIVATE/DEACTIVATE question/symptom/module), `question_module` + `question_module_member`, `question_dependency` (blocking prerequisites), `question_rationale` (clinical/safety/differential/documentation/context/educational), `question_differential_weight` (condition-scored answers), `documentation_requirement` (per-section required facts), `history_completion_rule` (and/or completion tree), plus `question_requirement` level CHECK extended with `safety` + `high_priority` |
+| `database/migrations/028_h4_universal_symptom_dimensions.sql` | Medical Knowledge Compiler H4 (universal symptom dimensions): `symptom_dimension` canonical 25-dimension registry (SD001-SD025, universal vs conditional), `symptom_dimension_option` (symptom-specific controlled vocabularies), `red_flag_rule` (FACT + CONTEXT + CLINICAL_SIGNIFICANCE, urgency tiers), `exposure_concept` (15 reusable exposure classes) + `symptom_exposure`, and `symptom_relationship.diagnostic_weight` (hard-vs-soft symptoms) |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
 | `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source map — source/version/section/chapter/chunk/extraction_job (generated) |
@@ -64,10 +65,11 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/seed/seed_zknowledge_zq2_history_engine.sql` | H2 universal question engine — 5 universal questions (Q001-Q005) with `question_mode` (OPEN/DIRECT/SCALE), `question_variant` context/language wordings (QV001+), `question_priority_rule` P001-P010, `history_context_rule` R001-R007 |
 | `database/seed/seed_zknowledge_zq3_question_rule_engine.sql` | H3 engine content — 10 `question_module`s (COUGH_CORE, SPUTUM, DYSPNOEA, CHEST_PAIN, FEVER, CHRONIC_COUGH, HAEMOPTYSIS, PAEDIATRIC_RESPIRATORY, ADULT_RESPIRATORY, PREGNANCY_CONTEXT), 36 members, 13 `question_rule`s QR001-QR013 (cough/dyspnoea/haemoptysis/fever/context modules), 13 `question_dependency`s (blocking sputum/dyspnoea/fever/chest-pain probes), 12 `question_rationale`s, 18 `question_differential_weight`s (vs PNEUMONIA, TUBERCULOSIS, HEART-FAILURE, ASTHMA, ACUTE-BRONCHITIS, GERD), 9 `documentation_requirement`s (HPI/RED_FLAGS), 2 `history_completion_rule`s (HCR-COUGH, HCR-CHEST-PAIN), 7 `question_requirement` safety/high_priority rows, 67 `provenance` edges — all sourced from H1/H12 claims |
 | `database/seed/seed_zknowledge_zq4_question_engine_worked_example.sql` | H3 worked example — makes the L1 universal foundation askable: binds Q001-Q005 to universal facts (REASON_PRESENTATION, SYMPTOM_ONSET_TEXT, SYMPTOM_DURATION_DAYS, SYMPTOM_SEVERITY_SCORE, SYMPTOM_ASSOCIATED_TEXT), marks them MANDATORY, adds provenance |
+| `database/seed/seed_zknowledge_zq5_symptom_dimensions.sql` | H4 universal symptom grammar — 25 canonical dimensions (SD001-SD025) + 9 new history_concept rows (HC058-HC066: presence, distribution, systemic impact, red flag, previous episodes/treatment, treatment response, evolution, resolution), 25 symptom-specific option vocabularies (cough/chest-pain/abdo character, radiation), 10 red-flag rules (RFR-*, emergency/urgent, sourced to H1/H12 claims), 15 exposure concepts + 21 symptom→exposure maps, 9 hard-vs-soft diagnostic weights, 67 provenance edges |
 
 ## Knowledge compiler
 
-`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2 done, H3 done). The locked H1 hierarchy is:
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1-H4 done). The locked H1 hierarchy is:
 
 ```
 source (HUTCHISON_CM) → version (HUTCHISON_24_2018)
@@ -137,6 +139,33 @@ DEACTIVATE suppresses its target; a blocking `question_dependency` that is not
 yet satisfied hides its question. `question_requirement` conditions only rule a
 question *out* (dry cough hides sputum probes; unknown gating fact never
 suppresses). The L1 universal foundation (Q001-Q005) is always asked first.
+
+The safety boost is **H4-driven**: the CPU reads `knowledge.red_flag_rule`
+(FACT + CONTEXT + CLINICAL_SIGNIFICANCE) instead of a hardcoded list —
+emergency-tier facts (haemoptysis, cyanosis, chest indrawing, severe dyspnoea)
+outrank urgent-tier ones.
+
+## Universal symptom dimensions (H4)
+
+The symptom *owns* its exploration dimensions; diseases consume the facts.
+`knowledge.symptom_dimension` is the canonical 25-dimension registry
+(SD001-SD025): presence, onset, duration, time course, frequency, site,
+distribution, radiation, character, severity, triggers, aggravating, relieving,
+timing/pattern, associated, functional impact, systemic impact, red flag,
+exposure, previous episodes, previous treatment, treatment response, patient
+perspective, evolution, resolution. Universal dimensions are always explored;
+conditional ones (site, radiation, distribution, frequency, character, ...)
+apply only where they make sense (fever has no site). Each dimension is backed
+by a `history_concept` — the H2 vocabulary stays the single source of truth, so
+nothing is duplicated.
+
+Per-symptom vocabulary lives in `symptom_dimension_option` (universal dimension
++ symptom-specific terms: cough character dry/productive/barking/paroxysmal vs
+chest-pain character pressure/burning/sharp/tearing). `red_flag_rule` encodes
+red flags as fact + context + significance. `exposure_concept` +
+`symptom_exposure` make exposure history reusable across symptoms.
+`symptom_relationship.diagnostic_weight` ranks hard vs soft associations
+(haemoptysis > weight loss > fever as cough companions).
 
 ## Acceptance criteria
 
