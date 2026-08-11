@@ -54,14 +54,17 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/023_knowledge_hpi_documentation_group.sql` | `documentation_group` on HPI templates |
 | `database/migrations/024_knowledge_hpi_documentation_groups.sql` | full internal-medicine HPI group order (adds chronology, previous, health_seeking, severity) |
 | `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1 (locked spec): source → version → section → chapter → chunk → claim + `extraction_job` + `provenance` bridge |
+| `database/migrations/026_h2_universal_history_ontology.sql` | Medical Knowledge Compiler H2 (universal history ontology): `history_concept`, `symptom_history_dimension`, `history_context_rule`, `question_variant`, `question_priority_rule`, `functional_impact`, three-state `fact_value.value_state` (TRUE/FALSE/UNKNOWN vs NOT_ASKED), `clinical_event` timeline, `patient_perspective` (IDEA/CONCERN/EXPECTATION/GOAL), `history_reliability`, `question.history_concept_id` + `question_mode` |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
 | `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source map — source/version/section/chapter/chunk/extraction_job (generated) |
 | `database/seed/seed_zknowledge_zpf_hutchison_claims.sql` | compiled Hutchison claims ch 1/2/12 — `HC-000001..`, `H1-Cxx`, printed pages (generated) |
+| `database/seed/seed_zknowledge_zq1_history_concepts.sql` | H2 universal history vocabulary — `history_concept` HC001..HC057 (28 universal + 29 symptom dimensions), 9 `functional_impact` domains, symptom dimension maps (cough/chest pain/dyspnoea/fever/abdo pain), `provenance` H1→H2 derivation edges |
+| `database/seed/seed_zknowledge_zq2_history_engine.sql` | H2 universal question engine — 5 universal questions (Q001-Q005) with `question_mode` (OPEN/DIRECT/SCALE), `question_variant` context/language wordings (QV001+), `question_priority_rule` P001-P010, `history_context_rule` R001-R007 |
 
 ## Knowledge compiler
 
-`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2+ planned). The locked H1 hierarchy is:
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2 ontology done, symptom modules planned). The locked H1 hierarchy is:
 
 ```
 source (HUTCHISON_CM) → version (HUTCHISON_24_2018)
