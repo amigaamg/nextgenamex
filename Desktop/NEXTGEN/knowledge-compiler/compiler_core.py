@@ -11,6 +11,17 @@ import uuid as uuid_mod
 
 NS = uuid_mod.UUID("6ba7b810-9dad-11d1-80b4-00c04fd430c8")  # DNS namespace
 
+# PAGE CONVENTION: the raw PDF extraction and the TOC carry 1-based PDF page
+# indices; the book's printed page numbers are offset from those. All AMEXAN
+# page columns store PRINTED book pages.  printed = pdf_index - PAGE_OFFSET
+# (verified: ch1 PDF p14 -> printed p3; ch12 PDF p178 -> printed p167).
+PAGE_OFFSET = 11
+
+
+def printed_page(pdf_index: int) -> int:
+    """Convert a 1-based PDF page index to the printed book page number."""
+    return pdf_index - PAGE_OFFSET
+
 
 def stable_uuid(seed: str) -> uuid_mod.UUID:
     """Deterministic uuid5 from a string seed (no randomness)."""

@@ -1,1316 +1,67 @@
 -- =============================================================================
--- AMEXAN Medical Knowledge Compiler — H1 source-knowledge seed (Hutchison 24e)
+-- AMEXAN Medical Knowledge Compiler — H1 source-map seed (Hutchison 24e)
+-- LOCKED H1 SPEC: source -> version -> section -> chapter -> chunk + extraction_job
 -- GENERATED FILE — do not edit by hand. Regenerate with:
 --   python knowledge-compiler/build_h1_source.py <toc> <text> <out>
+-- Page convention: all page columns are PRINTED book pages (pdf_index - 11).
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- source + source_document
+-- source
 -- -----------------------------------------------------------------------------
-INSERT INTO knowledge.source (id, source_code, title, source_type, authority_type, description, publisher, language_code, status) VALUES
-   ('8d9e0a53-6d81-50c3-9e33-06a3401bc6e7', 'SRC-HUTCHISON-2018', 'Hutchison''s Clinical Methods', 'textbook', 'clinical_method', 'Clinical methods foundation: how to elicit, organise and document history, examination and differential diagnosis.', 'Elsevier', 'en', 'active')
-ON CONFLICT (source_code) DO UPDATE SET description = EXCLUDED.description;
-
-INSERT INTO knowledge.source_document (id, source_id, document_code, title, edition_label, year, page_count, status) VALUES
-   ('68f52e46-b23e-5281-9f66-71250b36ed24', '8d9e0a53-6d81-50c3-9e33-06a3401bc6e7', 'DOC-HUTCHISON-24E', 'Hutchison''s Clinical Methods', '24th edition', 2018, 499, 'active')
-ON CONFLICT (document_code) DO UPDATE SET edition_label = EXCLUDED.edition_label, year = EXCLUDED.year, page_count = EXCLUDED.page_count;
+INSERT INTO knowledge.source (source_id, source_name, edition, year, source_type, authority_scope, amexan_role, description, publisher, language_code, status) VALUES
+   ('HUTCHISON_CM', 'Hutchison''s Clinical Methods', 24, 2018, 'clinical_methods_text', 'clinical method', 'HISTORY + EXAMINATION + CLINICAL COMMUNICATION', 'Clinical methods foundation: how to elicit, organise and document history, examination and differential diagnosis.', 'Elsevier', 'en', 'ACTIVE_FOUNDATION')
+ON CONFLICT (source_id) DO UPDATE SET source_name = EXCLUDED.source_name, edition = EXCLUDED.edition, year = EXCLUDED.year, source_type = EXCLUDED.source_type, authority_scope = EXCLUDED.authority_scope, amexan_role = EXCLUDED.amexan_role;
 
 -- -----------------------------------------------------------------------------
--- source_chapter
+-- source_version
 -- -----------------------------------------------------------------------------
-INSERT INTO knowledge.source_chapter (id, document_id, chapter_number, chapter_title, chapter_type, start_page, end_page, sort_order) VALUES
-   ('807ac2f4-9add-50e8-9858-8a89d00a9309', '68f52e46-b23e-5281-9f66-71250b36ed24', '1', 'Doctor and patient', 'general', 14, 25, 0),
-   ('139fa68e-679c-5d52-9dc9-4334bf0c5577', '68f52e46-b23e-5281-9f66-71250b36ed24', '2', 'General patient examination and differential diagnosis', 'general', 26, 41, 1),
-   ('30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', '68f52e46-b23e-5281-9f66-71250b36ed24', '3', 'The next steps:', 'general', 42, 47, 2),
-   ('3e5af70c-abf6-5cb3-858e-afd53d782937', '68f52e46-b23e-5281-9f66-71250b36ed24', '4', 'Ethical considerations', 'general', 48, 55, 3),
-   ('ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '68f52e46-b23e-5281-9f66-71250b36ed24', '5', 'Women', 'group', 56, 73, 4),
-   ('c106ee47-a912-5e9b-8e9e-5b0cab817a32', '68f52e46-b23e-5281-9f66-71250b36ed24', '6', 'Children and adolescents', 'group', 74, 95, 5),
-   ('f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '68f52e46-b23e-5281-9f66-71250b36ed24', '7', 'Older people', 'group', 96, 109, 6),
-   ('323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '68f52e46-b23e-5281-9f66-71250b36ed24', '8', 'Psychiatric assessment', 'group', 110, 131, 7),
-   ('6a1185dd-7349-53b7-9b52-3456977cdd87', '68f52e46-b23e-5281-9f66-71250b36ed24', '9', 'Patients presenting as emergencies', 'group', 132, 151, 8),
-   ('fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '68f52e46-b23e-5281-9f66-71250b36ed24', '10', 'Patients with a fever', 'group', 152, 167, 9),
-   ('273a911d-8a5a-56f1-9f61-9c993e674466', '68f52e46-b23e-5281-9f66-71250b36ed24', '11', 'Patients in pain', 'group', 168, 177, 10),
-   ('8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '68f52e46-b23e-5281-9f66-71250b36ed24', '12', 'Respiratory system', 'system', 178, 199, 11),
-   ('22fe0f7b-b70c-5e17-9514-d068e854ec09', '68f52e46-b23e-5281-9f66-71250b36ed24', '13', 'Cardiovascular system', 'system', 200, 251, 12),
-   ('05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '68f52e46-b23e-5281-9f66-71250b36ed24', '14', 'Gastrointestinal system', 'system', 252, 283, 13),
-   ('a2341edd-7c9f-570c-ae5a-6808ef39ac99', '68f52e46-b23e-5281-9f66-71250b36ed24', '15', 'Locomotor system', 'system', 284, 319, 14),
-   ('0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '68f52e46-b23e-5281-9f66-71250b36ed24', '16', 'Nervous system', 'system', 320, 365, 15),
-   ('9c71e0e9-9577-5581-9546-054bb5c96415', '68f52e46-b23e-5281-9f66-71250b36ed24', '17', 'Urogenital system', 'system', 366, 389, 16),
-   ('65e2c421-da5c-5da3-b89b-86573eb11c94', '68f52e46-b23e-5281-9f66-71250b36ed24', '18', 'Endocrine and metabolic disorders', 'system', 390, 413, 17),
-   ('3b39b90a-889e-5746-bfe3-75475c945b44', '68f52e46-b23e-5281-9f66-71250b36ed24', '19', 'Skin, nails and hair', 'system', 414, 429, 18),
-   ('07fc99a7-29c8-5d46-81d7-78e8c9af3214', '68f52e46-b23e-5281-9f66-71250b36ed24', '20', 'Eyes', 'system', 430, 449, 19),
-   ('bc352907-c5e8-527c-9af0-ec8d2309f29a', '68f52e46-b23e-5281-9f66-71250b36ed24', '21', 'Ear, nose and throat', 'system', 450, 475, 20)
-ON CONFLICT (document_id, chapter_number) DO UPDATE SET chapter_title = EXCLUDED.chapter_title, start_page = EXCLUDED.start_page, end_page = EXCLUDED.end_page;
+INSERT INTO knowledge.source_version (version_id, source_id, edition, publication_year, language, supersedes, effective_from, status, pdf_page_offset, page_count) VALUES
+   ('HUTCHISON_24_2018', 'HUTCHISON_CM', 24, 2018, 'English', NULL, '2018-01-01', 'ACTIVE', 11, 499)
+ON CONFLICT (version_id) DO UPDATE SET source_id = EXCLUDED.source_id, edition = EXCLUDED.edition, publication_year = EXCLUDED.publication_year, effective_from = EXCLUDED.effective_from, pdf_page_offset = EXCLUDED.pdf_page_offset, page_count = EXCLUDED.page_count;
 
 -- -----------------------------------------------------------------------------
 -- source_section
 -- -----------------------------------------------------------------------------
-INSERT INTO knowledge.source_section (id, chapter_id, parent_section_id, section_number, section_title, depth, start_page, sort_order) VALUES
-   ('bbb941fd-7893-5743-8939-fb146f01426b', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1', 'Introduction', 1, 14, 0),
-   ('ec9b3ab9-3fec-5d78-9a54-adb9a3ac1245', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1', 'Setting the scene', 1, 14, 0),
-   ('2e8a0935-661d-5b52-ab9b-ca8327227cce', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1', 'Emergency presentations', 1, 15, 0),
-   ('5ca644f9-b008-56f6-a927-90281a495f01', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1', 'History taking', 1, 15, 0),
-   ('6729058e-47a9-51ec-b8ae-320280f6eda9', '807ac2f4-9add-50e8-9858-8a89d00a9309', '5ca644f9-b008-56f6-a927-90281a495f01', '1.1.1.1.1.1', 'Beginning the history', 2, 15, 0),
-   ('caaa82c3-8770-5a31-80db-5fb7148ec7dc', '807ac2f4-9add-50e8-9858-8a89d00a9309', '6729058e-47a9-51ec-b8ae-320280f6eda9', '1.1.1.1.1.1.1', 'Developing themes', 2, 16, 0),
-   ('58479bb1-a476-575d-916c-0d27a2ff89c9', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'caaa82c3-8770-5a31-80db-5fb7148ec7dc', '1.1.1.1.1.1.1.1', 'Non-verbal communication', 3, 16, 0),
-   ('7398ddf5-5bed-52bd-9e28-86a61dc6cc44', '807ac2f4-9add-50e8-9858-8a89d00a9309', '58479bb1-a476-575d-916c-0d27a2ff89c9', '1.1.1.1.1.1.1.1.1', 'Vocabulary', 3, 16, 0),
-   ('c6fbbd24-6008-583e-8b6f-b976474c423a', '807ac2f4-9add-50e8-9858-8a89d00a9309', '7398ddf5-5bed-52bd-9e28-86a61dc6cc44', '1.1.1.1.1.1.1.1.1.1', 'Indirect and direct questions', 3, 17, 0),
-   ('82bcba96-1253-5219-850e-bd2eaf8b0177', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'c6fbbd24-6008-583e-8b6f-b976474c423a', '1.1.1.1.1.1.1.1.1.1.1', 'Disease-centred versus patient-centred', 3, 17, 0),
-   ('ee108493-ed64-50cb-a96d-cc7637e159f7', '807ac2f4-9add-50e8-9858-8a89d00a9309', '82bcba96-1253-5219-850e-bd2eaf8b0177', '1.1.1.1.1.1.1.1.1.1.1.1', 'Judging the severity of symptoms', 3, 18, 0),
-   ('2d9af74e-a6ff-5f6c-901f-a6640ec0c3af', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'ee108493-ed64-50cb-a96d-cc7637e159f7', '1.1.1.1.1.1.1.1.1.1.1.1.1', 'Which issues are important?', 3, 18, 0),
-   ('db5e7bde-f834-51e9-8927-520f99df118e', '807ac2f4-9add-50e8-9858-8a89d00a9309', '2d9af74e-a6ff-5f6c-901f-a6640ec0c3af', '1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'A schematic history', 2, 18, 0),
-   ('b5d3f8f2-87bd-570c-b8c3-d7b993e51970', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'db5e7bde-f834-51e9-8927-520f99df118e', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Direct questions about bodily systems', 3, 18, 0),
-   ('8e8002b7-64b7-50d1-8a3f-181dcafe67ac', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'b5d3f8f2-87bd-570c-b8c3-d7b993e51970', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Clarifying detail', 2, 19, 0),
-   ('1632b864-8b51-5a1b-b764-b8712193a822', '807ac2f4-9add-50e8-9858-8a89d00a9309', '8e8002b7-64b7-50d1-8a3f-181dcafe67ac', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pain', 3, 19, 0),
-   ('00b01531-1e97-52ea-b3b9-45a2892a63fe', '807ac2f4-9add-50e8-9858-8a89d00a9309', '1632b864-8b51-5a1b-b764-b8712193a822', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Drug history', 3, 20, 0),
-   ('79c859ea-9ade-51ca-b4ff-866baa5abf08', '807ac2f4-9add-50e8-9858-8a89d00a9309', '00b01531-1e97-52ea-b3b9-45a2892a63fe', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family history', 3, 20, 0),
-   ('80a1eae7-1b96-5a09-9b90-c9c4cd166fc3', '807ac2f4-9add-50e8-9858-8a89d00a9309', '79c859ea-9ade-51ca-b4ff-866baa5abf08', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Occupational history', 3, 20, 0),
-   ('cc4cf3ca-874d-551d-9d81-03c9b7d45980', '807ac2f4-9add-50e8-9858-8a89d00a9309', '80a1eae7-1b96-5a09-9b90-c9c4cd166fc3', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Alcohol history', 3, 20, 0),
-   ('2fa2fe2a-13a3-5151-99e5-56dec60fdbc8', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'cc4cf3ca-874d-551d-9d81-03c9b7d45980', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Retrospective history', 3, 20, 0),
-   ('92f67b28-c03b-5234-ae34-16b9a20fb4dc', '807ac2f4-9add-50e8-9858-8a89d00a9309', '2fa2fe2a-13a3-5151-99e5-56dec60fdbc8', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Particular situations', 2, 21, 0),
-   ('bda645d1-00ab-574b-a74e-2ff3cae422f2', '807ac2f4-9add-50e8-9858-8a89d00a9309', '92f67b28-c03b-5234-ae34-16b9a20fb4dc', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Garrulous patients', 3, 21, 0),
-   ('ce6ea2f4-52d5-58aa-bd4e-dae55e86af8d', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'bda645d1-00ab-574b-a74e-2ff3cae422f2', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Angry patients', 3, 21, 0),
-   ('e2188f53-06d2-545e-9ef7-e3fa4be2826d', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'ce6ea2f4-52d5-58aa-bd4e-dae55e86af8d', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The well-informed patient', 3, 22, 0),
-   ('4f4136c4-b167-56c4-b981-152fc24ba5eb', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'e2188f53-06d2-545e-9ef7-e3fa4be2826d', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Accompanying persons', 3, 22, 0),
-   ('0020f2a3-c376-5c9a-acb4-4aec8fa540f5', '807ac2f4-9add-50e8-9858-8a89d00a9309', '4f4136c4-b167-56c4-b981-152fc24ba5eb', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Using interpreters/advocates', 3, 23, 0),
-   ('7d7b14fa-680b-578c-a866-aa736a193824', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Analysing symptoms', 1, 23, 1),
-   ('d64ce480-85e8-5f64-a487-19157c743669', '807ac2f4-9add-50e8-9858-8a89d00a9309', '7d7b14fa-680b-578c-a866-aa736a193824', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', '‘Hard and soft’ symptoms', 2, 23, 0),
-   ('eb9d6d56-1df5-593a-9317-e65f6365b729', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'd64ce480-85e8-5f64-a487-19157c743669', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Time course', 2, 23, 0),
-   ('6ed8a9db-57cc-51d5-9a0b-63efdd703f17', '807ac2f4-9add-50e8-9858-8a89d00a9309', 'eb9d6d56-1df5-593a-9317-e65f6365b729', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Pattern recognition versus logical analysis', 2, 24, 0),
-   ('59f6c2e0-c92a-5de7-b625-12578b263dfe', '807ac2f4-9add-50e8-9858-8a89d00a9309', '6ed8a9db-57cc-51d5-9a0b-63efdd703f17', '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Negative data', 2, 24, 0),
-   ('0d9aeb37-ad2e-516b-a302-d727d1cb3c97', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'What does the patient actually want?', 1, 24, 0),
-   ('b7b14a93-b47f-5203-9024-fec84fbf70c1', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Retaking the history', 1, 24, 0),
-   ('aea146e7-d7ba-557c-a71e-3d8526f93c05', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Note taking', 1, 25, 0),
-   ('1435103e-978d-5c15-a63d-d85360a13410', '807ac2f4-9add-50e8-9858-8a89d00a9309', NULL, '1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Conclusion', 1, 25, 0),
-   ('3758a818-98d6-550a-93ee-6a68d91ef588', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1', 'Introduction', 1, 26, 0),
-   ('3862328d-8e30-5237-a610-cc3fc5bac146', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1.1', 'General examination of a patient', 1, 26, 0),
-   ('c2c574a8-8a1c-5da0-8da8-ff8b2cb651e5', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '3862328d-8e30-5237-a610-cc3fc5bac146', '2.1.1.1', 'Posture and gait', 2, 27, 0),
-   ('0808e26f-59f7-5b32-988e-15a711b38fe8', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'c2c574a8-8a1c-5da0-8da8-ff8b2cb651e5', '2.1.1.1.1', 'Speech and interaction', 2, 27, 0),
-   ('d3ea985c-e137-5cb9-8eb4-2b9c3d35f292', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '0808e26f-59f7-5b32-988e-15a711b38fe8', '2.1.1.1.1.1', 'Physique and nutrition', 2, 27, 0),
-   ('5dcc509f-bf64-58ab-85ca-34105f24a2c2', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'd3ea985c-e137-5cb9-8eb4-2b9c3d35f292', '2.1.1.1.1.1.1', 'Temperature', 2, 27, 0),
-   ('864da13a-f17c-5b4e-9cd2-6d8053536a64', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '5dcc509f-bf64-58ab-85ca-34105f24a2c2', '2.1.1.1.1.1.1.1', 'Hands', 2, 28, 0),
-   ('6a9a9ad0-aa20-5e30-b526-5d8b7086a733', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '864da13a-f17c-5b4e-9cd2-6d8053536a64', '2.1.1.1.1.1.1.1.1', 'Odours', 2, 30, 0),
-   ('5a099f98-61bf-5764-a34d-f1f37e69adcd', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '6a9a9ad0-aa20-5e30-b526-5d8b7086a733', '2.1.1.1.1.1.1.1.1.1', 'Face and neck', 2, 30, 0),
-   ('1b81eef0-820b-5e8b-bd1d-fd3c231a9d2a', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '5a099f98-61bf-5764-a34d-f1f37e69adcd', '2.1.1.1.1.1.1.1.1.1.1', 'Lymph glands and lymphadenopathy', 2, 31, 0),
-   ('bdc3eb7b-ddca-57fa-997e-235eb0153f97', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '1b81eef0-820b-5e8b-bd1d-fd3c231a9d2a', '2.1.1.1.1.1.1.1.1.1.1.1', 'Axillae', 2, 32, 0),
-   ('2da1dc11-daaa-5f24-ad19-4b474f62aff0', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'bdc3eb7b-ddca-57fa-997e-235eb0153f97', '2.1.1.1.1.1.1.1.1.1.1.1.1', 'Skin', 2, 33, 0),
-   ('7447fb3a-fa47-557d-8c2f-1b4daeafaab9', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '2da1dc11-daaa-5f24-ad19-4b474f62aff0', '2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pulses', 2, 34, 0),
-   ('53326d36-87bf-528d-85b3-723c0b6cb6ac', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '7447fb3a-fa47-557d-8c2f-1b4daeafaab9', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Blood pressure', 2, 35, 0),
-   ('52c8b858-f7e2-551a-a16d-c624abcab88f', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '53326d36-87bf-528d-85b3-723c0b6cb6ac', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Legs and feet', 2, 36, 0),
-   ('cb244fb2-87f6-56c9-b74c-62c95381b24a', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '52c8b858-f7e2-551a-a16d-c624abcab88f', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Breasts', 2, 37, 0),
-   ('f49b62c4-9415-5fe3-bec0-a8fe311e3679', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Putting it all together', 1, 38, 0),
-   ('3501bae8-0511-5cbf-a29d-76198f46d603', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'f49b62c4-9415-5fe3-bec0-a8fe311e3679', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'General', 2, 38, 0),
-   ('17d60a42-674f-5113-8b68-81ece91547f0', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '3501bae8-0511-5cbf-a29d-76198f46d603', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Mouth and pharynx', 2, 38, 0),
-   ('f8ea176b-5277-578a-ac26-0cffeb9e703b', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '17d60a42-674f-5113-8b68-81ece91547f0', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Hands', 2, 38, 0),
-   ('ac97480b-40ef-536b-89e4-1b80d3c5423a', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'f8ea176b-5277-578a-ac26-0cffeb9e703b', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cardiovascular and respiratory (anterior, patient semi-recumbent)', 2, 38, 0),
-   ('93d67a73-f632-5d2b-a56f-457e95ae2265', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'ac97480b-40ef-536b-89e4-1b80d3c5423a', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cardiovascular and respiratory (posterior, sitting forward)', 2, 38, 0),
-   ('7eb65886-5588-546b-90e7-e02e7a639ddd', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '93d67a73-f632-5d2b-a56f-457e95ae2265', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Neck (while sitting forward)', 2, 38, 0),
-   ('7c28d56f-1f81-500b-8a6a-0e27e7431e3c', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '7eb65886-5588-546b-90e7-e02e7a639ddd', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Abdomen', 2, 38, 0),
-   ('614e511b-84e6-5586-8bc4-da6e0c84edb2', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '7c28d56f-1f81-500b-8a6a-0e27e7431e3c', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Upper limbs', 2, 38, 0),
-   ('ac997619-c8c9-56e7-8efb-b8737b7b61a8', '139fa68e-679c-5d52-9dc9-4334bf0c5577', '614e511b-84e6-5586-8bc4-da6e0c84edb2', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Lower limbs', 2, 38, 0),
-   ('22fe1da0-6ad4-5c56-87f1-245dee0233b8', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 'ac997619-c8c9-56e7-8efb-b8737b7b61a8', '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cranial nerves', 2, 38, 0),
-   ('35d7ea1d-4a88-5c1e-b7f7-81e251547036', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Documentation and communication', 1, 38, 0),
-   ('6c5db9cf-1692-5d59-b9df-7ecdcfeca713', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Presenting a case', 1, 40, 0),
-   ('07104505-64e2-53b0-aa33-a498beff7f1f', '139fa68e-679c-5d52-9dc9-4334bf0c5577', NULL, '2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Summary', 1, 40, 0),
-   ('c6965fb5-39df-54ac-8aab-2c809db9324d', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1', 'Introduction', 1, 42, 0),
-   ('cde216dc-74d0-5e7a-ac27-cc7b2d0841f3', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1', 'Management plan', 1, 43, 0),
-   ('f2a90854-cebc-5fc9-8f3d-d139375be17b', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1.1', 'What to write in the case notes', 1, 43, 0),
-   ('973dff25-b0d2-5c90-a925-c1faaca380fd', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1.1.1', 'What to say to the patient', 1, 44, 0),
-   ('72e37915-e942-5e94-9c32-6a51c2f72db5', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1.1.1.1', 'What to do when the diagnosis is unclear', 1, 45, 0),
-   ('8e0ce12d-4093-5045-8dfa-f5d01fc01c64', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1.1.1.1.1', 'Multiple causation', 1, 45, 0),
-   ('30b86ac7-47de-54ce-979a-e88cca5c032b', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', NULL, '3.1.1.1.1.1.1.1', 'Selecting appropriate investigations', 1, 45, 0),
-   ('88f82b6e-fcdf-523c-9343-ca6118e6901e', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1', 'Introduction', 1, 48, 0),
-   ('8e51986e-7821-5c0e-b655-5831fd1cea88', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1', 'Autonomy', 1, 48, 0),
-   ('9e2a505d-3908-53d3-998d-dfd97aa1d9f1', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1', 'Consent', 1, 48, 0),
-   ('0da780aa-543d-5a5c-a2a2-fe4e071d5806', '3e5af70c-abf6-5cb3-858e-afd53d782937', '9e2a505d-3908-53d3-998d-dfd97aa1d9f1', '4.1.1.1.1', 'Obtaining consent', 2, 49, 0),
-   ('558394c6-1c51-5746-b2b6-afcb6dbd019e', '3e5af70c-abf6-5cb3-858e-afd53d782937', '0da780aa-543d-5a5c-a2a2-fe4e071d5806', '4.1.1.1.1.1', 'Setting the scene', 2, 49, 0),
-   ('4ff52b1c-6f35-5e11-85c0-3414abb42f0a', '3e5af70c-abf6-5cb3-858e-afd53d782937', '558394c6-1c51-5746-b2b6-afcb6dbd019e', '4.1.1.1.1.1.1', 'Implications of consent or refusal', 2, 49, 0),
-   ('c6edc685-b5f0-5927-ba23-7deb278b1dff', '3e5af70c-abf6-5cb3-858e-afd53d782937', '4ff52b1c-6f35-5e11-85c0-3414abb42f0a', '4.1.1.1.1.1.1.1', 'Legal requirements for consent', 2, 49, 0),
-   ('adea44c1-f3da-5781-b480-cdb880b30f89', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'c6edc685-b5f0-5927-ba23-7deb278b1dff', '4.1.1.1.1.1.1.1.1', 'Competence and capacity for consent', 3, 49, 0),
-   ('eadf623d-d131-5c9f-9d8a-3a424ecc03af', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'adea44c1-f3da-5781-b480-cdb880b30f89', '4.1.1.1.1.1.1.1.1.1', 'Appropriately informed', 3, 49, 0),
-   ('afeec54d-13f2-58ea-9d5f-a34a718bf857', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2', 'Confidentiality', 1, 50, 1),
-   ('972bf194-5a26-5bcf-b8d2-acae0d52eb01', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'afeec54d-13f2-58ea-9d5f-a34a718bf857', '4.1.1.1.1.1.1.1.2.1', 'With permission', 2, 50, 0),
-   ('3093a898-c231-52a6-a014-5fc8a917618f', '3e5af70c-abf6-5cb3-858e-afd53d782937', '972bf194-5a26-5bcf-b8d2-acae0d52eb01', '4.1.1.1.1.1.1.1.2.1.1', 'In the patient’s interests', 2, 50, 0),
-   ('91109bd5-b545-5010-b091-e2295df6ff70', '3e5af70c-abf6-5cb3-858e-afd53d782937', '3093a898-c231-52a6-a014-5fc8a917618f', '4.1.1.1.1.1.1.1.2.1.1.1', 'An overriding duty to society', 2, 50, 0),
-   ('e3a8e8c2-804d-50be-b422-693509db1202', '3e5af70c-abf6-5cb3-858e-afd53d782937', '91109bd5-b545-5010-b091-e2295df6ff70', '4.1.1.1.1.1.1.1.2.1.1.1.1', 'Statutory disclosure', 2, 50, 0),
-   ('20c69d83-9702-59ff-8c4e-5633dfa4fd4e', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'e3a8e8c2-804d-50be-b422-693509db1202', '4.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Inspection of medical records', 2, 50, 0),
-   ('bdf7844a-dbd3-5e77-a5ac-50401ebbfc8d', '3e5af70c-abf6-5cb3-858e-afd53d782937', '20c69d83-9702-59ff-8c4e-5633dfa4fd4e', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'After death', 2, 50, 0),
-   ('5711a7bf-e43a-55c0-a944-b8bb30d768fa', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Organ donation', 1, 51, 0),
-   ('275291f8-55dc-557d-8b51-5b797ed0b3ce', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Resuscitation', 1, 51, 0),
-   ('6300b613-b1a0-58e4-99b7-6e77a2745b5e', '3e5af70c-abf6-5cb3-858e-afd53d782937', '275291f8-55dc-557d-8b51-5b797ed0b3ce', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Not for resuscitation', 2, 51, 0),
-   ('0ecb065e-2ad0-5629-9721-5438f35ba962', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Consent for autopsy', 1, 51, 0),
-   ('6c8f3764-0649-585f-ae6e-a6f3d7a23d30', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Other ethical problems', 1, 51, 0),
-   ('d9dbb66a-a98c-5fd9-a515-a284a14a5d7b', '3e5af70c-abf6-5cb3-858e-afd53d782937', '6c8f3764-0649-585f-ae6e-a6f3d7a23d30', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Medical negligence', 2, 51, 0),
-   ('a908c029-f295-5fa0-93d2-0c1aa64d6b2a', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'd9dbb66a-a98c-5fd9-a515-a284a14a5d7b', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'HIV', 2, 52, 0),
-   ('4918f69c-ce6a-5612-b75d-1927d4b7b3ee', '3e5af70c-abf6-5cb3-858e-afd53d782937', 'a908c029-f295-5fa0-93d2-0c1aa64d6b2a', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Genetics', 2, 52, 0),
-   ('6a9d6ef5-3fd6-5742-b08c-15c7424fecd1', '3e5af70c-abf6-5cb3-858e-afd53d782937', '4918f69c-ce6a-5612-b75d-1927d4b7b3ee', '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Genetic counselling', 3, 53, 0),
-   ('d879a44c-1173-5898-b40a-90208ab1c6c1', '3e5af70c-abf6-5cb3-858e-afd53d782937', NULL, '4.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Principles of medical ethics', 1, 53, 1),
-   ('a9842c0f-da7f-5034-b34b-c63ce8c4381a', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1', 'Introduction', 1, 56, 0),
-   ('8f274f46-cc8f-5dfe-9547-cc2d317a8d54', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1', 'Gynaecological history', 1, 56, 0),
-   ('707cbb68-11e8-5586-bc5a-ad13a276a4b8', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '8f274f46-cc8f-5dfe-9547-cc2d317a8d54', '5.1.1.1', 'Presenting complaint', 2, 56, 0),
-   ('9fa752f8-af42-5758-8b87-d457a2264923', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '707cbb68-11e8-5586-bc5a-ad13a276a4b8', '5.1.1.1.1', 'History of presenting complaint', 2, 56, 0),
-   ('41dc9306-e03e-560a-9f08-5495b7d3fcea', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9fa752f8-af42-5758-8b87-d457a2264923', '5.1.1.1.1.1', 'Pain history', 2, 56, 0),
-   ('9268fc5e-93f7-5725-a6e3-6177b1a79944', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '41dc9306-e03e-560a-9f08-5495b7d3fcea', '5.1.1.1.1.1.1', 'Menstrual history', 2, 57, 0),
-   ('8ae9c258-feb3-585d-900f-33a5e31597d0', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9268fc5e-93f7-5725-a6e3-6177b1a79944', '5.1.1.1.1.1.1.1', 'Vaginal discharge', 2, 57, 0),
-   ('2e98f748-761a-5c2b-9624-aa00c1b2e650', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '8ae9c258-feb3-585d-900f-33a5e31597d0', '5.1.1.1.1.1.1.1.1', 'Urinary tract and uterovaginal prolapse symptoms', 2, 57, 0),
-   ('30e6e402-1d27-520f-9402-17f3017d38c4', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '2e98f748-761a-5c2b-9624-aa00c1b2e650', '5.1.1.1.1.1.1.1.1.1', 'Sexual symptoms', 2, 58, 0),
-   ('0c7095a7-744a-5d5f-9bbb-d25875ed1956', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '30e6e402-1d27-520f-9402-17f3017d38c4', '5.1.1.1.1.1.1.1.1.1.1', 'Cervical cytology history', 2, 58, 0),
-   ('7e719e9a-2f46-5fc7-8338-d65d5a4ffe62', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '0c7095a7-744a-5d5f-9bbb-d25875ed1956', '5.1.1.1.1.1.1.1.1.1.1.1', 'Past obstetric history', 2, 58, 0),
-   ('27db094f-432e-5b69-a05f-b44fda21f6b6', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '7e719e9a-2f46-5fc7-8338-d65d5a4ffe62', '5.1.1.1.1.1.1.1.1.1.1.1.1', 'Past gynaecological history', 2, 59, 0),
-   ('2dc7ee87-5e08-513e-98b7-5942d303e03e', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '27db094f-432e-5b69-a05f-b44fda21f6b6', '5.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Past medical/surgical/anaesthetic history', 2, 59, 0),
-   ('9bb83e18-c1ec-5af5-8323-bcbf7a6ef14b', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '2dc7ee87-5e08-513e-98b7-5942d303e03e', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Medication or treatment history', 2, 59, 0),
-   ('b23f82ca-75f6-5d12-9600-2f79a311f9fd', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9bb83e18-c1ec-5af5-8323-bcbf7a6ef14b', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Social history', 2, 59, 0),
-   ('ffca3a8f-c6c9-5d82-b4ab-498f3e555b32', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'b23f82ca-75f6-5d12-9600-2f79a311f9fd', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family history', 2, 59, 0),
-   ('7740dace-9db5-5a6d-9f63-d89780f8b3a8', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gynaecological examination', 1, 59, 0),
-   ('9464b534-5621-541b-8013-67430ce809ff', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '7740dace-9db5-5a6d-9f63-d89780f8b3a8', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Abdominal examination', 2, 59, 0),
-   ('9c88b4f6-0b64-55a3-9659-5d21305cd959', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9464b534-5621-541b-8013-67430ce809ff', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pelvic examination', 2, 60, 0),
-   ('bf4f3c47-41ca-5564-a0fc-e44098a279b3', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pelvic examination in special circumstances', 1, 61, 0),
-   ('8e478bed-564c-5873-a64f-973fc4d67781', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'bf4f3c47-41ca-5564-a0fc-e44098a279b3', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vaginal bleeding', 2, 61, 0),
-   ('fd8af5c0-1b79-596d-8758-0351dfbe9f2a', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '8e478bed-564c-5873-a64f-973fc4d67781', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cervical smear', 2, 61, 0),
-   ('21e43fba-2217-565b-bcf8-202d5a708350', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'fd8af5c0-1b79-596d-8758-0351dfbe9f2a', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination under general anaesthesia', 2, 62, 0),
-   ('646e4618-41b6-5954-a95f-2bfef54c8c3e', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '21e43fba-2217-565b-bcf8-202d5a708350', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vaginismus', 2, 62, 0),
-   ('2ffa75ae-1581-5074-a840-5b151478a4c2', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '646e4618-41b6-5954-a95f-2bfef54c8c3e', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Intact hymen', 2, 62, 0),
-   ('d5aaf86a-b72a-5d63-9dc1-f85f26f3eefa', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '2ffa75ae-1581-5074-a840-5b151478a4c2', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pregnancy', 2, 62, 0),
-   ('63458cd2-f58c-58cc-a48d-6bdca9480831', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'd5aaf86a-b72a-5d63-9dc1-f85f26f3eefa', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Speculum examination', 2, 63, 0),
-   ('0b446bec-5ab3-5f3c-abd0-60a083f4b8a7', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '63458cd2-f58c-58cc-a48d-6bdca9480831', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Taking a cervical (Papanicolaou) smear', 3, 64, 0),
-   ('0eb0627a-0844-5d52-b2eb-92b2ce04eeff', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '0b446bec-5ab3-5f3c-abd0-60a083f4b8a7', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Assessment for prolapse', 3, 64, 0),
-   ('6ce95d2a-a1de-5155-a399-16908e92d6f3', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'History relating to current pregnancy', 1, 64, 1),
-   ('72e687b3-dbe5-5c71-a161-3732efa48ec2', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '6ce95d2a-a1de-5155-a399-16908e92d6f3', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Relevant past obstetric history', 2, 65, 0),
-   ('bda3618b-3511-5877-b143-73b5cc395eae', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '72e687b3-dbe5-5c71-a161-3732efa48ec2', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Drug/smoking/alcohol history', 2, 65, 0),
-   ('402a5cfd-250b-5c5d-8519-c5ddf1784bff', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'bda3618b-3511-5877-b143-73b5cc395eae', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Family history', 2, 65, 0),
-   ('c2f88380-e91c-5273-ad3a-fdbf9f99fae0', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '402a5cfd-250b-5c5d-8519-c5ddf1784bff', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Social history', 2, 65, 0),
-   ('385146c0-a6bc-5e3f-afe7-4ecdfacd412d', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Presentation of obstetric cases', 1, 65, 0),
-   ('9ac1c4fc-d795-57ac-9775-372c0601eb96', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Obstetric examination', 1, 65, 0),
-   ('ee090bee-9056-55b8-934c-148ef0689795', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9ac1c4fc-d795-57ac-9775-372c0601eb96', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'General examination', 2, 65, 0),
-   ('c69ff4f4-836f-57c6-8108-e4483c1be356', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'ee090bee-9056-55b8-934c-148ef0689795', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Abdominal examination in pregnancy', 2, 65, 0),
-   ('125b461e-0550-554f-bd71-8877bfe5630e', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'c69ff4f4-836f-57c6-8108-e4483c1be356', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Vaginal examination in pregnancy', 2, 67, 0),
-   ('f1c80d63-08a1-5e00-97b0-b5af28faa22b', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '125b461e-0550-554f-bd71-8877bfe5630e', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Vaginal examination in labour', 2, 68, 0),
-   ('c91e2532-37f7-559f-b017-e9ff61ead509', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Investigations in obstetrics and gynaecology', 1, 68, 0),
-   ('c3483d1f-b9d6-58d6-8228-21dc7dee717e', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'c91e2532-37f7-559f-b017-e9ff61ead509', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Pregnancy testing', 2, 68, 0),
-   ('e013bd03-3383-5125-8c7f-3639ce8e80fb', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'c3483d1f-b9d6-58d6-8228-21dc7dee717e', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Bacteriological and virus tests', 2, 68, 0),
-   ('c79f3ac5-dd05-581e-a053-9b9097ebd269', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'e013bd03-3383-5125-8c7f-3639ce8e80fb', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Imaging', 2, 69, 0),
-   ('41a0a713-bfda-5854-b1e2-1bec5bd3ea3b', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'c79f3ac5-dd05-581e-a053-9b9097ebd269', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ultrasound', 3, 69, 0),
-   ('ec1efc3d-c1bc-5ef1-b2a9-6b77f9fc11fc', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '41a0a713-bfda-5854-b1e2-1bec5bd3ea3b', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Computed tomography and magnetic resonance imaging', 3, 69, 0),
-   ('52f4904e-8d0a-58a5-8cc9-cc4e0ebbcdb8', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'ec1efc3d-c1bc-5ef1-b2a9-6b77f9fc11fc', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Hysterosalpingography', 3, 69, 0),
-   ('b4fd599d-fd1a-5d48-8f37-56b2b25d3da8', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '52f4904e-8d0a-58a5-8cc9-cc4e0ebbcdb8', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Endometrial sampling (biopsy)', 3, 69, 0),
-   ('8f0a203c-0a2e-5be6-a1b8-9e478e6a4bcb', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'b4fd599d-fd1a-5d48-8f37-56b2b25d3da8', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Colposcopy', 3, 70, 0),
-   ('6bec469b-b722-5372-ae4d-0b4c556f5234', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '8f0a203c-0a2e-5be6-a1b8-9e478e6a4bcb', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Hysteroscopy', 3, 70, 0),
-   ('f2c3a52f-e43f-55a0-b33f-de3585abe404', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '6bec469b-b722-5372-ae4d-0b4c556f5234', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cystoscopy and cystometry', 3, 70, 0),
-   ('6200b7c6-caff-5000-bd01-9469dadadf99', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'f2c3a52f-e43f-55a0-b33f-de3585abe404', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Laparoscopy', 3, 71, 0),
-   ('7485a709-ef90-545a-9d19-a2ccfd122a38', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', NULL, '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Tests of fetal wellbeing', 1, 71, 1),
-   ('2c04fb7f-3db1-561f-8295-8456933e80ea', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '7485a709-ef90-545a-9d19-a2ccfd122a38', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Biochemical tests', 2, 71, 0),
-   ('12fd608f-75b5-5518-bd15-91b686f573a5', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '2c04fb7f-3db1-561f-8295-8456933e80ea', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Early pregnancy markers', 3, 71, 0),
-   ('35a94c02-bd58-55bd-a212-89f558d7e576', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '12fd608f-75b5-5518-bd15-91b686f573a5', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'α-Fetoprotein (AFP), unconjugated oestriol, βhCG, inhibin A, PAPP A', 4, 71, 0),
-   ('4ea6f4ed-ade2-5153-9b4c-1f446b00bc17', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '35a94c02-bd58-55bd-a212-89f558d7e576', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Late pregnancy', 3, 71, 0),
-   ('e9c56e47-7a5a-5a20-8d50-19b16f8f3f60', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '4ea6f4ed-ade2-5153-9b4c-1f446b00bc17', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Biological tests', 2, 71, 0),
-   ('95e8dfb6-efb9-57ba-9947-535f41100dbd', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'e9c56e47-7a5a-5a20-8d50-19b16f8f3f60', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Chorion biopsy (chorionic villus sampling, CVS)', 3, 71, 0),
-   ('9105dab1-753d-56b0-9e92-a5724fd18c7f', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '95e8dfb6-efb9-57ba-9947-535f41100dbd', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Amniocentesis', 3, 71, 0),
-   ('ff9fe8c1-bf1b-5c22-8854-e39e65849215', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '9105dab1-753d-56b0-9e92-a5724fd18c7f', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Non-invasive prenatal testing', 2, 72, 0),
-   ('3c95a92d-a3cc-5663-b04d-cd2b9eb91ff5', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'ff9fe8c1-bf1b-5c22-8854-e39e65849215', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Biophysical tests', 2, 72, 0),
-   ('6a820fce-deca-5b6c-bda4-42023e79b19f', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '3c95a92d-a3cc-5663-b04d-cd2b9eb91ff5', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Fetal movements', 3, 72, 0),
-   ('1003cb87-39c0-5aa4-9c5a-ac70ec80ac1c', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '6a820fce-deca-5b6c-bda4-42023e79b19f', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Cardiotocography (CTG)', 3, 72, 0),
-   ('c61d072f-1620-5e49-a09a-25fd5d3b7f8c', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', '1003cb87-39c0-5aa4-9c5a-ac70ec80ac1c', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Ultrasound visualization', 3, 72, 0),
-   ('f5e5dd7c-8dc2-5692-b0d7-9b21ce365f5d', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 'c61d072f-1620-5e49-a09a-25fd5d3b7f8c', '5.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Doppler blood flow', 3, 73, 0),
-   ('a9d9712c-e6cd-5569-9851-08ca592c534c', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', NULL, '6.1', 'Introduction', 1, 74, 0),
-   ('0fa76c34-da63-5ab4-920f-7d8efcf36bdf', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'a9d9712c-e6cd-5569-9851-08ca592c534c', '6.1.1', 'History', 2, 74, 0),
-   ('e37a6de7-0878-5615-9314-b89383187aa3', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '0fa76c34-da63-5ab4-920f-7d8efcf36bdf', '6.1.1.1', 'Family history', 2, 75, 0),
-   ('6f04ebd5-fbf2-576e-85bc-852911a51f77', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'e37a6de7-0878-5615-9314-b89383187aa3', '6.1.1.1.1', 'Social history', 2, 75, 0),
-   ('2a772c1e-8e82-57df-a53b-eba9d34a60cb', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '6f04ebd5-fbf2-576e-85bc-852911a51f77', '6.1.1.1.1.1', 'Examination', 2, 75, 0),
-   ('1e7e62e9-c0a6-5aa3-9160-bae11fe4b4f7', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '2a772c1e-8e82-57df-a53b-eba9d34a60cb', '6.1.1.1.1.1.1', 'General examination', 3, 77, 0),
-   ('efd44134-e6af-5c28-9680-2ac0c0997773', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '1e7e62e9-c0a6-5aa3-9160-bae11fe4b4f7', '6.1.1.1.1.1.1.1', 'The head, face and neck', 3, 77, 0),
-   ('e06ef894-9a84-53ea-bfaf-8446f8081da5', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'efd44134-e6af-5c28-9680-2ac0c0997773', '6.1.1.1.1.1.1.1.1', 'The limbs', 3, 78, 0),
-   ('7860c47e-4318-541c-8df9-c8406344c1b2', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'e06ef894-9a84-53ea-bfaf-8446f8081da5', '6.1.1.1.1.1.1.1.1.1', 'The abdomen', 3, 78, 0),
-   ('2574a40e-e7df-548c-9b08-d151bbc50823', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '7860c47e-4318-541c-8df9-c8406344c1b2', '6.1.1.1.1.1.1.1.1.1.1', 'The chest', 3, 79, 0),
-   ('c541e848-c44b-5104-a1ca-315a1405d7c5', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '2574a40e-e7df-548c-9b08-d151bbc50823', '6.1.1.1.1.1.1.1.1.1.1.1', 'Neurological examination', 3, 80, 0),
-   ('6dd3fe3e-ce40-507e-89dc-05037bd24ee8', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'c541e848-c44b-5104-a1ca-315a1405d7c5', '6.1.1.1.1.1.1.1.1.1.1.1.1', 'The eyes', 3, 81, 0),
-   ('6c9d4f8b-b25e-58ca-9138-a578cd5ccf5d', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '6dd3fe3e-ce40-507e-89dc-05037bd24ee8', '6.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The genitalia, groins and anus', 3, 82, 0),
-   ('e90e9bc4-6023-52d6-b29e-ead7c6fdcb6f', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '6c9d4f8b-b25e-58ca-9138-a578cd5ccf5d', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The nose, ears, mouth and throat', 3, 82, 0),
-   ('20f062fb-013f-516b-8e86-f096267c8105', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'e90e9bc4-6023-52d6-b29e-ead7c6fdcb6f', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Signs associated with abuse/child neglect', 3, 83, 0),
-   ('6b13a34b-026b-5e6f-865f-dd1302c41a38', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '20f062fb-013f-516b-8e86-f096267c8105', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Routine measurements', 2, 83, 0),
-   ('1f0f9ce4-ad5a-5e28-a2a6-d151c1045882', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '6b13a34b-026b-5e6f-865f-dd1302c41a38', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Height and weight', 3, 83, 0),
-   ('ecd0cd95-2b10-5fba-ada4-0913c4346c19', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '1f0f9ce4-ad5a-5e28-a2a6-d151c1045882', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Head circumference', 3, 84, 0),
-   ('614684f3-27b0-5dd8-a889-14fdaeaee9ec', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'ecd0cd95-2b10-5fba-ada4-0913c4346c19', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Blood pressure', 3, 84, 0),
-   ('8ffb366d-5b50-5fb6-87b7-afbbc5009718', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '614684f3-27b0-5dd8-a889-14fdaeaee9ec', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Temperature', 3, 89, 0),
-   ('5c30ca62-7092-57f5-9a04-a1f8b263f0b9', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '8ffb366d-5b50-5fb6-87b7-afbbc5009718', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Stools', 3, 89, 0),
-   ('f0602311-9ce1-5758-86d8-6e18949650c3', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '5c30ca62-7092-57f5-9a04-a1f8b263f0b9', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Urine', 3, 89, 0),
-   ('312d1a1a-4fd8-51bd-9ba4-7df56614cd3f', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'f0602311-9ce1-5758-86d8-6e18949650c3', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Developmental screening examination', 2, 89, 0),
-   ('9d5378bf-2dea-5784-9f5a-812b288402e3', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '312d1a1a-4fd8-51bd-9ba4-7df56614cd3f', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Techniques used', 3, 89, 0),
-   ('54f4400e-82b5-52d4-9dce-58ccbc25d71f', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '9d5378bf-2dea-5784-9f5a-812b288402e3', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Head control', 4, 90, 0),
-   ('c5b684ef-510c-5f9e-b4f3-96868f66c629', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '54f4400e-82b5-52d4-9dce-58ccbc25d71f', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing vision', 4, 90, 0),
-   ('1959e1eb-de6b-55d0-8ce4-b9aee6a7a7da', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'c5b684ef-510c-5f9e-b4f3-96868f66c629', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing hearing', 4, 90, 0),
-   ('68abf8c2-043a-5ae0-ab3a-919018fcc032', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '9d5378bf-2dea-5784-9f5a-812b288402e3', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Examination of the newborn', 2, 91, 1),
-   ('0c298c37-272e-53c7-800c-c4dbfbaa074f', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '68abf8c2-043a-5ae0-ab3a-919018fcc032', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'The skin', 3, 91, 0),
-   ('cd4df042-0e6e-5e24-9e33-7aebba2b528e', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '0c298c37-272e-53c7-800c-c4dbfbaa074f', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'The face', 3, 92, 0),
-   ('5e8aadd7-c2f4-5fb4-bbc8-e81924154cb9', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'cd4df042-0e6e-5e24-9e33-7aebba2b528e', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'The head', 3, 92, 0),
-   ('3d1f7df6-9021-5d46-b99e-0f0a21133aba', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '5e8aadd7-c2f4-5fb4-bbc8-e81924154cb9', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'The eyes', 3, 92, 0),
-   ('7f540fac-eedc-5b72-a2c1-66522a8132bc', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '3d1f7df6-9021-5d46-b99e-0f0a21133aba', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'The mouth and tongue', 3, 92, 0),
-   ('a6b9b07b-a93f-5030-889c-f626d3fc1cc3', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '7f540fac-eedc-5b72-a2c1-66522a8132bc', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'The neck', 3, 92, 0),
-   ('b665dd1e-cc05-5bd1-befb-654ac28f5625', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'a6b9b07b-a93f-5030-889c-f626d3fc1cc3', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'The limbs', 3, 92, 0),
-   ('db326e1b-2b4c-582b-94bc-ec64247127c0', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'b665dd1e-cc05-5bd1-befb-654ac28f5625', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'The chest', 3, 92, 0),
-   ('758fb45f-ef22-5d9d-958d-b516c3cb4d5e', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'db326e1b-2b4c-582b-94bc-ec64247127c0', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'The abdomen', 3, 92, 0),
-   ('de4a3310-ac4d-510e-9ad1-0e7b9a18e05e', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '758fb45f-ef22-5d9d-958d-b516c3cb4d5e', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'The perineum and genitalia', 3, 92, 0),
-   ('01e802bd-6e65-5b74-bb14-b05adfdc60fd', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 'de4a3310-ac4d-510e-9ad1-0e7b9a18e05e', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Neurological assessment', 3, 93, 0),
-   ('0eadcd2a-cd29-5c5f-9f45-3935a0ec36ee', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '01e802bd-6e65-5b74-bb14-b05adfdc60fd', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Primitive reflexes', 3, 93, 0),
-   ('6a92be32-d7d5-5a1f-a5c3-4e8ce1b5e03b', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '0eadcd2a-cd29-5c5f-9f45-3935a0ec36ee', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination of the hips', 3, 93, 0),
-   ('dfb33dcf-97ab-5d63-9037-2aa2b9deaed8', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', '6a92be32-d7d5-5a1f-a5c3-4e8ce1b5e03b', '6.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Summary', 2, 94, 0),
-   ('4f30280a-b6b1-55fe-bad1-32bed6db5c66', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', NULL, '7.1', 'Introduction', 1, 96, 0),
-   ('8d7ba7de-2128-54e0-bf56-96707499bb05', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', NULL, '7.1.1', 'Presentation of disease in older people', 1, 96, 0),
-   ('edd9a3f0-e91f-58db-b563-3fab7e429942', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', NULL, '7.1.1.1', 'History', 1, 98, 0),
-   ('385f2905-81ae-50f3-91fe-e07ddad95c0d', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'edd9a3f0-e91f-58db-b563-3fab7e429942', '7.1.1.1.1', 'The social history and social networks', 2, 98, 0),
-   ('938e5bc7-ab38-5e91-adf7-3c13824d9c60', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '385f2905-81ae-50f3-91fe-e07ddad95c0d', '7.1.1.1.1.1', 'Activities of daily living', 2, 99, 0),
-   ('96401a4b-baf9-5c67-ad42-1505dfc06767', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '938e5bc7-ab38-5e91-adf7-3c13824d9c60', '7.1.1.1.1.1.1', 'Drug history', 2, 99, 0),
-   ('caae0593-5408-5a8a-b344-5fe280ae9b77', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '96401a4b-baf9-5c67-ad42-1505dfc06767', '7.1.1.1.1.1.1.1', 'Review of systems', 2, 100, 0),
-   ('b3c026e2-aab6-5d67-a25b-fc2a5c2fadd3', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', NULL, '7.1.1.1.1.1.1.1.1', 'Examination', 1, 100, 0),
-   ('21a0ae37-f3f8-5ccb-836e-74f4ef775eec', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'b3c026e2-aab6-5d67-a25b-fc2a5c2fadd3', '7.1.1.1.1.1.1.1.1.1', 'General', 2, 100, 0),
-   ('b4cc22c8-d005-55ea-8bde-88beade3f7d3', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '21a0ae37-f3f8-5ccb-836e-74f4ef775eec', '7.1.1.1.1.1.1.1.1.1.1', 'Special considerations', 2, 100, 0),
-   ('adf2a8c0-ba95-58ea-a902-2174dbf813ad', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'b4cc22c8-d005-55ea-8bde-88beade3f7d3', '7.1.1.1.1.1.1.1.1.1.1.1', 'Skin', 3, 100, 0),
-   ('d00774f6-a048-5043-8130-2657a2fe9e53', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'adf2a8c0-ba95-58ea-a902-2174dbf813ad', '7.1.1.1.1.1.1.1.1.1.1.1.1', 'Cardiovascular system', 3, 101, 0),
-   ('b173b9e8-5aba-5cda-a388-6858cc038088', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'd00774f6-a048-5043-8130-2657a2fe9e53', '7.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Respiratory system', 3, 101, 0),
-   ('7f19acb3-75bb-5195-8be0-71773d0e26e9', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'b173b9e8-5aba-5cda-a388-6858cc038088', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gastrointestinal system', 3, 102, 0),
-   ('abb51219-cfd2-58dd-911c-3c628c14ff91', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '7f19acb3-75bb-5195-8be0-71773d0e26e9', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nervous system', 3, 102, 0),
-   ('1dcf8bd3-beab-5238-995e-79bc94a99ec5', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'abb51219-cfd2-58dd-911c-3c628c14ff91', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vision and the eyes', 3, 103, 0),
-   ('6c05512e-5e29-59d2-b4e9-9df22ec900c5', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '1dcf8bd3-beab-5238-995e-79bc94a99ec5', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Hearing', 3, 104, 0),
-   ('477e2005-ab2a-513e-9f93-3df8efe7ff35', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '6c05512e-5e29-59d2-b4e9-9df22ec900c5', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The ‘geriatric giants’', 2, 104, 0),
-   ('f05ac3f4-0d29-56ae-8ccf-481f79b8e40e', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '477e2005-ab2a-513e-9f93-3df8efe7ff35', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Immobility', 3, 104, 0),
-   ('d8279cc1-c59e-5b40-9909-0e4cb3aa437f', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'f05ac3f4-0d29-56ae-8ccf-481f79b8e40e', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Instability/falls', 3, 104, 0),
-   ('0323826b-b426-5f76-a7d4-ea7d124371c8', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'd8279cc1-c59e-5b40-9909-0e4cb3aa437f', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Incontinence', 3, 105, 0),
-   ('5e99c538-69b7-5fb5-9c00-f1ec52510b25', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '0323826b-b426-5f76-a7d4-ea7d124371c8', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pressure ulcers', 3, 105, 0),
-   ('30ae22c1-fb18-5065-b1a4-164abe13ec4b', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '5e99c538-69b7-5fb5-9c00-f1ec52510b25', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Confusion', 2, 106, 0),
-   ('a60f0e00-dcbc-544a-8a89-628165870b44', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '30ae22c1-fb18-5065-b1a4-164abe13ec4b', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The confused older patient', 3, 106, 0),
-   ('659140db-02c1-5433-8f02-615fcf3fba30', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 'a60f0e00-dcbc-544a-8a89-628165870b44', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Assessment of capacity', 2, 107, 0),
-   ('6e8309f6-5bbe-55d0-a1f5-fdb079d632d6', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', NULL, '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Other issues', 1, 107, 0),
-   ('602afdaa-9fd2-5044-95f8-829be1894c8f', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '6e8309f6-5bbe-55d0-a1f5-fdb079d632d6', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ethnic elders', 2, 107, 0),
-   ('1c62e70c-d756-5b4e-b0cb-80d2e9090c12', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', '602afdaa-9fd2-5044-95f8-829be1894c8f', '7.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Inadequate care and elder abuse', 2, 107, 0),
-   ('ebdb783b-617f-5a78-b6c1-f4283e575fe8', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1', 'Introduction', 1, 110, 0),
-   ('68eff103-440d-5d96-8fe4-4ce71270c86b', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1', 'History taking', 1, 111, 0),
-   ('bdf1e8fa-045d-59de-9b53-7538d7008849', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '68eff103-440d-5d96-8fe4-4ce71270c86b', '8.1.1.1', 'Context of the interview', 2, 111, 0),
-   ('13751f75-1812-57d6-aa91-540a30bf9570', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'bdf1e8fa-045d-59de-9b53-7538d7008849', '8.1.1.1.1', 'Patient factors', 3, 111, 0),
-   ('26bd1062-2cbf-5423-85c7-8cf42f7c0c8b', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '13751f75-1812-57d6-aa91-540a30bf9570', '8.1.1.1.1.1', 'Factors in the physical environment', 3, 111, 0),
-   ('85163e24-4b33-5a3f-82c5-6f895a0fb579', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '26bd1062-2cbf-5423-85c7-8cf42f7c0c8b', '8.1.1.1.1.1.1', 'Safety', 4, 111, 0),
-   ('e2b2d721-dc7d-5441-bb41-ae20740ba80b', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '85163e24-4b33-5a3f-82c5-6f895a0fb579', '8.1.1.1.1.1.1.1', 'Privacy', 4, 111, 0),
-   ('89aea22d-c63a-598a-a03a-ad62ff1b636d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '26bd1062-2cbf-5423-85c7-8cf42f7c0c8b', '8.1.1.1.1.1.2', 'Collateral history', 2, 111, 1),
-   ('f14f8d65-9400-55e6-8412-fdd6ce4d0d2d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1', 'The psychiatric history', 1, 111, 0),
-   ('cebaf80f-6ae4-5ad5-a8d4-3e9862313078', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'f14f8d65-9400-55e6-8412-fdd6ce4d0d2d', '8.1.1.1.1.1.2.1.1', 'Introduction', 2, 111, 0),
-   ('223f95fc-1b0c-5492-8344-76b037bb8006', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'cebaf80f-6ae4-5ad5-a8d4-3e9862313078', '8.1.1.1.1.1.2.1.1.1', 'Confidentiality and note keeping', 2, 112, 0),
-   ('7db957f7-9bd4-5c60-b9dc-6447f798d1fa', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '223f95fc-1b0c-5492-8344-76b037bb8006', '8.1.1.1.1.1.2.1.1.1.1', 'Interviewing a patient who does not speak English', 2, 112, 0),
-   ('ab75c2ba-8397-57e2-add8-7276f0c7efef', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '7db957f7-9bd4-5c60-b9dc-6447f798d1fa', '8.1.1.1.1.1.2.1.1.1.1.1', 'Interviewing technique', 2, 112, 0),
-   ('ed185600-95a5-5073-b7e6-944c278dfb61', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ab75c2ba-8397-57e2-add8-7276f0c7efef', '8.1.1.1.1.1.2.1.1.1.1.1.1', 'Structure of the psychiatric history', 2, 112, 0),
-   ('5e4fb92f-4670-510c-8121-797951fa7cb0', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ed185600-95a5-5073-b7e6-944c278dfb61', '8.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Order of sections', 2, 112, 0),
-   ('c07e9a1c-d851-5a42-ac80-107dcac3b0f3', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '5e4fb92f-4670-510c-8121-797951fa7cb0', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Presenting complaint', 3, 112, 0),
-   ('41c10234-a284-545e-8e9d-e2bed7e5129d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'c07e9a1c-d851-5a42-ac80-107dcac3b0f3', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'History of presenting complaint (HPC)', 3, 113, 0),
-   ('76b94092-3d34-5018-b916-6ad362ccdc61', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '41c10234-a284-545e-8e9d-e2bed7e5129d', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'History of psychiatric disorder', 3, 114, 0),
-   ('45013e46-6afc-5720-804a-52613490e58a', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '76b94092-3d34-5018-b916-6ad362ccdc61', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Past medical history', 3, 114, 0),
-   ('7ea0de9d-70e5-5922-b2ca-aba396c0ac5c', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '45013e46-6afc-5720-804a-52613490e58a', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Current medication', 3, 114, 0),
-   ('a35d57e2-5e0a-5f13-aab0-8eb6f22b7f65', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '7ea0de9d-70e5-5922-b2ca-aba396c0ac5c', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family history', 3, 114, 0),
-   ('b9a38e70-8532-59d7-af00-c9078cc0c1e4', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'a35d57e2-5e0a-5f13-aab0-8eb6f22b7f65', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Personal history', 3, 115, 0),
-   ('875d289c-4800-5acb-83ba-91a9da93953e', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'b9a38e70-8532-59d7-af00-c9078cc0c1e4', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Birth and early developmental milestones (in most patients only a brief outline is required)', 4, 115, 0),
-   ('abaffcce-8597-5b04-b5a3-381c70676b68', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '875d289c-4800-5acb-83ba-91a9da93953e', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family milieu, childhood health and early relationships with caregivers', 4, 115, 0),
-   ('49df0c04-42d8-5570-b4f1-7a75123b60dd', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'abaffcce-8597-5b04-b5a3-381c70676b68', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Schooling', 4, 115, 0),
-   ('1e442656-44da-512f-b75c-b0d62a689e4f', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '49df0c04-42d8-5570-b4f1-7a75123b60dd', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Occupational history', 3, 116, 0),
-   ('655b5ba1-1173-5d62-8479-4d2716a9a048', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '1e442656-44da-512f-b75c-b0d62a689e4f', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Psychosexual history, including marital/relationship history and children', 3, 116, 0),
-   ('ee61ca9c-760a-5d3e-a8b1-1b6ce85bba17', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '655b5ba1-1173-5d62-8479-4d2716a9a048', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Current social situation (Box 8.6)', 2, 117, 0),
-   ('797d525b-cde7-5a00-a2e1-c4c2724c3402', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ee61ca9c-760a-5d3e-a8b1-1b6ce85bba17', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Forensic history', 3, 117, 0),
-   ('a5869105-2d81-5968-8e67-855a0e9b1de9', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '797d525b-cde7-5a00-a2e1-c4c2724c3402', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Use of alcohol and non-prescribed recreational drugs', 3, 117, 0),
-   ('bc7270e8-e5cc-5167-95c3-147d4ca92980', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'a5869105-2d81-5968-8e67-855a0e9b1de9', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Alcohol', 4, 117, 0),
-   ('f48c613c-260c-5f94-a704-8967e151b9b1', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'bc7270e8-e5cc-5167-95c3-147d4ca92980', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Taking a full drinking history', 4, 118, 0),
-   ('0fdc1fc1-3174-5dab-accb-647871d5d67c', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'f48c613c-260c-5f94-a704-8967e151b9b1', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Recreational drugs', 4, 118, 0),
-   ('9e9c1f98-0e48-5b1b-b50d-3c48186a82d4', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '0fdc1fc1-3174-5dab-accb-647871d5d67c', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Personality assessment', 3, 118, 0),
-   ('d394fa23-00f0-5e4c-9e6b-5455133b77c1', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The mental state examination', 1, 118, 1),
-   ('10f87b3c-a058-5e0a-a0cc-6742d6dcae5d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'd394fa23-00f0-5e4c-9e6b-5455133b77c1', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Appearance and behaviour', 2, 118, 0),
-   ('9a8a7cd4-63d0-5a13-8740-7779aed7ace7', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '10f87b3c-a058-5e0a-a0cc-6742d6dcae5d', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Appearance', 3, 118, 0),
-   ('96e57ded-cdbd-5aae-a915-6cde42ec24a6', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '9a8a7cd4-63d0-5a13-8740-7779aed7ace7', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Behaviour', 3, 119, 0),
-   ('7a6a0b12-ba1c-5e2a-855d-0536d91bb569', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '96e57ded-cdbd-5aae-a915-6cde42ec24a6', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'General demeanour', 4, 119, 0),
-   ('9cd7efa5-0797-5c7c-bb5a-98c764206daa', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '7a6a0b12-ba1c-5e2a-855d-0536d91bb569', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Rapport', 4, 119, 0),
-   ('83f39a30-4dda-5753-a641-dd5aea9162a1', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '9cd7efa5-0797-5c7c-bb5a-98c764206daa', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Eye contact', 4, 119, 0),
-   ('b2db3a70-8916-53b9-8537-599baabcf38a', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '83f39a30-4dda-5753-a641-dd5aea9162a1', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Gait', 4, 119, 0),
-   ('7fb12583-9ee4-54ff-a7cd-dbc9fc9cc29c', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'b2db3a70-8916-53b9-8537-599baabcf38a', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Reduced motor activity', 4, 119, 0),
-   ('45ce2de5-c018-5f4b-938e-db5ef4fefac2', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '7fb12583-9ee4-54ff-a7cd-dbc9fc9cc29c', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Increased motor activity', 4, 119, 0),
-   ('164d36fb-f97f-5cd8-a4dc-98a444fe141d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '96e57ded-cdbd-5aae-a915-6cde42ec24a6', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2', 'Speech', 2, 120, 1),
-   ('1222c897-7018-5bce-9dd7-0efc0b90bb62', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '164d36fb-f97f-5cd8-a4dc-98a444fe141d', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1', 'Rate', 3, 120, 0),
-   ('a8d60e3a-c4f0-5d25-adb9-e9a3bf91fb03', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '1222c897-7018-5bce-9dd7-0efc0b90bb62', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1', 'Structure', 3, 120, 0),
-   ('6f21f126-efd2-5f22-b4da-81e13f9c64fd', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'a8d60e3a-c4f0-5d25-adb9-e9a3bf91fb03', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1', 'Mood', 2, 120, 0),
-   ('ef2956fc-2f8c-5789-85a9-55d49e8b42e5', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '6f21f126-efd2-5f22-b4da-81e13f9c64fd', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1', 'Thought', 2, 121, 0),
-   ('6c5f3b04-9ad8-5464-9474-c1e0f7e4a1ba', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ef2956fc-2f8c-5789-85a9-55d49e8b42e5', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1', 'Exploring thoughts in elevated mood', 3, 122, 0),
-   ('7ce63857-40b2-5e15-97eb-df7bb95bbee8', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '6c5f3b04-9ad8-5464-9474-c1e0f7e4a1ba', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1', 'Obsessional thoughts', 3, 122, 0),
-   ('17eb7bac-8773-5774-ab6b-10f7d7607400', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '7ce63857-40b2-5e15-97eb-df7bb95bbee8', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1', 'Abnormal beliefs', 3, 123, 0),
-   ('318530bc-3447-5885-b130-7edc24b6e5a5', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '17eb7bac-8773-5774-ab6b-10f7d7607400', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1', 'Perception', 2, 125, 0),
-   ('ef9db7ea-1bc9-5916-add1-3ad9d4ea1090', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '318530bc-3447-5885-b130-7edc24b6e5a5', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Abnormal perception', 3, 125, 0),
-   ('ba97c4ea-adf2-51cf-934f-6561ad9842cd', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ef9db7ea-1bc9-5916-add1-3ad9d4ea1090', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Cognition', 2, 126, 0),
-   ('17623cfe-6f9b-57ba-9d3c-4c580e6839f5', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ba97c4ea-adf2-51cf-934f-6561ad9842cd', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Basic assessment of cognitive function', 3, 126, 0),
-   ('ce38e30f-b5fc-57e1-92d2-a128ee048271', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '17623cfe-6f9b-57ba-9d3c-4c580e6839f5', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Level of consciousness', 2, 126, 0),
-   ('2db930c6-f9a9-5d61-87d4-ed88b122e507', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'ce38e30f-b5fc-57e1-92d2-a128ee048271', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Orientation', 2, 126, 0),
-   ('4c07158e-48ea-5d81-86fe-548150d51bda', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '2db930c6-f9a9-5d61-87d4-ed88b122e507', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Time', 2, 126, 0),
-   ('d8391ff2-a3bb-5ccf-8860-b352a6c1378e', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '4c07158e-48ea-5d81-86fe-548150d51bda', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Place', 2, 127, 0),
-   ('bde7ed2c-d476-5064-851f-03c640be5935', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'd8391ff2-a3bb-5ccf-8860-b352a6c1378e', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Person', 2, 127, 0),
-   ('34a58a3f-e7d3-5a3d-b787-a82e1530d3e4', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Attention and concentration', 1, 127, 0),
-   ('1502ed59-b2b5-54fd-a125-e31e69feb84a', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '34a58a3f-e7d3-5a3d-b787-a82e1530d3e4', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Memory', 2, 127, 0),
-   ('c6986d3a-9b23-5002-8abf-72de5f6453b3', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '1502ed59-b2b5-54fd-a125-e31e69feb84a', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing registration and immediate recall', 3, 128, 0),
-   ('c61b1a19-8311-514d-bfd0-da70ddb95089', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'c6986d3a-9b23-5002-8abf-72de5f6453b3', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing short-term memory', 3, 128, 0),
-   ('3c88eaf9-e0c1-590d-8acb-48faaa5916dd', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'c61b1a19-8311-514d-bfd0-da70ddb95089', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing longer term memory – recent', 3, 128, 0),
-   ('151105b2-a21b-53c4-89c3-88b744ddd419', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '3c88eaf9-e0c1-590d-8acb-48faaa5916dd', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing longer term memory – remote', 3, 128, 0),
-   ('a3ba5d64-ef69-55aa-bcdb-4eada9dcbe0c', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '151105b2-a21b-53c4-89c3-88b744ddd419', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Intelligence', 2, 128, 0),
-   ('20dfdabe-cd7b-5c81-9943-89f0ae0c147a', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'a3ba5d64-ef69-55aa-bcdb-4eada9dcbe0c', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Abstraction', 3, 129, 0),
-   ('c33f3dd9-e4f5-56f0-a182-dd2d72542ce6', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '20dfdabe-cd7b-5c81-9943-89f0ae0c147a', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Insight', 2, 129, 0),
-   ('2ce670d8-0e1c-50cc-82f7-cd4b43ac85ca', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ending the interview', 1, 129, 0),
-   ('daa16930-9d55-54e7-b288-bbc0a9194b02', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Final reflection', 1, 129, 0),
-   ('0372c093-0582-55e0-918b-cc6367122d1e', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', NULL, '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Further investigations', 1, 129, 0),
-   ('c3435da4-3355-59d7-b137-b7ce35d78a2e', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '0372c093-0582-55e0-918b-cc6367122d1e', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Mental state evaluation', 2, 129, 0),
-   ('9735521e-419e-5e8e-aa65-942270c80cd7', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 'c3435da4-3355-59d7-b137-b7ce35d78a2e', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Neuropsychological testing', 2, 130, 0),
-   ('1a81e2c4-9511-5b20-af5a-eb7c0e7cb094', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', '9735521e-419e-5e8e-aa65-942270c80cd7', '8.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Brain imaging', 2, 130, 0),
-   ('f1f20839-5aa6-55a1-841e-16bf0f066adb', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1', 'Introduction', 1, 132, 0),
-   ('a40ad8e5-d0b9-5dee-ae5d-982777bd500f', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1', 'The importance of clinical assessment', 1, 132, 0),
-   ('e2c7e2af-9d90-5317-a4d0-7ca7167898bc', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1', 'Diagnosis versus resuscitation', 1, 133, 0),
-   ('a27356c0-6691-533a-ad7b-e0448052cece', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1', 'The pyrexial and septic patient', 1, 133, 0),
-   ('c89745bb-eb29-510b-ab1c-d37003009c4e', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1', 'The patient with chest pain', 1, 133, 0),
-   ('bb140cc6-5daf-52b8-8cf8-8777ad596168', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1', 'The breathless patient', 1, 135, 0),
-   ('e5feef14-9358-5925-ba95-85b866da274c', '6a1185dd-7349-53b7-9b52-3456977cdd87', 'bb140cc6-5daf-52b8-8cf8-8777ad596168', '9.1.1.1.1.1.1.1', 'General principles', 2, 135, 0),
-   ('8c1c83a1-da31-5fd1-b515-1edb95b8ab98', '6a1185dd-7349-53b7-9b52-3456977cdd87', 'e5feef14-9358-5925-ba95-85b866da274c', '9.1.1.1.1.1.1.1.1', 'Airway obstruction', 2, 137, 0),
-   ('7750f9ae-8727-522f-bc32-4d7e1e7afd51', '6a1185dd-7349-53b7-9b52-3456977cdd87', '8c1c83a1-da31-5fd1-b515-1edb95b8ab98', '9.1.1.1.1.1.1.1.1.1', 'Acute breathlessness due to ventilatory and/or oxygenation defects', 2, 137, 0),
-   ('e438d4ba-d3d5-54ce-a455-639c98533a1e', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1', 'The patient with hypotension or shock', 1, 138, 0),
-   ('c5a5301e-dee2-5dff-aad3-8c17feae79e9', '6a1185dd-7349-53b7-9b52-3456977cdd87', 'e438d4ba-d3d5-54ce-a455-639c98533a1e', '9.1.1.1.1.1.1.1.1.1.1.1', 'Hypovolaemic shock', 2, 139, 0),
-   ('4843fb48-c356-572d-a7c4-23da96068e6b', '6a1185dd-7349-53b7-9b52-3456977cdd87', 'c5a5301e-dee2-5dff-aad3-8c17feae79e9', '9.1.1.1.1.1.1.1.1.1.1.1.1', 'Cardiogenic shock', 2, 140, 0),
-   ('ab894963-4fb2-55b1-83cc-5d6a0dbc2d85', '6a1185dd-7349-53b7-9b52-3456977cdd87', '4843fb48-c356-572d-a7c4-23da96068e6b', '9.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Distributive shock', 2, 140, 0),
-   ('963737cc-9072-5d88-9bc7-050febc0c447', '6a1185dd-7349-53b7-9b52-3456977cdd87', 'ab894963-4fb2-55b1-83cc-5d6a0dbc2d85', '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Obstructive shock', 2, 141, 0),
-   ('f9ded4dd-b9fe-5ff0-830b-cc1396af6f9b', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with diminished consciousness', 1, 141, 0),
-   ('786379ec-585a-561d-9587-6ad9fcdb4ac4', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The syncopal patient', 1, 143, 0),
-   ('49706390-33fe-572b-8f09-a0996e5c2caf', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with seizures', 1, 144, 0),
-   ('fc34ebef-300a-536d-a4d8-7ef82681c99f', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with acute confusion', 1, 146, 0),
-   ('15d42d30-ff99-53d2-b7c7-35b70d6f37b2', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with acute headache', 1, 147, 0),
-   ('abef1d1e-5efc-508b-993a-f703bc1d70c4', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The acutely weak patient', 1, 148, 0),
-   ('c42d56da-0757-568d-859c-53f9bdcd1650', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with acute abdominal pain', 1, 149, 0),
-   ('5a54d625-6f4e-5dd9-b99b-de2c536219f2', '6a1185dd-7349-53b7-9b52-3456977cdd87', NULL, '9.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The patient with haematemesis and/or melaena', 1, 150, 0),
-   ('762252c0-4cd4-5d72-8468-f518e6181b24', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', NULL, '10.1', 'Introduction', 1, 152, 0),
-   ('94c45df1-6019-5939-927c-a20883ae2020', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '762252c0-4cd4-5d72-8468-f518e6181b24', '10.1.1', 'How is normal core body temperature regulated?', 2, 152, 0),
-   ('5af67fee-c181-583d-b68c-2b73dc2702b4', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '94c45df1-6019-5939-927c-a20883ae2020', '10.1.1.1', 'What effects on thermoregulation lead to fever?', 2, 152, 0),
-   ('71d162da-81ab-51f7-b5e2-a3458ccfa8e5', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '5af67fee-c181-583d-b68c-2b73dc2702b4', '10.1.1.1.1', 'Should you always treat a fever?', 2, 154, 0),
-   ('30689b38-5294-555f-9d2b-ea41a19292a7', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '71d162da-81ab-51f7-b5e2-a3458ccfa8e5', '10.1.1.1.1.1', 'The patterns of fever', 2, 154, 0),
-   ('2ecc8e71-bddd-5dd5-9803-430b4e05188e', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', NULL, '10.1.1.1.1.1.1', 'Approach to a patient with a fever – causes of fever', 1, 154, 0),
-   ('c54998fb-41df-5f64-806d-188b8f9bff73', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '2ecc8e71-bddd-5dd5-9803-430b4e05188e', '10.1.1.1.1.1.1.1', 'History', 2, 156, 0),
-   ('21ac70b7-18a5-52bf-aa8d-d28314654d45', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'c54998fb-41df-5f64-806d-188b8f9bff73', '10.1.1.1.1.1.1.1.1', 'Main presenting complaint', 3, 156, 0),
-   ('01b17686-a4ec-594d-ac78-804c23af4e3f', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '21ac70b7-18a5-52bf-aa8d-d28314654d45', '10.1.1.1.1.1.1.1.1.1', 'History of the presenting complaint', 3, 156, 0),
-   ('64063050-cda8-5e8e-b7dd-ca1ff7315c64', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '01b17686-a4ec-594d-ac78-804c23af4e3f', '10.1.1.1.1.1.1.1.1.1.1', 'Personal history', 3, 156, 0),
-   ('e090e91e-2d7c-5dff-8f82-2c7de6247393', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '64063050-cda8-5e8e-b7dd-ca1ff7315c64', '10.1.1.1.1.1.1.1.1.1.1.1', 'History of associated and constitutional symptoms', 3, 157, 0),
-   ('31db275e-cf8d-5d1f-b01a-8bcde0a7ecee', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'e090e91e-2d7c-5dff-8f82-2c7de6247393', '10.1.1.1.1.1.1.1.1.1.1.1.1', 'History of behaviours and exposures are important in infectious diseases', 3, 157, 0),
-   ('5a28c630-1ba7-5541-bc79-8901ca0b6e60', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '31db275e-cf8d-5d1f-b01a-8bcde0a7ecee', '10.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Past medical and surgical history', 3, 157, 0),
-   ('f3bba867-f271-59e3-a129-2290d7324d32', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '5a28c630-1ba7-5541-bc79-8901ca0b6e60', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Systematic history', 2, 158, 0),
-   ('17742cf9-a6fb-5746-aa5c-49f9a2a56903', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'f3bba867-f271-59e3-a129-2290d7324d32', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Respiratory tract', 3, 158, 0),
-   ('2e764d85-bab2-5899-9e7f-277ac6b8baed', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '17742cf9-a6fb-5746-aa5c-49f9a2a56903', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Genitourinary tract', 3, 158, 0),
-   ('7ff877f7-bed6-5672-bbea-546dda5b184f', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '2e764d85-bab2-5899-9e7f-277ac6b8baed', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gastrointestinal tract', 3, 158, 0),
-   ('33254028-fae2-5d22-9edd-a7ae3c8342da', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '7ff877f7-bed6-5672-bbea-546dda5b184f', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nervous system', 3, 158, 0),
-   ('845cd392-4400-5319-83a6-55e97dbcabcf', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '33254028-fae2-5d22-9edd-a7ae3c8342da', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Skin and soft tissue', 3, 159, 0),
-   ('1f08242d-36a8-544d-9cff-370efc313355', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '845cd392-4400-5319-83a6-55e97dbcabcf', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Musculoskeletal system', 3, 159, 0),
-   ('8abc8596-0980-5518-b223-4e55325fe512', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '1f08242d-36a8-544d-9cff-370efc313355', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cardiovascular system', 3, 160, 0),
-   ('f498f380-7267-5ec4-a8ff-cb4c581b15a0', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', NULL, '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Examination', 1, 160, 1),
-   ('8e44f3a6-25ba-5096-bc0a-ecbddc820ec0', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'f498f380-7267-5ec4-a8ff-cb4c581b15a0', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'General assessment', 2, 160, 0),
-   ('3c1ece82-676c-52ea-98c1-4fac36c5b6de', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '8e44f3a6-25ba-5096-bc0a-ecbddc820ec0', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Systematic assessment', 2, 160, 0),
-   ('62718417-f585-55a1-a2ad-16da44f7b5a0', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '3c1ece82-676c-52ea-98c1-4fac36c5b6de', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Skin and mucous membranes', 3, 160, 0),
-   ('92dd7559-ba2e-5c89-afdf-5c46da9efa10', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '62718417-f585-55a1-a2ad-16da44f7b5a0', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Respiratory tract', 3, 161, 0),
-   ('80bb0457-1fa2-5e81-8615-2945bceafcbd', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '92dd7559-ba2e-5c89-afdf-5c46da9efa10', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Cardiovascular system', 3, 161, 0),
-   ('bdf1ed8a-5bb4-59ba-bc8e-7aa3d0ea8466', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '80bb0457-1fa2-5e81-8615-2945bceafcbd', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Genitourinary tract', 3, 162, 0),
-   ('c3c6298b-0f54-5a25-a2c2-5b6530d40a82', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'bdf1ed8a-5bb4-59ba-bc8e-7aa3d0ea8466', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Gastrointestinal tract', 3, 162, 0),
-   ('d55f1845-01a7-511d-b306-b7ab7a02935d', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'c3c6298b-0f54-5a25-a2c2-5b6530d40a82', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Nervous system', 3, 162, 0),
-   ('70243146-dd28-5b6a-ad20-d2b581d20dfb', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'd55f1845-01a7-511d-b306-b7ab7a02935d', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Musculoskeletal system', 3, 163, 0),
-   ('6b0622a5-7e7a-5141-99cc-8cf31246fb98', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '70243146-dd28-5b6a-ad20-d2b581d20dfb', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Multisystem diseases', 3, 163, 0),
-   ('4729ebc4-1b5d-5c64-becb-a04a0ed747f6', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '6b0622a5-7e7a-5141-99cc-8cf31246fb98', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Fever in autoinflammatory periodic syndromes', 4, 163, 0),
-   ('69ac1bb9-5b2e-5069-88bb-5d675b529304', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '4729ebc4-1b5d-5c64-becb-a04a0ed747f6', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Drug fever', 4, 164, 0),
-   ('79714a9e-9650-5136-b242-ce26b5b58c6b', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', NULL, '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2', 'Investigations for infectious causes of fever', 1, 164, 1),
-   ('592ed74f-213b-5e33-9a34-6f31899a89f3', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '79714a9e-9650-5136-b242-ce26b5b58c6b', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1', 'Laboratory', 2, 164, 0),
-   ('a76bdf99-cdbf-5ce0-93fd-9a474db86f05', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '592ed74f-213b-5e33-9a34-6f31899a89f3', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1', 'Full blood count with differential and film', 3, 164, 0),
-   ('74f9bad2-ead4-5006-b4d9-e596544c82f3', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'a76bdf99-cdbf-5ce0-93fd-9a474db86f05', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1', 'Platelets', 3, 164, 0),
-   ('44f04535-f40d-5beb-a154-c23485383fab', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '74f9bad2-ead4-5006-b4d9-e596544c82f3', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1', 'Inflammatory markers', 3, 164, 0),
-   ('8a112c6e-0f65-54a9-ad14-f28671e7bbad', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '44f04535-f40d-5beb-a154-c23485383fab', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1', 'Basic biochemistry tests', 3, 165, 0),
-   ('42dfaad3-0d1c-5105-ae7c-789ff146b1c5', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '8a112c6e-0f65-54a9-ad14-f28671e7bbad', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1', 'Microbiology and virology tests', 3, 165, 0),
-   ('978b2bb2-3e7c-542a-a355-3ea7b883b7e6', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '42dfaad3-0d1c-5105-ae7c-789ff146b1c5', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1.1', 'Serology', 4, 165, 0),
-   ('b6ad789d-d54b-5373-b747-d11600566bf0', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', '978b2bb2-3e7c-542a-a355-3ea7b883b7e6', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1.1.1', 'Molecular diagnostics', 4, 165, 0),
-   ('f04b1473-a076-5cca-be86-f15b827fb820', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'b6ad789d-d54b-5373-b747-d11600566bf0', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1.1.1.1', 'Immunological tests', 3, 166, 0),
-   ('b9e3ff0b-0fd7-5146-83d9-c2fd80520994', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'f04b1473-a076-5cca-be86-f15b827fb820', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Histopathology', 3, 166, 0),
-   ('88a7e737-9414-5ab3-8a4a-a39de921f48f', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 'b9e3ff0b-0fd7-5146-83d9-c2fd80520994', '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Radiology', 3, 166, 0),
-   ('eb3e95b6-3392-5376-9129-bb6d2dc3a072', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', NULL, '10.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.2', 'Pyrexia of unknown origin', 1, 166, 1),
-   ('3e026b58-aed0-5788-b243-f01b15303304', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1', 'Introduction', 1, 168, 0),
-   ('91c30412-a38c-5384-a588-fc7dd493f369', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1', 'Definition', 1, 168, 0),
-   ('3b3708be-841d-53a5-9f5a-19052e10796b', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1.1', 'Classification of pain', 1, 168, 0),
-   ('5b5a9af2-9c13-519c-afbe-889883e3cfef', '273a911d-8a5a-56f1-9f61-9c993e674466', '3b3708be-841d-53a5-9f5a-19052e10796b', '11.1.1.1.1', 'Aetiology/underlying condition', 2, 168, 0),
-   ('989bbd51-f883-52b1-87f9-e4ef32d35be2', '273a911d-8a5a-56f1-9f61-9c993e674466', '5b5a9af2-9c13-519c-afbe-889883e3cfef', '11.1.1.1.1.1', 'Mechanism', 2, 168, 0),
-   ('b7f02263-80b0-5919-a79a-911931729a65', '273a911d-8a5a-56f1-9f61-9c993e674466', '989bbd51-f883-52b1-87f9-e4ef32d35be2', '11.1.1.1.1.1.1', 'Duration', 2, 168, 0),
-   ('bc1ba294-a4f8-5f16-9c3b-b6a7de5b903b', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1.1.1.1.1.1', 'Mechanisms of pain', 1, 169, 0),
-   ('fd033504-3a6e-5f3c-9adc-2a7bc7b382ce', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1.1.1.1.1.1.1', 'The patient in pain', 1, 170, 0),
-   ('0a8841d8-1596-5aff-8d7a-565825f07c07', '273a911d-8a5a-56f1-9f61-9c993e674466', 'fd033504-3a6e-5f3c-9adc-2a7bc7b382ce', '11.1.1.1.1.1.1.1.1.1', 'History', 2, 170, 0),
-   ('7779e4d8-3ec4-5450-9b27-63b86d71e7d9', '273a911d-8a5a-56f1-9f61-9c993e674466', '0a8841d8-1596-5aff-8d7a-565825f07c07', '11.1.1.1.1.1.1.1.1.1.1', 'Examination', 2, 170, 0),
-   ('30f1115b-7eda-5ea8-ade8-b57de3d9788a', '273a911d-8a5a-56f1-9f61-9c993e674466', '7779e4d8-3ec4-5450-9b27-63b86d71e7d9', '11.1.1.1.1.1.1.1.1.1.1.1', 'Investigation', 2, 172, 0),
-   ('255077f4-c7d0-5e32-b4fb-6e8b01d4993a', '273a911d-8a5a-56f1-9f61-9c993e674466', '30f1115b-7eda-5ea8-ade8-b57de3d9788a', '11.1.1.1.1.1.1.1.1.1.1.1.1', 'Difficult cases', 2, 172, 0),
-   ('f6c4774e-b1de-5f7a-95f4-ddc443aa9f58', '273a911d-8a5a-56f1-9f61-9c993e674466', '255077f4-c7d0-5e32-b4fb-6e8b01d4993a', '11.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Measuring pain', 2, 173, 0),
-   ('4222f556-778c-5127-85c6-6c637c2b335a', '273a911d-8a5a-56f1-9f61-9c993e674466', 'f6c4774e-b1de-5f7a-95f4-ddc443aa9f58', '11.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Unidimensional scales', 3, 173, 0),
-   ('05b1af6b-33bd-58b9-b5d0-a7b719fb5d36', '273a911d-8a5a-56f1-9f61-9c993e674466', '4222f556-778c-5127-85c6-6c637c2b335a', '11.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Multidimensional (complex) scales', 3, 174, 0),
-   ('85b75f02-5b80-57b5-9844-cc802c70e5a1', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Treatment strategies', 1, 174, 1),
-   ('4ea151d8-a433-5efd-b1c0-f272453b58d5', '273a911d-8a5a-56f1-9f61-9c993e674466', '85b75f02-5b80-57b5-9844-cc802c70e5a1', '11.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Acute pain', 2, 174, 0),
-   ('20d08821-b1a0-5c4e-8eec-6dad5e8f62d3', '273a911d-8a5a-56f1-9f61-9c993e674466', '4ea151d8-a433-5efd-b1c0-f272453b58d5', '11.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Chronic pain', 2, 174, 0),
-   ('1a595352-3db1-5b13-b763-d40cd6735644', '273a911d-8a5a-56f1-9f61-9c993e674466', '20d08821-b1a0-5c4e-8eec-6dad5e8f62d3', '11.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Non-pharmacological options', 3, 174, 0),
-   ('91e952e6-156c-575c-8f3a-e4eda142d04d', '273a911d-8a5a-56f1-9f61-9c993e674466', NULL, '11.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.2', 'Conclusions', 1, 175, 1),
-   ('a753ea9f-ae03-5cdd-b4a8-23ed694befe8', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', NULL, '12.1', 'Introduction', 1, 178, 0),
-   ('cf704e0b-9530-500a-ac4d-dcccc9f7b706', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', NULL, '12.1.1', 'The history', 1, 178, 0),
-   ('3e4937a4-0f1b-5263-a680-a2ffdcd5e702', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'cf704e0b-9530-500a-ac4d-dcccc9f7b706', '12.1.1.1', 'Breathlessness', 2, 178, 0),
-   ('46feac17-60bf-560b-9713-09af2d2d6610', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '3e4937a4-0f1b-5263-a680-a2ffdcd5e702', '12.1.1.1.1', 'Cough', 2, 178, 0),
-   ('f68de4f4-ad14-5012-8118-8d6a5a9f5748', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '46feac17-60bf-560b-9713-09af2d2d6610', '12.1.1.1.1.1', 'Sputum', 2, 178, 0),
-   ('02e3249c-47b5-58af-b2e8-81cdc99f2caa', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'f68de4f4-ad14-5012-8118-8d6a5a9f5748', '12.1.1.1.1.1.1', 'Haemoptysis', 2, 179, 0),
-   ('e948c484-3029-5ff0-9ffc-2788908a8d22', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '02e3249c-47b5-58af-b2e8-81cdc99f2caa', '12.1.1.1.1.1.1.1', 'Wheezing', 2, 180, 0),
-   ('ff1a2cfd-cb2f-52bc-b23e-07445ef98454', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'e948c484-3029-5ff0-9ffc-2788908a8d22', '12.1.1.1.1.1.1.1.1', 'Pain in the chest', 2, 180, 0),
-   ('4f303cc2-0f37-5541-a999-54aaa6ebf883', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'ff1a2cfd-cb2f-52bc-b23e-07445ef98454', '12.1.1.1.1.1.1.1.1.1', 'Other symptoms', 2, 180, 0),
-   ('ab4d55d0-0df4-5e4c-940c-df45e73ae0aa', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '4f303cc2-0f37-5541-a999-54aaa6ebf883', '12.1.1.1.1.1.1.1.1.1.1', 'Upper airway', 3, 180, 0),
-   ('7f5552bb-7356-5ebc-8f1f-ce89cebd3bc9', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'ab4d55d0-0df4-5e4c-940c-df45e73ae0aa', '12.1.1.1.1.1.1.1.1.1.1.1', 'The smoking and recreational drug history', 3, 180, 0),
-   ('e2a23856-ed08-5c94-b93f-c23655838ebe', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '7f5552bb-7356-5ebc-8f1f-ce89cebd3bc9', '12.1.1.1.1.1.1.1.1.1.1.1.1', 'The family history', 3, 181, 0),
-   ('afd786aa-f6eb-5d78-8745-afdffed33e7c', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'e2a23856-ed08-5c94-b93f-c23655838ebe', '12.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The occupational history', 3, 181, 0),
-   ('087927fe-25b9-5661-bf79-3149ad7087d1', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', NULL, '12.1.1.1.1.1.1.1.1.1.2', 'The examination', 1, 181, 1),
-   ('fa3367d0-17ee-5dce-a725-2ec0622ff303', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '087927fe-25b9-5661-bf79-3149ad7087d1', '12.1.1.1.1.1.1.1.1.1.2.1', 'General assessment', 2, 181, 0),
-   ('7f22787f-cd0e-5322-bfc0-8c1723a2ef95', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'fa3367d0-17ee-5dce-a725-2ec0622ff303', '12.1.1.1.1.1.1.1.1.1.2.1.1', 'Hands', 3, 182, 0),
-   ('29f3933b-3f36-53b7-95d7-004eaffd4c15', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '7f22787f-cd0e-5322-bfc0-8c1723a2ef95', '12.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Respiratory rate and rhythm', 3, 182, 0),
-   ('38dadc49-6a6e-5d4a-9668-980b34cd45af', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '29f3933b-3f36-53b7-95d7-004eaffd4c15', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Venous pulses', 3, 183, 0),
-   ('ff3f4096-81a9-51e1-8621-facc573b85ed', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '38dadc49-6a6e-5d4a-9668-980b34cd45af', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Head', 3, 183, 0),
-   ('35756612-9e97-5f2f-9d66-aa11d4b95fc1', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'ff3f4096-81a9-51e1-8621-facc573b85ed', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Examination of the chest', 2, 183, 0),
-   ('081ea604-3313-5a8e-9691-9d78855d1921', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '35756612-9e97-5f2f-9d66-aa11d4b95fc1', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Relevant anatomy', 3, 183, 0),
-   ('118766e5-a780-5db3-8b97-85e5e228dfe4', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '081ea604-3313-5a8e-9691-9d78855d1921', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Looking: inspection of the chest', 3, 184, 0),
-   ('2961632e-d999-5d2f-8be3-4fc2b36e8775', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '118766e5-a780-5db3-8b97-85e5e228dfe4', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Appearance of the chest', 4, 184, 0),
-   ('195d95f9-0ff0-5408-a922-e1936409e7f0', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '2961632e-d999-5d2f-8be3-4fc2b36e8775', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Movement of the chest', 4, 184, 0),
-   ('2109f15b-80d2-545e-a69e-475a6e5f71f9', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '195d95f9-0ff0-5408-a922-e1936409e7f0', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Feeling: palpation of the chest', 3, 184, 0),
-   ('7dffe1dd-1a91-5482-9b0a-e37f253e5c4b', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '2109f15b-80d2-545e-a69e-475a6e5f71f9', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Lymph nodes', 4, 184, 0),
-   ('0a2ca07f-ec09-5b66-a0d5-560372ba703e', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '7dffe1dd-1a91-5482-9b0a-e37f253e5c4b', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Swellings and tenderness', 4, 184, 0),
-   ('71e195ab-9ca0-5d5f-81c8-8346120193e7', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '0a2ca07f-ec09-5b66-a0d5-560372ba703e', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Trachea and heart', 4, 186, 0),
-   ('ad9c0f8f-4de2-5d1b-a212-479f2713f07c', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '71e195ab-9ca0-5d5f-81c8-8346120193e7', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Chest expansion', 4, 186, 0),
-   ('d01dfaa7-8218-5fae-861f-cd55606ceaff', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'ad9c0f8f-4de2-5d1b-a212-479f2713f07c', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Feeling: percussion of the chest', 3, 186, 0),
-   ('d4d7e375-a7a6-5445-b71d-664eeb67b6ae', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'd01dfaa7-8218-5fae-861f-cd55606ceaff', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Listening: auscultation of the chest', 3, 187, 0),
-   ('01c56aae-5269-5d9a-bcc3-b49b2e6480e0', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'd4d7e375-a7a6-5445-b71d-664eeb67b6ae', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The breath sounds', 4, 187, 0),
-   ('bf7672eb-8e5d-5ba8-aad7-572f18feff81', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '01c56aae-5269-5d9a-bcc3-b49b2e6480e0', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Added sounds', 4, 188, 0),
-   ('145cecc0-6e84-5b54-9692-aa66d845e4a3', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'bf7672eb-8e5d-5ba8-aad7-572f18feff81', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vocal resonance', 4, 188, 0),
-   ('10fb2ecf-3eb4-58fd-9a1e-0e9b710ae4f6', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '145cecc0-6e84-5b54-9692-aa66d845e4a3', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vocal fremitus', 4, 189, 0),
-   ('88e8da7d-366c-5877-9e84-d7bf1025afc5', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'd4d7e375-a7a6-5445-b71d-664eeb67b6ae', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Putting it together: an examination of the chest', 2, 189, 1),
-   ('8c0e65d7-e05b-54b1-8542-2956045ae054', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '88e8da7d-366c-5877-9e84-d7bf1025afc5', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Putting it together: interpreting the signs', 2, 189, 0),
-   ('e709e4cf-cdf1-570d-845d-c838420219cf', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', NULL, '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Other investigations', 1, 189, 0),
-   ('2379f466-619b-580f-8916-16910b9fb7e6', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'e709e4cf-cdf1-570d-845d-c838420219cf', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Sputum examination', 2, 189, 0),
-   ('11d2e0bf-ba45-5736-9a79-acfed8f1515e', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '2379f466-619b-580f-8916-16910b9fb7e6', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'At the bedside', 3, 189, 0),
-   ('734d1722-3799-5ec4-bc26-b47be7598060', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '11d2e0bf-ba45-5736-9a79-acfed8f1515e', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'In the laboratory', 3, 190, 0),
-   ('a80debb6-c47b-5d07-b2eb-ddb9a557e6b9', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '734d1722-3799-5ec4-bc26-b47be7598060', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Lung function tests', 2, 190, 0),
-   ('060a2e90-c13f-5c66-9e2d-919e4f2a2c7e', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'a80debb6-c47b-5d07-b2eb-ddb9a557e6b9', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Arterial blood sampling', 2, 192, 0),
-   ('533c7e30-ec0f-5c39-84ec-eaa34ef89b1a', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '060a2e90-c13f-5c66-9e2d-919e4f2a2c7e', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Imaging the lung and chest', 2, 192, 0),
-   ('7ed51875-1dbf-51ce-97d4-2b3e2ae6ea82', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '533c7e30-ec0f-5c39-84ec-eaa34ef89b1a', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'The chest X-ray', 3, 192, 0),
-   ('875794c8-4697-524a-aeac-29cca4807138', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '7ed51875-1dbf-51ce-97d4-2b3e2ae6ea82', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'The position of the patient', 4, 192, 0),
-   ('b60bfef7-62c7-5a26-bf7a-48d7e0091d2f', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '875794c8-4697-524a-aeac-29cca4807138', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'The outline of the heart and the mediastinum', 4, 192, 0),
-   ('753c8424-c4f7-534d-86f4-94b345a75e3a', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'b60bfef7-62c7-5a26-bf7a-48d7e0091d2f', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'The position of the trachea', 4, 192, 0),
-   ('41b0f6dd-358f-5551-b98a-0c4a648d0a3e', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '753c8424-c4f7-534d-86f4-94b345a75e3a', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The diaphragm', 4, 192, 0),
-   ('347b7239-ccfa-5f19-bbc7-51487250bead', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '41b0f6dd-358f-5551-b98a-0c4a648d0a3e', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The lung fields', 4, 193, 0),
-   ('7d0b0c8a-92d3-54cc-9208-5b5f5c27b1bf', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '347b7239-ccfa-5f19-bbc7-51487250bead', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The bony skeleton', 4, 193, 0),
-   ('eadde381-a62c-5206-b43a-44d83dd8bdf0', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '7d0b0c8a-92d3-54cc-9208-5b5f5c27b1bf', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The computed tomography scan', 3, 193, 0),
-   ('22f76245-68bf-57c4-bf2e-f7457b7b97bb', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'eadde381-a62c-5206-b43a-44d83dd8bdf0', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radioisotope imaging', 3, 193, 0),
-   ('49e75878-b3c7-54ba-9b8e-aabbdd0489a4', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '22f76245-68bf-57c4-bf2e-f7457b7b97bb', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Magnetic resonance imaging', 3, 194, 0),
-   ('f4d4b938-ec7c-5aa7-94d9-ba43a49df065', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '49e75878-b3c7-54ba-9b8e-aabbdd0489a4', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ultrasound', 3, 194, 0),
-   ('462eb1c7-e35e-5af2-9427-31727dceb0ca', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'f4d4b938-ec7c-5aa7-94d9-ba43a49df065', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Positron emission tomography (PET) scanning', 3, 195, 0),
-   ('f9398ff8-8cb4-5205-bdf0-2ec85db903fc', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '462eb1c7-e35e-5af2-9427-31727dceb0ca', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Flexible bronchoscopy and endobronchial ultrasound (EBUS)', 3, 195, 0),
-   ('cfb51e36-24e3-5f71-9757-8108076f3440', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'f9398ff8-8cb4-5205-bdf0-2ec85db903fc', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pleural aspiration and biopsy', 3, 195, 0),
-   ('29bd4e46-22e9-5229-a627-c105b29aa7ce', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'cfb51e36-24e3-5f71-9757-8108076f3440', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ridge thoracoscopy and video-assisted thoracoscopic surgery (VATS)', 3, 197, 0),
-   ('e9b4d77c-2149-59f9-9444-0ddf754ee77d', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '29bd4e46-22e9-5229-a627-c105b29aa7ce', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Lung biopsy', 3, 197, 0),
-   ('2459ae06-f94f-5777-a312-3f69016d6dc1', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 'e9b4d77c-2149-59f9-9444-0ddf754ee77d', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Immunological tests', 3, 197, 0),
-   ('1d2e2c25-dadb-5483-a63b-56ab7e527e9c', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', '2459ae06-f94f-5777-a312-3f69016d6dc1', '12.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Tests for Tuberculosis (TB)', 3, 198, 0),
-   ('c3673e84-851b-5c69-9a05-e0d9e9de7ef7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1', 'Introduction', 1, 200, 0),
-   ('851ccfdd-b68a-5296-9d9e-22621513d559', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1', 'The cardiac history', 1, 200, 0),
-   ('6ad67882-879f-5bf2-a251-7af224942196', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '851ccfdd-b68a-5296-9d9e-22621513d559', '13.1.1.1', 'Chest pain', 2, 200, 0),
-   ('dd43d573-c69f-5ebd-9466-f9d78f4fd7f9', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6ad67882-879f-5bf2-a251-7af224942196', '13.1.1.1.1', 'Myocardial ischaemia', 3, 201, 0),
-   ('f3578fd4-d469-5783-9c6c-ba0469b4c8a2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'dd43d573-c69f-5ebd-9466-f9d78f4fd7f9', '13.1.1.1.1.1', 'Acute coronary syndromes', 3, 202, 0),
-   ('4d6a0160-8271-51ba-aab5-87e5f331a832', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f3578fd4-d469-5783-9c6c-ba0469b4c8a2', '13.1.1.1.1.1.1', 'Pericarditis', 3, 202, 0),
-   ('a8068727-fd4d-5f35-8aee-0b1a18927628', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4d6a0160-8271-51ba-aab5-87e5f331a832', '13.1.1.1.1.1.1.1', 'Aortic dissection', 3, 202, 0),
-   ('d94c86e3-90de-5d0e-82c8-7bf1ac1ea11c', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a8068727-fd4d-5f35-8aee-0b1a18927628', '13.1.1.1.1.1.1.1.1', 'Pulmonary embolism', 3, 203, 0),
-   ('4a55f38d-8a94-55ed-b1d9-5e6eec848d61', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd94c86e3-90de-5d0e-82c8-7bf1ac1ea11c', '13.1.1.1.1.1.1.1.1.1', 'Dyspnoea', 2, 203, 0),
-   ('51e14c7d-5960-58f2-816e-2b532f382cff', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4a55f38d-8a94-55ed-b1d9-5e6eec848d61', '13.1.1.1.1.1.1.1.1.1.1', 'Exertional dyspnoea', 3, 204, 0),
-   ('3652b327-ae40-547a-8599-04ed20bd3c19', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '51e14c7d-5960-58f2-816e-2b532f382cff', '13.1.1.1.1.1.1.1.1.1.1.1', 'Orthopnoea', 3, 205, 0),
-   ('52f49e4e-b88f-5a3a-9a4b-4c8754adaef1', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3652b327-ae40-547a-8599-04ed20bd3c19', '13.1.1.1.1.1.1.1.1.1.1.1.1', 'Paroxysmal nocturnal dyspnoea', 3, 205, 0),
-   ('d3a708de-bfb4-5993-84d5-09d287e79090', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '52f49e4e-b88f-5a3a-9a4b-4c8754adaef1', '13.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fatigue', 2, 205, 0),
-   ('7a44f13d-af31-580c-9e3d-cb775bb93b2c', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd3a708de-bfb4-5993-84d5-09d287e79090', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Palpitation', 2, 205, 0),
-   ('c8940870-75f0-515e-a63f-009e9c463358', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '7a44f13d-af31-580c-9e3d-cb775bb93b2c', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Dizziness and syncope', 2, 205, 0),
-   ('5b86b465-0bd3-55df-8ba7-7b7d01fb1fb5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'c8940870-75f0-515e-a63f-009e9c463358', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Postural hypotension', 3, 205, 0),
-   ('03b7502f-7ffc-50e0-bc3a-228e4393f6b3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5b86b465-0bd3-55df-8ba7-7b7d01fb1fb5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vasovagal syncope', 3, 205, 0),
-   ('74f6e599-a6aa-5f27-bece-35360c48f3c0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '03b7502f-7ffc-50e0-bc3a-228e4393f6b3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Carotid sinus hypersensitivity', 3, 205, 0),
-   ('a801e8cf-ba40-5efc-bbc4-dae728bc1e4a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '74f6e599-a6aa-5f27-bece-35360c48f3c0', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Valvular obstruction', 3, 205, 0),
-   ('a3f3dc89-9e46-517c-bf19-c98b75e8b6a6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a801e8cf-ba40-5efc-bbc4-dae728bc1e4a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Stokes-Adams attacks', 3, 205, 0),
-   ('cfeb74d7-f11c-58b8-913c-195b8c15f859', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The cardiac examination', 1, 205, 1),
-   ('7ba5651c-eaaa-5d05-b7c1-b65d4f5d867b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'cfeb74d7-f11c-58b8-913c-195b8c15f859', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Inspection of the patient', 2, 206, 0),
-   ('3c3fdf23-dd2a-5354-a285-c1d53bf208b3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '7ba5651c-eaaa-5d05-b7c1-b65d4f5d867b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Anaemia', 3, 206, 0),
-   ('4f3ed967-67a5-5536-8908-b311c0ca76a6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3c3fdf23-dd2a-5354-a285-c1d53bf208b3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Cyanosis', 3, 206, 0),
-   ('24d0e3ff-49f9-5997-9155-95745c97f29b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4f3ed967-67a5-5536-8908-b311c0ca76a6', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Clubbing of the fingers and toes', 3, 207, 0),
-   ('a331fe7c-881d-5aef-a76d-639eac986583', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '24d0e3ff-49f9-5997-9155-95745c97f29b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Other cutaneous and ocular signs of infective endocarditis', 3, 207, 0),
-   ('602038f5-3cf8-5fd7-83ae-91eacbd12ed7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a331fe7c-881d-5aef-a76d-639eac986583', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Coldness of the extremities', 3, 207, 0),
-   ('89a9b7dc-d81f-585d-b3b7-adaf88544b4e', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '602038f5-3cf8-5fd7-83ae-91eacbd12ed7', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Pyrexia', 3, 207, 0),
-   ('b82ef9b2-95bd-5d02-b3ff-39c7af938e67', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '89a9b7dc-d81f-585d-b3b7-adaf88544b4e', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Oedema', 3, 207, 0),
-   ('3a1c043f-492e-5aae-b50c-b76aa4fa683d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b82ef9b2-95bd-5d02-b3ff-39c7af938e67', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Arterial pulse', 2, 207, 0),
-   ('cb471e4f-2e68-5227-b031-1ab7c0f66ec4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3a1c043f-492e-5aae-b50c-b76aa4fa683d', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Rate and rhythm', 3, 207, 0),
-   ('a9eb7878-eec4-556b-b45e-de8eb8cabca9', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'cb471e4f-2e68-5227-b031-1ab7c0f66ec4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Character', 3, 207, 0),
-   ('e493120c-4722-5f68-bf5d-4c8b6274cc09', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a9eb7878-eec4-556b-b45e-de8eb8cabca9', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Symmetry', 3, 208, 0),
-   ('6b65dad8-990e-5551-a31a-7db77805ef45', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'e493120c-4722-5f68-bf5d-4c8b6274cc09', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Measurement of blood pressure', 2, 208, 0),
-   ('0864167b-c0ae-5e03-b541-5a1c2d05c6e6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6b65dad8-990e-5551-a31a-7db77805ef45', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Jugular venous pulse', 3, 209, 0),
-   ('5da904b9-6d3a-5a63-955c-6604dfb6ff31', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '0864167b-c0ae-5e03-b541-5a1c2d05c6e6', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Jugular venous pressure', 3, 209, 0),
-   ('17d408dc-c7d3-5a90-bb04-681161194a91', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5da904b9-6d3a-5a63-955c-6604dfb6ff31', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Waveform of jugular venous pulses', 3, 210, 0),
-   ('bf1794c2-c8d1-59f2-b81c-0ac7c9fc24df', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '17d408dc-c7d3-5a90-bb04-681161194a91', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Palpation of the chest wall', 2, 210, 0),
-   ('fee08af7-9957-5726-93eb-03d480728838', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'bf1794c2-c8d1-59f2-b81c-0ac7c9fc24df', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Auscultation of the heart', 2, 211, 0),
-   ('e601e68c-c53b-5a3f-a5bc-6659de569270', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'fee08af7-9957-5726-93eb-03d480728838', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'First sound (S1)', 3, 211, 0),
-   ('67c9751c-1f7f-530b-9f0c-d6378073b165', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'e601e68c-c53b-5a3f-a5bc-6659de569270', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Second sound (S2)', 3, 211, 0),
-   ('d317d251-0f22-5892-8362-a3577c796e44', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '67c9751c-1f7f-530b-9f0c-d6378073b165', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Third and fourth sounds (S3, S4)', 3, 211, 0),
-   ('34119638-76f4-53eb-af8e-0f165ed84709', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd317d251-0f22-5892-8362-a3577c796e44', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Systolic clicks and opening snaps', 3, 212, 0),
-   ('a7c31454-06b8-5782-af8e-c776c279d5be', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '34119638-76f4-53eb-af8e-0f165ed84709', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Heart murmurs', 3, 212, 0),
-   ('8e593368-af7b-51bb-a09b-b66d75737fc6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a7c31454-06b8-5782-af8e-c776c279d5be', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Friction rubs and venous hums', 3, 214, 0),
-   ('1fccdc0f-8909-568c-83cf-3994e98d0912', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '8e593368-af7b-51bb-a09b-b66d75737fc6', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Finishing the cardiovascular examination', 3, 214, 0),
-   ('64d102ae-1784-5311-85d8-fd8c730cd97a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The electrocardiogram', 1, 214, 1),
-   ('2a12a5a0-5937-5c64-b7cc-241005f6b373', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '64d102ae-1784-5311-85d8-fd8c730cd97a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Electrophysiology', 2, 214, 0),
-   ('38eccdf1-e15b-5396-b4d8-29b4923ef014', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '2a12a5a0-5937-5c64-b7cc-241005f6b373', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Generation of electrical activity', 3, 214, 0),
-   ('3b4cbd3e-e54e-5f3e-9690-c3be3d336da5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '38eccdf1-e15b-5396-b4d8-29b4923ef014', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Inscription of the QRS complex', 3, 214, 0),
-   ('e0d28634-3a29-5acd-a134-c233876dade2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3b4cbd3e-e54e-5f3e-9690-c3be3d336da5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Electrical axis', 3, 215, 0),
-   ('5c4fcebd-89eb-5526-862b-2dd83f38351f', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'e0d28634-3a29-5acd-a134-c233876dade2', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Normal 12-lead ECG', 2, 215, 0),
-   ('f3d7dc50-d9a0-5c41-a262-f1d48e0a1fb3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5c4fcebd-89eb-5526-862b-2dd83f38351f', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Analysis of the ECG', 2, 215, 0),
-   ('6e2ee36a-03cc-5540-8b62-943ee5519ef5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f3d7dc50-d9a0-5c41-a262-f1d48e0a1fb3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Heart rate', 3, 215, 0),
-   ('73a5c72a-be29-57d8-91bf-ee1cf7accfa1', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6e2ee36a-03cc-5540-8b62-943ee5519ef5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Rhythm', 3, 215, 0),
-   ('f1cbef70-f77a-5a91-9d90-468f6ceea31e', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '73a5c72a-be29-57d8-91bf-ee1cf7accfa1', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Electrical axis', 3, 215, 0),
-   ('62cbad3b-f365-5e0c-8b3a-b1b2cb581c95', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f1cbef70-f77a-5a91-9d90-468f6ceea31e', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'P-wave morphology', 3, 215, 0),
-   ('184bc70a-ec50-5db3-bf6a-13f0b1255357', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '62cbad3b-f365-5e0c-8b3a-b1b2cb581c95', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'PR interval', 3, 215, 0),
-   ('3134699b-6eca-5956-b34e-6ae38d2d8c64', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '184bc70a-ec50-5db3-bf6a-13f0b1255357', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'QRS morphology', 3, 215, 0),
-   ('6ba4f37e-0eb1-5984-a5b1-b3989c1c4f6b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3134699b-6eca-5956-b34e-6ae38d2d8c64', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'QT interval', 3, 216, 0),
-   ('5f027d8a-22c3-5b6d-ae92-b79288a03df0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6ba4f37e-0eb1-5984-a5b1-b3989c1c4f6b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'ST segment morphology', 3, 217, 0),
-   ('198a561c-6a37-5ae4-949e-66cbc6222953', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5f027d8a-22c3-5b6d-ae92-b79288a03df0', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'T-wave morphology', 3, 217, 0),
-   ('2d6a29db-1fa2-5577-9895-d192b1995448', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2', 'Clinical applications of ECG', 1, 217, 1),
-   ('712378da-1d88-57a7-8cb2-12f8bba5c4dc', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '2d6a29db-1fa2-5577-9895-d192b1995448', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1', 'Diagnosis of coronary heart disease', 2, 217, 0),
-   ('12f345b7-37a7-5da7-b993-dd30ae0d8d79', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '712378da-1d88-57a7-8cb2-12f8bba5c4dc', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1', 'Stable angina', 3, 217, 0),
-   ('1489120e-1b3a-5712-bf2a-1544495f7cb3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '12f345b7-37a7-5da7-b993-dd30ae0d8d79', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1', 'Exercise stress testing', 3, 218, 0),
-   ('cbe78f21-e5eb-5d62-9187-8651726feead', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '1489120e-1b3a-5712-bf2a-1544495f7cb3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1', 'Acute coronary syndromes', 3, 220, 0),
-   ('4f9430c8-0965-5709-a75d-d1aebc824826', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'cbe78f21-e5eb-5d62-9187-8651726feead', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1', 'Detection of cardiac arrhythmias', 2, 221, 0),
-   ('b45edc43-c097-5cda-a4df-89444c04fd8b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4f9430c8-0965-5709-a75d-d1aebc824826', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1', 'In-hospital ECG monitoring', 3, 221, 0),
-   ('72e27f83-70f1-579d-aa24-f8f6bd3006f7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b45edc43-c097-5cda-a4df-89444c04fd8b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Ambulatory (Holter) ECG monitoring', 3, 222, 0),
-   ('b5d697b9-6ac1-5276-9b51-fe983787c866', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '72e27f83-70f1-579d-aa24-f8f6bd3006f7', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Patient-activated ECG recording', 3, 223, 0),
-   ('530a4719-552e-5ae8-94c3-779d9a225ce1', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b5d697b9-6ac1-5276-9b51-fe983787c866', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Implantable loop recording', 3, 223, 0),
-   ('5ded17c5-f0d6-5906-ac9b-8d9e9a241fe4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '530a4719-552e-5ae8-94c3-779d9a225ce1', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Exercise testing', 3, 223, 0),
-   ('a99626f3-0c06-5a89-a0fb-eb9292ddae29', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5ded17c5-f0d6-5906-ac9b-8d9e9a241fe4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Tilt testing', 3, 223, 0),
-   ('51e54325-b4e6-5ac4-a6ef-cc466cf208c7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a99626f3-0c06-5a89-a0fb-eb9292ddae29', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Electrophysiological study', 3, 223, 0),
-   ('87bbeae7-090d-55e1-8799-ae912389c493', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '51e54325-b4e6-5ac4-a6ef-cc466cf208c7', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diagnosis of atrial arrhythmias', 2, 223, 0),
-   ('16f7744b-d1e5-5a83-8783-13f7826e6381', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '87bbeae7-090d-55e1-8799-ae912389c493', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Atrial ectopic beats', 3, 223, 0),
-   ('0c6940f7-1f30-5038-9f40-1db40ca0cb98', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '16f7744b-d1e5-5a83-8783-13f7826e6381', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Atrial fibrillation', 3, 223, 0),
-   ('0df08ce6-0d82-5860-9670-bc1c5c278bde', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '0c6940f7-1f30-5038-9f40-1db40ca0cb98', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Atrial flutter', 3, 223, 0),
-   ('49aa8176-2264-566c-9788-7c8a59ae6370', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '0df08ce6-0d82-5860-9670-bc1c5c278bde', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diagnosis of nodal arrhythmias', 2, 223, 0),
-   ('e2f228d8-f98b-5b2a-b4d5-a720dfb78712', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '49aa8176-2264-566c-9788-7c8a59ae6370', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Atrioventricular nodal re-entry tachycardia (AVNRT)', 3, 223, 0),
-   ('6a45957e-74e0-52a5-b30d-8ac4d2b65e9a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'e2f228d8-f98b-5b2a-b4d5-a720dfb78712', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Wolff-Parkinson-White syndrome', 3, 224, 0),
-   ('bfc6c96f-2ac0-5403-956f-518fc4c193e3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6a45957e-74e0-52a5-b30d-8ac4d2b65e9a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diagnosis of ventricular arrhythmias', 2, 225, 0),
-   ('bb726643-24bd-5aef-b911-a854817c02c2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'bfc6c96f-2ac0-5403-956f-518fc4c193e3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ventricular premature beats', 3, 225, 0),
-   ('9a4e27a4-1bfc-5d7c-8916-b7d9926a2ee3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'bb726643-24bd-5aef-b911-a854817c02c2', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ventricular tachycardia', 3, 226, 0),
-   ('ab626f01-cd91-53e2-b5d3-a7b24ce388e0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '9a4e27a4-1bfc-5d7c-8916-b7d9926a2ee3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ventricular fibrillation', 3, 227, 0),
-   ('61f2e975-e3be-55a5-b496-1bb5abfa87df', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'ab626f01-cd91-53e2-b5d3-a7b24ce388e0', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diagnosis of sinoatrial disease', 2, 227, 0),
-   ('82428d74-ce6c-5f52-a646-a015c2679066', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '61f2e975-e3be-55a5-b496-1bb5abfa87df', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Sinus bradycardia (<50 bpm)', 3, 228, 0),
-   ('03ed4d95-1a34-5009-9f05-e4dcaf93a9c7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '82428d74-ce6c-5f52-a646-a015c2679066', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Sinoatrial block', 3, 228, 0),
-   ('5d75b39e-815f-5323-bf58-3b0679a41a01', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '03ed4d95-1a34-5009-9f05-e4dcaf93a9c7', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Sinus arrest', 3, 228, 0),
-   ('81aeac7b-5aff-5f25-981c-3b5047086d9f', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '5d75b39e-815f-5323-bf58-3b0679a41a01', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Bradycardia-tachycardia syndrome', 3, 228, 0),
-   ('591bfb89-595f-5b62-a407-15be98d8af24', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '81aeac7b-5aff-5f25-981c-3b5047086d9f', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diagnosis of atrioventricular block', 2, 228, 0),
-   ('4074191d-1a91-521f-a4bf-492f6a8826b4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '591bfb89-595f-5b62-a407-15be98d8af24', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'First-degree atrioventricular block', 3, 230, 0),
-   ('fe9f1374-b438-5e42-b562-96fc40a48c94', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4074191d-1a91-521f-a4bf-492f6a8826b4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Second-degree atrioventricular block: Mobitz type I (Wenckebach)', 3, 230, 0),
-   ('c4942155-a087-5eb8-ab47-66ba5d9c4d8e', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'fe9f1374-b438-5e42-b562-96fc40a48c94', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Second-degree atrioventricular block: Mobitz type II', 3, 230, 0),
-   ('d138fe8d-604c-50dd-a338-121029bf6e02', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'c4942155-a087-5eb8-ab47-66ba5d9c4d8e', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Third-degree (complete) atrioventricular block', 3, 230, 0),
-   ('b53c5585-de78-5002-b789-e17198497bfe', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd138fe8d-604c-50dd-a338-121029bf6e02', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Right bundle branch block', 3, 230, 0),
-   ('12e896c7-0486-5353-85da-57b730dd244d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b53c5585-de78-5002-b789-e17198497bfe', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Left bundle branch block', 3, 230, 0),
-   ('420d6b5f-0daa-50a3-ab82-dda9a57908f7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The chest X-ray', 1, 230, 1),
-   ('885d6b83-66bb-5c69-a275-e26ec9d813ae', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '420d6b5f-0daa-50a3-ab82-dda9a57908f7', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Cardiac silhouette', 2, 231, 0),
-   ('3348c639-aa9c-5746-a726-01a112b212c5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '885d6b83-66bb-5c69-a275-e26ec9d813ae', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Ventricular dilatation', 3, 231, 0),
-   ('42283a49-b269-57ef-89e8-136dacc83357', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '3348c639-aa9c-5746-a726-01a112b212c5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Atrial dilatation', 3, 231, 0),
-   ('03660914-7fa5-5db7-bd25-d12ca343fa51', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '42283a49-b269-57ef-89e8-136dacc83357', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Vascular dilatation', 3, 231, 0),
-   ('60e7e273-2020-5a93-9d9d-a4eddfcf7fbd', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '03660914-7fa5-5db7-bd25-d12ca343fa51', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Intracardiac calcification', 3, 231, 0),
-   ('f1470cb3-0817-58a2-bfd6-8e81e284e5fd', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '60e7e273-2020-5a93-9d9d-a4eddfcf7fbd', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Lung fields', 2, 232, 0),
-   ('7a73b509-7f0c-5296-b1ea-0b222eb609d4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f1470cb3-0817-58a2-bfd6-8e81e284e5fd', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Altered pulmonary flow', 3, 232, 0),
-   ('72d32360-72a3-5fa3-bb06-cb9d0fd2d6a5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '7a73b509-7f0c-5296-b1ea-0b222eb609d4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Increased left atrial pressure', 3, 232, 0),
-   ('b418e36d-f222-5db8-bc09-a131b419a4fd', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '72d32360-72a3-5fa3-bb06-cb9d0fd2d6a5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Other lung field abnormalities', 3, 232, 0),
-   ('66f597b6-9c51-528b-a681-16cb381d0af5', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b418e36d-f222-5db8-bc09-a131b419a4fd', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Pulmonary infarction', 4, 232, 0),
-   ('959971bc-eb5c-5fcd-b7c1-9ab742742326', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '66f597b6-9c51-528b-a681-16cb381d0af5', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Pneumonic consolidation and abscess', 4, 232, 0),
-   ('c21c7040-ecea-5746-8e30-30d0188e3e21', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '959971bc-eb5c-5fcd-b7c1-9ab742742326', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Interstitial lung disease', 4, 232, 0),
-   ('9623d463-5f42-5e42-a7a7-f1f10130e7ff', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'b418e36d-f222-5db8-bc09-a131b419a4fd', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2', 'Bony abnormalities', 2, 232, 1),
-   ('f095ba0f-e36a-53f6-a447-6999fa61b9a2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1', 'Echocardiography', 1, 232, 0),
-   ('cb079649-53fc-528e-93bc-535c97a293ac', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f095ba0f-e36a-53f6-a447-6999fa61b9a2', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1', 'Principles', 2, 233, 0),
-   ('55798d41-b5f8-5be7-942b-c6af8b61ac74', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'cb079649-53fc-528e-93bc-535c97a293ac', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Physics', 3, 233, 0),
-   ('62c73b9d-bb38-5b37-83dd-6e52e84c1098', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '55798d41-b5f8-5be7-942b-c6af8b61ac74', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'M-mode echocardiogram', 3, 233, 0),
-   ('6c1280a1-a72b-5cf3-bca7-5e9d75bc1bdf', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '62c73b9d-bb38-5b37-83dd-6e52e84c1098', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Two-dimensional echocardiogram', 3, 233, 0),
-   ('4ec01521-f8dc-5634-afa9-09c4346fb04b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6c1280a1-a72b-5cf3-bca7-5e9d75bc1bdf', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Clinical applications', 2, 233, 0),
-   ('656daaf0-aded-5c11-9388-c546c5818a2b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4ec01521-f8dc-5634-afa9-09c4346fb04b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Congenital heart disease', 3, 233, 0),
-   ('79f643aa-0775-5413-941c-5e44a13f1a8b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '656daaf0-aded-5c11-9388-c546c5818a2b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Myocardial disease', 3, 233, 0),
-   ('f025bf99-6b6a-55e5-a6c3-39251a8d719d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '79f643aa-0775-5413-941c-5e44a13f1a8b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Valvular disease', 3, 233, 0),
-   ('23bfeb03-5ebe-5771-b23e-2448d895710b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f025bf99-6b6a-55e5-a6c3-39251a8d719d', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Pericardial disease', 3, 233, 0),
-   ('f778ad7d-4bb4-5a77-9947-57c748cfb061', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '23bfeb03-5ebe-5771-b23e-2448d895710b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Other clinical applications', 3, 236, 0),
-   ('7d045c3c-b8fb-5614-b536-59bf0a2230b9', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2', 'Stress echocardiography', 1, 236, 1),
-   ('97ea4d66-581a-5ed2-ab2e-545160d69a84', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1', 'Doppler echocardiography', 1, 237, 0),
-   ('fe08e61f-4f1a-5da2-9312-04e552630da2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '97ea4d66-581a-5ed2-ab2e-545160d69a84', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1', 'Principles', 2, 238, 0),
-   ('1de79ba0-c693-5abe-a013-8a83933c37b8', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'fe08e61f-4f1a-5da2-9312-04e552630da2', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1', 'Physics', 3, 238, 0),
-   ('7568b623-64ca-5018-a9c3-017000d4c93a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '1de79ba0-c693-5abe-a013-8a83933c37b8', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1', 'Colour-flow mapping', 3, 238, 0),
-   ('08cdf54c-91f4-54dd-8166-50c4c774e451', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '7568b623-64ca-5018-a9c3-017000d4c93a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1', 'Clinical applications', 2, 238, 0),
-   ('1e04b3a1-76e3-50c9-8de8-167382900f29', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '08cdf54c-91f4-54dd-8166-50c4c774e451', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1', 'New developments', 2, 238, 0),
-   ('8e245e10-f0d7-5e0e-a0e7-cb105893e77e', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Cardiovascular radionuclide imaging', 1, 238, 0),
-   ('a892092f-8dec-5f87-8ea6-13cc283a21f8', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '8e245e10-f0d7-5e0e-a0e7-cb105893e77e', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Principles', 2, 238, 0),
-   ('63dc5389-e845-5cae-b86f-0dcf5589f5b1', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'a892092f-8dec-5f87-8ea6-13cc283a21f8', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Clinical applications', 2, 238, 0),
-   ('1c5dc27d-1383-5a63-8bc7-42f4522f0fc2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '63dc5389-e845-5cae-b86f-0dcf5589f5b1', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Radionuclide ventriculography', 3, 238, 0),
-   ('2495b885-9b78-5338-9d75-bb6dba90d75c', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '1c5dc27d-1383-5a63-8bc7-42f4522f0fc2', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Myocardial perfusion scintigraphy', 3, 239, 0),
-   ('556d88d1-d88d-58ef-9590-ed9fa7a651f8', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '2495b885-9b78-5338-9d75-bb6dba90d75c', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Positron emission tomography', 3, 239, 0),
-   ('0f6d46d8-822a-5908-835d-26adc69e7504', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '556d88d1-d88d-58ef-9590-ed9fa7a651f8', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pulmonary scintigraphy (radioisotope imaging)', 3, 239, 0),
-   ('7c9d54e1-8bb9-51b2-92a8-111ea4bfceb0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2', 'Computed tomography', 1, 239, 1),
-   ('4a0c0eca-a8c4-57e3-a128-98adfa76774f', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '7c9d54e1-8bb9-51b2-92a8-111ea4bfceb0', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1', 'Principles', 2, 239, 0),
-   ('a6dbc194-a4c8-5671-bcf3-3276fbd6647d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4a0c0eca-a8c4-57e3-a128-98adfa76774f', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1', 'Clinical applications', 2, 240, 0),
-   ('6ab6d42a-9086-5e78-aeb9-4d8fab3e0d5b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Magnetic resonance imaging', 1, 241, 0),
-   ('d43e831d-b71f-5d3e-b8b8-e8e59a3909d0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6ab6d42a-9086-5e78-aeb9-4d8fab3e0d5b', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Principles', 2, 241, 0),
-   ('0c4f852a-e394-5a27-aa34-1b0aff195107', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd43e831d-b71f-5d3e-b8b8-e8e59a3909d0', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Clinical applications', 2, 242, 0),
-   ('8d1cd44a-53c1-5d68-a312-5d2e274669bc', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Cardiac catheterization', 1, 242, 0),
-   ('f218f384-6f4e-5f32-a0e4-082955b9772e', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '8d1cd44a-53c1-5d68-a312-5d2e274669bc', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Cardiac angiography', 2, 242, 0),
-   ('48f5f121-acdd-575a-9eb1-2def2ecf2711', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f218f384-6f4e-5f32-a0e4-082955b9772e', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Aortic root angiography', 3, 242, 0),
-   ('05426400-89b9-5593-bc7a-e12033a35f45', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '48f5f121-acdd-575a-9eb1-2def2ecf2711', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Left ventricular angiography', 3, 242, 0),
-   ('c66b1a6b-4316-59ca-bddb-85467f5ceff4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '05426400-89b9-5593-bc7a-e12033a35f45', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Coronary angiography', 3, 242, 0),
-   ('31357b29-c6f5-5141-9570-f00e037fdf44', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'c66b1a6b-4316-59ca-bddb-85467f5ceff4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Pressure wire', 2, 243, 0),
-   ('cf1075d5-f9df-5b23-a3aa-0dd7adff6c04', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '31357b29-c6f5-5141-9570-f00e037fdf44', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Intravascular ultrasound', 2, 244, 0),
-   ('45b6b115-d0bf-5839-bcbe-1824b4b18228', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'cf1075d5-f9df-5b23-a3aa-0dd7adff6c04', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pulmonary angiography', 2, 245, 0),
-   ('d0f994d0-81eb-5363-a8ae-6545feb44c1a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '45b6b115-d0bf-5839-bcbe-1824b4b18228', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Intracardiac pressure measurement', 2, 245, 0),
-   ('6a7dc606-ac8d-55c9-8535-f0aa98ef74e3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd0f994d0-81eb-5363-a8ae-6545feb44c1a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Haemodynamic evaluation of valvular stenosis', 3, 246, 0),
-   ('d52b886b-55b7-599d-8dfb-5b23703c24a4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '6a7dc606-ac8d-55c9-8535-f0aa98ef74e3', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Haemodynamic evaluation of intracardiac shunts', 3, 247, 0),
-   ('37549364-6661-5807-8169-7dbf1ea4e5d8', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd52b886b-55b7-599d-8dfb-5b23703c24a4', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Haemodynamic evaluation of constriction and tamponade', 3, 247, 0),
-   ('b5313f60-6dab-5aa1-aa78-c18c405873b3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '37549364-6661-5807-8169-7dbf1ea4e5d8', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Measurement of cardiac output', 3, 247, 0),
-   ('2e3d768f-1835-5807-a0ab-dd00ae97ca99', '22fe0f7b-b70c-5e17-9514-d068e854ec09', NULL, '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Pathology laboratory support', 1, 248, 1),
-   ('d9e11449-22e3-5926-bc9f-2f58f9155273', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '2e3d768f-1835-5807-a0ab-dd00ae97ca99', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Haematology laboratory', 2, 248, 0),
-   ('f7c4f013-5cc8-5b9f-86e8-c3a5c6584167', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'd9e11449-22e3-5926-bc9f-2f58f9155273', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Biochemistry laboratory', 2, 248, 0),
-   ('68826dd5-723d-53c2-bc61-e14999a1d6ca', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f7c4f013-5cc8-5b9f-86e8-c3a5c6584167', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Cardiac enzymes and other markers of myocardial injury', 3, 248, 0),
-   ('1061b426-3bd0-5796-a246-baee1cc55c9a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '68826dd5-723d-53c2-bc61-e14999a1d6ca', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Renal function', 3, 249, 0),
-   ('fe23f9fa-18a7-5609-9abf-2e09b3fbac5d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '1061b426-3bd0-5796-a246-baee1cc55c9a', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Electrolytes', 3, 249, 0),
-   ('de36edda-e1db-5e3a-8126-3ffe95292d25', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'fe23f9fa-18a7-5609-9abf-2e09b3fbac5d', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Glucose and lipids', 3, 249, 0),
-   ('f4c01c7f-d477-5106-8e64-212db22e0603', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'de36edda-e1db-5e3a-8126-3ffe95292d25', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Bacteriology laboratory', 2, 249, 0),
-   ('58b077ed-e905-5c79-bc89-3cbda8c78d80', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 'f4c01c7f-d477-5106-8e64-212db22e0603', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Blood culture', 3, 249, 0),
-   ('4147cc2f-ccfd-5612-aa60-cc3c62f54aae', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '58b077ed-e905-5c79-bc89-3cbda8c78d80', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Serology', 3, 250, 0),
-   ('06dcde35-db36-5685-b93d-aa74f2541649', '22fe0f7b-b70c-5e17-9514-d068e854ec09', '4147cc2f-ccfd-5612-aa60-cc3c62f54aae', '13.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Acknowledgement', 3, 250, 0),
-   ('0fe0fd95-6dc3-5d7a-8236-e001321bfca5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1', 'Introduction', 1, 252, 0),
-   ('4c1df53e-7c26-52fc-9ef9-a503a2b44ff8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1', 'Symptoms of gastrointestinal disease', 1, 252, 0),
-   ('74216ca5-9f8a-5f47-b6eb-b0b0cfe09656', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4c1df53e-7c26-52fc-9ef9-a503a2b44ff8', '14.1.1.1', 'Dysphagia (and odynophagia)', 2, 252, 0),
-   ('4a206a56-2d9d-5b63-a9ca-f1f541d5db41', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '74216ca5-9f8a-5f47-b6eb-b0b0cfe09656', '14.1.1.1.1', 'Heartburn', 2, 252, 0),
-   ('e2250add-d0c4-5b06-b28d-0724011ed3e9', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4a206a56-2d9d-5b63-a9ca-f1f541d5db41', '14.1.1.1.1.1', 'Reflux', 2, 252, 0),
-   ('af674bba-7f2d-50ff-b2f3-6d398212207e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'e2250add-d0c4-5b06-b28d-0724011ed3e9', '14.1.1.1.1.1.1', 'Indigestion (dyspepsia)', 2, 252, 0),
-   ('fa40801e-87f6-5137-be46-25b23ba46a4e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'af674bba-7f2d-50ff-b2f3-6d398212207e', '14.1.1.1.1.1.1.1', 'Flatulence', 2, 253, 0),
-   ('4bfd8a16-24fa-5cd1-b0ea-2937bde03a64', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'fa40801e-87f6-5137-be46-25b23ba46a4e', '14.1.1.1.1.1.1.1.1', 'Vomiting', 2, 253, 0),
-   ('dc9ebd3e-9b0e-5bf3-9bbd-21e7a2497702', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4bfd8a16-24fa-5cd1-b0ea-2937bde03a64', '14.1.1.1.1.1.1.1.1.1', 'Anorexia', 2, 253, 0),
-   ('61ac8645-0ddd-5c45-81a0-cad1d2119433', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'dc9ebd3e-9b0e-5bf3-9bbd-21e7a2497702', '14.1.1.1.1.1.1.1.1.1.1', 'Constipation', 2, 253, 0),
-   ('9ae95da1-15db-554e-ad42-4a82ab5c2d9a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '61ac8645-0ddd-5c45-81a0-cad1d2119433', '14.1.1.1.1.1.1.1.1.1.1.1', 'Diarrhoea', 2, 253, 0),
-   ('bd408e92-8703-5e99-8d5c-f134ceb44e77', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9ae95da1-15db-554e-ad42-4a82ab5c2d9a', '14.1.1.1.1.1.1.1.1.1.1.1.1', 'Abdominal pain', 2, 253, 0),
-   ('5a0a7d6f-b8d5-5c29-bbd8-dbdae92cc90e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'bd408e92-8703-5e99-8d5c-f134ceb44e77', '14.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Abdominal distension', 2, 253, 0),
-   ('d1a6ce17-f43c-5f63-b0b4-c45758ac6538', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '5a0a7d6f-b8d5-5c29-bbd8-dbdae92cc90e', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Weight loss', 2, 254, 0),
-   ('1bd935a7-9dc3-53e6-a73f-cafea2a2e0de', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd1a6ce17-f43c-5f63-b0b4-c45758ac6538', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Haematemesis', 2, 254, 0),
-   ('ad31cf9c-6105-5aeb-a523-b38a146ca7c6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '1bd935a7-9dc3-53e6-a73f-cafea2a2e0de', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Rectal bleeding', 2, 254, 0),
-   ('488168b1-91d4-51eb-8dfd-e54ca637168a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'ad31cf9c-6105-5aeb-a523-b38a146ca7c6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Melaena', 2, 254, 0),
-   ('468018c0-3fb7-5ad1-9ad5-718c0c0a73a5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '488168b1-91d4-51eb-8dfd-e54ca637168a', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Jaundice', 2, 254, 0),
-   ('2e5973d8-cdfa-59be-8e06-5daf2befa1da', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '468018c0-3fb7-5ad1-9ad5-718c0c0a73a5', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Urinary symptoms', 2, 254, 0),
-   ('36c84116-b735-5517-b5b4-755e971101b4', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nutritional assessment', 1, 254, 0),
-   ('b55f6112-2b0b-571d-98dd-982c9709cb97', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Physical examination of the GI tract and abdomen', 1, 256, 0),
-   ('a70d7d71-1d64-521c-a15c-1cedbea3b1d9', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'b55f6112-2b0b-571d-98dd-982c9709cb97', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'General signs', 2, 256, 0),
-   ('addaec90-f24b-55e9-be91-079b2a8ed691', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'a70d7d71-1d64-521c-a15c-1cedbea3b1d9', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Inspection', 2, 256, 0),
-   ('84fdc419-90e4-575e-a830-04ed008c534f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'addaec90-f24b-55e9-be91-079b2a8ed691', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Shape', 3, 257, 0),
-   ('49b1159c-30a9-58cb-b33f-19dd0873f2bd', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '84fdc419-90e4-575e-a830-04ed008c534f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The umbilicus', 3, 258, 0),
-   ('a27a8b54-ebaf-5f91-8d6a-dac1cfc3271f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '49b1159c-30a9-58cb-b33f-19dd0873f2bd', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Movements of the abdominal wall', 3, 258, 0),
-   ('70f3eaa5-22a2-541b-a248-e4fdca4f3fbc', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'a27a8b54-ebaf-5f91-8d6a-dac1cfc3271f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Skin and surface of the abdomen', 3, 259, 0),
-   ('3add80e5-affa-5d1a-a1e8-b6f33aff46b8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '70f3eaa5-22a2-541b-a248-e4fdca4f3fbc', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Palpation', 2, 260, 0),
-   ('9114f9ae-0105-5f45-8b1c-d823c17d40c1', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3add80e5-affa-5d1a-a1e8-b6f33aff46b8', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Left kidney', 3, 261, 0),
-   ('3d8aa99a-c712-54d9-ba0c-e6b14d0b370c', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9114f9ae-0105-5f45-8b1c-d823c17d40c1', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Spleen', 3, 261, 0),
-   ('f0f0499f-5a66-54a1-af93-53310406d1b8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3d8aa99a-c712-54d9-ba0c-e6b14d0b370c', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Right kidney', 3, 262, 0),
-   ('01f55131-1583-528d-936e-84869f47ddc6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'f0f0499f-5a66-54a1-af93-53310406d1b8', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Liver', 3, 262, 0),
-   ('540557a1-91a0-53af-ae59-274515e65968', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '01f55131-1583-528d-936e-84869f47ddc6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gallbladder', 3, 263, 0),
-   ('51508ae4-ccd5-5310-8bc4-2da33c96da54', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '540557a1-91a0-53af-ae59-274515e65968', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Murphy’s sign', 4, 264, 0),
-   ('6676a344-d7f4-56c2-8828-dab277892225', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '51508ae4-ccd5-5310-8bc4-2da33c96da54', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Courvoisier’s law', 4, 264, 0),
-   ('b33c36f2-0a37-5eaf-9c82-ba04e81862d6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '6676a344-d7f4-56c2-8828-dab277892225', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The urinary bladder', 3, 264, 0),
-   ('f3c8a1fd-4202-52cf-b3a6-ffa1f33ef669', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'b33c36f2-0a37-5eaf-9c82-ba04e81862d6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The aorta and common femoral vessels', 3, 264, 0),
-   ('fc9b88c4-bb9b-5291-83cb-8dfab82d9b4f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'f3c8a1fd-4202-52cf-b3a6-ffa1f33ef669', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Causes of diagnostic difficulty on palpation', 3, 265, 0),
-   ('e823485d-0c59-56c3-9ad9-2300e5208c9a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'fc9b88c4-bb9b-5291-83cb-8dfab82d9b4f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'What to do when an abdominal mass is palpable', 3, 265, 0),
-   ('9603412d-a459-5e43-8e11-a956dd93e2ca', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'e823485d-0c59-56c3-9ad9-2300e5208c9a', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Site', 4, 265, 0),
-   ('4f6ba726-0ec2-517e-ae12-d402d2bf426f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9603412d-a459-5e43-8e11-a956dd93e2ca', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Size and shape', 4, 266, 0),
-   ('bcee5566-22df-5045-bba0-3f7ce3465114', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4f6ba726-0ec2-517e-ae12-d402d2bf426f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Surface, edge and consistency', 4, 266, 0),
-   ('4fadb864-5493-530d-aef7-39966cd2a4ca', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'bcee5566-22df-5045-bba0-3f7ce3465114', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Mobility and attachments', 4, 266, 0),
-   ('98c48be5-6a88-5ddd-906e-527094c090fb', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4fadb864-5493-530d-aef7-39966cd2a4ca', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Is it bimanually palpable or pulsatile?', 4, 266, 0),
-   ('16e7612b-0856-55a0-92ea-3b9fd1ca9a67', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'e823485d-0c59-56c3-9ad9-2300e5208c9a', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Percussion', 2, 266, 1),
-   ('d8fa2e36-44ce-5600-a453-2287c9855a75', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '16e7612b-0856-55a0-92ea-3b9fd1ca9a67', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Defining the boundaries of abdominal organs and masses', 3, 266, 0),
-   ('4098d245-77fe-54c0-9635-e178de02e507', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd8fa2e36-44ce-5600-a453-2287c9855a75', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Liver', 4, 266, 0),
-   ('c70d35b5-0532-5d7c-b28b-2c6405b01085', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4098d245-77fe-54c0-9635-e178de02e507', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Spleen', 4, 266, 0),
-   ('c7538005-0fbf-5516-b277-0f42406f8bf9', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'c70d35b5-0532-5d7c-b28b-2c6405b01085', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Urinary bladder', 4, 266, 0),
-   ('3f5d7780-8f6d-5bad-b980-0b874fb6e22b', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'c7538005-0fbf-5516-b277-0f42406f8bf9', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Other masses', 4, 266, 0),
-   ('08f8f4fd-6a40-552c-bd6b-d2249d693e01', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3f5d7780-8f6d-5bad-b980-0b874fb6e22b', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Detection of ascites and its differentiation from ovarian cyst and intestinal obstruction', 3, 266, 0),
-   ('d5a26f19-03cb-5b58-b0e3-f41fab1112b0', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '08f8f4fd-6a40-552c-bd6b-d2249d693e01', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Auscultation', 2, 267, 0),
-   ('1220b160-a569-55ef-a100-23a231a67559', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd5a26f19-03cb-5b58-b0e3-f41fab1112b0', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Bowel sounds', 3, 268, 0),
-   ('4965477e-8d77-5f28-8e91-81355c312aee', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '1220b160-a569-55ef-a100-23a231a67559', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Vascular bruits', 3, 268, 0),
-   ('9c3f66aa-bbfa-5981-800c-b06bea6326c3', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '4965477e-8d77-5f28-8e91-81355c312aee', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'The groins', 2, 268, 0),
-   ('7eab2c42-7dd6-5a94-8eb1-287a11c8849f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9c3f66aa-bbfa-5981-800c-b06bea6326c3', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'What to do if a patient complains of a lump in the groin', 3, 268, 0),
-   ('7cb9fce7-4fae-5008-841f-28c9c10e40a5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '7eab2c42-7dd6-5a94-8eb1-287a11c8849f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'The male genitalia', 2, 269, 0),
-   ('23acabee-4550-5c8b-b511-1b53131c327e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '7cb9fce7-4fae-5008-841f-28c9c10e40a5', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The female genitalia', 2, 270, 0),
-   ('51ea6c21-af24-5d12-9767-5c847bc06e08', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '23acabee-4550-5c8b-b511-1b53131c327e', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The anus and rectum', 2, 270, 0),
-   ('43ab768a-7540-5934-8d80-dc867d371af8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '51ea6c21-af24-5d12-9767-5c847bc06e08', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Inspection', 3, 270, 0),
-   ('6b5b6a71-cffe-50c5-83be-437a91693e3a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '43ab768a-7540-5934-8d80-dc867d371af8', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Digital rectal examination (palpation)', 3, 270, 0),
-   ('0ae52b49-9278-54f1-9ed8-d2e82316bee2', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The acute abdomen', 1, 271, 1),
-   ('f19d5fb7-7284-5379-a9c2-9f3a593a89ac', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '0ae52b49-9278-54f1-9ed8-d2e82316bee2', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'History', 2, 271, 0),
-   ('501fee68-3dab-5ef7-9a25-3251ec38f400', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'f19d5fb7-7284-5379-a9c2-9f3a593a89ac', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Site', 3, 271, 0),
-   ('7e1c4581-3599-5781-9f08-4c6250e57967', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '501fee68-3dab-5ef7-9a25-3251ec38f400', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Severity', 3, 272, 0),
-   ('d2aa78cd-7be3-5bec-a3a0-5eb6ea5320dd', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '7e1c4581-3599-5781-9f08-4c6250e57967', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Radiation', 3, 272, 0),
-   ('c01bb8e1-6131-5895-9ffe-cdb6070fc0dc', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd2aa78cd-7be3-5bec-a3a0-5eb6ea5320dd', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Character and constancy', 3, 272, 0),
-   ('bdfb1462-92c4-5367-a263-8d63f65fb577', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'c01bb8e1-6131-5895-9ffe-cdb6070fc0dc', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Mode of onset', 3, 272, 0),
-   ('cd150eaf-a103-5454-b8ad-aa85a8b044e4', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'bdfb1462-92c4-5367-a263-8d63f65fb577', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Relieving features', 3, 272, 0),
-   ('a8b6080b-9055-58bf-9833-892c91d62bc5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'cd150eaf-a103-5454-b8ad-aa85a8b044e4', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Vomiting', 3, 272, 0),
-   ('bc8e565a-0c81-5ede-8b33-2f6075915481', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'a8b6080b-9055-58bf-9833-892c91d62bc5', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Micturition', 3, 272, 0),
-   ('d1451cf8-c8e6-5147-bf47-903decb273f1', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'bc8e565a-0c81-5ede-8b33-2f6075915481', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Appetite and weight', 3, 272, 0),
-   ('fbdaee1b-90ca-5684-9a02-6aeb3693662d', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd1451cf8-c8e6-5147-bf47-903decb273f1', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Other features', 3, 273, 0),
-   ('52e71574-9004-554b-a16d-6cce71aaa60f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'fbdaee1b-90ca-5684-9a02-6aeb3693662d', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination', 2, 273, 0),
-   ('574bb942-7465-50f8-b6c7-3a36efcf14cb', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '52e71574-9004-554b-a16d-6cce71aaa60f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Guarding', 3, 273, 0),
-   ('888456be-a5c0-5810-a30c-b82a6646e65e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '574bb942-7465-50f8-b6c7-3a36efcf14cb', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Rigidity', 3, 273, 0),
-   ('8deafce8-ea49-545b-a0f7-399876272030', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '888456be-a5c0-5810-a30c-b82a6646e65e', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Rebound tenderness', 3, 273, 0),
-   ('d064d8fa-7787-5d1b-a2cd-0aef5340c441', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '8deafce8-ea49-545b-a0f7-399876272030', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Percussion', 3, 273, 0),
-   ('76ec9459-7e57-5419-9e5c-ac1ac0641f93', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd064d8fa-7787-5d1b-a2cd-0aef5340c441', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiology', 3, 273, 0),
-   ('5b9d6163-cbd0-5c20-a02b-6c7c55a0bd32', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Examination of abdominal fluids', 1, 273, 1),
-   ('ee153d76-58c4-5c74-8321-f18e78365570', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '5b9d6163-cbd0-5c20-a02b-6c7c55a0bd32', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Examination of vomit', 2, 273, 0),
-   ('d0871373-525d-5a1c-b6b3-c4a2959a95e6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'ee153d76-58c4-5c74-8321-f18e78365570', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Examination of faeces', 2, 274, 0),
-   ('3ca510d5-2886-52c2-8324-27c6d0c57bd5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd0871373-525d-5a1c-b6b3-c4a2959a95e6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Faecal amount', 3, 274, 0),
-   ('1aacd703-b6df-5134-8cf4-3e4a6225930f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3ca510d5-2886-52c2-8324-27c6d0c57bd5', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Faecal colour', 3, 274, 0),
-   ('b8f9055a-edd1-5ea2-be01-893dc63b1afd', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '1aacd703-b6df-5134-8cf4-3e4a6225930f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Faecal odour', 3, 274, 0),
-   ('dd82e031-3cfc-5297-8dae-32906f3bb04e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'b8f9055a-edd1-5ea2-be01-893dc63b1afd', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Abnormal stools', 3, 274, 0),
-   ('08d2b4e1-7154-5910-9845-03b26797d557', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'dd82e031-3cfc-5297-8dae-32906f3bb04e', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Tests for faecal occult blood', 3, 274, 0),
-   ('54db37a9-1af2-599f-a72b-6ce9abab5488', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '08d2b4e1-7154-5910-9845-03b26797d557', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Tests for faecal fat', 3, 274, 0),
-   ('ec08224c-46bc-5e23-a77c-addec9be0e9f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '54db37a9-1af2-599f-a72b-6ce9abab5488', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Stool microbiology', 3, 275, 0),
-   ('02c8838f-0440-57ac-bcc1-62e14c89e168', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'ec08224c-46bc-5e23-a77c-addec9be0e9f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Aspiration of peritoneal fluid', 2, 275, 0),
-   ('0e09276c-0641-52e8-99e9-1c4429971ad6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', NULL, '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Special techniques in the examination of the GI tract', 1, 275, 0),
-   ('a419d611-4c9e-5bc3-9c01-cad909dedc76', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '0e09276c-0641-52e8-99e9-1c4429971ad6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Upper gastrointestinal endoscopy', 2, 276, 0),
-   ('51212420-0361-5e73-8ee5-b81ebd62a66d', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'a419d611-4c9e-5bc3-9c01-cad909dedc76', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Oesophageal function studies', 2, 276, 0),
-   ('83269ee5-c163-5ea9-88f0-bccc35389dc2', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '51212420-0361-5e73-8ee5-b81ebd62a66d', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gastric secretory studies and serum gastrin levels', 2, 276, 0),
-   ('e3dcb12f-5ebb-5017-8546-ac245e95efcf', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '83269ee5-c163-5ea9-88f0-bccc35389dc2', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Tests for Helicobacter pylori', 2, 277, 0),
-   ('abf40e73-92dd-5deb-b277-1554193251f3', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'e3dcb12f-5ebb-5017-8546-ac245e95efcf', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiology of the upper gastrointestinal tract', 2, 277, 0),
-   ('8f234be9-77ea-50e3-908b-621f97347b24', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'abf40e73-92dd-5deb-b277-1554193251f3', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Plain radiographs', 3, 277, 0),
-   ('7ac9cb0f-ea7b-5db7-8e61-11c5fcd0f00a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '8f234be9-77ea-50e3-908b-621f97347b24', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Barium swallow', 3, 277, 0),
-   ('1ea2b7b4-9d3a-5052-8412-11cc6c97afd7', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '7ac9cb0f-ea7b-5db7-8e61-11c5fcd0f00a', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Small intestine', 2, 277, 0),
-   ('6f06d88f-e259-5c13-80d3-8d809501fcb5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '1ea2b7b4-9d3a-5052-8412-11cc6c97afd7', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Barium follow-through studies', 3, 277, 0),
-   ('9b2880d8-9f22-5c79-bd29-79ab3751ebbe', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '6f06d88f-e259-5c13-80d3-8d809501fcb5', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Small-bowel enema', 3, 278, 0),
-   ('927aa773-a39b-5dc2-a690-7876612e976d', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9b2880d8-9f22-5c79-bd29-79ab3751ebbe', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radioisotope studies', 3, 278, 0),
-   ('50c65258-263d-5aec-8023-616ea4ce9549', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '927aa773-a39b-5dc2-a690-7876612e976d', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Selective angiography of gastrointestinal arteries', 3, 278, 0),
-   ('d716179e-7a1a-539a-a3c2-fbfdb06bae14', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '50c65258-263d-5aec-8023-616ea4ce9549', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Small intestine endoscopy and biopsy', 3, 278, 0),
-   ('bda367dd-c40e-52ef-b5a3-6c105c463745', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'd716179e-7a1a-539a-a3c2-fbfdb06bae14', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Magnetic resonance scanning', 3, 278, 0),
-   ('96bb1be1-7a28-5d95-a1f6-0ce7bef1ff18', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'bda367dd-c40e-52ef-b5a3-6c105c463745', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Colon, rectum and anus', 2, 278, 0),
-   ('c2c527ce-b24f-558e-a016-f625bebce4f3', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '96bb1be1-7a28-5d95-a1f6-0ce7bef1ff18', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Proctoscopy', 3, 278, 0),
-   ('563bb5d6-d346-5b6a-bb3b-1fbcab6bd608', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'c2c527ce-b24f-558e-a016-f625bebce4f3', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Rigid sigmoidoscopy and other tests in chronic diarrhoea', 3, 278, 0),
-   ('afcdeb71-71cf-5daa-960f-59c3ff091e7c', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '563bb5d6-d346-5b6a-bb3b-1fbcab6bd608', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Barium enema', 3, 278, 0),
-   ('0b2ec2ba-66f8-5a10-81de-9ad9843284c4', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'afcdeb71-71cf-5daa-960f-59c3ff091e7c', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Colonoscopy and flexible sigmoidoscopy', 3, 279, 0),
-   ('eaa6c111-25a7-50b9-8fa0-546c2d33ae20', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '0b2ec2ba-66f8-5a10-81de-9ad9843284c4', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The liver', 2, 279, 0),
-   ('3885bf32-5a37-599b-8991-06afc6c79124', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'eaa6c111-25a7-50b9-8fa0-546c2d33ae20', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Biochemical tests in liver disorders', 3, 279, 0),
-   ('504b64d0-eebc-5204-933c-6134a76e9aee', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3885bf32-5a37-599b-8991-06afc6c79124', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Viral hepatitis', 3, 280, 0),
-   ('3d6ce816-e098-5c16-b7ac-7a90c8d7f2ea', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '504b64d0-eebc-5204-933c-6134a76e9aee', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Needle biopsy of liver', 3, 280, 0),
-   ('1e63ec99-8320-5851-8fbf-0dc7f8e9df3f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3d6ce816-e098-5c16-b7ac-7a90c8d7f2ea', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Ultrasound scanning', 2, 280, 0),
-   ('9ac4b750-75d7-5866-8565-439559cc8535', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '1e63ec99-8320-5851-8fbf-0dc7f8e9df3f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Isotope scanning', 2, 281, 0),
-   ('c0c04708-a044-56f5-9424-fe3bfc51b457', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '9ac4b750-75d7-5866-8565-439559cc8535', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Computed tomography scanning', 2, 281, 0),
-   ('89a87282-567c-5fe6-9054-a9d2bcc0b6e6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 'c0c04708-a044-56f5-9424-fe3bfc51b457', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Positron emission tomography scanning', 2, 281, 0),
-   ('5d523751-87b5-59eb-b864-7573265ea43d', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '89a87282-567c-5fe6-9054-a9d2bcc0b6e6', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Endoscopic ultrasound', 2, 281, 0),
-   ('8c4ad285-5bbf-5108-84c6-16258e3e1c9a', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '5d523751-87b5-59eb-b864-7573265ea43d', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Magnetic resonance imaging', 2, 281, 0),
-   ('3e10d2e1-8a10-513b-b694-2f8591832748', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '8c4ad285-5bbf-5108-84c6-16258e3e1c9a', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Endoscopic retrograde cholangiopancreatography (ERCP)', 2, 281, 0),
-   ('55e8d736-7c23-5429-b742-eb2c176fb26f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '3e10d2e1-8a10-513b-b694-2f8591832748', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Percutaneous transhepatic cholangiography', 2, 282, 0),
-   ('1aa81fa2-28dc-5be5-8f1b-2c3ec4b29c8f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', '55e8d736-7c23-5429-b742-eb2c176fb26f', '14.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pancreatic function tests', 2, 282, 0),
-   ('3f9b7ccb-8671-54de-8280-281b5725851b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1', 'Introduction', 1, 284, 0),
-   ('1d1ab3b5-a3a6-5119-8a11-13868bce892d', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1.1', 'General assessment: the ‘GALS’ locomotor screen', 1, 284, 0),
-   ('bef9b7db-91bb-5fed-9c5c-58b943f46fde', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '1d1ab3b5-a3a6-5119-8a11-13868bce892d', '15.1.1.1', 'Screening history', 2, 284, 0),
-   ('64668946-eeeb-5c39-9a9c-66c55de09e11', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'bef9b7db-91bb-5fed-9c5c-58b943f46fde', '15.1.1.1.1', 'Screening examination', 2, 284, 0),
-   ('0429cd0f-90e5-5985-b0a4-324ad798d31a', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '64668946-eeeb-5c39-9a9c-66c55de09e11', '15.1.1.1.1.1', 'Gait', 3, 284, 0),
-   ('e144c4ff-f8d7-5819-a350-f9e201684797', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '0429cd0f-90e5-5985-b0a4-324ad798d31a', '15.1.1.1.1.1.1', 'Spine', 3, 284, 0),
-   ('8533d801-fa67-5ceb-ae5c-3533ae66ad18', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'e144c4ff-f8d7-5819-a350-f9e201684797', '15.1.1.1.1.1.1.1', 'Arms', 3, 286, 0),
-   ('158f788a-ab91-591d-a9fb-48532e0650a9', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '8533d801-fa67-5ceb-ae5c-3533ae66ad18', '15.1.1.1.1.1.1.1.1', 'Legs', 3, 287, 0),
-   ('eff2b475-70dc-5f48-885c-f5eb442a14a8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '158f788a-ab91-591d-a9fb-48532e0650a9', '15.1.1.1.1.1.1.1.1.1', 'Children', 3, 287, 0),
-   ('b4ad7b2c-7e38-58b3-9ad6-07156b30450b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'eff2b475-70dc-5f48-885c-f5eb442a14a8', '15.1.1.1.1.1.1.1.1.1.1', 'Gait', 4, 288, 0),
-   ('dc61ead6-dca6-510c-abef-133b962ce36c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'eff2b475-70dc-5f48-885c-f5eb442a14a8', '15.1.1.1.1.1.1.1.1.1.2', 'Recording the results', 2, 288, 1),
-   ('b702f972-9354-5e55-ba1e-e2d895e60cb5', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1.1.1.1.1.1.1.1.1.2.1', 'Specific locomotor history', 1, 288, 0),
-   ('82f330b4-14c0-5643-bb4c-3f3fb83b9168', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'b702f972-9354-5e55-ba1e-e2d895e60cb5', '15.1.1.1.1.1.1.1.1.1.2.1.1', 'Words', 2, 289, 0),
-   ('004e8959-ffdb-569e-a8ab-a9d64d4407d1', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '82f330b4-14c0-5643-bb4c-3f3fb83b9168', '15.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Intensity', 2, 289, 0),
-   ('a570c35f-7c46-579d-adde-5497017972e8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '004e8959-ffdb-569e-a8ab-a9d64d4407d1', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Location', 2, 289, 0),
-   ('73e6774c-85e7-5500-aae0-d0bf8bfa471e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'a570c35f-7c46-579d-adde-5497017972e8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Duration', 2, 289, 0),
-   ('5766e873-ba28-502b-b544-19a3964c4501', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '73e6774c-85e7-5500-aae0-d0bf8bfa471e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Aggravating/alleviating factors', 2, 289, 0),
-   ('b2c48a08-299c-5bc3-a541-934c9170198e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '5766e873-ba28-502b-b544-19a3964c4501', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Chronic pain syndromes', 2, 289, 0),
-   ('8d7d754d-7122-58d8-b4d8-6e149bd87704', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'b2c48a08-299c-5bc3-a541-934c9170198e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Joint disease', 2, 290, 0),
-   ('e136a8ba-1d0f-51cc-867a-1487fe375105', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '8d7d754d-7122-58d8-b4d8-6e149bd87704', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Non-inflammatory joint disease', 3, 290, 0),
-   ('02852ffb-a93d-5e08-9d54-ab95a9b5bd4b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'e136a8ba-1d0f-51cc-867a-1487fe375105', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Inflammatory joint disease', 3, 290, 0),
-   ('744579b6-e348-5ece-837b-a0625be3c85f', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '02852ffb-a93d-5e08-9d54-ab95a9b5bd4b', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Early morning stiffness', 4, 290, 0),
-   ('04f0ce93-fce4-51ee-b7ce-d80612496656', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '744579b6-e348-5ece-837b-a0625be3c85f', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Distribution of joint disease', 3, 290, 0),
-   ('f22ed151-0663-5a2d-bf22-b3b7818fd431', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '04f0ce93-fce4-51ee-b7ce-d80612496656', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Recurrent attacks of joint pain', 3, 291, 0),
-   ('f1b103fb-dd29-5281-9804-0a58c5c3b3f6', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f22ed151-0663-5a2d-bf22-b3b7818fd431', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Episodic joint pain', 3, 291, 0),
-   ('5a668868-b4c7-508f-baca-ee7edd359cfe', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f1b103fb-dd29-5281-9804-0a58c5c3b3f6', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Flitting or migratory joint pains', 3, 291, 0),
-   ('ddd6d5b8-ee6d-5567-869a-43fadea95216', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '5a668868-b4c7-508f-baca-ee7edd359cfe', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Inflammatory connective tissue diseases', 2, 292, 0),
-   ('c35154fd-a866-5732-9f28-302618036be5', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'ddd6d5b8-ee6d-5567-869a-43fadea95216', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Soft tissue symptoms', 2, 292, 0),
-   ('c2f0edad-6af6-5f42-b9be-d50ed45dfa6e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'c35154fd-a866-5732-9f28-302618036be5', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The bones', 2, 292, 0),
-   ('a5af3ce4-8aa7-5c87-b481-db363568870d', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination: general principles', 1, 293, 0),
-   ('6e6b26f4-21b6-51ec-818a-f5b83113a746', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'a5af3ce4-8aa7-5c87-b481-db363568870d', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The bones', 2, 293, 0),
-   ('6caaec8a-c6ba-562b-ba1a-bcb9e4908138', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '6e6b26f4-21b6-51ec-818a-f5b83113a746', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Inspection', 3, 293, 0),
-   ('0ba04368-afdb-5d8d-bfb9-d97f268be530', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '6caaec8a-c6ba-562b-ba1a-bcb9e4908138', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Palpation', 3, 294, 0),
-   ('f1b33653-1be3-5b69-b0ad-728b45c2003e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '0ba04368-afdb-5d8d-bfb9-d97f268be530', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fractures', 3, 294, 0),
-   ('987e31d0-69e9-5ff2-a1aa-67ce0274d5f5', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f1b33653-1be3-5b69-b0ad-728b45c2003e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination of suspected fracture', 4, 295, 0),
-   ('7914c1d6-d1a8-534b-acda-a2faea1578e5', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f1b33653-1be3-5b69-b0ad-728b45c2003e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The joints', 2, 295, 1),
-   ('2b5be76e-bcd8-566f-a94b-5f2f97371429', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '7914c1d6-d1a8-534b-acda-a2faea1578e5', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Inspection', 3, 295, 0),
-   ('f3d9c876-42b4-5d33-b86b-1f2b752242ae', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '2b5be76e-bcd8-566f-a94b-5f2f97371429', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Palpation', 3, 295, 0),
-   ('d9e3b31c-eb10-5909-aaca-b979c13cb7c3', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f3d9c876-42b4-5d33-b86b-1f2b752242ae', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Tendon sheath crepitus', 3, 297, 0),
-   ('1b8cd9e9-9aa3-5f4b-abeb-11451064ae84', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'd9e3b31c-eb10-5909-aaca-b979c13cb7c3', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Joint crepitus', 3, 297, 0),
-   ('1af5b7eb-5a7c-5748-b7ba-8c7415eba3bb', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '1b8cd9e9-9aa3-5f4b-abeb-11451064ae84', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Range of movement', 3, 297, 0),
-   ('b1d2df1c-3a79-5d53-b097-ea278bb86704', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '1af5b7eb-5a7c-5748-b7ba-8c7415eba3bb', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Extra-articular features of joint disease', 2, 297, 0),
-   ('f729f2e0-294b-53a7-985e-9ca9cb22d50e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'b1d2df1c-3a79-5d53-b097-ea278bb86704', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Subcutaneous nodules', 3, 297, 0),
-   ('4dc9e24f-01ca-58b7-a9f1-d62536f51dd4', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f729f2e0-294b-53a7-985e-9ca9cb22d50e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Cutaneous vasculitic lesions', 3, 298, 0),
-   ('bb2deb6f-2a4c-576f-997d-c7a1f0db6829', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '4dc9e24f-01ca-58b7-a9f1-d62536f51dd4', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Lymphadenopathy', 3, 298, 0),
-   ('d7e795e4-0149-558b-974b-d047c0b7c242', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'bb2deb6f-2a4c-576f-997d-c7a1f0db6829', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Local oedema', 3, 298, 0),
-   ('18140549-a8bf-5eef-8627-8217a6f46973', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'd7e795e4-0149-558b-974b-d047c0b7c242', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Other soft-tissue swellings', 3, 298, 0),
-   ('47a2e2ba-b7a9-5039-b68d-8a162070b334', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2', 'Examination of individual joints', 1, 298, 1),
-   ('55300e65-8773-5c07-80a6-50ed90bd781c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '47a2e2ba-b7a9-5039-b68d-8a162070b334', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1', 'The spine', 2, 298, 0),
-   ('19aa0977-e354-5bcc-b939-b0047da2b0f8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '55300e65-8773-5c07-80a6-50ed90bd781c', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1', 'General examination of the vertebral column', 3, 298, 0),
-   ('b34bd4a1-5147-5b71-bb38-bc35e1ceb332', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '19aa0977-e354-5bcc-b939-b0047da2b0f8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1', 'Inspection', 4, 298, 0),
-   ('5eaa5dfd-8784-591d-9649-9ee77b0dd13f', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'b34bd4a1-5147-5b71-bb38-bc35e1ceb332', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1', 'Palpation', 4, 298, 0),
-   ('f0316287-66bd-51d7-be49-26057af5aa18', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '5eaa5dfd-8784-591d-9649-9ee77b0dd13f', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1', 'The cervical spine', 3, 299, 0),
-   ('481ece74-2b74-5bbe-98ee-5aa475150a23', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f0316287-66bd-51d7-be49-26057af5aa18', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1', 'The thoracic and lumbar spine', 3, 300, 0),
-   ('9c43d17d-d825-5b0c-aba7-6821e7dce344', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '481ece74-2b74-5bbe-98ee-5aa475150a23', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'The sacroiliac joints', 3, 301, 0),
-   ('f2de042c-9ec8-50bb-9ddc-62b871ef114c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '9c43d17d-d825-5b0c-aba7-6821e7dce344', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'The shoulder', 2, 302, 0),
-   ('024c453d-1464-5bac-9551-cca2289e0d86', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'f2de042c-9ec8-50bb-9ddc-62b871ef114c', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Special tests in shoulder examination', 3, 303, 0),
-   ('bd42a6d8-cf3f-587c-9bfa-44ef367e68b1', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '024c453d-1464-5bac-9551-cca2289e0d86', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Supraspinatus', 4, 303, 0),
-   ('15b198d4-8ec0-55b1-be69-e0c8b971ae3b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'bd42a6d8-cf3f-587c-9bfa-44ef367e68b1', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Subscapularis', 5, 303, 0),
-   ('42dd83fd-8f96-55b2-be5d-028056e4d333', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '15b198d4-8ec0-55b1-be69-e0c8b971ae3b', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Infraspinatus and teres minor', 5, 303, 0),
-   ('27d94cc9-c85d-5c32-bb12-32305ed68f7f', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '42dd83fd-8f96-55b2-be5d-028056e4d333', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Long head of biceps', 5, 303, 0),
-   ('2f287230-1568-507b-a921-22d2ece761c1', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '024c453d-1464-5bac-9551-cca2289e0d86', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2', 'The elbow', 2, 303, 1),
-   ('dee5831c-8928-5059-a019-6c00ece2fb21', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '2f287230-1568-507b-a921-22d2ece761c1', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1', 'The forearm', 2, 303, 0),
-   ('2b0b8508-f082-50d5-9aef-f3db97557a99', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'dee5831c-8928-5059-a019-6c00ece2fb21', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1', 'The wrist', 2, 303, 0),
-   ('d4a48cc2-20c4-5073-9600-ded1c4d32f26', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '2b0b8508-f082-50d5-9aef-f3db97557a99', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1', 'The fingers', 2, 304, 0),
-   ('6e6c5a94-4e9c-54c4-a04a-9d9f36c79fff', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'd4a48cc2-20c4-5073-9600-ded1c4d32f26', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'The thumb (carpometacarpal joint)', 2, 304, 0),
-   ('27e1773e-1887-5cf2-b716-45a0f727a913', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '6e6c5a94-4e9c-54c4-a04a-9d9f36c79fff', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'The hand', 2, 304, 0),
-   ('4f501062-a551-5e5f-93dc-e392cc2ab125', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '27e1773e-1887-5cf2-b716-45a0f727a913', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Deformities in joint disease', 3, 304, 0),
-   ('91a97524-1eb1-5a82-81f4-77e76950c4ac', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '4f501062-a551-5e5f-93dc-e392cc2ab125', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Deformities due to neuropathy', 3, 306, 0),
-   ('680b8087-b5f6-5908-b4ec-19b017430c1f', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '91a97524-1eb1-5a82-81f4-77e76950c4ac', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Assessment of hand function', 3, 306, 0),
-   ('83063441-01ca-552e-b1a9-8480e65d327c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '680b8087-b5f6-5908-b4ec-19b017430c1f', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'The hip', 2, 306, 0),
-   ('03f81ff1-81e5-55a4-bc11-5202ed44784f', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '83063441-01ca-552e-b1a9-8480e65d327c', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Additional examination of the hip joint', 3, 306, 0),
-   ('5940419f-32ed-5ad2-86f2-79d941e407f0', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '03f81ff1-81e5-55a4-bc11-5202ed44784f', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'The knee', 2, 306, 0),
-   ('e6df6e40-412c-5136-b9ee-0fa38d8423f8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '5940419f-32ed-5ad2-86f2-79d941e407f0', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Joint swelling', 3, 306, 0),
-   ('3cf36a75-7f6d-5090-af78-04c92b8c87b8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'e6df6e40-412c-5136-b9ee-0fa38d8423f8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing for stability', 3, 307, 0),
-   ('15514c92-3611-5f0f-9317-6ea3ec38d84a', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '3cf36a75-7f6d-5090-af78-04c92b8c87b8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cruciate ligaments', 4, 307, 0),
-   ('96451e17-b83e-50e7-9e5c-a2e265168f24', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '15514c92-3611-5f0f-9317-6ea3ec38d84a', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Collateral ligaments', 4, 307, 0),
-   ('bbaab77a-c99d-5c2d-aa35-cf10555739b1', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '3cf36a75-7f6d-5090-af78-04c92b8c87b8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The ankle', 2, 307, 1),
-   ('c6074aff-6248-5f3a-a74b-f552567089ca', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'bbaab77a-c99d-5c2d-aa35-cf10555739b1', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'The foot', 2, 308, 0),
-   ('3bcb5ae9-a214-55b9-b634-7b95ce5112a0', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'c6074aff-6248-5f3a-a74b-f552567089ca', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Achilles tendon rupture', 3, 309, 0),
-   ('8b028948-56e9-5209-b13b-ff4e97678d51', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '3bcb5ae9-a214-55b9-b634-7b95ce5112a0', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'The gait', 2, 310, 0),
-   ('85e5c68a-3b5a-552e-aa5d-2dcffde513b2', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '8b028948-56e9-5209-b13b-ff4e97678d51', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Hypermobility', 2, 310, 0),
-   ('208cc90c-0c59-538c-a024-4519cd99eded', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '85e5c68a-3b5a-552e-aa5d-2dcffde513b2', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Work-related musculoskeletal disorders', 2, 310, 0),
-   ('d7987057-2aa6-5d61-bbde-e5143227c3f4', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', NULL, '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Investigations in rheumatic diseases', 1, 310, 0),
-   ('06bc1225-b67d-56b1-b42c-4711ded72caf', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'd7987057-2aa6-5d61-bbde-e5143227c3f4', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Tests in support of inflammatory disease', 2, 310, 0),
-   ('8e4ece9c-ebf6-56ea-a9a3-bdbae59c086c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '06bc1225-b67d-56b1-b42c-4711ded72caf', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Diagnostic tests', 2, 311, 0),
-   ('31a158bb-f095-5309-9ab3-7ebdf672304b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '8e4ece9c-ebf6-56ea-a9a3-bdbae59c086c', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Tests for rheumatoid factor', 3, 311, 0),
-   ('12b5fe3a-ab55-569d-a5eb-006b7f23d1e0', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '31a158bb-f095-5309-9ab3-7ebdf672304b', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Antinuclear antibody tests', 3, 311, 0),
-   ('5cbb75a1-581b-5477-a18b-c9abfe1b85c8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '12b5fe3a-ab55-569d-a5eb-006b7f23d1e0', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'DNA-binding test', 3, 311, 0),
-   ('fd656090-907f-527f-b108-3b37f1b5646e', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '5cbb75a1-581b-5477-a18b-c9abfe1b85c8', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Antibody tests to extractable nuclear antigens (ENA)', 3, 311, 0),
-   ('e58c9567-9c1e-58f5-afd6-16321e65adad', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'fd656090-907f-527f-b108-3b37f1b5646e', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Uric acid', 3, 311, 0),
-   ('25517523-aece-5bff-ae10-b078ca446ca3', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'e58c9567-9c1e-58f5-afd6-16321e65adad', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Synovial fluid examination', 3, 312, 0),
-   ('73e1240a-108e-5ef0-99f8-bbfbbdcd884d', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '25517523-aece-5bff-ae10-b078ca446ca3', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Biopsies useful in differential diagnosis', 2, 313, 0),
-   ('84de6cbc-c008-5789-9ff0-29ee79443ff0', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '73e1240a-108e-5ef0-99f8-bbfbbdcd884d', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiological examination', 2, 313, 0),
-   ('fd94e024-9f41-5c04-a2cf-b2b0d4d375df', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', '84de6cbc-c008-5789-9ff0-29ee79443ff0', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fractures', 3, 315, 0),
-   ('4bbf6d59-0c20-5e43-815a-28c9fc4c50e8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 'fd94e024-9f41-5c04-a2cf-b2b0d4d375df', '15.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Specialized radiology', 3, 316, 0),
-   ('4a1a468c-5d82-5910-b7f7-d65832fa2168', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1', 'Introduction', 1, 320, 0),
-   ('b4e8d9ff-8312-57d8-a7a2-0ea9ae89d9cf', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1', 'The neurological history', 1, 320, 0),
-   ('9d14e613-c8da-5444-8218-822b19b7ea51', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1', 'The neurological examination', 1, 324, 0),
-   ('604740fd-c208-5b83-91a7-479f573575e5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1', 'Cranial nerve examination', 1, 324, 0),
-   ('c70ea8c3-abe0-569d-9916-1f1d6211ebc2', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '604740fd-c208-5b83-91a7-479f573575e5', '16.1.1.1.1.1', 'The olfactory (I) nerves', 2, 324, 0),
-   ('7a7e185c-bf70-5aa3-8950-98bf519d8a6b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c70ea8c3-abe0-569d-9916-1f1d6211ebc2', '16.1.1.1.1.1.1', 'Examination of the olfactory nerves', 3, 324, 0),
-   ('2f61820d-4470-58f4-93ec-ef0edb5f1b53', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7a7e185c-bf70-5aa3-8950-98bf519d8a6b', '16.1.1.1.1.1.1.1', 'The optic (II) nerves (see also Chapter 20)', 2, 325, 0),
-   ('c3ed986e-a875-5851-a23b-ed32e89b5fea', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '2f61820d-4470-58f4-93ec-ef0edb5f1b53', '16.1.1.1.1.1.1.1.1', 'Visual acuity and colour vision', 3, 326, 0),
-   ('88f5ddc6-ace4-5f9f-af28-82065c890aa9', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c3ed986e-a875-5851-a23b-ed32e89b5fea', '16.1.1.1.1.1.1.1.1.1', 'Visual fields', 3, 326, 0),
-   ('7db8a9ec-39bf-531f-8949-ed6aecdc7343', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '88f5ddc6-ace4-5f9f-af28-82065c890aa9', '16.1.1.1.1.1.1.1.1.1.1', 'Examination of the visual fields', 4, 326, 0),
-   ('e4495507-a604-5246-9be4-a794b1f4f864', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7db8a9ec-39bf-531f-8949-ed6aecdc7343', '16.1.1.1.1.1.1.1.1.1.1.1', 'The pupils', 3, 327, 0),
-   ('1c404d70-18bf-51e7-99a1-5cd82ed4ea47', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'e4495507-a604-5246-9be4-a794b1f4f864', '16.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination of the pupils', 4, 327, 0),
-   ('0eadc70e-2849-5764-80db-43eb4e1a7027', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '1c404d70-18bf-51e7-99a1-5cd82ed4ea47', '16.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Afferent pupillary defect', 4, 327, 0),
-   ('a5b19c5c-b778-5f2d-a286-279e630ae61c', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '0eadc70e-2849-5764-80db-43eb4e1a7027', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Relative afferent pupillary defect', 4, 327, 0),
-   ('377f84f7-7aec-5eea-a9bf-9ac92d618c7f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'a5b19c5c-b778-5f2d-a286-279e630ae61c', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Efferent pupillary defect (part of a third cranial nerve lesion)', 4, 328, 0),
-   ('992a97da-0e09-57d2-94fd-37e0665cc6bd', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '377f84f7-7aec-5eea-a9bf-9ac92d618c7f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Other common pupillary abnormalities of neurological relevance', 4, 328, 0),
-   ('f9d7e119-051f-5183-b01b-d5e719121981', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '992a97da-0e09-57d2-94fd-37e0665cc6bd', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fundoscopy', 3, 328, 0),
-   ('a2b72591-64ac-5841-83ec-a34bd943d0a8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f9d7e119-051f-5183-b01b-d5e719121981', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The oculomotor (III), trochlear (IV) and abducens (VI) nerves – eye movements', 2, 328, 0),
-   ('5128bbed-08c8-539f-a0c7-85bb97755d04', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'a2b72591-64ac-5841-83ec-a34bd943d0a8', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Terminology in eye movements', 3, 329, 0),
-   ('ccb1a5fe-c607-5ec0-8cfd-485bd4715bcb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '5128bbed-08c8-539f-a0c7-85bb97755d04', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination of eye movements', 3, 329, 0),
-   ('cd593789-813e-58d9-937a-e5bc00cfd175', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'ccb1a5fe-c607-5ec0-8cfd-485bd4715bcb', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diplopia testing', 4, 330, 0),
-   ('a829fda6-944d-5226-b608-46cb407d1e2f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'cd593789-813e-58d9-937a-e5bc00cfd175', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Horizontal gaze paresis; internuclear ophthalmoparesis', 4, 331, 0),
-   ('07003786-ab21-5924-894f-6e366a194bad', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'a829fda6-944d-5226-b608-46cb407d1e2f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Vertical gaze pareses', 4, 331, 0),
-   ('8ba255b5-959e-566d-bd6c-2f8d5983f4d1', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '07003786-ab21-5924-894f-6e366a194bad', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Non-paralytic strabismus', 4, 332, 0),
-   ('06f83a62-474b-57c6-8c35-300fb1e133ff', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '8ba255b5-959e-566d-bd6c-2f8d5983f4d1', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing saccadic eye movements', 4, 332, 0),
-   ('ba23995d-2532-58b6-a922-b93a974f5e0e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '06f83a62-474b-57c6-8c35-300fb1e133ff', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Supranuclear gaze pareses', 4, 332, 0),
-   ('504312e1-a770-586e-995f-20695fbfc4bc', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'ba23995d-2532-58b6-a922-b93a974f5e0e', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Peripheral vestibular nystagmus', 4, 332, 0),
-   ('d8f750e2-6c48-52a0-820c-113481503bc6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '504312e1-a770-586e-995f-20695fbfc4bc', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gaze paretic nystagmus', 4, 332, 0),
-   ('3fc5b8af-0dff-511b-ba45-886a7bf72a9a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'd8f750e2-6c48-52a0-820c-113481503bc6', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Congenital nystagmus', 4, 333, 0),
-   ('62b9ac17-35c9-56e6-ad50-c20d5e216979', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '3fc5b8af-0dff-511b-ba45-886a7bf72a9a', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pendular nystagmus', 4, 333, 0),
-   ('2a0a7e6c-95c3-5cfc-9c5f-6dea645b79c9', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'ccb1a5fe-c607-5ec0-8cfd-485bd4715bcb', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The trigeminal (V) nerve', 2, 333, 1),
-   ('48972fb7-bca5-5e5c-8cd6-debb21dcf81a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '2a0a7e6c-95c3-5cfc-9c5f-6dea645b79c9', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Sensory component of the trigeminal nerve', 3, 333, 0),
-   ('29a6e53a-7b7c-50a9-863f-0fda64a1a465', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '48972fb7-bca5-5e5c-8cd6-debb21dcf81a', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Motor component of the trigeminal nerve', 3, 333, 0),
-   ('289029c2-dba7-556f-9b5a-860e24d88df1', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '29a6e53a-7b7c-50a9-863f-0fda64a1a465', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Trigeminal territory sensory loss', 4, 333, 0),
-   ('4adf4050-5afc-5b68-8f57-2edeced2a5f4', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '289029c2-dba7-556f-9b5a-860e24d88df1', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'The corneal reflex', 4, 333, 0),
-   ('1e2f2519-60a4-55bb-9615-3f1dcb4a5bd6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '4adf4050-5afc-5b68-8f57-2edeced2a5f4', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Testing the motor component of the trigeminal nerve', 3, 334, 0),
-   ('8ce2684f-27a0-5d8c-851b-f92f6d6007f2', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '1e2f2519-60a4-55bb-9615-3f1dcb4a5bd6', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'The facial (VII) nerve', 2, 334, 0),
-   ('76851054-eec1-5aa8-9800-ce4a3719a3f8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '8ce2684f-27a0-5d8c-851b-f92f6d6007f2', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Testing the facial nerve', 3, 334, 0),
-   ('b3e478a9-763e-5a72-ba6b-038cab965d19', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '76851054-eec1-5aa8-9800-ce4a3719a3f8', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'The cochlear and vestibular (VIII) nerves', 2, 335, 0),
-   ('ab1f0bab-9c22-5771-b8cb-6a2016b08c14', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'b3e478a9-763e-5a72-ba6b-038cab965d19', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Testing the cochlear and vestibular nerves', 3, 335, 0),
-   ('e14c6e90-36d9-56aa-93d5-5db39c4022d8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'ab1f0bab-9c22-5771-b8cb-6a2016b08c14', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'The glossopharyngeal (IX) nerve', 2, 335, 0),
-   ('25052954-1263-539a-bc47-6f0a7541f1fb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'e14c6e90-36d9-56aa-93d5-5db39c4022d8', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Testing the glossopharyngeal nerve', 3, 336, 0),
-   ('9d8f11e6-61ff-5d4b-a41b-1d9d0a0c4e05', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '25052954-1263-539a-bc47-6f0a7541f1fb', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'The vagus (X) nerve', 2, 336, 0),
-   ('85461394-4a15-53fe-b23c-22e82c6f5270', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9d8f11e6-61ff-5d4b-a41b-1d9d0a0c4e05', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing the vagus nerve', 3, 336, 0),
-   ('e54607b1-3a36-5a12-b9ec-5b3afa8349b7', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '85461394-4a15-53fe-b23c-22e82c6f5270', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The accessory (XI) nerve', 2, 336, 0),
-   ('8d6b45d7-e384-5385-9330-4b868b0785c6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'e54607b1-3a36-5a12-b9ec-5b3afa8349b7', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing the accessory nerve', 3, 336, 0),
-   ('15fde4fe-adb7-5c83-bbd5-c792df8e39d5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '8d6b45d7-e384-5385-9330-4b868b0785c6', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The hypoglossal (XII) nerve', 2, 336, 0),
-   ('a36c35a0-09d8-5d0d-a4b5-dab1e7674dbd', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '15fde4fe-adb7-5c83-bbd5-c792df8e39d5', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing the hypoglossal nerve', 3, 336, 0),
-   ('da9e29ba-f060-5557-9f08-eed7dd30bbc6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Speech', 1, 337, 1),
-   ('f0d59fdb-263a-57ac-9939-ad68990a7144', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'da9e29ba-f060-5557-9f08-eed7dd30bbc6', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Spastic dysarthria', 2, 337, 0),
-   ('c416395b-680f-5029-8c48-5e74ad829d0f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f0d59fdb-263a-57ac-9939-ad68990a7144', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Cerebellar (ataxic) dysarthria', 2, 337, 0),
-   ('80d8819d-9a39-52b9-9046-b1f77e88015e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c416395b-680f-5029-8c48-5e74ad829d0f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Parkinsonism (hypokinetic dysarthria)', 2, 337, 0),
-   ('2c26e048-fb83-5c08-b962-83c9232d62eb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '80d8819d-9a39-52b9-9046-b1f77e88015e', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Bulbar palsy (flaccid dysarthria)', 2, 337, 0),
-   ('70a0051a-9bfb-55ee-b44b-071c5c637455', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Motor system', 1, 337, 0),
-   ('6f4bf7ef-f082-5543-ac59-723057421766', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '70a0051a-9bfb-55ee-b44b-071c5c637455', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Motor system examination', 2, 338, 0),
-   ('80ef3982-5c31-5aa9-8bc2-30302793873f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '6f4bf7ef-f082-5543-ac59-723057421766', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Inspection', 3, 338, 0),
-   ('d09b1002-afa1-56cd-8992-a72ff0de177f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '80ef3982-5c31-5aa9-8bc2-30302793873f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Assessment of muscle tone', 3, 339, 0),
-   ('c488cadf-8ecb-53b9-b05d-1846181187af', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'd09b1002-afa1-56cd-8992-a72ff0de177f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Spasticity', 4, 339, 0),
-   ('23da4509-2cb4-5d11-9298-bdfa9476ad7e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c488cadf-8ecb-53b9-b05d-1846181187af', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Parkinsonian extrapyramidal rigidity', 4, 340, 0),
-   ('f57ada49-4815-5a38-b756-1db3927b0569', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '23da4509-2cb4-5d11-9298-bdfa9476ad7e', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Paratonia (Gegenhalten)', 4, 340, 0),
-   ('7d90c63b-8509-5c1e-8872-6dd90d8d9cf8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f57ada49-4815-5a38-b756-1db3927b0569', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing muscle power', 3, 340, 0),
-   ('2a2e1c26-93e9-5684-a3bd-da26b91c3aa4', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2', 'Cerebellar system', 1, 341, 1),
-   ('0db9292b-3b26-5e91-affd-0b5a5b3134cc', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '2a2e1c26-93e9-5684-a3bd-da26b91c3aa4', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1', 'Examination of limb coordination', 2, 345, 0),
-   ('554f306b-2760-53dc-99c5-bd1816b69ac0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '0db9292b-3b26-5e91-affd-0b5a5b3134cc', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1', 'The finger-nose test', 3, 345, 0),
-   ('8c4e6b7b-f7d8-5733-898c-6f4963386098', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '554f306b-2760-53dc-99c5-bd1816b69ac0', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1', 'Dysdiadochokinesis', 3, 345, 0),
-   ('7d59f94c-5cfc-537b-b059-d67fb6511c80', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '8c4e6b7b-f7d8-5733-898c-6f4963386098', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1', 'The heel-shin test', 3, 345, 0),
-   ('5c91103b-5228-5979-ad47-59e9c891eb9c', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7d59f94c-5cfc-537b-b059-d67fb6511c80', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1', 'Reflexes', 2, 345, 0),
-   ('ae5887ba-8c31-5dc9-ad20-67c5e8368cf5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '5c91103b-5228-5979-ad47-59e9c891eb9c', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1', 'The jaw jerk and tendon reflexes', 3, 345, 0),
-   ('77fd9d03-2e33-5ed8-8568-09b2648a331e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'ae5887ba-8c31-5dc9-ad20-67c5e8368cf5', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Testing the jaw jerk', 4, 345, 0),
-   ('87432fad-57ac-5812-bef1-d51f86a8546b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '77fd9d03-2e33-5ed8-8568-09b2648a331e', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Testing the tendon reflexes', 4, 346, 0),
-   ('72916339-b762-5da4-bfac-9420b58573dd', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '87432fad-57ac-5812-bef1-d51f86a8546b', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Abdominal reflexes', 3, 346, 0),
-   ('9282c0a0-1cbc-5068-b886-2c52bcf973f5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '72916339-b762-5da4-bfac-9420b58573dd', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Testing the abdominal reflexes', 4, 347, 0),
-   ('f8dc05cd-5f57-5ea7-974c-d8b934d1f449', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9282c0a0-1cbc-5068-b886-2c52bcf973f5', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'The plantar reflex', 3, 347, 0),
-   ('fb832ff2-08f8-5dfd-84e6-06a5c3e9a8f1', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f8dc05cd-5f57-5ea7-974c-d8b934d1f449', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Testing the plantar reflex', 4, 347, 0),
-   ('9a3b6f2c-bdbf-53d7-a9cb-110f8a32f7ea', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'fb832ff2-08f8-5dfd-84e6-06a5c3e9a8f1', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Primitive reflexes', 3, 347, 0),
-   ('f0fdf22b-21fd-5518-9001-6aea6de8a1ac', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9a3b6f2c-bdbf-53d7-a9cb-110f8a32f7ea', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The grasp reflex', 4, 347, 0),
-   ('12640697-8359-5fe1-baf8-95d0d7733ff9', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f0fdf22b-21fd-5518-9001-6aea6de8a1ac', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The pout reflex', 4, 347, 0),
-   ('85c883e5-17eb-5075-adde-3af3151311fa', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2', 'Movement disorders', 1, 347, 1),
-   ('7b84b26f-9382-5889-a4e1-e12362fd8ebb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '85c883e5-17eb-5075-adde-3af3151311fa', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1', 'Tremor', 2, 348, 0),
-   ('07cd6638-baa6-5f24-bbc5-9d84d9068bf0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7b84b26f-9382-5889-a4e1-e12362fd8ebb', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1', 'Parkinson’s disease', 2, 349, 0),
-   ('9cba5002-e221-5bf2-9971-517172ad2d83', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '07cd6638-baa6-5f24-bbc5-9d84d9068bf0', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1', 'The pull test', 3, 349, 0),
-   ('f41d51a3-fb3c-52ed-bdec-ec0280e0dc2e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9cba5002-e221-5bf2-9971-517172ad2d83', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1', 'Other movement disorders (hyperkinetic movement disorders)', 2, 349, 0),
-   ('578a0a98-aeb9-5978-bf81-a1a6152da36f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1', 'Sensation', 1, 349, 0),
-   ('3b8f30e2-689e-5a7b-8638-f35c7d4e083a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '578a0a98-aeb9-5978-bf81-a1a6152da36f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1', 'Cutaneous sensory examination', 2, 350, 0),
-   ('c7708d03-73dc-582a-bc3e-3c72a7706290', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '3b8f30e2-689e-5a7b-8638-f35c7d4e083a', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Vibration sense', 2, 353, 0),
-   ('845bec76-625b-5782-907b-4b5095d7f46f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c7708d03-73dc-582a-bc3e-3c72a7706290', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Testing vibration sense', 3, 353, 0),
-   ('cbee52f4-c43c-5193-ae06-08402b3fcd80', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '845bec76-625b-5782-907b-4b5095d7f46f', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Proprioception', 2, 353, 0),
-   ('c1513dc4-a822-5ca2-813a-4ee046fb4bd7', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'cbee52f4-c43c-5193-ae06-08402b3fcd80', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Testing joint position sense', 3, 353, 0),
-   ('b6eaedc4-ade6-523f-85b6-ff485206ed80', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c1513dc4-a822-5ca2-813a-4ee046fb4bd7', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Pseudoathetosis', 4, 354, 0),
-   ('dff37020-7895-5479-bb99-e136f6bf6ba3', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'b6eaedc4-ade6-523f-85b6-ff485206ed80', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Romberg’s test', 4, 354, 0),
-   ('f59e2e2d-729c-55fc-83ea-818500438aaa', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c1513dc4-a822-5ca2-813a-4ee046fb4bd7', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2', 'Cortical sensory loss', 2, 354, 1),
-   ('421e8bd0-1aea-55ab-9f9a-f2c0ec0453bd', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'f59e2e2d-729c-55fc-83ea-818500438aaa', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.1', 'Testing sensory inattention', 3, 354, 0),
-   ('b30c258f-a7e2-59c7-93c9-573abcf25fe1', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '421e8bd0-1aea-55ab-9f9a-f2c0ec0453bd', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Stretch tests', 4, 354, 0),
-   ('040ea243-9c8c-59be-9f71-74e0a65b79e8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2', 'Posture and gait', 1, 355, 1),
-   ('7e86b1fd-2ab2-5a97-a758-1d251f52e257', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1', 'Patterns of motor and sensory signs', 1, 355, 0),
-   ('d7b5c935-4d47-525b-8c51-56d08a3e0d75', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7e86b1fd-2ab2-5a97-a758-1d251f52e257', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1', 'Patterns of motor signs', 2, 355, 0),
-   ('977d8311-3433-5bd9-bd9c-575fcbcc9465', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'd7b5c935-4d47-525b-8c51-56d08a3e0d75', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1', 'Upper motor neuron disorders affecting the leg', 3, 356, 0),
-   ('07f7ee93-8dfe-5cd6-a35c-50de5b13a29a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '977d8311-3433-5bd9-bd9c-575fcbcc9465', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1', 'Upper motor neuron disorders affecting the arm and hand', 3, 357, 0),
-   ('6add000d-90da-54f9-b776-21631d683436', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '07f7ee93-8dfe-5cd6-a35c-50de5b13a29a', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1', 'Patterns of sensory loss (Table 16.13)', 2, 357, 0),
-   ('62ec294a-c86f-54e1-a017-da22f78184f0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '6add000d-90da-54f9-b776-21631d683436', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1', 'Spinal cord and cauda equina lesions', 3, 359, 0),
-   ('78683397-d2cd-5970-85f2-172e7bc3665e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '62ec294a-c86f-54e1-a017-da22f78184f0', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1', 'Brown-Séquard syndrome', 3, 359, 0),
-   ('fd3ae62f-4b89-5eb1-a962-4a7ad5f4e2a4', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '78683397-d2cd-5970-85f2-172e7bc3665e', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1', 'Central spinal cord lesion (especially syringomyelia)', 3, 359, 0),
-   ('b65c2768-f1f6-507d-b47d-c6a08df33ce5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'fd3ae62f-4b89-5eb1-a962-4a7ad5f4e2a4', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1', 'Anterior spinal artery territory spinal cord infarction', 3, 360, 0),
-   ('7f841acc-dfab-5b92-a6af-67ab642c705b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'b65c2768-f1f6-507d-b47d-c6a08df33ce5', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1', 'Patterns of sensory loss in lesions of the medulla', 3, 360, 0),
-   ('c7462762-a1a0-597a-8ddf-869985a13c9a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '7f841acc-dfab-5b92-a6af-67ab642c705b', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.1', 'Hemianaesthesia', 3, 360, 0),
-   ('933d6c01-9e29-5c5f-ab8f-589b8528ca78', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2', 'Cognitive function', 1, 360, 1),
-   ('a3206534-6489-573a-9661-55a4a46d0ffe', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '933d6c01-9e29-5c5f-ab8f-589b8528ca78', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1', 'Amnesia', 2, 360, 0),
-   ('2d85ba93-7e78-5ad2-911f-e8962fd14e68', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'a3206534-6489-573a-9661-55a4a46d0ffe', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1', 'Dysphasia', 2, 360, 0),
-   ('24d8a059-f5ee-54aa-b12e-ca9567b36bf3', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '2d85ba93-7e78-5ad2-911f-e8962fd14e68', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1', 'Apraxia', 2, 361, 0),
-   ('e020035c-42f1-540e-a9cd-0e50a01135e3', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '24d8a059-f5ee-54aa-b12e-ca9567b36bf3', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1', 'Agnosia', 2, 362, 0),
-   ('53ca869d-469a-5551-a089-d44cbcbb15ae', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'e020035c-42f1-540e-a9cd-0e50a01135e3', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1', 'Neglect phenomena', 2, 362, 0),
-   ('e8ec8c83-28ab-586c-87b7-15c1e7a6572d', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1', 'Localizing the neurological lesion', 1, 362, 0),
-   ('55e4d97a-9e80-55e4-b2aa-5ad8db21129b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', NULL, '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Investigations', 1, 363, 0),
-   ('0f81956c-6b55-506d-9655-54be70e53b37', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '55e4d97a-9e80-55e4-b2aa-5ad8db21129b', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Imaging', 2, 363, 0),
-   ('65b3c371-ced3-5113-a9ad-7fdea18a5952', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '0f81956c-6b55-506d-9655-54be70e53b37', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Headache', 3, 363, 0),
-   ('11529b26-ee63-522e-bd8e-2beb912d41b0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '65b3c371-ced3-5113-a9ad-7fdea18a5952', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Epilepsy', 3, 363, 0),
-   ('9808edcc-f047-5b2c-8e0f-e8675fd4ac0d', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '11529b26-ee63-522e-bd8e-2beb912d41b0', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Stroke', 3, 363, 0),
-   ('e728ce45-71a6-5560-b927-edd1773dd22c', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9808edcc-f047-5b2c-8e0f-e8675fd4ac0d', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Focal central nervous system lesions', 3, 363, 0),
-   ('735a1395-3edb-5b69-87b3-1f69db7d0814', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'e728ce45-71a6-5560-b927-edd1773dd22c', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Multiple sclerosis', 3, 363, 0),
-   ('d188449e-d545-51fb-a456-c9b67935c210', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '735a1395-3edb-5b69-87b3-1f69db7d0814', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cognitive impairment', 3, 363, 0),
-   ('c27b7e41-0794-575a-9c84-d866a7db2906', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'd188449e-d545-51fb-a456-c9b67935c210', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Peripheral nervous system', 3, 363, 0),
-   ('76f1e174-2356-58b0-8780-495d104a9cab', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'c27b7e41-0794-575a-9c84-d866a7db2906', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Muscle diseases', 3, 363, 0),
-   ('d70495e3-40df-520c-8283-24c3e2983e7d', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '76f1e174-2356-58b0-8780-495d104a9cab', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Electroencephalography', 2, 363, 0),
-   ('193317ce-f66c-5366-ad0d-89d3c6d90575', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'd70495e3-40df-520c-8283-24c3e2983e7d', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nerve conduction studies and electromyography', 2, 364, 0),
-   ('b305f11e-a162-54b3-b822-51e124beab44', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '193317ce-f66c-5366-ad0d-89d3c6d90575', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cerebrospinal fluid examination', 2, 364, 0),
-   ('9b383615-73e5-593a-8049-661947a499f9', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 'b305f11e-a162-54b3-b822-51e124beab44', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Meningitis', 3, 364, 0),
-   ('185bbfd4-be4c-58f8-b093-e0c72e94d238', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '9b383615-73e5-593a-8049-661947a499f9', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Subarachnoid haemorrhage', 3, 365, 0),
-   ('67cb9fae-55f8-5e6a-ad88-7d8d52913b00', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '185bbfd4-be4c-58f8-b093-e0c72e94d238', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'CNS inflammatory disorders', 3, 365, 0),
-   ('5742cef1-9c98-59c9-a8d8-be3c66d38a23', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '67cb9fae-55f8-5e6a-ad88-7d8d52913b00', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Guillain-Barré syndrome', 3, 365, 0),
-   ('24769bef-3423-5765-bf1e-24c53cc06e7d', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', '5742cef1-9c98-59c9-a8d8-be3c66d38a23', '16.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Neoplastic leptomeningeal infiltration', 3, 365, 0),
-   ('9f7ec952-ad3c-5149-a049-4a05461a83dd', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1', 'The diagnostic process in nephrology and urology', 1, 366, 0),
-   ('4a58921c-fc16-5d2e-a1d1-ee465e3b4ce0', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1', 'Symptoms of renal and urological disease', 1, 366, 0),
-   ('136302ac-7fa0-5247-bce1-c436534c8188', '9c71e0e9-9577-5581-9546-054bb5c96415', '4a58921c-fc16-5d2e-a1d1-ee465e3b4ce0', '17.1.1.1', 'Pain', 2, 366, 0),
-   ('a9641d36-f2d8-5e43-8f05-26b93d854078', '9c71e0e9-9577-5581-9546-054bb5c96415', '136302ac-7fa0-5247-bce1-c436534c8188', '17.1.1.1.1', 'Haematuria', 2, 366, 0),
-   ('b25cccb3-c45f-58e7-8b34-d7a4803bdd56', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a9641d36-f2d8-5e43-8f05-26b93d854078', '17.1.1.1.1.1', 'Oliguria/anuria', 2, 367, 0),
-   ('aa3210de-9b3e-5979-9039-850aab47e0c2', '9c71e0e9-9577-5581-9546-054bb5c96415', 'b25cccb3-c45f-58e7-8b34-d7a4803bdd56', '17.1.1.1.1.1.1', 'Polyuria', 2, 367, 0),
-   ('d084d3d6-a2d1-56c5-9542-51665b7fabd0', '9c71e0e9-9577-5581-9546-054bb5c96415', 'aa3210de-9b3e-5979-9039-850aab47e0c2', '17.1.1.1.1.1.1.1', 'Frequency of micturition', 2, 367, 0),
-   ('729b0c56-f16e-51b5-b7b5-927e3bc38c39', '9c71e0e9-9577-5581-9546-054bb5c96415', 'd084d3d6-a2d1-56c5-9542-51665b7fabd0', '17.1.1.1.1.1.1.1.1', 'Nocturia', 2, 367, 0),
-   ('e44d3266-11f4-5395-9fd2-36cd80ba5ab3', '9c71e0e9-9577-5581-9546-054bb5c96415', '729b0c56-f16e-51b5-b7b5-927e3bc38c39', '17.1.1.1.1.1.1.1.1.1', 'Dysuria', 2, 367, 0),
-   ('e1705436-6354-58af-93e1-830a06181d05', '9c71e0e9-9577-5581-9546-054bb5c96415', 'e44d3266-11f4-5395-9fd2-36cd80ba5ab3', '17.1.1.1.1.1.1.1.1.1.1', 'Urgency of micturition, incontinence and enuresis', 2, 368, 0),
-   ('7c9619a2-a977-55b8-abae-e7080cc3152a', '9c71e0e9-9577-5581-9546-054bb5c96415', 'e1705436-6354-58af-93e1-830a06181d05', '17.1.1.1.1.1.1.1.1.1.1.1', 'Slow stream, hesitancy and terminal dribbling', 2, 368, 0),
-   ('d05d0090-2dbf-504a-bf5d-bcefc2879e63', '9c71e0e9-9577-5581-9546-054bb5c96415', '7c9619a2-a977-55b8-abae-e7080cc3152a', '17.1.1.1.1.1.1.1.1.1.1.1.1', 'Urethral discharge', 2, 368, 0),
-   ('a726d6b2-129f-5dd4-8174-4f3e57f33109', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Physical signs in renal and urological disease', 1, 368, 0),
-   ('4b19c144-4fb6-5719-a108-13fbf75a3317', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a726d6b2-129f-5dd4-8174-4f3e57f33109', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'General features', 2, 368, 0),
-   ('38c80674-84b7-5e26-bffb-a2edb0fe43db', '9c71e0e9-9577-5581-9546-054bb5c96415', '4b19c144-4fb6-5719-a108-13fbf75a3317', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The circulation in the renal patient', 2, 369, 0),
-   ('ae010d0f-acb5-54de-af61-f1545e3ddc00', '9c71e0e9-9577-5581-9546-054bb5c96415', '38c80674-84b7-5e26-bffb-a2edb0fe43db', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Abdominal palpation', 2, 369, 0),
-   ('cfc9ed4a-217b-54f0-a5a5-64b2de315b07', '9c71e0e9-9577-5581-9546-054bb5c96415', 'ae010d0f-acb5-54de-af61-f1545e3ddc00', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Auscultation', 2, 369, 0),
-   ('c00f7739-ac87-5a9d-88cb-c6b0a3c6dddd', '9c71e0e9-9577-5581-9546-054bb5c96415', 'cfc9ed4a-217b-54f0-a5a5-64b2de315b07', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The eye in uraemia', 2, 369, 0),
-   ('98ce8610-8095-5078-b98b-9cf10109ef85', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The renal and urological syndromes', 1, 370, 0),
-   ('a32fa934-0a03-5c75-bec3-07bf6761a3d4', '9c71e0e9-9577-5581-9546-054bb5c96415', '98ce8610-8095-5078-b98b-9cf10109ef85', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Acute renal failure', 2, 370, 0),
-   ('ef4614a9-c485-5a1d-a30f-46d0c36dfeaa', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a32fa934-0a03-5c75-bec3-07bf6761a3d4', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Chronic renal failure', 2, 370, 0),
-   ('d5014e97-2460-5a85-bcc1-2515c7b2e776', '9c71e0e9-9577-5581-9546-054bb5c96415', 'ef4614a9-c485-5a1d-a30f-46d0c36dfeaa', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The acute nephritic syndrome', 2, 371, 0),
-   ('a5397642-1ee8-5cde-9714-921155f982c4', '9c71e0e9-9577-5581-9546-054bb5c96415', 'd5014e97-2460-5a85-bcc1-2515c7b2e776', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The nephrotic syndrome', 2, 371, 0),
-   ('c8e3e1c7-1034-50f2-a5d1-6a7b7bd6798f', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a5397642-1ee8-5cde-9714-921155f982c4', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Asymptomatic urinary abnormality', 2, 371, 0),
-   ('3c79f0e2-a163-50e4-8c6f-3e03546d8e5b', '9c71e0e9-9577-5581-9546-054bb5c96415', 'c8e3e1c7-1034-50f2-a5d1-6a7b7bd6798f', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Recurrent visible haematuria', 2, 371, 0),
-   ('c98a86fc-4034-5986-b47b-71f79d241c13', '9c71e0e9-9577-5581-9546-054bb5c96415', '3c79f0e2-a163-50e4-8c6f-3e03546d8e5b', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Urinary tract infection', 2, 371, 0),
-   ('06326a1e-9e23-5dd4-a715-e8de06df8faf', '9c71e0e9-9577-5581-9546-054bb5c96415', 'c98a86fc-4034-5986-b47b-71f79d241c13', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Urinary tract obstruction', 2, 372, 0),
-   ('c55c3bfb-df4f-5acf-af4c-bc69c42abfb8', '9c71e0e9-9577-5581-9546-054bb5c96415', '06326a1e-9e23-5dd4-a715-e8de06df8faf', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Renal and urinary tract stones', 2, 372, 0),
-   ('4ee6229a-fc42-5ddf-bfd9-55fde24650bd', '9c71e0e9-9577-5581-9546-054bb5c96415', 'c55c3bfb-df4f-5acf-af4c-bc69c42abfb8', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Renal hypertension', 2, 372, 0),
-   ('13c97d88-9fe8-5a78-90c1-b219f0c65e53', '9c71e0e9-9577-5581-9546-054bb5c96415', '4ee6229a-fc42-5ddf-bfd9-55fde24650bd', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Renal tubular syndromes', 2, 372, 0),
-   ('e42220a6-98c3-5cab-9943-de9d9a580cad', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Laboratory assessment and imaging of the kidneys and urinary tract: assessment of structure and function', 1, 372, 0),
-   ('7fb6bf61-9ba0-566b-b580-72ba43c4b15f', '9c71e0e9-9577-5581-9546-054bb5c96415', 'e42220a6-98c3-5cab-9943-de9d9a580cad', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The urine', 2, 372, 0),
-   ('074ac83a-4a13-5374-a21d-47064b54a4e1', '9c71e0e9-9577-5581-9546-054bb5c96415', '7fb6bf61-9ba0-566b-b580-72ba43c4b15f', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Quantity', 3, 373, 0),
-   ('83e4a7c4-7a6a-5088-956e-677d1891b0f5', '9c71e0e9-9577-5581-9546-054bb5c96415', '074ac83a-4a13-5374-a21d-47064b54a4e1', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Colour', 3, 373, 0),
-   ('78af4204-72ab-5281-ae96-ec897a249dc5', '9c71e0e9-9577-5581-9546-054bb5c96415', '83e4a7c4-7a6a-5088-956e-677d1891b0f5', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Specific gravity and osmolality', 3, 373, 0),
-   ('89a9be9c-9a4c-534f-a196-0a4b40ba6896', '9c71e0e9-9577-5581-9546-054bb5c96415', '78af4204-72ab-5281-ae96-ec897a249dc5', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'pH', 3, 374, 0),
-   ('55884f64-d584-5b29-b58d-52d27ea24bcd', '9c71e0e9-9577-5581-9546-054bb5c96415', '89a9be9c-9a4c-534f-a196-0a4b40ba6896', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Glucose', 3, 374, 0),
-   ('b767cff1-7f7b-5705-afa2-894150149312', '9c71e0e9-9577-5581-9546-054bb5c96415', '55884f64-d584-5b29-b58d-52d27ea24bcd', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Protein', 3, 374, 0),
-   ('55fe6ce6-5b22-503d-94a2-13ae0f0f3e16', '9c71e0e9-9577-5581-9546-054bb5c96415', 'b767cff1-7f7b-5705-afa2-894150149312', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Microscopy', 3, 374, 0),
-   ('41d87984-f357-59f8-9f6e-7a52b3a818d8', '9c71e0e9-9577-5581-9546-054bb5c96415', '55fe6ce6-5b22-503d-94a2-13ae0f0f3e16', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Microbiological examination of the urine', 3, 375, 0),
-   ('a4d2087e-e8f3-53fe-b07e-12a2c8639f2a', '9c71e0e9-9577-5581-9546-054bb5c96415', '41d87984-f357-59f8-9f6e-7a52b3a818d8', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Measurement of the glomerular filtration rate', 3, 375, 0),
-   ('6eeeca49-6644-5612-a29b-0e149180f776', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a4d2087e-e8f3-53fe-b07e-12a2c8639f2a', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Measurement of renal tubular function', 3, 376, 0),
-   ('06b7b5e6-4682-5280-8657-cad738a08003', '9c71e0e9-9577-5581-9546-054bb5c96415', '6eeeca49-6644-5612-a29b-0e149180f776', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Assessment of the urine in the stone-forming patient', 3, 377, 0),
-   ('80b2f4d0-8f82-5810-9a96-f610786c00a4', '9c71e0e9-9577-5581-9546-054bb5c96415', '06b7b5e6-4682-5280-8657-cad738a08003', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Kidney biopsy', 3, 377, 0),
-   ('806511ca-f4d8-57c9-863d-91f164eae0eb', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Imaging of the urinary tract', 1, 377, 1),
-   ('ea2b4ba8-159f-57a1-ae26-726f290be7a2', '9c71e0e9-9577-5581-9546-054bb5c96415', '806511ca-f4d8-57c9-863d-91f164eae0eb', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Plain radiographs', 2, 377, 0),
-   ('87baa23a-100c-5c53-9141-7e16c8e256d5', '9c71e0e9-9577-5581-9546-054bb5c96415', 'ea2b4ba8-159f-57a1-ae26-726f290be7a2', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Ultrasound', 2, 377, 0),
-   ('3e44c87b-e84d-5b9d-9296-f6ff8ba92291', '9c71e0e9-9577-5581-9546-054bb5c96415', '87baa23a-100c-5c53-9141-7e16c8e256d5', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Intravenous urography', 2, 377, 0),
-   ('90929e9f-895c-5083-8ca3-2e6f90a239bb', '9c71e0e9-9577-5581-9546-054bb5c96415', '3e44c87b-e84d-5b9d-9296-f6ff8ba92291', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Antegrade and retrograde urography', 2, 378, 0),
-   ('ae0869ee-6504-5333-bc7c-f65b244b7e5c', '9c71e0e9-9577-5581-9546-054bb5c96415', '90929e9f-895c-5083-8ca3-2e6f90a239bb', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Cystography', 2, 378, 0),
-   ('50ffebfb-5925-54f1-9f9c-8667c7c90b9f', '9c71e0e9-9577-5581-9546-054bb5c96415', 'ae0869ee-6504-5333-bc7c-f65b244b7e5c', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Radionuclide studies', 2, 378, 0),
-   ('a503a42f-68df-556b-9569-16f227a149b2', '9c71e0e9-9577-5581-9546-054bb5c96415', '50ffebfb-5925-54f1-9f9c-8667c7c90b9f', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Computed tomography and magnetic resonance imaging', 2, 378, 0),
-   ('91f288cc-209b-59d7-9515-4ec1b74e75b4', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a503a42f-68df-556b-9569-16f227a149b2', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Arteriography and venography', 2, 379, 0),
-   ('a2bedbb6-a40c-5af9-9440-efc39e04649c', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Sexually transmitted infections', 1, 379, 0),
-   ('5e0a6627-de13-5a1e-abb0-fe3c150d75e0', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a2bedbb6-a40c-5af9-9440-efc39e04649c', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Introduction', 2, 379, 0),
-   ('e9b03a48-85d7-526a-af38-6a0c57663be8', '9c71e0e9-9577-5581-9546-054bb5c96415', '5e0a6627-de13-5a1e-abb0-fe3c150d75e0', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'History', 2, 380, 0),
-   ('d696ec37-3f3c-5547-9292-ce0682ac2610', '9c71e0e9-9577-5581-9546-054bb5c96415', 'e9b03a48-85d7-526a-af38-6a0c57663be8', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Presenting symptoms', 2, 381, 0),
-   ('0bb177ef-c48f-51fc-a021-dbe6ca6df079', '9c71e0e9-9577-5581-9546-054bb5c96415', 'd696ec37-3f3c-5547-9292-ce0682ac2610', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Male', 3, 381, 0),
-   ('9c474cb1-93c0-52aa-a468-db34fa37cb1b', '9c71e0e9-9577-5581-9546-054bb5c96415', '0bb177ef-c48f-51fc-a021-dbe6ca6df079', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Female', 3, 381, 0),
-   ('1907d3af-adb9-55c8-aacc-5409b5fd733f', '9c71e0e9-9577-5581-9546-054bb5c96415', '9c474cb1-93c0-52aa-a468-db34fa37cb1b', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Both male and female patients', 3, 381, 0),
-   ('79121e89-0cdd-5a7a-acec-fbbca1f4ad9b', '9c71e0e9-9577-5581-9546-054bb5c96415', '1907d3af-adb9-55c8-aacc-5409b5fd733f', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Special groups', 3, 382, 0),
-   ('d37cb431-654b-5aa8-abbf-638c6723d6cc', '9c71e0e9-9577-5581-9546-054bb5c96415', '79121e89-0cdd-5a7a-acec-fbbca1f4ad9b', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Men who have sex with men (MSM)', 4, 382, 0),
-   ('cec421bc-c30a-58a3-bc02-f5b6ff44e2e4', '9c71e0e9-9577-5581-9546-054bb5c96415', 'd37cb431-654b-5aa8-abbf-638c6723d6cc', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Sex workers', 4, 383, 0),
-   ('bab26275-0e93-516c-a0cd-9669c3927043', '9c71e0e9-9577-5581-9546-054bb5c96415', 'cec421bc-c30a-58a3-bc02-f5b6ff44e2e4', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Young people', 4, 383, 0),
-   ('cd8bda7d-deea-5faa-8890-bcca9e5d6ce3', '9c71e0e9-9577-5581-9546-054bb5c96415', NULL, '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Genital examination', 1, 383, 1),
-   ('078a1f20-6eb7-5cdc-8b39-06b9eb3744c2', '9c71e0e9-9577-5581-9546-054bb5c96415', 'cd8bda7d-deea-5faa-8890-bcca9e5d6ce3', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Male examination', 2, 383, 0),
-   ('419e3504-cee0-5414-a7a1-51b2077c5e61', '9c71e0e9-9577-5581-9546-054bb5c96415', '078a1f20-6eb7-5cdc-8b39-06b9eb3744c2', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Female examination', 2, 383, 0),
-   ('c338887a-46cb-541a-b4ca-6d1baa79f3a9', '9c71e0e9-9577-5581-9546-054bb5c96415', '419e3504-cee0-5414-a7a1-51b2077c5e61', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Tests and further management', 2, 383, 0),
-   ('7278a8ca-c84d-5564-9931-644c9e2df7e3', '9c71e0e9-9577-5581-9546-054bb5c96415', 'c338887a-46cb-541a-b4ca-6d1baa79f3a9', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Gram staining', 3, 384, 0),
-   ('510a40dd-83b1-5b5b-8293-f98e31ea8abf', '9c71e0e9-9577-5581-9546-054bb5c96415', '7278a8ca-c84d-5564-9931-644c9e2df7e3', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Urethral sample', 4, 384, 0),
-   ('285a0aee-24e9-53ef-8329-5dc1941e2259', '9c71e0e9-9577-5581-9546-054bb5c96415', '510a40dd-83b1-5b5b-8293-f98e31ea8abf', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Vaginal sample', 4, 384, 0),
-   ('5844faf3-77ea-52ac-baa6-78d589942d77', '9c71e0e9-9577-5581-9546-054bb5c96415', '285a0aee-24e9-53ef-8329-5dc1941e2259', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'pH', 4, 385, 0),
-   ('f2b192fb-097d-591e-a121-5f9127e3bdd6', '9c71e0e9-9577-5581-9546-054bb5c96415', '5844faf3-77ea-52ac-baa6-78d589942d77', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Nucleic acid amplification testing', 3, 385, 0),
-   ('98a84db3-9b4c-56aa-aebb-4f58d727459f', '9c71e0e9-9577-5581-9546-054bb5c96415', 'f2b192fb-097d-591e-a121-5f9127e3bdd6', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Culture', 4, 385, 0),
-   ('d1e463fe-60d6-5b34-ace9-a3a43040656b', '9c71e0e9-9577-5581-9546-054bb5c96415', '98a84db3-9b4c-56aa-aebb-4f58d727459f', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Antibody testing', 3, 385, 0),
-   ('47ef8fa5-ef4e-56bf-a0c5-f33a55ebf5aa', '9c71e0e9-9577-5581-9546-054bb5c96415', 'd1e463fe-60d6-5b34-ace9-a3a43040656b', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Serological tests for syphilis', 3, 385, 0),
-   ('a0e4eda4-2a55-51c0-af2e-ceb9d9743ab8', '9c71e0e9-9577-5581-9546-054bb5c96415', '47ef8fa5-ef4e-56bf-a0c5-f33a55ebf5aa', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Tropical infections', 3, 385, 0),
-   ('66474194-7707-5dba-bf42-a2f00290dc4e', '9c71e0e9-9577-5581-9546-054bb5c96415', 'a0e4eda4-2a55-51c0-af2e-ceb9d9743ab8', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Further management', 3, 385, 0),
-   ('57296eef-5278-5e84-ac27-2e4d1363b9ca', '9c71e0e9-9577-5581-9546-054bb5c96415', '66474194-7707-5dba-bf42-a2f00290dc4e', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'HIV infection', 2, 386, 0),
-   ('51f549cf-5eff-5bba-9c7d-4b248129c272', '9c71e0e9-9577-5581-9546-054bb5c96415', '57296eef-5278-5e84-ac27-2e4d1363b9ca', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Signs commonly seen in late HIV infection', 3, 388, 0),
-   ('48a854c7-0ffb-516c-91ec-88457d1bc58d', '9c71e0e9-9577-5581-9546-054bb5c96415', '51f549cf-5eff-5bba-9c7d-4b248129c272', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Blood tests done to assess an HIV-positive patient', 3, 388, 0),
-   ('ccddcf60-2a09-5263-8861-48105b7d611f', '9c71e0e9-9577-5581-9546-054bb5c96415', '48a854c7-0ffb-516c-91ec-88457d1bc58d', '17.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Mother-to-child transmission', 3, 388, 0),
-   ('66f6010f-9167-58ed-af22-159490f92bfa', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1', 'Introduction', 1, 390, 0),
-   ('dc5f844b-0327-5872-9a10-93bc21c3c7b4', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1', 'The endocrine history', 1, 390, 0),
-   ('a782868e-c9c5-533d-8ed0-c0a532a0e81c', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'dc5f844b-0327-5872-9a10-93bc21c3c7b4', '18.1.1.1', 'Presenting symptoms', 2, 390, 0),
-   ('028a2bf5-9fe7-5870-9957-3cae92964ff1', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'a782868e-c9c5-533d-8ed0-c0a532a0e81c', '18.1.1.1.1', 'Thirst and polyuria', 3, 390, 0),
-   ('9acb0f50-f710-52c1-b8bf-e3a6d2f7cfa6', '65e2c421-da5c-5da3-b89b-86573eb11c94', '028a2bf5-9fe7-5870-9957-3cae92964ff1', '18.1.1.1.1.1', 'Weight loss', 3, 390, 0),
-   ('e091beda-e8aa-500e-915a-0f8b0b5483bf', '65e2c421-da5c-5da3-b89b-86573eb11c94', '9acb0f50-f710-52c1-b8bf-e3a6d2f7cfa6', '18.1.1.1.1.1.1', 'Weight gain or redistribution', 3, 390, 0),
-   ('2bc0228a-149b-5db6-a7f2-30dde8db8c8b', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'e091beda-e8aa-500e-915a-0f8b0b5483bf', '18.1.1.1.1.1.1.1', 'Muscle weakness', 3, 391, 0),
-   ('b8eeba0b-275e-573a-ada7-2e4bb324429e', '65e2c421-da5c-5da3-b89b-86573eb11c94', '2bc0228a-149b-5db6-a7f2-30dde8db8c8b', '18.1.1.1.1.1.1.1.1', 'Cold intolerance', 3, 391, 0),
-   ('3b24c881-0994-51c7-bbad-3b9e41d2b9ae', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'b8eeba0b-275e-573a-ada7-2e4bb324429e', '18.1.1.1.1.1.1.1.1.1', 'Heat intolerance', 3, 391, 0),
-   ('58c61fb2-185c-59a2-bfff-832b7e5c610b', '65e2c421-da5c-5da3-b89b-86573eb11c94', '3b24c881-0994-51c7-bbad-3b9e41d2b9ae', '18.1.1.1.1.1.1.1.1.1.1', 'Increased sweating', 3, 391, 0),
-   ('48b79fbf-cfe4-5406-9b51-499f9ecd3797', '65e2c421-da5c-5da3-b89b-86573eb11c94', '58c61fb2-185c-59a2-bfff-832b7e5c610b', '18.1.1.1.1.1.1.1.1.1.1.1', 'Tremor', 3, 392, 0),
-   ('56ebd94c-364f-5ccc-a3d0-fff3fbbda186', '65e2c421-da5c-5da3-b89b-86573eb11c94', '48b79fbf-cfe4-5406-9b51-499f9ecd3797', '18.1.1.1.1.1.1.1.1.1.1.1.1', 'Palpitations', 3, 392, 0),
-   ('fe230635-12a0-5e06-bf9a-b584877cfce2', '65e2c421-da5c-5da3-b89b-86573eb11c94', '56ebd94c-364f-5ccc-a3d0-fff3fbbda186', '18.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Postural unsteadiness', 3, 392, 0),
-   ('5d4cbe4c-c1dd-5589-8cfe-3eb4c03085d4', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'fe230635-12a0-5e06-bf9a-b584877cfce2', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Visual disturbance', 3, 392, 0),
-   ('96f156df-16a6-5d40-bec1-021b0c6110e6', '65e2c421-da5c-5da3-b89b-86573eb11c94', '5d4cbe4c-c1dd-5589-8cfe-3eb4c03085d4', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fasting symptoms', 3, 392, 0),
-   ('aebaf1b7-b043-535c-9823-ba34c1817c75', '65e2c421-da5c-5da3-b89b-86573eb11c94', '96f156df-16a6-5d40-bec1-021b0c6110e6', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Cramps and ‘pins and needles’', 3, 392, 0),
-   ('6f563fe5-3479-52eb-a616-b83ae14389d3', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'aebaf1b7-b043-535c-9823-ba34c1817c75', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nausea', 3, 392, 0),
-   ('efb5ac17-87e3-56fe-b1c6-6bece9e4c590', '65e2c421-da5c-5da3-b89b-86573eb11c94', '6f563fe5-3479-52eb-a616-b83ae14389d3', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Dysphagia', 3, 393, 0),
-   ('9ae6893d-7c36-5d59-a7a9-fb54c4510529', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'efb5ac17-87e3-56fe-b1c6-6bece9e4c590', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Neck pain and swelling', 3, 393, 0),
-   ('306c4810-0761-5b24-828b-1d6ce27d7b82', '65e2c421-da5c-5da3-b89b-86573eb11c94', '9ae6893d-7c36-5d59-a7a9-fb54c4510529', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Impotence', 3, 393, 0),
-   ('da2f4b51-e3dd-5c15-b311-480b53de1311', '65e2c421-da5c-5da3-b89b-86573eb11c94', '306c4810-0761-5b24-828b-1d6ce27d7b82', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Gynaecomastia', 3, 393, 0),
-   ('84cb2060-0de6-5095-bf24-f63e66b19544', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'da2f4b51-e3dd-5c15-b311-480b53de1311', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Amenorrhoea', 3, 394, 0),
-   ('01acd89e-fcfb-58dd-8721-a60fd1796b32', '65e2c421-da5c-5da3-b89b-86573eb11c94', '84cb2060-0de6-5095-bf24-f63e66b19544', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Galactorrhoea', 3, 394, 0),
-   ('7acb09cc-942e-5dac-8697-861343e30e3a', '65e2c421-da5c-5da3-b89b-86573eb11c94', '01acd89e-fcfb-58dd-8721-a60fd1796b32', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Excess hair growth', 3, 394, 0),
-   ('d84ecce8-d998-5802-a045-060eef8b8005', '65e2c421-da5c-5da3-b89b-86573eb11c94', '7acb09cc-942e-5dac-8697-861343e30e3a', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Bowel disturbance', 3, 394, 0),
-   ('49384c53-b429-585d-851b-900eb9437734', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'd84ecce8-d998-5802-a045-060eef8b8005', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Skin changes', 3, 394, 0),
-   ('2c2471de-36a6-5b56-bfb6-a4105be592cd', '65e2c421-da5c-5da3-b89b-86573eb11c94', '49384c53-b429-585d-851b-900eb9437734', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family history', 2, 394, 0),
-   ('a22ef877-463d-5cf3-aa40-335541f713d1', '65e2c421-da5c-5da3-b89b-86573eb11c94', '2c2471de-36a6-5b56-bfb6-a4105be592cd', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Thyroid disease', 3, 394, 0),
-   ('ca7c1d94-ecd1-57f3-97d5-02ec706698cd', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'a22ef877-463d-5cf3-aa40-335541f713d1', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Renal calculi', 3, 395, 0),
-   ('21a3cb83-2c8e-5f34-b3e0-3ab55682d460', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The examination', 1, 395, 1),
-   ('cddce8da-5165-5e6e-9ea5-6342478e78cd', '65e2c421-da5c-5da3-b89b-86573eb11c94', '21a3cb83-2c8e-5f34-b3e0-3ab55682d460', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'General assessment', 2, 395, 0),
-   ('c055b35a-59ca-55cf-b86a-87ba3e276c6a', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'cddce8da-5165-5e6e-9ea5-6342478e78cd', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'The skin', 2, 396, 0),
-   ('f16abd51-b239-5cc4-a159-e720b7137321', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'c055b35a-59ca-55cf-b86a-87ba3e276c6a', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'The thyroid', 2, 397, 0),
-   ('92a97f19-5443-51e4-b6a4-0972d2cdc7ad', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'f16abd51-b239-5cc4-a159-e720b7137321', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'The cardiovascular system', 2, 398, 0),
-   ('5246a2e3-94bd-5100-94de-98bf364ab185', '65e2c421-da5c-5da3-b89b-86573eb11c94', '92a97f19-5443-51e4-b6a4-0972d2cdc7ad', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'The breasts and genitalia', 2, 398, 0),
-   ('6190257d-7335-5da5-a115-7455528ebef8', '65e2c421-da5c-5da3-b89b-86573eb11c94', '5246a2e3-94bd-5100-94de-98bf364ab185', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'The eyes', 2, 400, 0),
-   ('59613d43-4c8c-5950-b220-cf05fa6e0205', '65e2c421-da5c-5da3-b89b-86573eb11c94', '6190257d-7335-5da5-a115-7455528ebef8', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'The nervous system', 2, 401, 0),
-   ('4694993c-de4e-51c8-83c1-2e0faa100e36', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Investigation', 1, 401, 0),
-   ('92cd2572-b56c-5bdb-948d-565ccd516534', '65e2c421-da5c-5da3-b89b-86573eb11c94', '4694993c-de4e-51c8-83c1-2e0faa100e36', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Endocrine stimulation tests', 2, 402, 0),
-   ('60b4ade0-8f94-52fd-9c2e-389443d11125', '65e2c421-da5c-5da3-b89b-86573eb11c94', '92cd2572-b56c-5bdb-948d-565ccd516534', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Endocrine suppression tests', 2, 402, 0),
-   ('b48832e2-83f3-5ab8-bd2c-032a72cc8e55', '65e2c421-da5c-5da3-b89b-86573eb11c94', '60b4ade0-8f94-52fd-9c2e-389443d11125', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Endocrine imaging', 2, 402, 0),
-   ('5f7ecd13-2d01-592c-b2ef-c9b740a3226b', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Diabetes mellitus', 1, 403, 0),
-   ('a73eb48e-b9b5-5b95-bec3-1a6864e34dbe', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Presenting symptoms of diabetes', 1, 403, 0),
-   ('2e77d5b8-2660-59cb-aff5-43e385ed1047', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'a73eb48e-b9b5-5b95-bec3-1a6864e34dbe', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Polyuria, polydipsia and nocturia', 2, 403, 0),
-   ('bb6973d9-3118-5118-b5e2-a79185f16503', '65e2c421-da5c-5da3-b89b-86573eb11c94', '2e77d5b8-2660-59cb-aff5-43e385ed1047', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Weight loss and lethargy', 2, 403, 0),
-   ('6a707c89-7e59-55ab-880e-12318c2b522e', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'bb6973d9-3118-5118-b5e2-a79185f16503', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Skin problems', 2, 404, 0),
-   ('1da39a1a-396a-57d7-84ce-9db1ce443f56', '65e2c421-da5c-5da3-b89b-86573eb11c94', '6a707c89-7e59-55ab-880e-12318c2b522e', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Visual disturbance', 2, 405, 0),
-   ('be7e9e9f-96cf-5f86-96f6-4228aefb37b6', '65e2c421-da5c-5da3-b89b-86573eb11c94', '1da39a1a-396a-57d7-84ce-9db1ce443f56', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Other important aspects of a diabetic history', 2, 405, 0),
-   ('acf9dee7-5ffd-531a-a5af-87dddcb30057', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'be7e9e9f-96cf-5f86-96f6-4228aefb37b6', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Family history', 3, 405, 0),
-   ('1e659871-a834-5367-bae4-ab25f709b826', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'acf9dee7-5ffd-531a-a5af-87dddcb30057', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Diet and lifestyle history', 3, 405, 0),
-   ('6f3d5e97-745d-587f-a000-8e1c4d302f8c', '65e2c421-da5c-5da3-b89b-86573eb11c94', '1e659871-a834-5367-bae4-ab25f709b826', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Assessment of other cardiovascular risk factors', 3, 405, 0),
-   ('d0b0da80-c6d4-5839-ac0e-15c9f0c6ea56', '65e2c421-da5c-5da3-b89b-86573eb11c94', '6f3d5e97-745d-587f-a000-8e1c4d302f8c', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Home glucose testing', 3, 405, 0),
-   ('a858a870-245d-552e-aa2a-89aaa46d69e5', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'd0b0da80-c6d4-5839-ac0e-15c9f0c6ea56', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Insulin injections', 3, 405, 0),
-   ('e64c2561-c0ef-5b27-b29f-8bd021f3a5b6', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Symptoms of complications of diabetes', 1, 405, 1),
-   ('e91b3978-b95e-57b4-b118-88e53fdbaee2', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'e64c2561-c0ef-5b27-b29f-8bd021f3a5b6', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Symptoms of macrovascular disease', 2, 405, 0),
-   ('f5797dd0-1723-5934-a5af-c3e695277150', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'e91b3978-b95e-57b4-b118-88e53fdbaee2', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Symptoms of microvascular disease', 2, 405, 0),
-   ('f10e7dfe-9971-59d5-9b61-93201c442c14', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Hypoglycaemia', 1, 406, 0),
-   ('60b20f9f-5e46-56de-833d-2a129c7ce569', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Examination of the diabetic patient', 1, 407, 0),
-   ('956e69b7-3fd8-5280-ab76-80a1058ee978', '65e2c421-da5c-5da3-b89b-86573eb11c94', '60b20f9f-5e46-56de-833d-2a129c7ce569', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'General assessment', 2, 407, 0),
-   ('15335b8e-1ccc-5924-9bb6-c601af23a3db', '65e2c421-da5c-5da3-b89b-86573eb11c94', '956e69b7-3fd8-5280-ab76-80a1058ee978', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Skin, nails and hands', 2, 407, 0),
-   ('d7511719-b647-5613-a293-db498a892c41', '65e2c421-da5c-5da3-b89b-86573eb11c94', '15335b8e-1ccc-5924-9bb6-c601af23a3db', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Eyes', 2, 408, 0),
-   ('9d6a2fae-3baf-5fa4-9682-f75387d87c86', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'd7511719-b647-5613-a293-db498a892c41', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Cardiovascular system', 2, 409, 0),
-   ('255298e2-6808-582f-ad48-9999837499d6', '65e2c421-da5c-5da3-b89b-86573eb11c94', '9d6a2fae-3baf-5fa4-9682-f75387d87c86', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Feet', 2, 410, 0),
-   ('ebcfe28f-77ca-5658-bb04-934b7e7632d5', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Investigation', 1, 411, 0),
-   ('06b33e23-9b6d-5300-af17-1877ce78325e', '65e2c421-da5c-5da3-b89b-86573eb11c94', NULL, '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Lipid disorders', 1, 411, 0),
-   ('4cd7220f-24fa-5be4-ba7c-b56284808112', '65e2c421-da5c-5da3-b89b-86573eb11c94', '06b33e23-9b6d-5300-af17-1877ce78325e', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'History', 2, 412, 0),
-   ('ea094059-d629-5a3d-92a2-e859c59f23a7', '65e2c421-da5c-5da3-b89b-86573eb11c94', '4cd7220f-24fa-5be4-ba7c-b56284808112', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Examination', 2, 412, 0),
-   ('93066ee4-912e-5999-9b86-341035bfac72', '65e2c421-da5c-5da3-b89b-86573eb11c94', 'ea094059-d629-5a3d-92a2-e859c59f23a7', '18.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Investigation', 2, 412, 0),
-   ('093879ba-b2fa-5714-b731-2bfc2b904c92', '3b39b90a-889e-5746-bfe3-75475c945b44', NULL, '19.1', 'Introduction', 1, 414, 0),
-   ('2fe0689f-b1e4-5228-b83f-5eb20a8b8da6', '3b39b90a-889e-5746-bfe3-75475c945b44', NULL, '19.1.1', 'History', 1, 414, 0),
-   ('7c6a4311-eba5-5a58-bd75-56924c565170', '3b39b90a-889e-5746-bfe3-75475c945b44', NULL, '19.1.1.1', 'Examination', 1, 414, 0),
-   ('b4427c7d-189e-53be-9c7b-7891872cabb9', '3b39b90a-889e-5746-bfe3-75475c945b44', '7c6a4311-eba5-5a58-bd75-56924c565170', '19.1.1.1.1', 'Colour and pigmentation', 2, 414, 0),
-   ('c15684e0-48ca-55b7-b901-509f30e7a7ec', '3b39b90a-889e-5746-bfe3-75475c945b44', 'b4427c7d-189e-53be-9c7b-7891872cabb9', '19.1.1.1.1.1', 'Skin lesions and eruptions', 2, 416, 0),
-   ('3be4a140-5ced-5c7c-88c7-6021e50c3f86', '3b39b90a-889e-5746-bfe3-75475c945b44', 'c15684e0-48ca-55b7-b901-509f30e7a7ec', '19.1.1.1.1.1.1', 'Morphology of skin lesions', 3, 417, 0),
-   ('88103adb-19c7-5459-8f63-d4c118559f5c', '3b39b90a-889e-5746-bfe3-75475c945b44', '3be4a140-5ced-5c7c-88c7-6021e50c3f86', '19.1.1.1.1.1.1.1', 'Inspection and palpation', 4, 417, 0),
-   ('f79aab73-2ec2-5a3e-a227-324872f37d5d', '3b39b90a-889e-5746-bfe3-75475c945b44', '88103adb-19c7-5459-8f63-d4c118559f5c', '19.1.1.1.1.1.1.1.1', 'Subcutaneous oedema', 4, 417, 0),
-   ('18e60003-19fe-5907-8750-21e24821a30b', '3b39b90a-889e-5746-bfe3-75475c945b44', 'f79aab73-2ec2-5a3e-a227-324872f37d5d', '19.1.1.1.1.1.1.1.1.1', 'Subcutaneous emphysema', 4, 418, 0),
-   ('d739bbb7-bad1-55a7-8d90-09d674ba7311', '3b39b90a-889e-5746-bfe3-75475c945b44', '18e60003-19fe-5907-8750-21e24821a30b', '19.1.1.1.1.1.1.1.1.1.1', 'Distribution of skin lesions', 3, 418, 0),
-   ('c228f82e-3e49-5e0d-8d09-a34803bddd12', '3b39b90a-889e-5746-bfe3-75475c945b44', 'd739bbb7-bad1-55a7-8d90-09d674ba7311', '19.1.1.1.1.1.1.1.1.1.1.1', 'Configuration of skin lesions', 3, 418, 0),
-   ('df293d9c-e362-5a03-a45d-e256d8071fae', '3b39b90a-889e-5746-bfe3-75475c945b44', 'c228f82e-3e49-5e0d-8d09-a34803bddd12', '19.1.1.1.1.1.1.1.1.1.1.1.1', 'The hair', 2, 418, 0),
-   ('7dfc854b-8f3b-53c6-ad4e-b35d93c654ae', '3b39b90a-889e-5746-bfe3-75475c945b44', 'df293d9c-e362-5a03-a45d-e256d8071fae', '19.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Growth of hair', 3, 418, 0),
-   ('9c0d8a8e-a98e-522f-a5b2-56a4d7d63378', '3b39b90a-889e-5746-bfe3-75475c945b44', '7dfc854b-8f3b-53c6-ad4e-b35d93c654ae', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Alopecia', 3, 419, 0),
-   ('e56ff10d-4516-5d72-92cb-997eb10b68c7', '3b39b90a-889e-5746-bfe3-75475c945b44', '9c0d8a8e-a98e-522f-a5b2-56a4d7d63378', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The nails', 2, 420, 0),
-   ('13f8ca4b-66f2-5f69-aa88-d0f604efe5ce', '3b39b90a-889e-5746-bfe3-75475c945b44', 'e56ff10d-4516-5d72-92cb-997eb10b68c7', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nail matrix abnormalities', 3, 420, 0),
-   ('eea18329-958e-5e3c-bb08-1f8a936828f5', '3b39b90a-889e-5746-bfe3-75475c945b44', '13f8ca4b-66f2-5f69-aa88-d0f604efe5ce', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nail and nail-bed abnormalities', 3, 421, 0),
-   ('2c2eee7e-ba0d-54fd-92f1-1dca81d7cab8', '3b39b90a-889e-5746-bfe3-75475c945b44', 'eea18329-958e-5e3c-bb08-1f8a936828f5', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The nails in systemic disease', 3, 421, 0),
-   ('c97962db-cde6-55f3-b5aa-b0ea323074bf', '3b39b90a-889e-5746-bfe3-75475c945b44', '2c2eee7e-ba0d-54fd-92f1-1dca81d7cab8', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Clubbing', 3, 421, 0),
-   ('122e2d8f-7024-5a38-a7d3-11682c4af9ba', '3b39b90a-889e-5746-bfe3-75475c945b44', NULL, '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Cutaneous manifestations of internal disease', 1, 421, 1),
-   ('f7ef68a7-ac68-53d0-a614-449f90099a2e', '3b39b90a-889e-5746-bfe3-75475c945b44', '122e2d8f-7024-5a38-a7d3-11682c4af9ba', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Genodermatoses (lesions of inherited origin)', 2, 421, 0),
-   ('4d43539d-a7a0-5bc9-96f5-b40434ed3b6f', '3b39b90a-889e-5746-bfe3-75475c945b44', 'f7ef68a7-ac68-53d0-a614-449f90099a2e', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Non-organ-specific autoimmune disorders', 2, 422, 0),
-   ('f64ef9d2-182e-5220-87fb-c8556e0f07d2', '3b39b90a-889e-5746-bfe3-75475c945b44', '4d43539d-a7a0-5bc9-96f5-b40434ed3b6f', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Skin pigmentation', 2, 422, 0),
-   ('74bfd2a8-4bf9-59af-881b-d455956fb75b', '3b39b90a-889e-5746-bfe3-75475c945b44', 'f64ef9d2-182e-5220-87fb-c8556e0f07d2', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Haemorrhage in the skin', 2, 424, 0),
-   ('1126ff84-2e3e-5086-b8c0-675b0e6708c1', '3b39b90a-889e-5746-bfe3-75475c945b44', '74bfd2a8-4bf9-59af-881b-d455956fb75b', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'The skin in sexually transmitted diseases', 2, 424, 0),
-   ('39d6e876-f3f3-5953-be21-414644a0076e', '3b39b90a-889e-5746-bfe3-75475c945b44', '1126ff84-2e3e-5086-b8c0-675b0e6708c1', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Viral infection of the skin', 2, 424, 0),
-   ('d41c798a-bb22-54c2-84d0-5bd2febab965', '3b39b90a-889e-5746-bfe3-75475c945b44', '39d6e876-f3f3-5953-be21-414644a0076e', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Drug eruptions', 2, 425, 0),
-   ('04112120-8d03-5a72-8256-cf3a494c51ca', '3b39b90a-889e-5746-bfe3-75475c945b44', 'd41c798a-bb22-54c2-84d0-5bd2febab965', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Tumours in the skin', 2, 425, 0),
-   ('c091d369-6f03-5f91-a9cf-621f0fde1d4e', '3b39b90a-889e-5746-bfe3-75475c945b44', NULL, '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Special techniques in examination of the skin', 1, 426, 0),
-   ('44bfe411-edf7-504e-a693-49f9049c1e7c', '3b39b90a-889e-5746-bfe3-75475c945b44', 'c091d369-6f03-5f91-a9cf-621f0fde1d4e', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Tzanck preparation', 2, 426, 0),
-   ('184e4b17-a23d-5167-8f1c-7405926fb995', '3b39b90a-889e-5746-bfe3-75475c945b44', '44bfe411-edf7-504e-a693-49f9049c1e7c', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Microscopic examination – Dermatoscopy (direct assessment of skin lesions)', 2, 427, 0),
-   ('2b38e2c1-e7df-5793-9a2f-96c6398bd0c0', '3b39b90a-889e-5746-bfe3-75475c945b44', '184e4b17-a23d-5167-8f1c-7405926fb995', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Scabies', 3, 427, 0),
-   ('0613a7ec-bd18-5b37-be4b-a53e7a2c5a85', '3b39b90a-889e-5746-bfe3-75475c945b44', '2b38e2c1-e7df-5793-9a2f-96c6398bd0c0', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pediculosis', 3, 427, 0),
-   ('f4ffe081-2fa4-51fd-94c1-b644843a4111', '3b39b90a-889e-5746-bfe3-75475c945b44', '0613a7ec-bd18-5b37-be4b-a53e7a2c5a85', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Fungal infections', 3, 427, 0),
-   ('2dafb18f-d72e-508d-b6b8-f574cc4cd8e6', '3b39b90a-889e-5746-bfe3-75475c945b44', 'f4ffe081-2fa4-51fd-94c1-b644843a4111', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Microscopic examination for fungus infection', 4, 427, 0),
-   ('7580951f-42eb-51a3-bea5-1ef8d394bb3f', '3b39b90a-889e-5746-bfe3-75475c945b44', 'f4ffe081-2fa4-51fd-94c1-b644843a4111', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'Wood’s light', 2, 428, 1),
-   ('fb4fc825-d90c-58c9-adba-e8c75365d6f6', '3b39b90a-889e-5746-bfe3-75475c945b44', '7580951f-42eb-51a3-bea5-1ef8d394bb3f', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Contact allergy patch testing', 2, 428, 0),
-   ('8bd6d04a-3509-5310-8b0a-769b5eccfa2a', '3b39b90a-889e-5746-bfe3-75475c945b44', 'fb4fc825-d90c-58c9-adba-e8c75365d6f6', '19.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Skin biopsy', 2, 428, 0),
-   ('fb9681ac-1934-532a-8aa2-eaeb0b11a929', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1', 'Introduction', 1, 430, 0),
-   ('613d3f03-f627-5af6-a139-d2b52b04c0c4', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1', 'History', 1, 430, 0),
-   ('828b2947-707b-5327-91f4-aeb099540a0f', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1.1', 'Examination', 1, 430, 0),
-   ('945c459a-1ffb-5c58-9f48-39e4f9f523f1', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '828b2947-707b-5327-91f4-aeb099540a0f', '20.1.1.1.1', 'Visual acuity', 2, 430, 0),
-   ('192bca0e-df82-5b21-8b12-ac0650821fbe', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '945c459a-1ffb-5c58-9f48-39e4f9f523f1', '20.1.1.1.1.1', 'Snellen distance vision', 3, 431, 0),
-   ('e36396c2-80d9-5bd6-af4d-671ab52ca103', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '192bca0e-df82-5b21-8b12-ac0650821fbe', '20.1.1.1.1.1.1', 'Technique', 4, 431, 0),
-   ('2d145171-22ba-53e8-8757-26e438da2add', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'e36396c2-80d9-5bd6-af4d-671ab52ca103', '20.1.1.1.1.1.1.1', 'Recording visual acuity', 4, 432, 0),
-   ('3e1705d4-1de8-5d21-92dd-8ee15fd0e48d', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '2d145171-22ba-53e8-8757-26e438da2add', '20.1.1.1.1.1.1.1.1', 'Log MAR charts', 4, 432, 0),
-   ('fef1d8ba-e834-51e0-bfa0-8060c14656fe', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '192bca0e-df82-5b21-8b12-ac0650821fbe', '20.1.1.1.1.1.2', 'Colour vision', 2, 432, 1),
-   ('97f9cb29-a0d3-513f-bba4-1985fa721657', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'fef1d8ba-e834-51e0-bfa0-8060c14656fe', '20.1.1.1.1.1.2.1', 'Visual field testing', 2, 433, 0),
-   ('156c739f-9158-5806-8a59-f48d4bcc20b8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '97f9cb29-a0d3-513f-bba4-1985fa721657', '20.1.1.1.1.1.2.1.1', 'Pupils', 2, 433, 0),
-   ('1c624449-a0ab-5922-bf3d-b735fb7ad272', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '156c739f-9158-5806-8a59-f48d4bcc20b8', '20.1.1.1.1.1.2.1.1.1', 'Pupil size: anisocoria', 3, 433, 0),
-   ('a405189f-6316-5fcf-9300-b1c13354f967', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '1c624449-a0ab-5922-bf3d-b735fb7ad272', '20.1.1.1.1.1.2.1.1.1.1', 'Pupil reactions: afferent and central defects', 3, 434, 0),
-   ('3119342a-de5e-5cc0-8315-72de16928890', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'a405189f-6316-5fcf-9300-b1c13354f967', '20.1.1.1.1.1.2.1.1.1.1.1', 'Pupil shape', 3, 436, 0),
-   ('55d98a89-d70d-5a4a-bd77-605d412101d4', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '3119342a-de5e-5cc0-8315-72de16928890', '20.1.1.1.1.1.2.1.1.1.1.1.1', 'Direct ophthalmoscopy', 2, 436, 0),
-   ('328042d8-c0a6-5af0-98b4-ce5beb09d3e2', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '55d98a89-d70d-5a4a-bd77-605d412101d4', '20.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Preparation', 3, 436, 0),
-   ('e062796c-f75d-591d-96c3-c381966ec8bd', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '328042d8-c0a6-5af0-98b4-ce5beb09d3e2', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Examining the fundi', 3, 436, 0),
-   ('9228180a-42e8-5115-aedf-57e30a64bcc8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'e062796c-f75d-591d-96c3-c381966ec8bd', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Optic disc', 4, 436, 0),
-   ('ad4a2b80-e995-5908-8fdc-f0b54587e5d2', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '9228180a-42e8-5115-aedf-57e30a64bcc8', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Blood vessels', 4, 439, 0),
-   ('02e07b4b-b011-568f-aabf-041b731d1109', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'ad4a2b80-e995-5908-8fdc-f0b54587e5d2', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Retina and macula', 4, 440, 0),
-   ('9305d1e2-4152-5b67-94e9-976721a8b41d', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'e062796c-f75d-591d-96c3-c381966ec8bd', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2', 'Slit lamp and intraocular pressure', 2, 440, 1),
-   ('0a6beb18-2cf1-5011-b194-eaf26f46f09f', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '9305d1e2-4152-5b67-94e9-976721a8b41d', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.1', 'Measuring intraocular pressure: applanation tonometry', 3, 442, 0),
-   ('fc05a14d-efb2-59dd-9de0-de6a322f3638', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2', 'Eyelid, lacrimal and orbital assessment', 1, 442, 1),
-   ('7a3b8276-d49e-5a3b-90ad-0cfea6962461', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'fc05a14d-efb2-59dd-9de0-de6a322f3638', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1', 'Eyelids', 2, 442, 0),
-   ('f4b2e5d2-a7bf-5c57-84c4-93cf74c392c7', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '7a3b8276-d49e-5a3b-90ad-0cfea6962461', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1', 'Lacrimal', 2, 443, 0),
-   ('6b1e70b0-59cf-5dd7-9a4a-a37e1d6906e8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'f4b2e5d2-a7bf-5c57-84c4-93cf74c392c7', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1', 'Orbit', 2, 444, 0),
-   ('89e0ad25-92a5-5210-8ee3-b574a859161d', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1', 'Examination of the eye in children', 1, 444, 0),
-   ('b9305af5-35c6-5ac1-9261-e6942aeea78b', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1', 'Imaging', 1, 445, 0),
-   ('5f2298a6-3f88-53ba-b215-adb011f874f8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'b9305af5-35c6-5ac1-9261-e6942aeea78b', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1', 'Plain X-rays', 2, 445, 0),
-   ('80fd34c9-6601-5622-ab0a-d29acf75bdb8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '5f2298a6-3f88-53ba-b215-adb011f874f8', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1', 'Computed tomography and magnetic resonance imaging', 2, 445, 0),
-   ('0126a75b-43e5-54a5-afcd-8cf25a1dd959', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '80fd34c9-6601-5622-ab0a-d29acf75bdb8', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1', 'A- and B-mode ultrasound', 2, 445, 0),
-   ('ab009906-44fc-5f42-a1c9-97b020fbfc26', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '0126a75b-43e5-54a5-afcd-8cf25a1dd959', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1', 'Retinal photography and fundus fluorescein angiography', 2, 446, 0),
-   ('e055bcc8-0d32-5092-944c-c59c399188b6', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'ab009906-44fc-5f42-a1c9-97b020fbfc26', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1', 'Retinal and optic disc tomography', 2, 446, 0),
-   ('6fe8cf31-e416-54e4-856d-75ef537aeef4', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'e055bcc8-0d32-5092-944c-c59c399188b6', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.1', 'Optical coherence tomography (OCT) and optic disc tomography', 3, 446, 0),
-   ('63fde26d-a106-50c1-884f-29a576102db2', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', NULL, '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.2', 'Special examination techniques', 1, 447, 1),
-   ('35996853-86fa-58f8-9dcb-5588e57070a1', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '63fde26d-a106-50c1-884f-29a576102db2', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.2.1', 'Refraction and refractive assessment', 2, 447, 0),
-   ('b3ca6b4c-3a3d-5fe7-92c3-6cec1f012813', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '35996853-86fa-58f8-9dcb-5588e57070a1', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Amsler grid', 2, 447, 0),
-   ('35dd1044-3d0f-5ab2-9d51-cbe34dac0404', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 'b3ca6b4c-3a3d-5fe7-92c3-6cec1f012813', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Indirect ophthalmoscopy', 2, 447, 0),
-   ('221b39ad-4dac-5440-b8c6-49714a760308', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', '35dd1044-3d0f-5ab2-9d51-cbe34dac0404', '20.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.2.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Electrophysiological tests', 2, 447, 0),
-   ('fa0efdff-e4a6-5753-85d0-75ec16406fa0', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', NULL, '21.1', 'Introduction', 1, 450, 0),
-   ('28e24326-9c59-5b94-8a50-c0e5b0672173', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', NULL, '21.1.1', 'The ear', 1, 450, 0),
-   ('e902cfa4-7390-55cb-b229-2eae72d35d49', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '28e24326-9c59-5b94-8a50-c0e5b0672173', '21.1.1.1', 'Anatomy', 2, 450, 0),
-   ('f0b57c62-7bfc-55bd-824c-181e2dd887fb', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'e902cfa4-7390-55cb-b229-2eae72d35d49', '21.1.1.1.1', 'Symptoms of ear disease', 2, 451, 0),
-   ('ab06525e-2425-572e-86a9-ccb5047842a6', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'f0b57c62-7bfc-55bd-824c-181e2dd887fb', '21.1.1.1.1.1', 'Otalgia', 3, 451, 0),
-   ('2fff10af-b87c-5fab-a2af-3e91fd7a9336', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'ab06525e-2425-572e-86a9-ccb5047842a6', '21.1.1.1.1.1.1', 'Otorrhoea', 3, 452, 0),
-   ('f0afa892-2a68-5541-a1c6-6254708a279b', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '2fff10af-b87c-5fab-a2af-3e91fd7a9336', '21.1.1.1.1.1.1.1', 'Hearing loss', 3, 452, 0),
-   ('b22f4f4c-548f-597d-a46e-c5d018885933', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'f0afa892-2a68-5541-a1c6-6254708a279b', '21.1.1.1.1.1.1.1.1', 'Tinnitus', 3, 453, 0),
-   ('eb0cfa79-35f7-5df0-aa16-a768b839c0c4', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'b22f4f4c-548f-597d-a46e-c5d018885933', '21.1.1.1.1.1.1.1.1.1', 'Vertigo', 3, 454, 0),
-   ('5cf6a2c8-9675-5155-92e9-f7be3ae4445f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'eb0cfa79-35f7-5df0-aa16-a768b839c0c4', '21.1.1.1.1.1.1.1.1.1.1', 'Clinical examination of the ear and hearing', 2, 454, 0),
-   ('7d75e9e1-8efa-548f-97da-b2b809fe2537', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '5cf6a2c8-9675-5155-92e9-f7be3ae4445f', '21.1.1.1.1.1.1.1.1.1.1.1', 'Pinna and postauricular area', 3, 454, 0),
-   ('72545636-0e13-5c05-824d-0161448d44ff', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '7d75e9e1-8efa-548f-97da-b2b809fe2537', '21.1.1.1.1.1.1.1.1.1.1.1.1', 'External ear canal', 3, 455, 0),
-   ('846dd10d-6a4f-546c-aa2c-a552ec23fe94', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '72545636-0e13-5c05-824d-0161448d44ff', '21.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The tympanic membrane', 3, 455, 0),
-   ('64e11c37-a866-526a-ae22-018013d57e4d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '846dd10d-6a4f-546c-aa2c-a552ec23fe94', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'The facial nerve', 3, 457, 0),
-   ('61af7710-b8f5-5311-8066-35cd454e9346', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '64e11c37-a866-526a-ae22-018013d57e4d', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Clinical assessment of hearing', 2, 457, 0),
-   ('c6006a69-1889-5f16-94fa-32c169a775b5', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '61af7710-b8f5-5311-8066-35cd454e9346', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Clinical assessment of balance', 2, 457, 0),
-   ('d4f3a55a-23e9-505c-b9e1-8d2ef209292f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'c6006a69-1889-5f16-94fa-32c169a775b5', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Special investigations of hearing', 2, 459, 0),
-   ('6cb6d23f-1317-5cb3-8c99-a1f5e7041022', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'd4f3a55a-23e9-505c-b9e1-8d2ef209292f', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Pure tone audiometry', 3, 459, 0),
-   ('870532d2-a8e4-5519-bb45-529b3040b015', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '6cb6d23f-1317-5cb3-8c99-a1f5e7041022', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Speech audiometry', 3, 460, 0),
-   ('401d9fb5-e9e7-53f1-b321-cd8451cc76c8', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '870532d2-a8e4-5519-bb45-529b3040b015', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Tympanometry', 3, 460, 0),
-   ('eb237e3a-c02f-5771-980e-3ff75a6566c3', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '401d9fb5-e9e7-53f1-b321-cd8451cc76c8', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Otoacoustic emissions', 3, 462, 0),
-   ('ef01f1b1-6c76-5723-b965-4d63e91b64ca', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'eb237e3a-c02f-5771-980e-3ff75a6566c3', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Evoked-response audiometry', 3, 462, 0),
-   ('be35d509-9b9a-559b-885c-cb69278d6b7f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'ef01f1b1-6c76-5723-b965-4d63e91b64ca', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Special tests of balance', 2, 462, 0),
-   ('118d5895-b265-52fc-b28c-a9b15bfacdc0', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'be35d509-9b9a-559b-885c-cb69278d6b7f', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiological examination', 3, 462, 0),
-   ('30e46757-7a61-510a-b5dd-eca9eede484c', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', NULL, '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2', 'The nose and paranasal sinuses', 1, 463, 1),
-   ('197db37b-5b3c-5167-b6ee-f85ce5bacb43', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '30e46757-7a61-510a-b5dd-eca9eede484c', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Anatomy', 2, 463, 0),
-   ('0c9711ad-16b6-5c0f-91b7-f44aa7d3d3f1', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '197db37b-5b3c-5167-b6ee-f85ce5bacb43', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Symptoms of nasal disease', 2, 464, 0),
-   ('9308dc67-5e11-5fd8-b3cd-87113a2a93a9', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '0c9711ad-16b6-5c0f-91b7-f44aa7d3d3f1', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'General features', 3, 464, 0),
-   ('923dc329-31e4-512a-b82b-72e511a0549f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '9308dc67-5e11-5fd8-b3cd-87113a2a93a9', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Nasal blockage', 3, 464, 0),
-   ('d3cd4e47-e19a-56e0-b251-7a2a7a456823', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '923dc329-31e4-512a-b82b-72e511a0549f', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Rhinorrhoea', 3, 464, 0),
-   ('2485542d-33bc-526b-8b4a-444f6bdce03f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'd3cd4e47-e19a-56e0-b251-7a2a7a456823', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Itching and sneezing', 3, 464, 0),
-   ('431e506b-1bde-5386-b086-1c56af5ba0c9', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '2485542d-33bc-526b-8b4a-444f6bdce03f', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Disturbances of smell', 3, 465, 0),
-   ('6476d7c5-2575-54c5-9cb7-2be1a0273e4a', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '431e506b-1bde-5386-b086-1c56af5ba0c9', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Facial pain', 3, 465, 0),
-   ('a33a44e4-6c5c-570e-a676-9a3c8405158f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '6476d7c5-2575-54c5-9cb7-2be1a0273e4a', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Other symptoms', 3, 465, 0),
-   ('11ffdefe-4e0f-5bfe-be5e-2d3eeee33d91', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'a33a44e4-6c5c-570e-a676-9a3c8405158f', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Examination of the nose and face', 2, 465, 0),
-   ('7effc585-8cfc-59b6-a54c-eed0588c6cc4', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '11ffdefe-4e0f-5bfe-be5e-2d3eeee33d91', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Special tests', 2, 466, 0),
-   ('50431f61-5c64-5f67-8b29-0465f45e71b9', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '7effc585-8cfc-59b6-a54c-eed0588c6cc4', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Allergy testing', 3, 466, 0),
-   ('046017fb-6e19-5dca-b2c8-7e2d5de6b2c2', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '50431f61-5c64-5f67-8b29-0465f45e71b9', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Nasal patency', 3, 466, 0),
-   ('380851dc-ef23-5f02-8000-421932764cfd', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '046017fb-6e19-5dca-b2c8-7e2d5de6b2c2', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Mucociliary clearance', 3, 466, 0),
-   ('0bc1128b-690d-51c2-9aaa-5539c98c1eaf', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '380851dc-ef23-5f02-8000-421932764cfd', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiological examination', 3, 467, 0),
-   ('1dbba283-1dda-5543-b6c4-e9477a37c6ba', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', NULL, '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2', 'The throat', 1, 467, 1),
-   ('4eb9af48-7456-5363-acb8-afe7d0913e35', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '1dbba283-1dda-5543-b6c4-e9477a37c6ba', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1', 'Anatomy', 2, 467, 0),
-   ('bca47ebb-386c-57fc-8d74-6865f553dc8b', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '4eb9af48-7456-5363-acb8-afe7d0913e35', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1', 'Symptoms of throat disease', 2, 469, 0),
-   ('97f183de-14e4-5ee4-b9a7-0026c3c580fa', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'bca47ebb-386c-57fc-8d74-6865f553dc8b', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1', 'Oral ulceration and pain', 3, 469, 0),
-   ('ead5a244-9514-5df2-a6d8-3dc16c90301c', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '97f183de-14e4-5ee4-b9a7-0026c3c580fa', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1', 'Sore throat', 3, 470, 0),
-   ('8dcacbb8-aacd-5df5-a141-eef52fa7d1ef', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'ead5a244-9514-5df2-a6d8-3dc16c90301c', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1', 'Stridor and stertor', 3, 470, 0),
-   ('c4ce1846-28d2-5b64-b334-07adf9d7f82b', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '8dcacbb8-aacd-5df5-a141-eef52fa7d1ef', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1', 'Dysphonia', 3, 470, 0),
-   ('019af5f9-2c83-5457-ba06-bb3a629b7a9d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'c4ce1846-28d2-5b64-b334-07adf9d7f82b', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1', 'Dysphagia', 3, 471, 0),
-   ('c7579a95-2489-50d9-85b1-86d45c54fff1', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '019af5f9-2c83-5457-ba06-bb3a629b7a9d', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1', 'Lump in the neck', 3, 471, 0),
-   ('080a2c6d-ded8-566c-a72e-9b2016d4db8d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'c7579a95-2489-50d9-85b1-86d45c54fff1', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1', 'Examination of the mouth and throat', 2, 472, 0),
-   ('e152903d-482a-56dd-ac93-b7d5bade6d5e', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '080a2c6d-ded8-566c-a72e-9b2016d4db8d', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1', 'Examination of the neck', 2, 472, 0),
-   ('9ecf8df9-9a46-52cc-83d5-d00ee7ff7d89', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 'e152903d-482a-56dd-ac93-b7d5bade6d5e', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1', 'Tissue sampling', 3, 473, 0),
-   ('1f7ed3a5-2e74-5432-9f3d-f809b98a51b6', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', '9ecf8df9-9a46-52cc-83d5-d00ee7ff7d89', '21.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.1.1.1', 'Radiological examination', 3, 474, 0)
-ON CONFLICT (chapter_id, section_number) DO UPDATE SET section_title = EXCLUDED.section_title, depth = EXCLUDED.depth, start_page = EXCLUDED.start_page;
+INSERT INTO knowledge.source_section (section_id, source_version_id, section_no, section_name, amexan_layer, sort_order) VALUES
+   ('H1-S1', 'HUTCHISON_24_2018', 1, 'General patient assessment', 'UNIVERSAL', 1),
+   ('H1-S2', 'HUTCHISON_24_2018', 2, 'Assessment in particular groups', 'CONTEXT', 2),
+   ('H1-S3', 'HUTCHISON_24_2018', 3, 'Basic systems', 'SYSTEM', 3),
+   ('H1-S4', 'HUTCHISON_24_2018', NULL, 'Index', 'NAVIGATION_ONLY', 4)
+ON CONFLICT (source_version_id, section_name) DO UPDATE SET section_no = EXCLUDED.section_no, amexan_layer = EXCLUDED.amexan_layer;
 
 -- -----------------------------------------------------------------------------
--- source_chunk  (page-anchored raw text)
+-- source_chapter
 -- -----------------------------------------------------------------------------
-INSERT INTO knowledge.source_chunk (id, section_id, chapter_id, page_number, pdf_page_index, chunk_index, chunk_text, char_count) VALUES
-   ('f2674e8e-a424-57bf-9fa4-77041e198690', 'bbb941fd-7893-5743-8939-fb146f01426b', '807ac2f4-9add-50e8-9858-8a89d00a9309', 14, 14, 0, 'Introduction
+INSERT INTO knowledge.source_chapter (chapter_id, source_version_id, section_id, chapter_no, chapter_name, start_page, end_page, amexan_role, amexan_context, amexan_system, sort_order) VALUES
+   ('H1-C01', 'HUTCHISON_24_2018', 'H1-S1', 1, 'Doctor and patient: General principles of history taking', 3, 14, 'HISTORY_ENGINE', NULL, NULL, 0),
+   ('H1-C02', 'HUTCHISON_24_2018', 'H1-S1', 2, 'General patient examination and differential diagnosis', 15, 30, 'EXAM_ENGINE', NULL, NULL, 1),
+   ('H1-C03', 'HUTCHISON_24_2018', 'H1-S1', 3, 'The next steps: Differential diagnosis and initial management', 31, 36, 'REASONING_INTERFACE', NULL, NULL, 2),
+   ('H1-C04', 'HUTCHISON_24_2018', 'H1-S1', 4, 'Ethical considerations', 37, 44, 'ETHICS_ENGINE', NULL, NULL, 3),
+   ('H1-C05', 'HUTCHISON_24_2018', 'H1-S2', 5, 'Women', 45, 62, NULL, 'FEMALE_OBG', NULL, 4),
+   ('H1-C06', 'HUTCHISON_24_2018', 'H1-S2', 6, 'Children and adolescents', 63, 84, NULL, 'PAEDIATRIC', NULL, 5),
+   ('H1-C07', 'HUTCHISON_24_2018', 'H1-S2', 7, 'Older people', 85, 98, NULL, 'GERIATRIC', NULL, 6),
+   ('H1-C08', 'HUTCHISON_24_2018', 'H1-S2', 8, 'Psychiatric assessment', 99, 120, NULL, 'PSYCHIATRIC', NULL, 7),
+   ('H1-C09', 'HUTCHISON_24_2018', 'H1-S2', 9, 'Patients presenting as emergencies', 121, 140, NULL, 'EMERGENCY', NULL, 8),
+   ('H1-C10', 'HUTCHISON_24_2018', 'H1-S2', 10, 'Patients with a fever', 141, 156, NULL, 'FEVER_PRESENTATION', NULL, 9),
+   ('H1-C11', 'HUTCHISON_24_2018', 'H1-S2', 11, 'Patients in pain', 157, 166, NULL, 'PAIN_PRESENTATION', NULL, 10),
+   ('H1-C12', 'HUTCHISON_24_2018', 'H1-S3', 12, 'Respiratory system', 167, 188, NULL, NULL, 'RESPIRATORY', 11),
+   ('H1-C13', 'HUTCHISON_24_2018', 'H1-S3', 13, 'Cardiovascular system', 189, 240, NULL, NULL, 'CARDIOVASCULAR', 12),
+   ('H1-C14', 'HUTCHISON_24_2018', 'H1-S3', 14, 'Gastrointestinal system', 241, 272, NULL, NULL, 'GASTROINTESTINAL', 13),
+   ('H1-C15', 'HUTCHISON_24_2018', 'H1-S3', 15, 'Locomotor system', 273, 308, NULL, NULL, 'LOCOMOTOR', 14),
+   ('H1-C16', 'HUTCHISON_24_2018', 'H1-S3', 16, 'Nervous system', 309, 354, NULL, NULL, 'NEUROLOGICAL', 15),
+   ('H1-C17', 'HUTCHISON_24_2018', 'H1-S3', 17, 'Urogenital system', 355, 378, NULL, NULL, 'UROGENITAL', 16),
+   ('H1-C18', 'HUTCHISON_24_2018', 'H1-S3', 18, 'Endocrine and metabolic disorders', 379, 402, NULL, NULL, 'ENDOCRINE_METABOLIC', 17),
+   ('H1-C19', 'HUTCHISON_24_2018', 'H1-S3', 19, 'Skin, nails and hair', 403, 418, NULL, NULL, 'DERMATOLOGY', 18),
+   ('H1-C20', 'HUTCHISON_24_2018', 'H1-S3', 20, 'Eyes', 419, 438, NULL, NULL, 'OPHTHALMOLOGY', 19),
+   ('H1-C21', 'HUTCHISON_24_2018', 'H1-S3', 21, 'Ear, nose and throat', 439, 464, NULL, NULL, 'ENT', 20)
+ON CONFLICT (source_version_id, chapter_no) DO UPDATE SET chapter_name = EXCLUDED.chapter_name, start_page = EXCLUDED.start_page, end_page = EXCLUDED.end_page, amexan_role = EXCLUDED.amexan_role, amexan_context = EXCLUDED.amexan_context, amexan_system = EXCLUDED.amexan_system;
+
+-- -----------------------------------------------------------------------------
+-- source_chunk  (page-anchored raw text, printed page numbers)
+-- -----------------------------------------------------------------------------
+INSERT INTO knowledge.source_chunk (id, source_version_id, chapter_id, page_number, pdf_page_index, chunk_index, chunk_text, char_count) VALUES
+   ('5224f85a-1154-5f8a-b5ac-e20b8ef7a2f4', 'HUTCHISON_24_2018', 'H1-C01', 3, 14, 0, 'Introduction
 If asked why they entered medicine, most doctors 
 would say that they wish to relieve human suffering 
 and disease. In order to achieve this aim for every 
@@ -1397,7 +148,7 @@ GENERAL PATIENT ASSESSMENT
 Doctor and patient: 
 General principles of history taking
 Michael Glynn', 4137),
-   ('2af5df4d-86e0-5fe3-81cd-c79c22de8ace', '2e8a0935-661d-5b52-ab9b-ca8327227cce', '807ac2f4-9add-50e8-9858-8a89d00a9309', 15, 15, 0, 'Doctor and patient: General principles of history taking
+   ('c23780af-d4ff-5741-abcf-dafb709dbdb2', 'HUTCHISON_24_2018', 'H1-C01', 4, 15, 0, 'Doctor and patient: General principles of history taking
 4 1
 Beginning the history
 The process of gathering information about a patient 
@@ -1505,7 +256,7 @@ beginning of history taking
 ■ Alcohol consumption
 ■ Drug and treatment history
 ■ Family history', 5308),
-   ('5c956642-2036-5c8b-95a1-e77d56f5d3a2', 'caaa82c3-8770-5a31-80db-5fb7148ec7dc', '807ac2f4-9add-50e8-9858-8a89d00a9309', 16, 16, 0, 'SECTION One
+   ('f361181a-899d-53eb-a41b-29340d482c3f', 'HUTCHISON_24_2018', 'H1-C01', 5, 16, 0, 'SECTION One
 Doctor and patient: General principles of history taking
 5
 Vocabulary
@@ -1610,7 +361,7 @@ Medical terms that may be used imprecisely by patients
 ■ Urticaria
 ■ Warts
 ■ Cystitis', 4273),
-   ('8c809990-b114-57d3-8ba1-1bed1232d5c2', 'c6fbbd24-6008-583e-8b6f-b976474c423a', '807ac2f4-9add-50e8-9858-8a89d00a9309', 17, 17, 0, 'Doctor and patient: General principles of history taking
+   ('f6ddacd9-e78e-545b-b72b-b1c23e2319ae', 'HUTCHISON_24_2018', 'H1-C01', 6, 17, 0, 'Doctor and patient: General principles of history taking
 6 1
 mean light-headedness or a feeling that he is going 
 to faint. A patient who says that he has diarrhoea 
@@ -1720,7 +471,7 @@ what happens within a directed area of interest. Clarifying
 questions have been used. While being reassuring, the GP 
 expresses some concern about angina and is clear about 
 the exact reason for the specialist referral (for clarification).', 5275),
-   ('fc6e0351-3567-5e45-b540-1697d1c19b3d', 'ee108493-ed64-50cb-a96d-cc7637e159f7', '807ac2f4-9add-50e8-9858-8a89d00a9309', 18, 18, 0, 'SECTION One
+   ('812e1907-ca31-5edd-a4c5-c85a3ee6fa65', 'HUTCHISON_24_2018', 'H1-C01', 7, 18, 0, 'SECTION One
 Doctor and patient: General principles of history taking
 7
 many women will be the pain of labour. The pain 
@@ -1827,7 +578,7 @@ epilepsy
 ■ Drug and other treatment history
 ■ Direct questions about bodily systems not covered by the 
 presenting complaint', 5237),
-   ('a65cbc26-5a1b-54be-892c-e59d9eccc19b', '8e8002b7-64b7-50d1-8a3f-181dcafe67ac', '807ac2f4-9add-50e8-9858-8a89d00a9309', 19, 19, 0, 'Doctor and patient: General principles of history taking
+   ('a58b5241-8817-5f38-8044-8138a0cb6188', 'HUTCHISON_24_2018', 'H1-C01', 8, 19, 0, 'Doctor and patient: General principles of history taking
 8 1
 some haematuria from a renal cell carcinoma that 
 has spread and is the cause of the presenting symptom. 
@@ -1937,7 +688,7 @@ Box 1.8  List of clarifications for a complaint of pain
 ■ Aggravating factors
 ■ Relieving factors
 ■ Associated symptoms', 4123),
-   ('ca0a3a70-e472-520c-bb6a-5e0d072b550d', '00b01531-1e97-52ea-b3b9-45a2892a63fe', '807ac2f4-9add-50e8-9858-8a89d00a9309', 20, 20, 0, 'SECTION One
+   ('05a42f29-6ef5-54fe-b788-f4bd1f186515', 'HUTCHISON_24_2018', 'H1-C01', 9, 20, 0, 'SECTION One
 Doctor and patient: General principles of history taking
 9
 toxic exposures, are now extremely rare in developed 
@@ -2043,7 +794,7 @@ and one with which any illness is bound to interact.
 In some situations, a patient''s occupation will be 
 directly relevant to the diagnostic process. The classic 
 industrial illnesses, such as lead poisoning and other', 5109),
-   ('74090b55-4714-582f-98d7-eea155e0516f', '92f67b28-c03b-5234-ae34-16b9a20fb4dc', '807ac2f4-9add-50e8-9858-8a89d00a9309', 21, 21, 0, 'Doctor and patient: General principles of history taking
+   ('18d1aa21-3dd1-56f1-9688-b3c75eb44793', 'HUTCHISON_24_2018', 'H1-C01', 10, 21, 0, 'Doctor and patient: General principles of history taking
 10 1
 period of heavy work and not a clear central chest 
 pain coming on during exertion.
@@ -2147,7 +898,7 @@ diagnosis. However, on closer questioning, it might
 become clear that what the patient was told was 
 angina (perhaps by a relative and not even a doctor) 
 was in fact a vague chest ache coming on after a', 5028),
-   ('3440b20f-c346-5e95-ba2b-7400ef3e23d9', 'e2188f53-06d2-545e-9ef7-e3fa4be2826d', '807ac2f4-9add-50e8-9858-8a89d00a9309', 22, 22, 0, 'SECTION One
+   ('87dbcae9-3d55-538d-9ce4-ef180e5be56f', 'HUTCHISON_24_2018', 'H1-C01', 11, 22, 0, 'SECTION One
 Doctor and patient: General principles of history taking
 11
 of a doctor to give the patient as much information 
@@ -2260,7 +1011,7 @@ very closed questions in order to try to get some information
 that is useful to building up the diagnostic picture 
 - eventually a question is asked that just has a yes/no 
 answer.', 5677),
-   ('a68ecc70-3ace-50e7-b99d-4e8651df423b', '0020f2a3-c376-5c9a-acb4-4aec8fa540f5', '807ac2f4-9add-50e8-9858-8a89d00a9309', 23, 23, 0, 'Doctor and patient: General principles of history taking
+   ('a67dc7b1-b54e-54e0-beb5-2cd42f450640', 'HUTCHISON_24_2018', 'H1-C01', 12, 23, 0, 'Doctor and patient: General principles of history taking
 12 1
 myriad data gleaned on taking a history, he is often 
 baffled as to how to start the analysis, but inevitably 
@@ -2366,7 +1117,7 @@ extrahepatic cholestasis
 ■ Back pain
 ■ Headache
 ■ Wind', 5190),
-   ('8e0c4d28-902f-5e88-a427-05976f1018c6', '6ed8a9db-57cc-51d5-9a0b-63efdd703f17', '807ac2f4-9add-50e8-9858-8a89d00a9309', 24, 24, 0, 'SECTION One
+   ('0fd9e9a6-a05c-5ceb-8c98-86add19a1c55', 'HUTCHISON_24_2018', 'H1-C01', 13, 24, 0, 'SECTION One
 Doctor and patient: General principles of history taking
 13
 presenting complaint is exertional chest pain can 
@@ -2473,7 +1224,7 @@ relatives, friends, books, media or Internet)
 time off
 ■ Requirement of others (insurance, employment benefit, 
 litigation)', 5270),
-   ('bf9c5c25-b925-5fa8-b14a-8e6b7da00efb', 'aea146e7-d7ba-557c-a71e-3d8526f93c05', '807ac2f4-9add-50e8-9858-8a89d00a9309', 25, 25, 0, 'Doctor and patient: General principles of history taking
+   ('58177c48-0af8-5a22-b157-0b4e30c3838b', 'HUTCHISON_24_2018', 'H1-C01', 14, 25, 0, 'Doctor and patient: General principles of history taking
 14 1
 history taking. Taking a detailed history while getting 
 to know a patient and arriving at a likely diagnosis 
@@ -2543,7 +1294,7 @@ the beginning of treating and caring for patients
 in the widest sense. Almost all the attributes of 
 good medical practice as set out by the UK General 
 Medical Council (Box 1.17) are encompassed in good', 3186),
-   ('de8d40b7-e012-5d07-88e9-9d2ad65c38d3', '3758a818-98d6-550a-93ee-6a68d91ef588', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 26, 26, 0, 'Introduction
+   ('25173a64-9a50-5961-82c1-91c9846e2880', 'HUTCHISON_24_2018', 'H1-C02', 15, 26, 0, 'Introduction
 The separation of the history from the examination 
 is artificial as the latter starts with the first greeting 
 and ends when the patient departs. There may be 
@@ -2629,7 +1380,7 @@ GENERAL PATIENT ASSESSMENT
 General patient examination and 
 differential diagnosis
 William M. Drake and Tahseen A. Chowdhury', 4330),
-   ('8c453bdd-55d8-518b-8d9a-e7b0bc5ebc51', 'c2c574a8-8a1c-5da0-8da8-ff8b2cb651e5', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 27, 27, 0, 'General patient examination and differential diagnosis ﻿
+   ('494937db-f99b-5d64-9159-0e7852238ee8', 'HUTCHISON_24_2018', 'H1-C02', 16, 27, 0, 'General patient examination and differential diagnosis ﻿
 16 2
 without papillae (atrophic glossitis, Fig. 2.1) suggests 
 important vitamin B deficiencies. Angular stomatitis 
@@ -2713,7 +1464,7 @@ healing. Malnutrition together with acute or chronic
 illness results in blood albumin being low, leading to 
 oedema and making overall body weight an unreliable 
 marker of malnutrition. A smooth, often sore tongue', 3971),
-   ('052eed86-3035-5b1c-bd46-418ada80867b', '864da13a-f17c-5b4e-9cd2-6d8053536a64', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 28, 28, 0, 'SECTION one
+   ('b588c442-80c7-5484-9435-36ec2dcde021', 'HUTCHISON_24_2018', 'H1-C02', 17, 28, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿17
 Check for clubbing of the fingers. Normally, the 
 angle of the fingernail and the nail base (Lovibond''s 
@@ -2781,7 +1532,7 @@ fibrous cord, leading to flexion contracture of the
 metacarpophalangeal and proximal interphalangeal 
 joints. Flexion contracture of the other fingers may 
 follow (Fig. 2.3).', 3573),
-   ('f05026cd-ff9a-5d86-adcd-a6b4b6cdef39', NULL, '139fa68e-679c-5d52-9dc9-4334bf0c5577', 29, 29, 0, 'General patient examination and differential diagnosis ﻿
+   ('69aa6682-39ea-5b42-bd83-fb532f43af80', 'HUTCHISON_24_2018', 'H1-C02', 18, 29, 0, 'General patient examination and differential diagnosis ﻿
 18 2
 inflammatory bowel disease and infective endocarditis. 
 The last of these may also be associated with Osler''s 
@@ -2819,7 +1570,7 @@ Beau''s lines are horizontal (transverse) depressions
 in the nail that may result from any disease process, 
 illness, chemotherapy or malnutrition that constitutes 
 a sufficient insult to affect the growth plate of the', 2197),
-   ('afc7c4a9-1de9-51cb-99cd-bfe1c56bda2b', '6a9a9ad0-aa20-5e30-b526-5d8b7086a733', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 30, 30, 0, 'SECTION one
+   ('88985f21-c812-5981-812d-2b27ff623c8d', 'HUTCHISON_24_2018', 'H1-C02', 19, 30, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿19
 Odours
 Certain odours may provide diagnostic clues. The 
@@ -2885,7 +1636,7 @@ Figure 2.11  Leuconychia in a patient with chronic liver disease.
 (From Forbes and Jackson 2002 Color Atlas and Text of Clinical 
 Medicine, 3rd edn, Mosby, Edinburgh. Reproduced by kind 
 permission.)', 3694),
-   ('7684f6dd-1dcb-55d0-b22f-279b5ce350b9', '1b81eef0-820b-5e8b-bd1d-fd3c231a9d2a', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 31, 31, 0, 'General patient examination and differential diagnosis ﻿
+   ('2c7442b4-75b4-5857-a91a-6a7c293e80af', 'HUTCHISON_24_2018', 'H1-C02', 20, 31, 0, 'General patient examination and differential diagnosis ﻿
 20 2
 ment should always be noted. Lymph from the arm 
 drains into the axillary nodes. These should be routinely examined but particularly in conjunction with 
@@ -2917,7 +1668,7 @@ Figure 2.13  Classic butterfly wing rash in a young patient with
 systemic lupus erythematosus. 
 Figure 2.14  Hereditary telangiectasia. The telangiectasia can be 
 seen at the margin of the lips and on the lower lip.', 1559),
-   ('4676a3d7-98cd-5cd2-baf8-576f0d722a36', 'bdc3eb7b-ddca-57fa-997e-235eb0153f97', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 32, 32, 0, 'SECTION one
+   ('45109d53-4af8-5aa0-9af1-1e635108bf36', 'HUTCHISON_24_2018', 'H1-C02', 21, 32, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿21
 slightly towards the side of examination in order to 
 relax the overlying muscles. Feel for each of the 
@@ -2978,7 +1729,7 @@ Posterior
 triangle
 Supraclavicular
 Figure 2.17  The cervical lymph node groups.', 2661),
-   ('460ba3fd-c3b3-5fa3-ab49-6980511d36e9', '2da1dc11-daaa-5f24-ad19-4b474f62aff0', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 33, 33, 0, 'General patient examination and differential diagnosis ﻿
+   ('5cb2c822-5be8-525e-9b01-4055b8f097d6', 'HUTCHISON_24_2018', 'H1-C02', 22, 33, 0, 'General patient examination and differential diagnosis ﻿
 22 2
 feeling for enlargement of the pectoral and subscapular 
 lymph nodes respectively. Use your left hand in the 
@@ -3019,7 +1770,7 @@ Figure 2.20  Acanthosis nigricans (sometimes seen in insulin
 resistance and gastric cancer) visible in the axilla.
 Figure 2.21  Freckling and neurofibromas in von 
 Recklinghausen''s disease.', 2107),
-   ('4da8f519-0fa8-5375-9c4d-f4cb962a4120', '7447fb3a-fa47-557d-8c2f-1b4daeafaab9', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 34, 34, 0, 'SECTION one
+   ('f14efb39-622d-510c-a7a5-e287cad1ebb7', 'HUTCHISON_24_2018', 'H1-C02', 23, 34, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿23
 the latter situation, blood passes directly from the 
 right to the left side of the heart, without passing 
@@ -3098,7 +1849,7 @@ Figure 2.23  The characteristic plethoric appearance of a patient
 with Cushing''s syndrome. (From Forbes and Jackson 2002 Color 
 Atlas and Text of Clinical Medicine, 3rd edn, Mosby, Edinburgh. 
 Reproduced by kind permission.)', 4193),
-   ('ed10dc36-3774-55fd-ab0d-6417f2427a60', '53326d36-87bf-528d-85b3-723c0b6cb6ac', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 35, 35, 0, 'General patient examination and differential diagnosis ﻿
+   ('c9bc81ae-359c-53f8-8c34-0d7f700ff73e', 'HUTCHISON_24_2018', 'H1-C02', 24, 35, 0, 'General patient examination and differential diagnosis ﻿
 24 2
 the right hand to examine the left DP pulse; the right 
 pulse is often best felt with the right hand from the 
@@ -3177,7 +1928,7 @@ compared to the tongue of a normal person.
 and Text of Clinical Medicine, 3rd edn, 
 Mosby, Edinburgh. Reproduced by kind 
 permission.)', 4194),
-   ('73b29661-683e-5009-9716-542073ef34a6', '52c8b858-f7e2-551a-a16d-c624abcab88f', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 36, 36, 0, 'SECTION one
+   ('739456b1-f9ee-56f8-89c7-a546f1d67bfe', 'HUTCHISON_24_2018', 'H1-C02', 25, 36, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿25
 Figure 2.25  Peripheral vascular disease. There is pallor, loss 
 of hair and early ulceration on the dorsum of three toes. (From 
@@ -3234,7 +1985,7 @@ standing (Fig. 2.27). Superficial varicosities are generally obvious in this pos
 of the valves of the long saphenous vein should be 
 assessed by Trendelenburg''s test. With the patient 
 lying, the saphenous vein is emptied by elevating the', 3240),
-   ('52568cbb-1ea2-5aa2-9e94-73356eaa7f15', 'cb244fb2-87f6-56c9-b74c-62c95381b24a', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 37, 37, 0, 'General patient examination and differential diagnosis ﻿
+   ('69e71c96-f0af-551a-bb67-3941a5204c7e', 'HUTCHISON_24_2018', 'H1-C02', 26, 37, 0, 'General patient examination and differential diagnosis ﻿
 26 2
 or inversion of the nipples. Simple longstanding 
 inversion is often a normal phenomenon, but associated retraction of the areola or recent nipple inversion 
@@ -3302,7 +2053,7 @@ Edinburgh. Reproduced by kind permission.)
 Figure 2.28  Gynaecomastia in a male patient. (From Forbes and 
 Jackson 2002 Color Atlas and Text of Clinical Medicine, 3rd edn, 
 Mosby, Edinburgh. Reproduced by kind permission.)', 3633),
-   ('3f9dc54f-0fc8-5930-8629-b5ac9fe92a80', 'f49b62c4-9415-5fe3-bec0-a8fe311e3679', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 38, 38, 0, 'SECTION one
+   ('ce81e1d9-726c-5164-b16b-3be8763a9a68', 'HUTCHISON_24_2018', 'H1-C02', 27, 38, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿27
 ■ Tactile vocal fremitus.
 ■ Percuss the lungs.
@@ -3408,7 +2159,7 @@ breasts, nipples.
 ■ Auscultate the heart sounds.
 ■ Palpate tracheal position.
 ■ Chest expansion.', 3946),
-   ('afbcb817-849d-54b8-ab44-7e63d53ca41d', NULL, '139fa68e-679c-5d52-9dc9-4334bf0c5577', 39, 39, 0, 'General patient examination and differential diagnosis ﻿
+   ('2e729e81-fa55-58fe-966f-39529d90ea82', 'HUTCHISON_24_2018', 'H1-C02', 28, 39, 0, 'General patient examination and differential diagnosis ﻿
 28 2
 HPC:
 ■ Sudden-onset right-sided chest pain.
@@ -3525,7 +2276,7 @@ Generally in excellent health and symptom free.
 Keen sportsman.
 No relevant past medical history.
 PC: Breathlessness.', 5365),
-   ('80697531-4f73-549a-86b0-42d023bedb5c', '6c5db9cf-1692-5d59-b9df-7ecdcfeca713', '139fa68e-679c-5d52-9dc9-4334bf0c5577', 40, 40, 0, 'SECTION one
+   ('aa81391d-a0c3-53bb-9f0a-27221f8f8f01', 'HUTCHISON_24_2018', 'H1-C02', 29, 40, 0, 'SECTION one
 General patient examination and differential diagnosis ﻿29
 Presenting a case
 It is very valuable to your learning to practice making 
@@ -3628,8 +2379,8 @@ including the dosages and frequency of administration
 4 List the investigations that may need to be done at 
 some stage in order to provide further diagnostic 
 information', 4708),
-   ('322faa56-031d-551b-9a45-505d5901d8e6', NULL, '139fa68e-679c-5d52-9dc9-4334bf0c5577', 41, 41, 0, 'This page intentionally left blank', 34),
-   ('c22aa0ba-8583-59fc-9c60-e7cb079e6a55', 'c6965fb5-39df-54ac-8aab-2c809db9324d', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 42, 42, 0, 'Introduction
+   ('f7dbdb43-15c1-5f1c-aec0-829fe25f658a', 'HUTCHISON_24_2018', 'H1-C02', 30, 41, 0, 'This page intentionally left blank', 34),
+   ('0af116d3-e6c4-5134-a755-3ea53ae0cc60', 'HUTCHISON_24_2018', 'H1-C03', 31, 42, 0, 'Introduction
 The term ''Differential Diagnosis'' used to be very 
 widely used by doctors, but it now seems to be used 
 less and is less well understood. It might be better 
@@ -3724,7 +2475,7 @@ Brain tumour with
 haemorrhage
 Cerebral abscess
 Cerebral vasculitis', 3547),
-   ('d64205da-4f66-537c-9032-a3b2473ea69a', 'cde216dc-74d0-5e7a-ac27-cc7b2d0841f3', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 43, 43, 0, 'The next steps: Differential diagnosis and initial management
+   ('bc8c2657-82e7-50b3-b8f8-7388376b5547', 'HUTCHISON_24_2018', 'H1-C03', 32, 43, 0, 'The next steps: Differential diagnosis and initial management
 32 3
 may lie behind a consultation between patient and 
 doctor. Of particular relevance to the process of 
@@ -3843,7 +2594,7 @@ angina pectoris
 ■ Does the pain come on with a 
 predictable amount of 
 exercise', 5446),
-   ('3c42e165-171e-5366-b465-991acd10b7a7', '973dff25-b0d2-5c90-a925-c1faaca380fd', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 44, 44, 0, 'SECTION One
+   ('1f4d7286-9369-58fa-abcf-83d6841f0073', 'HUTCHISON_24_2018', 'H1-C03', 33, 44, 0, 'SECTION One
 The next steps: Differential diagnosis and initial management
 33
 a good style of clinical practice which states ''once 
@@ -3996,7 +2747,7 @@ Dissecting thoracic
 aneurysm
 Blood pressure same in both arms, 
 no mediastinal widening on CXR', 5023),
-   ('0f992283-e87a-5e53-9118-91c3290db1d6', '72e37915-e942-5e94-9c32-6a51c2f72db5', '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 45, 45, 0, 'The next steps: Differential diagnosis and initial management
+   ('0b9dacaf-1a04-574d-973d-1b4834efb030', 'HUTCHISON_24_2018', 'H1-C03', 34, 45, 0, 'The next steps: Differential diagnosis and initial management
 34 3
 Selecting appropriate investigations
 As with history taking and physical examination, 
@@ -4106,7 +2857,7 @@ findings confined to a single organ system tend to
 favour a single cause, whereas multiple causation is 
 more likely among older patients with symptoms and 
 signs in more than one bodily system.', 5311),
-   ('61fad7d9-1f6e-5197-92a1-ff359edf7170', NULL, '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 46, 46, 0, 'SECTION One
+   ('6595a6c4-a1e3-5117-ae18-cad8ba8b5d00', 'HUTCHISON_24_2018', 'H1-C03', 35, 46, 0, 'SECTION One
 The next steps: Differential diagnosis and initial management
 35
 emergency nephrectomy is around 0.0003% 
@@ -4143,8 +2894,8 @@ is around 0.1% and of serious complication
 cardiac perforation) approximately 1.7%. 
 Following a kidney biopsy, the risk of a 
 haemorrhage sufficiently severe to require an', 1562),
-   ('1fb30133-931a-56d8-a7a9-c92bb6d4b571', NULL, '30a94dfc-13ae-51c8-9a2f-fd4734f5dc87', 47, 47, 0, 'This page intentionally left blank', 34),
-   ('739b2bf2-767f-563a-b2ea-ba289103512a', '88f82b6e-fcdf-523c-9343-ca6118e6901e', '3e5af70c-abf6-5cb3-858e-afd53d782937', 48, 48, 0, 'Introduction
+   ('74289207-2889-5c40-94ad-611898839591', 'HUTCHISON_24_2018', 'H1-C03', 36, 47, 0, 'This page intentionally left blank', 34),
+   ('41f39e9c-85e5-56f6-af34-ec7c95232098', 'HUTCHISON_24_2018', 'H1-C04', 37, 48, 0, 'Introduction
 The cornerstone of a good relationship between 
 doctor and patient is trust. In primary care, this 
 relationship (often in the context of caring for the 
@@ -4222,7 +2973,7 @@ GENERAL PATIENT ASSESSMENT
 4 
 Ethical considerations
 William M. Drake', 3681),
-   ('82e1743a-b13f-53a0-ade0-fbbb71c96333', '0da780aa-543d-5a5c-a2a2-fe4e071d5806', '3e5af70c-abf6-5cb3-858e-afd53d782937', 49, 49, 0, 'Ethical considerations ﻿
+   ('5469d7bb-224d-5d9e-81f5-eb81164c5a3a', 'HUTCHISON_24_2018', 'H1-C04', 38, 49, 0, 'Ethical considerations ﻿
 38 4
 3 Consent must have been given voluntarily, and 
 not under duress.
@@ -4329,7 +3080,7 @@ explained
 weigh information
 ■ The patient can communicate the decision that he has 
 made', 5167),
-   ('d918c57c-3087-543f-bdb7-430b394c9c17', 'afeec54d-13f2-58ea-9d5f-a34a718bf857', '3e5af70c-abf6-5cb3-858e-afd53d782937', 50, 50, 0, 'SECTION One
+   ('3e3854ba-ea0c-5b5e-bfe6-87c59bb03f2c', 'HUTCHISON_24_2018', 'H1-C04', 39, 50, 0, 'SECTION One
 Ethical considerations ﻿39
 adviser to handle their financial and legal affairs 
 during a severe illness. This generally requires permission from a court.
@@ -4435,7 +3186,7 @@ example in order to obtain information essential for
 effective treatment, it may be judged in the patient''s 
 best interests to break confidentiality. Another example 
 might arise if a patient was judged mentally incompetent and it became necessary to involve a legal', 5251),
-   ('5442e8aa-1cc3-5223-bf7f-182d5e33fd30', '5711a7bf-e43a-55c0-a944-b8bb30d768fa', '3e5af70c-abf6-5cb3-858e-afd53d782937', 51, 51, 0, 'Ethical considerations ﻿
+   ('9fb3a61f-f173-522f-8cb6-046e6871ae8c', 'HUTCHISON_24_2018', 'H1-C04', 40, 51, 0, 'Ethical considerations ﻿
 40 4
 record, and most hospitals now use a formal protocol 
 to document this procedure. Patients should always 
@@ -4539,7 +3290,7 @@ is usually the case. Most patients near death are aware
 of their situation and welcome the opportunity for 
 full discussion of the issues. The agreement of the 
 patient and medical staff should be signed in the case', 5213),
-   ('b48e74dd-9dc3-501b-a8bf-ce776cf9ef66', 'a908c029-f295-5fa0-93d2-0c1aa64d6b2a', '3e5af70c-abf6-5cb3-858e-afd53d782937', 52, 52, 0, 'SECTION One
+   ('c87d9ae8-32bc-57e1-bc63-7f10b6a9f136', 'HUTCHISON_24_2018', 'H1-C04', 41, 52, 0, 'SECTION One
 Ethical considerations ﻿41
 ■ How should expensive treatments that may be 
 possible for genetically determined disorders be 
@@ -4643,7 +3394,7 @@ them behave toward him
 ■ A doctor must not entice patients from his colleagues
 ■ A doctor must observe the principles of the Declaration of 
 Geneva', 4580),
-   ('97e2b020-2d24-5ba5-9cf9-3b1b60a13fd4', '6a9d6ef5-3fd6-5742-b08c-15c7424fecd1', '3e5af70c-abf6-5cb3-858e-afd53d782937', 53, 53, 0, 'Ethical considerations ﻿
+   ('51d2e1ad-cf66-5122-b11e-9822863c7df1', 'HUTCHISON_24_2018', 'H1-C04', 42, 53, 0, 'Ethical considerations ﻿
 42 4
 Genetic counselling
 Genetic counselling is relatively long established. The 
@@ -4681,7 +3432,7 @@ the Declaration of Helsinki are generally recognized
 as relevant to the design of research protocols. The 
 UK General Medical Council''s duties of doctors are 
 listed at the end of Chapter 1.', 2055),
-   ('1eaebdc8-0d5e-55d0-aec2-38f548e44959', NULL, '3e5af70c-abf6-5cb3-858e-afd53d782937', 54, 54, 0, '5. Women
+   ('bad70068-b3dc-570a-aa52-c6bb040e8dba', 'HUTCHISON_24_2018', 'H1-C04', 43, 54, 0, '5. Women
  
 6. Children and adolescents
  
@@ -4695,8 +3446,8 @@ listed at the end of Chapter 1.', 2055),
 Assessment in 
 particular groups
 SECTION 2', 216),
-   ('180cf1ce-9490-58c9-8a99-82a504130a3c', NULL, '3e5af70c-abf6-5cb3-858e-afd53d782937', 55, 55, 0, 'This page intentionally left blank', 34),
-   ('ec264fe3-21d8-56b7-a48a-17f1e6c52806', 'a9842c0f-da7f-5034-b34b-c63ce8c4381a', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 56, 56, 0, 'Introduction
+   ('57b2b30b-1038-5b4b-ad6d-2c36206e1992', 'HUTCHISON_24_2018', 'H1-C04', 44, 55, 0, 'This page intentionally left blank', 34),
+   ('6984a8a3-7a76-5827-8903-ce3cf7440cc8', 'HUTCHISON_24_2018', 'H1-C05', 45, 56, 0, 'Introduction
 All medical history taking, examination, investigation 
 and management plans are intensely personal matters 
 for patients, although their consent to such involve­
@@ -4788,7 +3539,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 5 
 Women
 Rehan Khan', 4389),
-   ('b54df2dd-b412-509c-a688-3d29c3fffbd9', '9268fc5e-93f7-5725-a6e3-6177b1a79944', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 57, 57, 0, 'Women ﻿
+   ('7e55b670-b1a4-5e5e-8f06-f1f5e4b5e7a8', 'HUTCHISON_24_2018', 'H1-C05', 46, 57, 0, 'Women ﻿
 46 5
 presence of blood, whether there is an associated 
 vulval itch and, if so, if there are other sites of itching. 
@@ -4903,7 +3654,7 @@ stop you from carrying out your normal activities?)
 (This is an enquiry about premenstrual syndrome, in 
 which a variety of symptoms can aggregate and then 
 disappear as menstrual flow starts.)', 5451),
-   ('d7cc72ab-43f9-5fc0-a3f0-f036fd176b75', '30e6e402-1d27-520f-9402-17f3017d38c4', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 58, 58, 0, 'SECTION Two
+   ('bdfb68a1-2fab-55cb-bd42-23d73b8306ae', 'HUTCHISON_24_2018', 'H1-C05', 47, 58, 0, 'SECTION Two
 Women ﻿47
 have been any abnormalities or treatments. The 
 opportunity also arises to ask if any other screening 
@@ -5010,7 +3761,7 @@ inflammatory disease.)
 ■ Do you have any other pains in the pelvic region other 
 than the one brought on by sexual activity?
 ■ Is there any bleeding during or after penetrative sex?', 5200),
-   ('9a602bba-f929-5818-a42b-21183b41dda6', '27db094f-432e-5b69-a05f-b44fda21f6b6', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 59, 59, 0, 'Women ﻿
+   ('25e450df-76ee-5e3b-9977-564b63d063c3', 'HUTCHISON_24_2018', 'H1-C05', 48, 59, 0, 'Women ﻿
 48 5
 illness or when planning the support of a child. For 
 instance, if the patient is the subject of domestic 
@@ -5120,7 +3871,7 @@ baby?
 ■ How old is the youngest and how old is the oldest?
 ■ How old would he be if he had survived?
 ■ Did you have any difficulty getting pregnant?', 5198),
-   ('88eddf5d-e090-5862-b92d-46970e618bee', '9c88b4f6-0b64-55a3-9659-5d21305cd959', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 60, 60, 0, 'SECTION Two
+   ('06cfee49-e97a-5dbf-965c-a4214ece117e', 'HUTCHISON_24_2018', 'H1-C05', 49, 60, 0, 'SECTION Two
 Women ﻿49
 accommodate two). Generally, but not always, a 
 speculum examination precedes the digital examina­
@@ -5181,7 +3932,7 @@ Pubic symphysis
 Figure 5.1  Approximate fundal height with changing gestation. 
 Figure 5.2  Equipment for the gynaecological examination. 
 Figure 5.3  Discharge due to Chlamydia trachomatis.', 2785),
-   ('601b1b8f-f6d6-560a-98d7-3f791fa9b3fe', 'bf4f3c47-41ca-5564-a0fc-e44098a279b3', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 61, 61, 0, 'Women ﻿
+   ('337cbac9-deb1-5df3-9a8f-f2dd33c67d39', 'HUTCHISON_24_2018', 'H1-C05', 50, 61, 0, 'Women ﻿
 50 5
 of masses. The cervix is then identified; it is approxi­
 mately 3 cm in diameter, with a variably sized and 
@@ -5288,7 +4039,7 @@ cavity
 Hymenal
 remnants
 Figure 5.4  The vulva.', 4827),
-   ('c4c422b6-a543-5117-b954-3e2d3f86dd2b', '21e43fba-2217-565b-bcf8-202d5a708350', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 62, 62, 0, 'SECTION Two
+   ('4a2c2617-e8c7-52ff-b6dd-cbafbca6585c', 'HUTCHISON_24_2018', 'H1-C05', 51, 62, 0, 'SECTION Two
 Women ﻿51
 clench her fists and place them under her buttocks. 
 This tilts the pelvis in such a way that the examination 
@@ -5346,7 +4097,7 @@ Figure 5.5  In cystocele, there is downward prolapse of the anterior part of t
 neck and leading to urinary incontinence. In rectocele, the posterior part of the pelvic floor is mostly affected, sometimes with associated 
 faecal incontinence. In some patients, the whole pelvic floor is weak, with double incontinence or prolapse of the uterus. In enterocele, 
 there is a prolapse of viscera from the pouch of Douglas as part of a severe pelvic floor weakness.', 2099),
-   ('b9e2ae5e-d629-537f-9c88-dbcf8a4532fc', '63458cd2-f58c-58cc-a48d-6bdca9480831', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 63, 63, 0, 'Women ﻿
+   ('6aadc057-cf02-5e86-851b-062201161eb3', 'HUTCHISON_24_2018', 'H1-C05', 52, 63, 0, 'Women ﻿
 52 5
 Speculum examination
 This is an essential part of a gynaecological examina­
@@ -5372,7 +4123,7 @@ Palpating the lateral fornix
 Right-handed clinician
 Figure 5.6  Bimanual examination of the pelvis. 
 Figure 5.7  Cusco''s speculum used to display the cervix.', 1171),
-   ('42bbf781-a485-599e-8077-787d47d442cd', '0b446bec-5ab3-5f3c-abd0-60a083f4b8a7', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 64, 64, 0, 'SECTION Two
+   ('d0717eeb-702b-52c4-9bfa-7efc9f2df51f', 'HUTCHISON_24_2018', 'H1-C05', 53, 64, 0, 'SECTION Two
 Women ﻿53
 by flexing the right thigh more than the left, and by 
 hanging the right arm over the distant edge of the 
@@ -5473,7 +4224,7 @@ in the left lateral position. The best exposure is given
 by the Sims'' position, in which the pelvis is rotated 
 Figure 5.8  Sims'' speculum used to display the anterior vaginal 
 wall.', 5085),
-   ('f7695517-a803-57c2-a2e3-de6673439212', '72e687b3-dbe5-5c71-a161-3732efa48ec2', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 65, 65, 0, 'Women ﻿
+   ('76915506-a199-53f9-9e59-2c6b06c6b49f', 'HUTCHISON_24_2018', 'H1-C05', 54, 65, 0, 'Women ﻿
 54 5
 as these can predispose to an increased risk of preeclampsia and gestational diabetes respectively.
 Social history
@@ -5579,7 +4330,7 @@ may have particular abnormal genetic predispositions
 and referral to a clinical geneticist may be indicated. 
 It is especially important to determine whether there 
 is a family history of hypertensive disorders or diabetes,', 5204),
-   ('062391eb-d5ed-5d06-a82c-3e699a78a866', NULL, 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 66, 66, 0, 'SECTION Two
+   ('5d2b488e-52d8-56a5-8fb1-3b4bb4aceea2', 'HUTCHISON_24_2018', 'H1-C05', 55, 66, 0, 'SECTION Two
 Women ﻿55
 and when equidistant from the xiphisternum and 
 umbilicus, it is about 30 weeks. From 36 weeks, the 
@@ -5664,7 +4415,7 @@ physis pubis at 12 weeks'' gestation, at the umbilicus
 at 22 weeks and at the xiphisternum at 36 weeks. 
 When the fundus is equidistant from the symphysis 
 pubis and the umbilicus, the gestation is 16 weeks,', 3691),
-   ('4d674473-2645-55fb-972f-f181bef3f99f', '125b461e-0550-554f-bd71-8877bfe5630e', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 67, 67, 0, 'Women ﻿
+   ('52c78d10-f59b-5204-9200-6c1efa5b1c86', 'HUTCHISON_24_2018', 'H1-C05', 56, 67, 0, 'Women ﻿
 56 5
 Fetal movements, both as reported by the mother 
 and observed by the examiner during the examination, 
@@ -5736,7 +4487,7 @@ means it is engaged. Engagement will usually occur
 as the leading edge of the baby''s head, on vaginal 
 examination, reaches the level of the ischial spines 
 (zero station).', 3357),
-   ('3bc593f0-385f-565f-aead-94e553cbf8a0', 'f1c80d63-08a1-5e00-97b0-b5af28faa22b', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 68, 68, 0, 'SECTION Two
+   ('01c20463-5b31-5e08-88a7-122ada91540c', 'HUTCHISON_24_2018', 'H1-C05', 57, 68, 0, 'SECTION Two
 Women ﻿57
 least 4 cm), the cervix should progressively dilate at 
 a rate of at least 0.5 cm per hour.
@@ -5843,7 +4594,7 @@ ischial spine of the pelvis and is measured in
 centimetres above or below the spines - thus the depth 
 of the presenting part is low when the tip of the 
 presenting part is 2 or 3 cm below the spines.', 5096),
-   ('19d801d5-75e2-5c25-b80d-d1b0cdcaf4b2', 'c79f3ac5-dd05-581e-a053-9b9097ebd269', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 69, 69, 0, 'Women ﻿
+   ('45f7c14f-b508-55b2-a759-5b644a4d8ab0', 'HUTCHISON_24_2018', 'H1-C05', 58, 69, 0, 'Women ﻿
 58 5
 Cervical length can be measured, giving an indication 
 of risk of possible late miscarriage or early premature 
@@ -5905,7 +4656,7 @@ of gestation sacs can be viewed in early pregnancy.
 By 11 to13 weeks, mono- or dichorionicity, nuchal 
 translucency, nasal bone development and gross fetal 
 abnormality can be detected (Figs 5.14 and 5.15).', 2896),
-   ('3ce8632d-1262-59d8-ab7b-c782d794bbcb', '8f0a203c-0a2e-5be6-a1b8-9e478e6a4bcb', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 70, 70, 0, 'SECTION Two
+   ('eba4cf61-df1c-5720-af17-80000b63287e', 'HUTCHISON_24_2018', 'H1-C05', 59, 70, 0, 'SECTION Two
 Women ﻿59
 bladder volume are recorded. Electromyographic 
 (EMG) activity in the external urethral sphincter 
@@ -5967,7 +4718,7 @@ is catheterized and slowly filled with sterile saline.
 The volume and pressure at which bladder filling is 
 perceived, and at which a desire to micturate is felt, 
 are noted. The urinary flow rate and postmicturition', 2995),
-   ('3dcf5c94-c31c-5fb2-a7d1-43bbba33a159', '6200b7c6-caff-5000-bd01-9469dadadf99', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 71, 71, 0, 'Women ﻿
+   ('d34a3b5b-7f6a-564c-81ae-4723f99cca26', 'HUTCHISON_24_2018', 'H1-C05', 60, 71, 0, 'Women ﻿
 60 5
 a predictable way with gestation. For example, at 16 
 weeks'' gestation, increased levels of AFP suggest fetal 
@@ -6060,7 +4811,7 @@ light source
 Grasping forceps
 Pneumoperitoneum
 Figure 5.20  Diagram of a diagnostic laparoscopy.', 4096),
-   ('09158fc8-17eb-5369-89dd-a9db12e47da1', 'ff9fe8c1-bf1b-5c22-8854-e39e65849215', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 72, 72, 0, 'SECTION Two
+   ('0848be5f-58f7-5ccd-9055-54efa64e1495', 'HUTCHISON_24_2018', 'H1-C05', 61, 72, 0, 'SECTION Two
 Women ﻿61
 Biophysical tests
 Fetal movements
@@ -6166,7 +4917,7 @@ which allows the antenatal diagnosis of Down''s syndrome,
 X-linked disorders, Turner''s syndrome, Klinefelter''s syndrome and 
 trisomies 13 and 18. 
 Figure 5.22  Cardiotocography equipment.', 3835),
-   ('9f04bec3-f66f-5edd-84b6-5c0a36aec628', 'f5e5dd7c-8dc2-5692-b0d7-9b21ce365f5d', 'ca523ce1-24ad-5788-a7a8-3d21fe4e289c', 73, 73, 0, 'Women ﻿
+   ('f99b2e5e-2634-5278-9f1a-8a315b095c34', 'HUTCHISON_24_2018', 'H1-C05', 62, 73, 0, 'Women ﻿
 62 5
 Doppler blood flow
 Studies of changes in the uterine circulation (uterine 
@@ -6191,7 +4942,7 @@ Figure 5.23  An abnormal cardiotocograph
 showing late variable decelerations during 
 uterine contractions with fetal tachycardia. 
 Figure 5.24  Fetal scalp electrode.', 744),
-   ('b2e6a3f4-8b86-5e5d-ab9a-c5dc9147c348', 'a9d9712c-e6cd-5569-9851-08ca592c534c', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 74, 74, 0, 'Introduction
+   ('08442095-6840-50e6-9c80-69cafef57710', 'HUTCHISON_24_2018', 'H1-C06', 63, 74, 0, 'Introduction
 The skill of clinical examination is the true art of 
 medicine and nowhere more seen than in the examination of children. Children are not small adults and 
 as such the approach to their examination is different. 
@@ -6275,7 +5026,7 @@ Box 6.1  Structure to history taking in children
 - consanguinity and genetic risk
 ■ Social history
 ■ Drug history (including allergies)', 3973),
-   ('46fe687a-aef3-50c7-a2ef-24d988e04869', 'e37a6de7-0878-5615-9314-b89383187aa3', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 75, 75, 0, 'Children and adolescents ﻿
+   ('71284511-26b9-5ca3-bcea-2a0e6c8d87d7', 'HUTCHISON_24_2018', 'H1-C06', 64, 75, 0, 'Children and adolescents ﻿
 64 6
 they are talking, keep watching everything that the 
 child is doing and his reactions.
@@ -6380,7 +5131,7 @@ about?
 the same age?
 ■ School: which school, does he like it, academic 
 achievement, does he miss much school?', 5134),
-   ('5286f4a6-8010-5949-adb0-9b955d38670e', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 76, 76, 0, 'SECTION Two
+   ('986d651f-cb33-5cbb-bad4-d2015463c1d6', 'HUTCHISON_24_2018', 'H1-C06', 65, 76, 0, 'SECTION Two
 Children and adolescents ﻿65
 Table 6.1  Normal developmental milestones
 Age
@@ -6530,7 +5281,7 @@ last; if an attempt is made to examine a child''s throat
 at the outset, the rest of the examination could be 
 jeopardized. Offer the child something to play with 
 - even a stethoscope will be a source of amusement', 3470),
-   ('40c81761-08a1-5f04-991d-e0d412d21ab8', '1e7e62e9-c0a6-5aa3-9160-bae11fe4b4f7', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 77, 77, 0, 'Children and adolescents ﻿
+   ('f3fa86dd-fefb-5edb-86cb-42f641a5cf10', 'HUTCHISON_24_2018', 'H1-C06', 66, 77, 0, 'Children and adolescents ﻿
 66 6
 to a young infant. Children often find it amusing if 
 their toy is examined first. The scheme set out in 
@@ -6623,7 +5374,7 @@ Box 6.4  Scheme for examination of children
 ■ Ear, nose and throat
 ■ Routine measurements and simple clinical tests
 Figure 6.1  Plagiocephalic skull.', 4056),
-   ('229bc8c6-ca07-56b7-9bc8-bfe602212c29', 'e06ef894-9a84-53ea-bfaf-8446f8081da5', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 78, 78, 0, 'SECTION Two
+   ('90b4ee35-285f-5142-a138-232fd8c6a3de', 'HUTCHISON_24_2018', 'H1-C06', 67, 78, 0, 'SECTION Two
 Children and adolescents ﻿67
 intracranial pressure, but it does also become tense 
 with crying. A sunken fontanelle is a feature of severe 
@@ -6721,7 +5472,7 @@ up to the age of 4 years; it can be anything up to
 2 cm below the costal margin. When enlarged, the 
 Figure 6.2  Baby sitting on mother''s lap while the abdomen is 
 examined.', 5228),
-   ('72c3720a-e56f-5947-9297-135fbc52b2f4', '2574a40e-e7df-548c-9b08-d151bbc50823', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 79, 79, 0, 'Children and adolescents ﻿
+   ('4a89492c-32ea-58e0-84b3-4d659b5bcd53', 'HUTCHISON_24_2018', 'H1-C06', 68, 79, 0, 'Children and adolescents ﻿
 68 6
 spleen may be felt below the left costal margin, and 
 in infancy it is more anterior and superficial than in 
@@ -6859,7 +5610,7 @@ Newborn
 15-20
 80
 100/70', 4782),
-   ('2393a660-f541-5a54-990c-ce98ca892b2a', 'c541e848-c44b-5104-a1ca-315a1405d7c5', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 80, 80, 0, 'SECTION Two
+   ('b785228a-9137-5569-9c9d-3064ba2bb4e7', 'HUTCHISON_24_2018', 'H1-C06', 69, 80, 0, 'SECTION Two
 Children and adolescents ﻿69
 clinical value the smaller the child. This is because 
 of difficulty with cooperation and the small size of 
@@ -6956,7 +5707,7 @@ Box 6.7  The five S''s of an innocent murmur
 ■ Systolic
 ■ Sitting/standing (varies with posture)
 ■ Symptom free', 4135),
-   ('ebb4d043-d3f7-5e8f-bc2a-d7874c4d4083', '6dd3fe3e-ce40-507e-89dc-05037bd24ee8', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 81, 81, 0, 'Children and adolescents ﻿
+   ('d79e5a5b-67f1-59a3-97d3-6026fe40d018', 'HUTCHISON_24_2018', 'H1-C06', 70, 81, 0, 'Children and adolescents ﻿
 70 6
 observed already. Look for toe walking (spasticity), 
 wide-based gait (seen in cerebellar ataxia but normal 
@@ -7064,7 +5815,7 @@ The Moro reflex (see Fig. 6.11)
 On dropping the head a few centimetres, the upper limbs 
 abduct and extend symmetrically and then flex. Lost by 6 
 months of age.', 5002),
-   ('917be5a0-cfea-527c-acf1-76d7100acf37', '6c9d4f8b-b25e-58ca-9138-a578cd5ccf5d', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 82, 82, 0, 'SECTION Two
+   ('c613c929-dffb-52c7-8a06-c83fb5648a7f', 'HUTCHISON_24_2018', 'H1-C06', 71, 82, 0, 'SECTION Two
 Children and adolescents ﻿71
 movements which may indicate a visual impairment. It is very important to check for squints, as 
 ophthalmological referral is necessary, particularly in 
@@ -7179,7 +5930,7 @@ Stage 5
 Adult genitalia
 Mature stage
 Adult in type and quantity', 5073),
-   ('2ead7165-7929-5fd2-aa5e-3d202a4849cd', '20f062fb-013f-516b-8e86-f096267c8105', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 83, 83, 0, 'Children and adolescents ﻿
+   ('e33bb370-f18f-57e2-be91-cd68595f521f', 'HUTCHISON_24_2018', 'H1-C06', 72, 83, 0, 'Children and adolescents ﻿
 72 6
 need to be held as shown in Fig. 6.5. Sometimes it 
 is not too disastrous if the child cries at this point, 
@@ -7256,7 +6007,7 @@ Figure 6.5  How to hold a baby to allow the mouth and throat
 to be examined. The baby faces the examiner, with the mother 
 holding him firmly with one hand on the forehead and the other 
 holding both arms.', 3903),
-   ('64af5354-f4ad-5b31-8d25-44397725339c', 'ecd0cd95-2b10-5fba-ada4-0913c4346c19', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 84, 84, 0, 'SECTION Two
+   ('79b43209-fadf-577e-a588-67d92fbdfecf', 'HUTCHISON_24_2018', 'H1-C06', 73, 84, 0, 'SECTION Two
 Children and adolescents ﻿73
 father and mother (cm) and dividing by 2. Add 7 cm 
 for a boy and take away 7 cm for a girl. Plot the final 
@@ -7357,7 +6108,7 @@ Macrocephaly
 ■ Hydrocephalus
 ■ Mucopolysaccharidosis
 ■ Excessive brain growth (Canavans and Sotos syndromes)', 4582),
-   ('7f37a968-e30b-5715-8f05-f870edb84d39', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 85, 85, 0, 'Children and adolescents ﻿
+   ('4c24ad72-5678-5b6d-84b1-59ca1cd2bc51', 'HUTCHISON_24_2018', 'H1-C06', 74, 85, 0, 'Children and adolescents ﻿
 74 6
 Figure 6.6  Height, weight and head circumference: boys aged 0-4 years. (© 2009 Department of Health Charts developed by RCPCH/
 WHO/Department of Health. Reproduced with permission.)
@@ -7728,7 +6479,7 @@ corrected centile.
 Actual age
 Gestational age
 (7 weeks preterm)', 2337),
-   ('819da209-a4c1-588f-bf3d-1b9e16e9d957', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 86, 86, 0, 'SECTION Two
+   ('d8de3b83-d939-5909-b9c8-9fe5fc6610eb', 'HUTCHISON_24_2018', 'H1-C06', 75, 86, 0, 'SECTION Two
 Children and adolescents ﻿75
 98th
 hea
@@ -8055,7 +6806,7 @@ Length/Height
 Location
 Health worker name
 Figure 6.6, cont''d', 2276),
-   ('81709f33-ef08-5cdf-af22-5f83d4b15bc1', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 87, 87, 0, 'Children and adolescents ﻿
+   ('da4c5b24-6bad-5e7f-a502-4883d2fb952f', 'HUTCHISON_24_2018', 'H1-C06', 76, 87, 0, 'Children and adolescents ﻿
 76 6
 Figure 6.7  Height, weight and head circumference: girls aged 0-4 years. (© 2009 Department of Health. Charts developed by RCPCH/
 WHO/Department of Health. Reproduced with permission.)
@@ -8424,7 +7175,7 @@ UK - WHO Chart 2009 © DH Copyright 2009
 Actual age
 Gestational age
 (7 weeks preterm)', 2335),
-   ('efc8d2e7-135f-5731-9b3b-686deafcb178', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 88, 88, 0, 'SECTION Two
+   ('2fb32bd9-8144-5452-aac8-8de6decdec7f', 'HUTCHISON_24_2018', 'H1-C06', 77, 88, 0, 'SECTION Two
 Children and adolescents ﻿77
 124cm
 120
@@ -8746,7 +7497,7 @@ Length/Height
 Location
 Health worker name
 Figure 6.7, cont''d', 2266),
-   ('f4e3c2e1-a7da-5cc5-9612-d827753f2ce4', '8ffb366d-5b50-5fb6-87b7-afbbc5009718', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 89, 89, 0, 'Children and adolescents ﻿
+   ('02e6e61a-6fc9-5460-92ac-a8e8e45811d4', 'HUTCHISON_24_2018', 'H1-C06', 78, 89, 0, 'Children and adolescents ﻿
 78 6
 pressure in children, but these are not always available. 
 The blood pressure should be checked in all four 
@@ -8855,7 +7606,7 @@ child. For example, when offering a 10-month-old
 baby a small toy, watch to see how he grasps it and 
 reacts to it. Let the baby play with the toys and bricks 
 while sitting on the mother''s lap, and if the child', 5477),
-   ('607b5935-1f05-5eb2-81f5-ff6774463619', '54f4400e-82b5-52d4-9dce-58ccbc25d71f', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 90, 90, 0, 'SECTION Two
+   ('fc23c346-8b36-56c5-9e9d-f45bd77d5349', 'HUTCHISON_24_2018', 'H1-C06', 79, 90, 0, 'SECTION Two
 Children and adolescents ﻿79
 remains suspicious, get the mother to offer the various 
 objects.
@@ -8919,7 +7670,7 @@ upright and forward on his parent''s lap and distracted by an
 examiner in front of him. An examiner then presents sounds at 
 35 dB at different frequencies behind him and observes if the 
 child turns towards the direction of the sound.', 3301),
-   ('60d15f9e-40ce-55c0-a125-1fa5158b49bc', '68abf8c2-043a-5ae0-ab3a-919018fcc032', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 91, 91, 0, 'Children and adolescents ﻿
+   ('aa2ae293-bb0f-5804-a287-574db3ee05ce', 'HUTCHISON_24_2018', 'H1-C06', 80, 91, 0, 'Children and adolescents ﻿
 80 6
 who can cooperate with the tests. They are useful 
 for detecting middle-ear disease or glue ear which 
@@ -9023,7 +7774,7 @@ Box 6.13  Checklist for examination of the newborn
 ■ Neurological assessment: posture, movements and tone, 
 reflexes, the cry
 ■ Hips', 4761),
-   ('4e93453f-39ac-5da8-bf48-aa85acc6b60d', 'cd4df042-0e6e-5e24-9e33-7aebba2b528e', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 92, 92, 0, 'SECTION Two
+   ('0de124d6-431f-5814-aff9-6b7ca018d1b1', 'HUTCHISON_24_2018', 'H1-C06', 81, 92, 0, 'SECTION Two
 Children and adolescents ﻿81
 the legs in black and Asian babies, as well as some 
 from the Mediterranean region.
@@ -9128,7 +7879,7 @@ overlooked unless it is specifically checked for. While
 looking at the buttocks and anus, inspect for a sacral 
 dimple. This is a blind-ending pit which is usually of 
 no significance. Make sure that the back is straight', 5331),
-   ('9a2520b3-8a26-5975-bad4-ce27458855a0', '01e802bd-6e65-5b74-bb14-b05adfdc60fd', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 93, 93, 0, 'Children and adolescents ﻿
+   ('348c051a-4ed9-539c-8a40-ba367bed300f', 'HUTCHISON_24_2018', 'H1-C06', 82, 93, 0, 'Children and adolescents ﻿
 82 6
 and that there are no gross spinal lesions, especially 
 spina bifida. Check female external genitalia for 
@@ -9197,7 +7948,7 @@ Figure 6.13  Stage 2 of the examination of the hips: the hips are
 abducted and a ''click'' or a ''clunk'' is felt for (see text). Note the 
 position of the examiner''s hands, with the thumbs on the medial 
 aspect of the thigh and the fingers over the lateral trochanters.', 3591),
-   ('040a7351-cfe0-5a8a-a888-d09f5e7e60eb', 'dfb33dcf-97ab-5d63-9037-2aa2b9deaed8', 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 94, 94, 0, 'SECTION Two
+   ('a562d594-9f18-5013-b789-5f447f919b2f', 'HUTCHISON_24_2018', 'H1-C06', 83, 94, 0, 'SECTION Two
 Children and adolescents ﻿83
 children, your findings must be conveyed to the 
 parents.
@@ -9213,8 +7964,8 @@ them will develop. Developing and practising the
 skills of the examination of children is a challenge 
 that is immensely rewarding when completed 
 satisfactorily.', 630),
-   ('3c14208f-805d-55c6-9f98-6b2a025fdbde', NULL, 'c106ee47-a912-5e9b-8e9e-5b0cab817a32', 95, 95, 0, 'This page intentionally left blank', 34),
-   ('1a7877f2-af91-5fee-ad45-8b0dd50d6f1f', '4f30280a-b6b1-55fe-bad1-32bed6db5c66', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 96, 96, 0, 'Introduction
+   ('78792411-b61e-552a-85b2-97858c2ecb9e', 'HUTCHISON_24_2018', 'H1-C06', 84, 95, 0, 'This page intentionally left blank', 34),
+   ('c9cb55c8-d673-565a-a85f-c50b1ec12827', 'HUTCHISON_24_2018', 'H1-C07', 85, 96, 0, 'Introduction
 ''In the end, it''s not the years in your life that 
 count. It''s the life in your years.''
 Abraham Lincoln
@@ -9302,7 +8053,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 7 
 Older people
 Adam Feather', 4473),
-   ('72f83466-9d4a-513f-b79d-887e82f221c7', NULL, 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 97, 97, 0, 'Older people ﻿
+   ('51278fc7-90cb-5bb6-83c4-9cec7cba6997', 'HUTCHISON_24_2018', 'H1-C07', 86, 97, 0, 'Older people ﻿
 86 7
 Table 7.1  Normal ageing and changes in body systems
 System
@@ -9420,7 +8171,7 @@ Haematological malignancies
 Chronic lymphatic lymphoma and myeloma
 FEV1, forced expiratory volume in 1 second; FSH, follicle stimulating hormone; FVC, forced vital capacity; GI, gastrointestinal; GFR, glomerular filtration rate; 
 LH, luteinizing hormone; PEFR, peak expiratory flow rate.', 3283),
-   ('cf945f68-4c10-596e-b9fd-6808cedbef5f', 'edd9a3f0-e91f-58db-b563-3fab7e429942', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 98, 98, 0, 'SECTION Two
+   ('de9a640c-7d2f-5d45-ab89-e628ed6388b1', 'HUTCHISON_24_2018', 'H1-C07', 87, 98, 0, 'SECTION Two
 Older people ﻿87
 impaired, try to sit in a well-lit area to aid lip reading. 
 Hearing impairment is such a common problem that 
@@ -9523,7 +8274,7 @@ Box 7.3  Observations during the introduction
 ■ Does the patient understand your role as a doctor?
 ■ Is the patient at ease, or in pain?
 ■ Is there evidence of support from family or friends?', 4987),
-   ('aaaa9c56-c95b-57d6-8f9a-014064f3198c', '938e5bc7-ab38-5e91-adf7-3c13824d9c60', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 99, 99, 0, 'Older people ﻿
+   ('3ae437cd-47b0-5ec2-8709-077a0699c690', 'HUTCHISON_24_2018', 'H1-C07', 88, 99, 0, 'Older people ﻿
 88 7
 Box 7.4  Social networks
 Informal
@@ -9644,7 +8395,7 @@ Drug history
 Older people are prescribed more medication than 
 any other age group. A treatment history checklist is 
 useful when enquiring about current and past medications (Box 7.5). This is applicable to any patient with', 4833),
-   ('396bb651-f0d4-5f61-9237-bf0039847408', 'caae0593-5408-5a8a-b344-5fe280ae9b77', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 100, 100, 0, 'SECTION Two
+   ('4d671778-2e40-5a82-8058-ebb034c2bdb9', 'HUTCHISON_24_2018', 'H1-C07', 89, 100, 0, 'SECTION Two
 Older people ﻿89
 However, disability and cognitive impairment should 
 not be used as an excuse for not performing a 
@@ -9735,7 +8486,7 @@ answer to the question ''How will this part of the
 examination contribute to the management of this 
 patient?'' should then direct further assessment. 
 Figure 7.1  Transparent ''paparaceous'' skin and senile purpura.', 4730),
-   ('ac925732-5f2a-5a97-abe1-8d10c2a7dd73', 'd00774f6-a048-5043-8130-2657a2fe9e53', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 101, 101, 0, 'Older people ﻿
+   ('373a3a49-949f-5499-9df9-e7f7b6a7d0c6', 'HUTCHISON_24_2018', 'H1-C07', 90, 101, 0, 'Older people ﻿
 90 7
 Check cutaneous pressure areas, especially the 
 heels, hips and sacrum, for signs of skin breakdown 
@@ -9810,7 +8561,7 @@ bandaging for leg ulceration should be avoided.
 Figure 7.2  Transparent ''paparaceous'' skin. The surface has 
 been broken by trivial trauma. 
 Figure 7.3  Leg ulcers.', 3571),
-   ('118b4917-9b4f-5b76-bc51-f7ba51a214eb', '7f19acb3-75bb-5195-8be0-71773d0e26e9', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 102, 102, 0, 'SECTION Two
+   ('3e7125fd-9483-557e-a838-1d3c37289bae', 'HUTCHISON_24_2018', 'H1-C07', 91, 102, 0, 'SECTION Two
 Older people ﻿91
 Nervous system
 Central nervous system examination should routinely 
@@ -9916,7 +8667,7 @@ itself causes confusion)
 7
 8
 Figure 7.4  Clock-face drawing.', 4684),
-   ('eb4acf22-844b-5b80-9f71-690c181b7be9', '1dcf8bd3-beab-5238-995e-79bc94a99ec5', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 103, 103, 0, 'Older people ﻿
+   ('a9b27ae9-ffbf-5cd1-a23d-05b2f0760fc7', 'HUTCHISON_24_2018', 'H1-C07', 92, 103, 0, 'Older people ﻿
 92 7
 Dysphasia, that is difficulty in encoding and decoding language, is usually associated with a left hemisphere lesion (see Ch. 16). Dyspraxia is difficulty 
 initiating and carrying out voluntary movements, for 
@@ -10021,7 +8772,7 @@ Miscellaneous
 - poor vision
 - labyrinthine disorder
 - peripheral neuropathy', 4355),
-   ('7bdc205b-a50a-5fbe-8056-96a9fe8c1611', '6c05512e-5e29-59d2-b4e9-9df22ec900c5', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 104, 104, 0, 'SECTION Two
+   ('cb147ace-2ef7-59fc-ba6a-9d5ef6925013', 'HUTCHISON_24_2018', 'H1-C07', 93, 104, 0, 'SECTION Two
 Older people ﻿93
 Immobility
 Impaired mobility is one of the most common clinical 
@@ -10128,7 +8879,7 @@ of face and limbs, excess salivation and seborrhoea
 muscles, e.g. from osteomalacia
 ■ The tentative antalgic or painful gait of patients with 
 acute pain from e.g. arthritis, injury or ulceration', 5172),
-   ('444bee2c-9c9a-5026-84c2-59cbcdb21d63', '0323826b-b426-5f76-a7d4-ea7d124371c8', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 105, 105, 0, 'Older people ﻿
+   ('4c94edab-b5bc-5e2c-8b27-e2777124b2cd', 'HUTCHISON_24_2018', 'H1-C07', 94, 105, 0, 'Older people ﻿
 94 7
 Pressure ulcers
 The mean capillary pressure in the skin of healthy 
@@ -10224,7 +8975,7 @@ the older person
 ■ Neurological disease, e.g. stroke, myelopathy
 ■ Autonomic neuropathy
 Figure 7.5  Superficial pressure ulcers.', 4766),
-   ('b9fe699b-eeae-568c-a42e-a7c9f9e2f0d4', '30ae22c1-fb18-5065-b1a4-164abe13ec4b', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 106, 106, 0, 'SECTION Two
+   ('8b4c4166-996d-586a-9f72-34cf858b4adb', 'HUTCHISON_24_2018', 'H1-C07', 95, 106, 0, 'SECTION Two
 Older people ﻿95
 even of long-lasting confusion - for example drugs, 
 depression and endocrine abnormalities - and appropriate diagnosis and treatment may produce improvement. Dementia is increasingly common in old age 
@@ -10303,7 +9054,7 @@ and further investigation
 *MMSE was copyrighted by its author''s university and has hence fallen out 
 of day to day use. Commonly used in its place is the Montreal Cognitive 
 Assessment (MOCA) and other cognitive assessment scores.', 3967),
-   ('eee174fa-6504-51b3-921e-ae107fcc867b', '659140db-02c1-5433-8f02-615fcf3fba30', 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 107, 107, 0, 'Older people ﻿
+   ('992b6383-2396-5485-a6b0-e260a39dcace', 'HUTCHISON_24_2018', 'H1-C07', 96, 107, 0, 'Older people ﻿
 96 7
 ■ Capacity is decision-specific; a patient may 
 retain capacity around one decision and not 
@@ -10413,7 +9164,7 @@ keep changing their mind.
 ■ Does the patient personalize the information to 
 himself? This is not part of the MCA definition 
 but important.', 5362),
-   ('10aebcf5-adaf-52c2-9d9b-37bea832fb35', NULL, 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 108, 108, 0, 'SECTION Two
+   ('e9affe46-8f58-5662-9666-7fb48fa8aea1', 'HUTCHISON_24_2018', 'H1-C07', 97, 108, 0, 'SECTION Two
 Older people ﻿97
 full social background is important, including a 
 sympathetic description of the carer''s role. A thorough 
@@ -10436,8 +9187,8 @@ occur with ageing (e.g. senile purpura). However,
 abrasions, pressure ulcers and poor nutrition should 
 raise the possibility of abuse. Assessment requires a 
 history that includes open questions about the possibility of violent behaviour. Enquiry regarding the', 1326),
-   ('fa5c803e-db87-505c-be1f-c8b4e667ec65', NULL, 'f0fafdeb-3e5b-51a1-8838-6d636aed7bd6', 109, 109, 0, 'This page intentionally left blank', 34),
-   ('8b347af2-978f-5fce-bed4-78350d79fc48', 'ebdb783b-617f-5a78-b6c1-f4283e575fe8', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 110, 110, 0, 'Introduction
+   ('8a9173d7-2193-5b4c-93b9-750e021cdb02', 'HUTCHISON_24_2018', 'H1-C07', 98, 109, 0, 'This page intentionally left blank', 34),
+   ('427b52f6-c9b7-54a0-937b-e144e54612e8', 'HUTCHISON_24_2018', 'H1-C08', 99, 110, 0, 'Introduction
 Psychiatry is the medical specialty that concerns itself 
 with the diagnosis and management of mental illness. 
 Many people, even fellow doctors, often feel confused 
@@ -10526,7 +9277,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 8 
 Psychiatric assessment
 Trevor Turner', 4812),
-   ('85086069-60ed-54a7-916e-aa7624449b73', '68eff103-440d-5d96-8fe4-4ce71270c86b', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 111, 111, 0, 'Psychiatric assessment ﻿
+   ('b429070e-d73b-5d71-b6ff-d3386e750a86', 'HUTCHISON_24_2018', 'H1-C08', 100, 111, 0, 'Psychiatric assessment ﻿
 100 8
 Safety
 The doctor should sit nearest the door and neither 
@@ -10632,7 +9383,7 @@ room, in terms of safety, privacy, and confidentiality.
 Quiet surroundings, in which a patient can be listened 
 to and engaged with, are essential although not always 
 possible.', 5085),
-   ('b7f45e45-26e6-5b6e-af7d-d90dc0f970a5', '223f95fc-1b0c-5492-8344-76b037bb8006', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 112, 112, 0, 'SECTION Two
+   ('2f311bb3-c450-5408-ab00-bb580ffcbcec', 'HUTCHISON_24_2018', 'H1-C08', 101, 112, 0, 'SECTION Two
 Psychiatric assessment ﻿101
 is to use a normalising statement. This is employed 
 when you are asking about symptoms or behaviours 
@@ -10737,7 +9488,7 @@ open questions, avoid loaded questions, encourage
 patients to tell their story in their own words and 
 follow the approaches for general history taking 
 detailed in Chapter 1. Another way of questioning', 5344),
-   ('8772a72d-4ce3-56f8-9735-f1687ebdebff', '41c10234-a284-545e-8e9d-e2bed7e5129d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 113, 113, 0, 'Psychiatric assessment ﻿
+   ('06def7c6-1934-5487-a149-7abef5f42be9', 'HUTCHISON_24_2018', 'H1-C08', 102, 113, 0, 'Psychiatric assessment ﻿
 102 8
 up in the morning or to focus on problems, but if 
 none are volunteered a systematic inquiry is essential. 
@@ -10851,7 +9602,7 @@ nihilism
 ■ Paradoxical agitation
 ■ Psychotic symptoms with mood
 ■ Congruent delusions and auditory hallucinations', 5028),
-   ('79b501b6-755a-549d-bb71-34b4c5995c6c', '76b94092-3d34-5018-b916-6ad362ccdc61', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 114, 114, 0, 'SECTION Two
+   ('680535c3-6172-5dcf-a4ed-042bbe59030f', 'HUTCHISON_24_2018', 'H1-C08', 103, 114, 0, 'SECTION Two
 Psychiatric assessment ﻿103
 important to inquire into changes in weight in relation 
 to starting psychotropic medication. Many psychotropic medications (e.g. some antidepressants, 
@@ -10955,7 +9706,7 @@ Box 8.4  Psychic symptoms of anxiety
 fears of dying/collapsing/having a heart attack, with 
 pounding heart and/or shortness of breath and 
 hyperventilation, with an urge to flee one''s situation)', 4881),
-   ('6a3e0eed-a301-5a5f-8b31-14b406f7377d', 'b9a38e70-8532-59d7-af00-c9078cc0c1e4', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 115, 115, 0, 'Psychiatric assessment ﻿
+   ('58b78957-4dc1-55d3-b8ee-e31338b15e03', 'HUTCHISON_24_2018', 'H1-C08', 104, 115, 0, 'Psychiatric assessment ﻿
 104 8
 and relationships with parents or alternative caregivers 
 such as grandparents or foster carers. It is important 
@@ -11069,7 +9820,7 @@ Start with an open question such as ''How do you
 remember your childhood?'' ''Was it a happy or 
 unhappy time of life?'' Cover the family atmosphere 
 during early upbringing, relationships between parents', 5668),
-   ('8784dac7-e659-579b-97fd-14abe6fdbdf7', '1e442656-44da-512f-b75c-b0d62a689e4f', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 116, 116, 0, 'SECTION Two
+   ('1fdc1c43-f369-5d27-98ba-a4cea968ba0e', 'HUTCHISON_24_2018', 'H1-C08', 105, 116, 0, 'SECTION Two
 Psychiatric assessment ﻿105
 and personality. Ask about his current job (if the 
 patient is employed) such as the hours worked, what 
@@ -11176,7 +9927,7 @@ easily? Fertility treatment? Were the pregnancies
 planned? History of miscarriages, terminations of 
 pregnancy or stillbirths. Mental health problems during 
 pregnancy or after childbirth or related to menstruation', 5628),
-   ('c8d3bd60-c258-50bc-8054-808cbab9609b', 'ee61ca9c-760a-5d3e-a8b1-1b6ce85bba17', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 117, 117, 0, 'Psychiatric assessment ﻿
+   ('04f8c85a-13d1-5396-b353-2f81d56b4047', 'HUTCHISON_24_2018', 'H1-C08', 106, 117, 0, 'Psychiatric assessment ﻿
 106 8
 relationships, a repeated pattern in intimate relationships, repeatedly entering into abusive relationships). 
 Be aware of domestic violence and the need to ask 
@@ -11279,7 +10030,7 @@ drinking which causes physical, social or psychological
 harm to the drinker. Alcohol dependence is said to 
 exist when the criteria for a dependence syndrome 
 are met (Box 8.9).', 4458),
-   ('8825cf62-5d63-53c9-8430-a444ad4c9b6f', 'f48c613c-260c-5f94-a704-8967e151b9b1', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 118, 118, 0, 'SECTION Two
+   ('af674a1b-2cc9-54c9-97bb-cfbad5576cdd', 'HUTCHISON_24_2018', 'H1-C08', 107, 118, 0, 'SECTION Two
 Psychiatric assessment ﻿107
 The mental state examination
 The MSE is the cornerstone of the psychiatric assessment. It enables a systematic observation of clinical 
@@ -11385,7 +10136,7 @@ party going, time spent on leisure versus workaholic
 attitudes to health and body, level of acculturation (if 
 from an ethnic minority), e.g. traditional or Western 
 attitudes, dress', 5314),
-   ('a9f0dc39-ea88-51d8-a4e9-1da1e9a6e86f', '96e57ded-cdbd-5aae-a915-6cde42ec24a6', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 119, 119, 0, 'Psychiatric assessment ﻿
+   ('69b2e400-b1a0-5ef5-afd6-f0257785307d', 'HUTCHISON_24_2018', 'H1-C08', 108, 119, 0, 'Psychiatric assessment ﻿
 108 8
 visual hallucinations (looking away suddenly) or 
 tactile hallucinations (reacting as if hit or bitten).
@@ -11489,7 +10240,7 @@ Box 8.12  The mental state examination
 and concentration, registration and short-term memory, 
 recent memory, remote memory, intelligence, abstraction
 ■ Insight', 5132),
-   ('b2f3fa7f-cf47-58c3-8687-423fa72277c6', '164d36fb-f97f-5cd8-a4dc-98a444fe141d', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 120, 120, 0, 'SECTION Two
+   ('fafbddbd-8d39-5679-8bee-1736807341bb', 'HUTCHISON_24_2018', 'H1-C08', 109, 120, 0, 'SECTION Two
 Psychiatric assessment ﻿109
 purposeless behaviour such as hand-wringing, scratching, rubbing hands on knees and pacing up and down. 
 See Box 8.13.
@@ -11595,7 +10346,7 @@ interviewer in an exaggerated way
 with fingertip pressure
 ■ Ambitendence: the patient will start and then reverse a 
 movement, e.g. putting out a hand and withdrawing it', 4975),
-   ('63c999f2-c1f3-508e-8ee1-df7e86815900', 'ef2956fc-2f8c-5789-85a9-55d49e8b42e5', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 121, 121, 0, 'Psychiatric assessment ﻿
+   ('41fe6693-cfa8-521e-a66a-321ee60072bb', 'HUTCHISON_24_2018', 'H1-C08', 110, 121, 0, 'Psychiatric assessment ﻿
 110 8
 distressing. Such psychological numbness is seen in 
 depression, depersonalisation and (as a key symptom) 
@@ -11711,7 +10462,7 @@ mixture of unrelated words (''word salad'')
 no longer appropriate (in ''echolalia'', the patient 
 repeats what the interviewer says), e.g. in organic 
 brain disease and some forms of schizophrenia', 5892),
-   ('90d95825-1f79-59c8-8a3f-589d8699fef7', '6c5f3b04-9ad8-5464-9474-c1e0f7e4a1ba', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 122, 122, 0, 'SECTION Two
+   ('0d6a8c17-85b0-5442-b653-bafebd8a21fc', 'HUTCHISON_24_2018', 'H1-C08', 111, 122, 0, 'SECTION Two
 Psychiatric assessment ﻿111
 while you are taking a history and may have disinhibited behaviour. Specific questions to ask if they 
 have not already come up are listed in Box 8.18.
@@ -11817,7 +10568,7 @@ things which are out of character and you would not
 normally do, for example planning to spend a lot of 
 money on a shopping spree, or thinking of starting 
 affairs or relationships which may not be wise?', 4626),
-   ('3ac739ce-3d61-5eae-986a-5f80fba9e43f', '17eb7bac-8773-5774-ab6b-10f7d7607400', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 123, 123, 0, 'Psychiatric assessment ﻿
+   ('2793617e-93a6-5f4e-b01f-d734e79d2046', 'HUTCHISON_24_2018', 'H1-C08', 112, 123, 0, 'Psychiatric assessment ﻿
 112 8
 constantly to wash them) or even infection (they 
 may reek of antiseptics), and many patients constantly 
@@ -11922,7 +10673,7 @@ mood and lack of emotional response
 ■ Lack of volition - loss of motivation; can be extreme 
 when patient neglects basic self-care
 ■ Social withdrawal', 5099),
-   ('271db39f-a68d-5fbd-93c5-567eaa3c1b01', NULL, '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 124, 124, 0, 'SECTION Two
+   ('89bd0e75-bc90-5a96-b944-543110b77c7a', 'HUTCHISON_24_2018', 'H1-C08', 113, 124, 0, 'SECTION Two
 Psychiatric assessment ﻿113
 ''Have you felt that other people are too interested 
 in you?'', ''Do you feel that people comment on you 
@@ -12026,7 +10777,7 @@ up by others); and thought withdrawal (where patients feel
 that thoughts are actually extracted from their heads). These 
 experiences are very specific and, in the absence of organic 
 brain disease, are diagnostic of schizophrenia.', 5205),
-   ('3998a9c9-97d1-5a73-acca-acb1ef144b56', '318530bc-3447-5885-b130-7edc24b6e5a5', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 125, 125, 0, 'Psychiatric assessment ﻿
+   ('cfff611b-1c83-5204-94c7-067c3382b2cd', 'HUTCHISON_24_2018', 'H1-C08', 114, 125, 0, 'Psychiatric assessment ﻿
 114 8
 (partial blindness or deafness) or a lowered level 
 of consciousness (common in acute confusional 
@@ -12135,7 +10886,7 @@ Box 8.23  Details of hallucinations
 ■ Recognisable voice
 ■ What voices say (record verbatim)
 ■ Commands to do harm (part of risk assessment)', 5597),
-   ('ddd0137e-cea9-582f-b4ab-fd0c05dfe77d', 'ba97c4ea-adf2-51cf-934f-6561ad9842cd', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 126, 126, 0, 'SECTION Two
+   ('de2ca046-ded9-58d6-b13c-5a1470b57f69', 'HUTCHISON_24_2018', 'H1-C08', 115, 126, 0, 'SECTION Two
 Psychiatric assessment ﻿115
 too disturbed, or there may be poor rapport, and 
 some will resent an implication that there is something 
@@ -12234,7 +10985,7 @@ colourless. Some patients say it is ''as if'' they are on a
 stage set and the world no longer feels real. This often 
 accompanies depersonalisation, in a similar context of 
 heightened anxiety, or depression or severe fatigue.', 4792),
-   ('cce037bc-9478-504a-88ac-ec7498ac19d4', 'd8391ff2-a3bb-5ccf-8860-b352a6c1378e', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 127, 127, 0, 'Psychiatric assessment ﻿
+   ('a64a8377-64a3-52c8-95cb-aca03a8e62b6', 'HUTCHISON_24_2018', 'H1-C08', 116, 127, 0, 'Psychiatric assessment ﻿
 116 8
 Place
 Patients should know where they are (e.g. home or 
@@ -12342,7 +11093,7 @@ unstructured timetables. Long stays in hospital, where
 one day is much like the next, however, are not 
 conducive to an awareness of which particular day 
 it is or the exact date of the month.', 4207),
-   ('20fe7b63-546b-54ba-8e83-6e745d7a8182', 'c6986d3a-9b23-5002-8abf-72de5f6453b3', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 128, 128, 0, 'SECTION Two
+   ('e9d43bce-5fd8-51e4-afd3-16c3cf60b9c8', 'HUTCHISON_24_2018', 'H1-C08', 117, 128, 0, 'SECTION Two
 Psychiatric assessment ﻿117
 it correctly, ask that it be remembered, since it will 
 be asked for again later. Continue with another part 
@@ -12452,7 +11203,7 @@ information and their response is recorded. If the
 patient makes a mistake, repeat the same information. 
 Keep going until it is repeated correctly, and record 
 how many tries this takes. When the patient repeats', 5694),
-   ('4a6788e8-1379-598b-9194-05806541eb61', '20dfdabe-cd7b-5c81-9943-89f0ae0c147a', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 129, 129, 0, 'Psychiatric assessment ﻿
+   ('35f1e606-c639-5f60-aa99-4cba3f8d6e07', 'HUTCHISON_24_2018', 'H1-C08', 118, 129, 0, 'Psychiatric assessment ﻿
 118 8
 history taking was part of a helpful process, showing 
 that you do understand his problems and out of 
@@ -12554,7 +11305,7 @@ clear outline to the patient about what you, the
 doctor, think is the problem and what should be done 
 in terms of treatment. This stage may need negotiation, 
 and it is important to leave a patient feeling that the', 5155),
-   ('6bdb0c21-b168-5fa3-b278-ae1c40deb89d', '9735521e-419e-5e8e-aa65-942270c80cd7', '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 130, 130, 0, 'SECTION Two
+   ('feca73a0-7ede-5688-a53c-de31ccead8d0', 'HUTCHISON_24_2018', 'H1-C08', 119, 130, 0, 'SECTION Two
 Psychiatric assessment ﻿119
 from the deteriorating scores in dementing illness. 
 Patients with schizophrenia, at least in the acute 
@@ -12605,8 +11356,8 @@ support a more detailed prognosis when a diagnosis
 of dementia has been reached. Repeat testing may 
 also help to distinguish the relatively static cognitive 
 deficits arising from chronic depression in the elderly', 2740),
-   ('fed213c4-8c7f-5a71-bd9f-cad65024536f', NULL, '323c8f7a-91ad-5da8-ae7b-dee65e272c9f', 131, 131, 0, 'This page intentionally left blank', 34),
-   ('5a68409d-a812-50dc-b357-d05475015b3e', 'f1f20839-5aa6-55a1-841e-16bf0f066adb', '6a1185dd-7349-53b7-9b52-3456977cdd87', 132, 132, 0, 'Introduction
+   ('9b2acf2a-372a-55a5-a35f-105ead66ff23', 'HUTCHISON_24_2018', 'H1-C08', 120, 131, 0, 'This page intentionally left blank', 34),
+   ('296bcbbf-270e-501f-b4bb-1821b95dcafd', 'HUTCHISON_24_2018', 'H1-C09', 121, 132, 0, 'Introduction
 A medical emergency requires swift recognition and 
 prompt action. Recognition of urgency does not 
 necessarily require a precise diagnosis; the fact that 
@@ -12691,7 +11442,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 Patients presenting 
 as emergencies
 Geraint Morris', 4351),
-   ('069afddd-7d6d-57af-b7cc-6465cd36c843', 'e2c7e2af-9d90-5317-a4d0-7ca7167898bc', '6a1185dd-7349-53b7-9b52-3456977cdd87', 133, 133, 0, 'Patients presenting as emergencies ﻿
+   ('5f9cb964-ebb0-539e-8440-fd9ae139782f', 'HUTCHISON_24_2018', 'H1-C09', 122, 133, 0, 'Patients presenting as emergencies ﻿
 122 9
 is evidence of sepsis with additional physiological 
 upset, such as new or increased requirement for 
@@ -12804,7 +11555,7 @@ Solid tumours; lymphoma; leukaemia;
 amyloidosis; sarcoidosis
 Drugs
 Prescription; recreational (e.g. ecstasy)', 5303),
-   ('a5be2227-4d17-5d45-a019-fbd25f26af0c', NULL, '6a1185dd-7349-53b7-9b52-3456977cdd87', 134, 134, 0, 'SECTION Two
+   ('22bc3a24-79d6-526b-91bb-3dbee146ba26', 'HUTCHISON_24_2018', 'H1-C09', 123, 134, 0, 'SECTION Two
 Patients presenting as emergencies ﻿123
 Table 9.3). The blood pressure should be taken in 
 both arms, particularly if the arm pulses are unequal. 
@@ -12923,7 +11674,7 @@ High
 Moderate
 <2
 Low', 4407),
-   ('b7ec40d4-9cbf-53d4-a631-f61dbe2a94f4', 'bb140cc6-5daf-52b8-8cf8-8777ad596168', '6a1185dd-7349-53b7-9b52-3456977cdd87', 135, 135, 0, 'Patients presenting as emergencies ﻿
+   ('3126b5c6-8d52-5a42-9cb9-2a48293eabba', 'HUTCHISON_24_2018', 'H1-C09', 124, 135, 0, 'Patients presenting as emergencies ﻿
 124 9
 General principles
 A rapid clinical assessment will establish if detailed 
@@ -13047,7 +11798,7 @@ Pulmonary embolism
 (hypoxia often present)
 Metabolic acidosis (hypoxia 
 often absent)', 5313),
-   ('bf811764-5ff5-560c-b58a-f50b1a3c8837', NULL, '6a1185dd-7349-53b7-9b52-3456977cdd87', 136, 136, 0, 'SECTION Two
+   ('cfd6b950-8fd8-5dcb-909c-7aca25c0b384', 'HUTCHISON_24_2018', 'H1-C09', 125, 136, 0, 'SECTION Two
 Patients presenting as emergencies ﻿125
 Table 9.5  Logical thinking for conditions causing breathlessness, including the emergency conditions
 Clinical assessment
@@ -13149,7 +11900,7 @@ In the emergency situation of the acutely breathless
 patient it is helpful to consider the potential problem 
 in one of two ''groupings'': upper airway obstruction 
 and cardiopulmonary pathologies that affect ventilation and/or gas exchange (Table 9.5).', 3274),
-   ('326732b0-d0ba-57b9-849d-92f478fdc9b8', '8c1c83a1-da31-5fd1-b515-1edb95b8ab98', '6a1185dd-7349-53b7-9b52-3456977cdd87', 137, 137, 0, 'Patients presenting as emergencies ﻿
+   ('08bfc1b0-f689-553b-8062-af516614e5c8', 'HUTCHISON_24_2018', 'H1-C09', 126, 137, 0, 'Patients presenting as emergencies ﻿
 126 9
 led to a sharp reduction in the incidence of acute 
 epiglottitis - an important cause of stridor in children 
@@ -13233,7 +11984,7 @@ often leads to objects being inserted into their mouths.
 In developed countries, vaccination programmes that 
 include Haemophilus influenzae type B vaccine have 
 Figure 9.1  The recovery position.', 4524),
-   ('1aede77a-62bc-54c2-8338-15434e9aed7e', 'e438d4ba-d3d5-54ce-a455-639c98533a1e', '6a1185dd-7349-53b7-9b52-3456977cdd87', 138, 138, 0, 'SECTION Two
+   ('541adf94-de84-573f-8ae5-168de7b8b694', 'HUTCHISON_24_2018', 'H1-C09', 127, 138, 0, 'SECTION Two
 Patients presenting as emergencies ﻿127
 Focal features such as tactile fremitus, dullness to 
 percussion, increased vocal resonance and bronchial 
@@ -13343,7 +12094,7 @@ coarse crackles with acute on chronic shortness
 of breath is typical of an exacerbation of COPD. 
 Widespread bilateral unchanging fine crepitations are 
 most often heard with acute pulmonary oedema.', 6026),
-   ('02c64a6b-af64-5016-b3cd-1c1aa480f34d', 'c5a5301e-dee2-5dff-aad3-8c17feae79e9', '6a1185dd-7349-53b7-9b52-3456977cdd87', 139, 139, 0, 'Patients presenting as emergencies ﻿
+   ('f72ac2fd-fac9-55e5-8855-6ceaa83a0b9a', 'HUTCHISON_24_2018', 'H1-C09', 128, 139, 0, 'Patients presenting as emergencies ﻿
 128 9
 cooler peripheries, with weak, ''thready'' peripheral 
 pulses. Although ''normal'' pulse pressure is often 
@@ -13453,7 +12204,7 @@ Hypovolaemic
 Cardiogenic
 Distributive
 Obstructive', 5421),
-   ('2b5092dc-bada-5992-9bf8-a19fc20e5b4c', '4843fb48-c356-572d-a7c4-23da96068e6b', '6a1185dd-7349-53b7-9b52-3456977cdd87', 140, 140, 0, 'SECTION Two
+   ('bc7582d0-879d-53aa-b4e7-7c4e935252bb', 'HUTCHISON_24_2018', 'H1-C09', 129, 140, 0, 'SECTION Two
 Patients presenting as emergencies ﻿129
 intra-abdominal blood loss, so a carefully taken history 
 is likely to be diagnostically informative. Replacement 
@@ -13582,7 +12333,7 @@ Retroperitoneal
 Ruptured abdominal aortic aneurysm
 Peripheries
 Long bone fractures', 4350),
-   ('cad609e1-3d90-5349-aad1-0d6ef9f733be', '963737cc-9072-5d88-9bc7-050febc0c447', '6a1185dd-7349-53b7-9b52-3456977cdd87', 141, 141, 0, 'Patients presenting as emergencies ﻿
+   ('d6771a08-9904-5ce0-99f6-9c9f0a664148', 'HUTCHISON_24_2018', 'H1-C09', 130, 141, 0, 'Patients presenting as emergencies ﻿
 130 9
 The patient with diminished 
 consciousness
@@ -13712,7 +12463,7 @@ when pain stimulus is
 used on them
 No response to 
 voice or pain', 4296),
-   ('5369366b-a04e-5296-a6d8-04e436c38393', NULL, '6a1185dd-7349-53b7-9b52-3456977cdd87', 142, 142, 0, 'SECTION Two
+   ('9a1fd47a-6478-598f-ac6a-bb5c4484cfa1', 'HUTCHISON_24_2018', 'H1-C09', 131, 142, 0, 'SECTION Two
 Patients presenting as emergencies ﻿131
 meningism by assessing nuchal rigidity (diminished 
 neck flexion with otherwise retained neck movements) 
@@ -13840,7 +12591,7 @@ disturbance)
 Liver
 Renal
 Non-cranial infection', 4991),
-   ('6e49b196-d8a3-5694-8ad9-0b4e8dc81b29', '786379ec-585a-561d-9587-6ad9fcdb4ac4', '6a1185dd-7349-53b7-9b52-3456977cdd87', 143, 143, 0, 'Patients presenting as emergencies ﻿
+   ('98ee2dbf-b7c7-5d94-b933-da37b6f4ce60', 'HUTCHISON_24_2018', 'H1-C09', 132, 143, 0, 'Patients presenting as emergencies ﻿
 132 9
 The syncopal patient
 Syncope is a frequent cause of presentation to hospital 
@@ -13961,7 +12712,7 @@ Hypovolaemia
 Blood loss
 Diarrhoea
 Vomiting', 4718),
-   ('a98b4ec7-a574-56de-b6e7-ca265df31972', '49706390-33fe-572b-8f09-a0996e5c2caf', '6a1185dd-7349-53b7-9b52-3456977cdd87', 144, 144, 0, 'SECTION Two
+   ('43c98940-b7f6-5807-a72d-6482b47e467f', 'HUTCHISON_24_2018', 'H1-C09', 133, 144, 0, 'SECTION Two
 Patients presenting as emergencies ﻿133
 or not. It should be remembered that a diagnosis 
 of seizures may lead to social and employment 
@@ -14079,7 +12830,7 @@ minutes'', although in modern times it
 is more sensible to accept that ''any 
 prolonged seizure'' may be classified 
 as status epilepticus', 5214),
-   ('e8cb80d8-7b5c-578a-a206-67668658aa91', NULL, '6a1185dd-7349-53b7-9b52-3456977cdd87', 145, 145, 0, 'Patients presenting as emergencies ﻿
+   ('ae374937-b607-5595-ab54-e0b64acb8153', 'HUTCHISON_24_2018', 'H1-C09', 134, 145, 0, 'Patients presenting as emergencies ﻿
 134 9
 contractions. Persistent fever together with other 
 abnormal observation such as tachycardia and raised 
@@ -14199,7 +12950,7 @@ poorly controlled Parkinson''s disease,
 manifested as severe coarse tremor 
 which, to the untrained eye, may 
 resemble myoclonus', 5503),
-   ('1fc291bb-4760-5e2e-a29b-d9a6a89a41d5', 'fc34ebef-300a-536d-a4d8-7ef82681c99f', '6a1185dd-7349-53b7-9b52-3456977cdd87', 146, 146, 0, 'SECTION Two
+   ('c9273afc-7d29-5f20-9600-bb0661c8d68a', 'HUTCHISON_24_2018', 'H1-C09', 135, 146, 0, 'SECTION Two
 Patients presenting as emergencies ﻿135
 drug-therapy implications. The epilepsy expert will 
 also decide, together with the patient, on the clinical 
@@ -14315,7 +13066,7 @@ features, meningism, altered conscious level or
 unexplained headache, a cranial CT scan should be 
 considered. A lumbar puncture should be performed 
 if meningitis remains a consideration.', 5137),
-   ('e533d7b1-8ccc-5a59-987e-37085fad944b', '15d42d30-ff99-53d2-b7c7-35b70d6f37b2', '6a1185dd-7349-53b7-9b52-3456977cdd87', 147, 147, 0, 'Patients presenting as emergencies ﻿
+   ('ffd726b4-e354-5246-a30b-757d2083454a', 'HUTCHISON_24_2018', 'H1-C09', 136, 147, 0, 'Patients presenting as emergencies ﻿
 136 9
 headache is typically unilateral and pulsating. The 
 acute period often lasts between 4 and 72 hours, and 
@@ -14441,7 +13192,7 @@ Glaucoma
 Neuralgia
 Trigeminal neuralgia, cluster 
 headache', 5424),
-   ('f7625b18-9369-5650-836d-41f2b35b0d88', 'abef1d1e-5efc-508b-993a-f703bc1d70c4', '6a1185dd-7349-53b7-9b52-3456977cdd87', 148, 148, 0, 'SECTION Two
+   ('fe3f18bb-3d72-5d8c-8745-32ab446107f0', 'HUTCHISON_24_2018', 'H1-C09', 137, 148, 0, 'SECTION Two
 Patients presenting as emergencies ﻿137
 be reserved for the original definition of ''reduced 
 motor power'', many patients will confess to ''weakness'' 
@@ -14540,7 +13291,7 @@ Lesion in upper cervical cord (external compression, ischaemia, inflammation, e.
 myelitis, infection, intramedullary space-occupying lesion)
 Post-infectious inflammatory polyneuropathy (''Guillain-Barré syndrome''), acute myopathy 
 (myositis, rhabdomyolysis)', 5098),
-   ('7326c669-d50d-53dd-aabe-2b016e1ec4f0', 'c42d56da-0757-568d-859c-53f9bdcd1650', '6a1185dd-7349-53b7-9b52-3456977cdd87', 149, 149, 0, 'Patients presenting as emergencies ﻿
+   ('cafe94b6-02bd-5553-94bc-8ad146be73c5', 'HUTCHISON_24_2018', 'H1-C09', 138, 149, 0, 'Patients presenting as emergencies ﻿
 138 9
 the periumbilical area, whereas large bowel pain 
 is usually found over the site of the pathology or 
@@ -14663,7 +13414,7 @@ around the right chest wall to the right dorsal area;
 pancreatic pain usually localizes over the epigastrium 
 and radiates through to the back; pain from the 
 small bowel is often manifested diffusely or over', 5565),
-   ('647e7749-7d4d-506e-8443-e04217fd3dd9', '5a54d625-6f4e-5dd9-b99b-de2c536219f2', '6a1185dd-7349-53b7-9b52-3456977cdd87', 150, 150, 0, 'SECTION Two
+   ('545fee73-873e-501f-9f58-e2612f6cfb44', 'HUTCHISON_24_2018', 'H1-C09', 139, 150, 0, 'SECTION Two
 Patients presenting as emergencies ﻿139
 its presence may suggest acute bleeding from any 
 source proximal to the ascending colon, the most 
@@ -14765,7 +13516,7 @@ Mallory-Weiss tear
 Tear of lower oesophagus or upper stomach from recurrent vomiting
 Nose bleeds (epistaxis)
 A large amount of swallowed blood may lead to melaena', 5101),
-   ('f1ccfc19-7c45-5725-9bdc-f454786061bd', NULL, '6a1185dd-7349-53b7-9b52-3456977cdd87', 151, 151, 0, 'Patients presenting as emergencies ﻿
+   ('bddf4896-b245-5d25-a7ef-c11e081a78a1', 'HUTCHISON_24_2018', 'H1-C09', 140, 151, 0, 'Patients presenting as emergencies ﻿
 140 9
 urgent upper gastrointestinal endoscopy varies widely 
 among hospitals and different healthcare systems. 
@@ -14777,7 +13528,7 @@ immediately. Blood is the best replacement fluid for
 a patient in shock with gastrointestinal bleeding but 
 should not necessarily be given immediately for the 
 stable patient who is anaemic. The availability of', 543),
-   ('e1102f67-d7e9-50a0-a2c8-08827813fdb0', '762252c0-4cd4-5d72-8468-f518e6181b24', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 152, 152, 0, 'Introduction
+   ('04f8146d-00de-522b-baf3-7df116da713d', 'HUTCHISON_24_2018', 'H1-C10', 141, 152, 0, 'Introduction
 Fever is one of the most common presenting features 
 in any doctor''s practice. It is the hallmark of the 
 body''s response to infection or inflammation. Before 
@@ -14864,7 +13615,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 10 
 Patients with a fever
 Caryn Rosmarin and Ali Jawad', 4247),
-   ('628fb475-9d2b-572f-95c3-ca1b114ef9e6', NULL, 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 153, 153, 0, 'Patients with a fever ﻿
+   ('cc0df046-5736-54ff-b34d-4070f7f233ad', 'HUTCHISON_24_2018', 'H1-C10', 142, 153, 0, 'Patients with a fever ﻿
 142 10
 turning up the thermostat to a higher temperature. 
 So long as the reset temperature remains below the 
@@ -14972,7 +13723,7 @@ colder surface, e.g. swimming in cold water or lying on
 a cold floor
 Radiation: Increased exposure of the body surface will lead 
 to increased heat loss', 2204),
-   ('b14f5805-bb6f-5ff3-8525-0a4e0f185f2d', '71d162da-81ab-51f7-b5e2-a3458ccfa8e5', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 154, 154, 0, 'SECTION Two
+   ('628b8043-5069-59a5-9cfd-4f0522eadcd5', 'HUTCHISON_24_2018', 'H1-C10', 143, 154, 0, 'SECTION Two
 Patients with a fever ﻿143
 cytotoxic effects of lymphocytes, impairment of the 
 growth and virulence of bacteria and evidence of 
@@ -15056,7 +13807,7 @@ a. Hot environment
 b. High humidity
 c. Inhibiting sweating (drugs)
 Figure 10.3  Mechanisms of thermoregulation and disregulation.', 3415),
-   ('c40da473-cd98-5ec8-9162-3d9c4143991a', NULL, 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 155, 155, 0, 'Patients with a fever ﻿
+   ('9684e63d-df83-5554-a69b-2ec005bbc5a3', 'HUTCHISON_24_2018', 'H1-C10', 144, 155, 0, 'Patients with a fever ﻿
 144 10
 cases, the temperature subsides spontaneously and 
 no cause is identified (Box 10.2).
@@ -15133,7 +13884,7 @@ Normal range
 Remittent fever
 Normal range
 Figure 10.4  The patterns of fever.', 2765),
-   ('c7916e51-5e06-5fec-ba2d-6132d544b8e2', 'c54998fb-41df-5f64-806d-188b8f9bff73', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 156, 156, 0, 'SECTION Two
+   ('6eeb2a71-8e6a-5039-98db-b5e94f1238a5', 'HUTCHISON_24_2018', 'H1-C10', 145, 156, 0, 'SECTION Two
 Patients with a fever ﻿145
 presenting complaint and the associated complaints 
 as part of the systematic history.
@@ -15229,7 +13980,7 @@ tissue diseases
 Miscellaneous
 Undiagnosed
 Figure 10.5  Causes of fever in India and Europe.', 3721),
-   ('5c3ef086-2c00-5240-9216-852bc46fd447', 'e090e91e-2d7c-5dff-8f82-2c7de6247393', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 157, 157, 0, 'Patients with a fever ﻿
+   ('826af3d6-22f2-593d-8513-5fd1e197c6af', 'HUTCHISON_24_2018', 'H1-C10', 146, 157, 0, 'Patients with a fever ﻿
 146 10
 ■ Recreational habits, especially illicit drug use or 
 tattoos.
@@ -15341,7 +14092,7 @@ Central America/Caribbean - diarrhoeal illness, RTI,
 dengue, malaria, mosquito-borne viruses
 North America/Europe - influenza, HIV, Lyme, tick-borne 
 viruses, TB (eastern Europe)', 4781),
-   ('9891beab-d67e-5375-b374-8299a9602e6f', 'f3bba867-f271-59e3-a129-2290d7324d32', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 158, 158, 0, 'SECTION Two
+   ('80c2fd26-0deb-590b-93ff-97b36e2c0961', 'HUTCHISON_24_2018', 'H1-C10', 147, 158, 0, 'SECTION Two
 Patients with a fever ﻿147
 with a whitish vaginal discharge and vaginal 
 itching.
@@ -15455,7 +14206,7 @@ swelling of lymph glands in the groin.
 women, particularly those who use vaginal 
 douches or after a course of antibiotics. It 
 may present as urinary tract infections do', 4856),
-   ('9aa6bee4-75b8-5e1e-ab36-c7a9a1422e30', '845cd392-4400-5319-83a6-55e97dbcabcf', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 159, 159, 0, 'Patients with a fever ﻿
+   ('21bee0fb-d394-5411-b4dc-e56a61561ce9', 'HUTCHISON_24_2018', 'H1-C10', 148, 159, 0, 'Patients with a fever ﻿
 148 10
 logic signs in severe typhoid fever and meningeal 
 signs in HIV seroconversion illness.
@@ -15573,7 +14324,7 @@ Not all patients with nervous system symptoms
 and fever have a primary nervous system infection. 
 Some systemic infections can cause neurological 
 symptoms such as severe or cerebral malaria, neuro-', 5307),
-   ('986c5b19-2046-5034-96e2-f882e9deee3f', '8abc8596-0980-5518-b223-4e55325fe512', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 160, 160, 0, 'SECTION Two
+   ('9d699317-1c80-5c4c-8d32-17b9573e2b7a', 'HUTCHISON_24_2018', 'H1-C10', 149, 160, 0, 'SECTION Two
 Patients with a fever ﻿149
 Examination
 General assessment
@@ -15680,7 +14431,7 @@ granulomatosis)
 ■ Eosinophilic granulomatosis with polyangiitis (EGPA) 
 (Churg-Strauss syndrome)
 ■ Microscopic polyangiitis (PA)', 4907),
-   ('7771b2db-7789-5835-9086-e4f78de852ea', '92dd7559-ba2e-5c89-afdf-5c46da9efa10', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 161, 161, 0, 'Patients with a fever ﻿
+   ('8bc0ed3b-6f19-5a26-899c-a086844a4613', 'HUTCHISON_24_2018', 'H1-C10', 150, 161, 0, 'Patients with a fever ﻿
 150 10
 can be determined by finding dullness to percussion 
 along with increased vocal resonance of crepitation 
@@ -15763,7 +14514,7 @@ nails
 Splinter haemorrhages on the palms and nail beds require further investigation for infective endocarditis. 
 Scaly, itchy lesions between the fingers suggest the presence of scabies mites. Typical nail deformities of 
 non-infectious inflammatory diseases, such as psoriasis, should be noticed.', 5101),
-   ('29c2ab2a-6ce7-5ddc-9f9c-126001a7bf0b', 'bdf1ed8a-5bb4-59ba-bc8e-7aa3d0ea8466', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 162, 162, 0, 'SECTION Two
+   ('9204b8ee-7e15-541e-bbf3-0a3c1acb5f2a', 'HUTCHISON_24_2018', 'H1-C10', 151, 162, 0, 'SECTION Two
 Patients with a fever ﻿151
 greenish fish-smelling discharge. A purulent discharge 
 coming from the cervix is suggestive of gonococcal 
@@ -15883,7 +14634,7 @@ Nodular
 Erythema nodosum, TB, leprosy, 
 non-infective vasculitis, Behçet''s 
 syndrome', 5203),
-   ('f4002855-d4a7-5a45-adbf-765bc97813a5', '70243146-dd28-5b6a-ad20-d2b581d20dfb', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 163, 163, 0, 'Patients with a fever ﻿
+   ('e189d07d-b6b2-5438-9299-c55046fa15e2', 'HUTCHISON_24_2018', 'H1-C10', 152, 163, 0, 'Patients with a fever ﻿
 152 10
 About one fifth of patients with relapsing polychondritis present with fever and in the absence of 
 chondritis of the external ear and the nose, the 
@@ -15992,7 +14743,7 @@ Box 10.5  The classic periodic fever syndromes
 ■ TNF receptor-associated periodic syndrome (TRAPS)
 ■ Hyperimmunoglobulinemia D with periodic fever 
 syndrome (HIDS)', 5681),
-   ('bc289b28-f125-5caf-bc05-b3d7b8faab17', '69ac1bb9-5b2e-5069-88bb-5d675b529304', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 164, 164, 0, 'SECTION Two
+   ('385f31ec-3dd5-54ae-9e47-d56c89764e89', 'HUTCHISON_24_2018', 'H1-C10', 153, 164, 0, 'SECTION Two
 Patients with a fever ﻿153
 Full blood count with differential and film
 White blood cell count is often raised in infection 
@@ -16081,7 +14832,7 @@ Chemotherapy
 Idiosyncrasy
 Succinylcholine, haloperidol, 
 serotonin syndrome', 3336),
-   ('4638547d-aee9-5dd5-8eda-80b961a3994c', '8a112c6e-0f65-54a9-ad14-f28671e7bbad', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 165, 165, 0, 'Patients with a fever ﻿
+   ('54a70662-7d91-5cd4-8073-7d8d7adc1f22', 'HUTCHISON_24_2018', 'H1-C10', 154, 165, 0, 'Patients with a fever ﻿
 154 10
 Sample any fluid that represents the possible site 
 of infection as follows:
@@ -16193,7 +14944,7 @@ taken aseptically prior to any antibiotic
 therapy.
 Bone marrow cultures may be more useful than 
 blood cultures for some intracellular pathogens.', 5108),
-   ('6c771066-6cb0-5c5c-be0b-6b4cb5b4d23a', 'f04b1473-a076-5cca-be86-f15b827fb820', 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 166, 166, 0, 'SECTION Two
+   ('d3c1a8e0-bdc1-5fa8-8c17-012f217566cb', 'HUTCHISON_24_2018', 'H1-C10', 155, 166, 0, 'SECTION Two
 Patients with a fever ﻿155
 unknown. This is termed a PUO or pyrexia of 
 unknown origin. The classic definition of a PUO is 
@@ -16306,8 +15057,8 @@ Mycoplasmas
 *HACEK includes Haemophilus parainfluenzae, Haemophilus aphrophilus, 
 Actinobacillus, actinomycetemcomitans, Cardiobacterium hominis, Eikenella 
 corrodens, and Kingella kingae', 3766),
-   ('9b1a7f37-649d-56da-ac2b-ca6dc1e7fbf3', NULL, 'fcdc5b11-dc30-5296-bdab-284e5a3c3f24', 167, 167, 0, 'This page intentionally left blank', 34),
-   ('4101d1df-e129-52f0-a151-11ccb4a6d5a5', '3e026b58-aed0-5788-b243-f01b15303304', '273a911d-8a5a-56f1-9f61-9c993e674466', 168, 168, 0, 'Introduction
+   ('fddac990-f63d-52c1-ae5f-11833303d6b4', 'HUTCHISON_24_2018', 'H1-C10', 156, 167, 0, 'This page intentionally left blank', 34),
+   ('6a64a348-e210-5e4c-90a7-9b336fa047a6', 'HUTCHISON_24_2018', 'H1-C11', 157, 168, 0, 'Introduction
 Pain is a familiar phenomenon which is part of our 
 everyday life and is a feature of various diseases. It 
 most commonly accompanies an injury, where it 
@@ -16388,7 +15139,7 @@ ASSESSMENT IN PARTICULAR GROUPS
 11 
 Patients in pain
 Richard M. Langford and Shankar Ramaswamy', 3504),
-   ('d6b663cc-3bba-58c0-98a7-6d4d09589322', 'bc1ba294-a4f8-5f16-9c3b-b6a7de5b903b', '273a911d-8a5a-56f1-9f61-9c993e674466', 169, 169, 0, 'Patients in pain ﻿
+   ('6fbd73a2-aad1-5b76-b838-1626874afe72', 'HUTCHISON_24_2018', 'H1-C11', 158, 169, 0, 'Patients in pain ﻿
 158 11
 synapse. From the thalamus, third-order neurons 
 project to the somatosensory cortex, anterior cingulate 
@@ -16466,7 +15217,7 @@ TISSUE DAMAGE
 PAIN
 SENSATION
 Figure 11.2  Biopsychosocial model of pain.', 3012),
-   ('8fd7c19b-a2a8-55d5-a568-296ae9a32b87', 'fd033504-3a6e-5f3c-9adc-2a7bc7b382ce', '273a911d-8a5a-56f1-9f61-9c993e674466', 170, 170, 0, 'SECTION Two
+   ('3cbe882b-56ce-531a-a0ae-9f7483378db2', 'HUTCHISON_24_2018', 'H1-C11', 159, 170, 0, 'SECTION Two
 Patients in pain ﻿159
 Unfortunately, no single standardized approach will 
 allow assessment of pain in every situation. Pain is 
@@ -16524,7 +15275,7 @@ Nociceptor
 Brain stem
 Spinal cord
 Figure 11.3  Pain pathway.', 2306),
-   ('1cd5931e-09a2-5674-97e7-865604ab5489', NULL, '273a911d-8a5a-56f1-9f61-9c993e674466', 171, 171, 0, 'Patients in pain ﻿
+   ('e2080b67-c3b7-5466-bd7c-8242391b2f91', 'HUTCHISON_24_2018', 'H1-C11', 160, 171, 0, 'Patients in pain ﻿
 160 11
 Box 11.1  Scheme for evaluating history associated with pain
 ■ The site of pain - this may give a clue to the underlying 
@@ -16623,7 +15374,7 @@ over time
 ■ To understand the mechanisms which generate and 
 sustain the pain, in particular to identify neuropathic 
 elements', 4297),
-   ('104f5855-ed53-57da-aae7-7bed0608bc51', '30f1115b-7eda-5ea8-ade8-b57de3d9788a', '273a911d-8a5a-56f1-9f61-9c993e674466', 172, 172, 0, 'SECTION Two
+   ('bfadd534-851f-5608-abca-8f46910f7340', 'HUTCHISON_24_2018', 'H1-C11', 161, 172, 0, 'SECTION Two
 Patients in pain ﻿161
 Investigation
 Investigation of a patient in pain is tailored to the 
@@ -16717,7 +15468,7 @@ Neuropathic pain following amputation most commonly of extremities
 Cancer
 Cancer and its treatment such as radiotherapy and chemotherapy cause chronic pain 
 with neuropathic and/or nociceptive features.', 4694),
-   ('54417b62-232d-5306-9e92-f4d8530157b3', 'f6c4774e-b1de-5f7a-95f4-ddc443aa9f58', '273a911d-8a5a-56f1-9f61-9c993e674466', 173, 173, 0, 'Patients in pain ﻿
+   ('5f751eff-ff19-5ab7-8c26-e61834b11444', 'HUTCHISON_24_2018', 'H1-C11', 162, 173, 0, 'Patients in pain ﻿
 162 11
 unidimensional or multidimensional, with the latter 
 being more useful in chronic pain conditions.
@@ -16869,7 +15620,7 @@ a
 b
 Shooting
 Figure 11.4  Short form McGill Pain Questionnaire.', 2600),
-   ('244d13ea-182a-5110-8920-6d9e5da5730e', '05b1af6b-33bd-58b9-b5d0-a7b719fb5d36', '273a911d-8a5a-56f1-9f61-9c993e674466', 174, 174, 0, 'SECTION Two
+   ('b93f0802-680b-5344-b99a-89cf37ec5d04', 'HUTCHISON_24_2018', 'H1-C11', 163, 174, 0, 'SECTION Two
 Patients in pain ﻿163
 The numerical rating scale: the patient is asked to 
 assign a number from 0 to 10 to his pain, 0 being 
@@ -16962,7 +15713,7 @@ patient self-management. As the presence of chronic
 pain can be considered a long-term illness or a disease, 
 the goal for treatment is to attain a good functional 
 outcome rather than being pain free.', 4779),
-   ('24762ce2-2fd1-5428-814b-d0af2deded35', '91e952e6-156c-575c-8f3a-e4eda142d04d', '273a911d-8a5a-56f1-9f61-9c993e674466', 175, 175, 0, 'Patients in pain ﻿
+   ('a50c8558-33d8-50fa-8a8a-06b85e61d963', 'HUTCHISON_24_2018', 'H1-C11', 164, 175, 0, 'Patients in pain ﻿
 164 11
 Conclusions
 Pain is complex and essentially a patient-reported, 
@@ -16972,7 +15723,7 @@ looking at its social and psychological consequences
 as well as its sensory characteristics. With wide interpatient variability, perhaps more than with any other 
 symptom, management must be individualized to 
 the context and needs of each patient.', 437),
-   ('edd38b38-dc67-54be-962a-9f5fc8e307a9', NULL, '273a911d-8a5a-56f1-9f61-9c993e674466', 176, 176, 0, '12. Respiratory system
+   ('3ffe3482-827a-5919-b1d8-c57180806262', 'HUTCHISON_24_2018', 'H1-C11', 165, 176, 0, '12. Respiratory system
  13. Cardiovascular system
  14. Gastrointestinal system
  15. Locomotor system
@@ -16984,8 +15735,8 @@ the context and needs of each patient.', 437),
  21. Ear, nose and throat
 Basic systems
 SECTION 3', 268),
-   ('ef7938a8-202b-5c41-bbe0-5fc1b4123e51', NULL, '273a911d-8a5a-56f1-9f61-9c993e674466', 177, 177, 0, 'This page intentionally left blank', 34),
-   ('84b86844-5df6-5504-b4cb-b7f9ab74644c', 'a753ea9f-ae03-5cdd-b4a8-23ed694befe8', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 178, 178, 0, 'Introduction
+   ('c737859d-ef04-5846-a4fa-bd59ac5f3b60', 'HUTCHISON_24_2018', 'H1-C11', 166, 177, 0, 'This page intentionally left blank', 34),
+   ('70b5f401-5515-5fe3-9366-ca1186b58c75', 'HUTCHISON_24_2018', 'H1-C12', 167, 178, 0, 'Introduction
 Diseases of the respiratory system account for up to 
 a third of deaths in most countries and for a major 
 proportion of visits to the doctor and time away from 
@@ -17065,7 +15816,7 @@ BASIC SYSTEMS
 12 
 Respiratory system
 Veronica L.C. White', 3788),
-   ('ad08340b-21cf-59e0-abb8-b57cc1b2585d', '02e3249c-47b5-58af-b2e8-81cdc99f2caa', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 179, 179, 0, 'Respiratory system ﻿
+   ('2affd5bf-eb2f-56f0-85bb-a3091514ec30', 'HUTCHISON_24_2018', 'H1-C12', 168, 179, 0, 'Respiratory system ﻿
 168 12
 Haemoptysis
 Haemoptysis means the coughing up of blood in the 
@@ -17199,7 +15950,7 @@ after meals?
 ■ Have you had fevers or night sweats?
 ■ Have you lost weight?
 ■ Are you getting chest pain?', 3574),
-   ('be39ba92-5159-5139-b62b-59e3e188c473', 'e948c484-3029-5ff0-9ffc-2788908a8d22', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 180, 180, 0, 'SECTION Three
+   ('3344e16a-2a8d-582b-ab42-ebd1710e67b3', 'HUTCHISON_24_2018', 'H1-C12', 169, 180, 0, 'SECTION Three
 Respiratory system ﻿169
 caused by lung disease usually arises from the pleura. 
 Pleuritic pain is sharp and stabbing and is made worse 
@@ -17303,7 +16054,7 @@ tuberculosis (TB), lung abscesses and fungal infection
 ■ Endometriosis
 ■ Anticoagulation or coagulopathy
 ■ Drugs, e.g. cocaine, thrombolytics', 4929),
-   ('a98d2bad-b93b-5d70-9de3-673116f476b5', 'e2a23856-ed08-5c94-b93f-c23655838ebe', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 181, 181, 0, 'Respiratory system ﻿
+   ('dd1e2bee-ee4f-5ebb-a3b6-719e7ffabb79', 'HUTCHISON_24_2018', 'H1-C12', 170, 181, 0, 'Respiratory system ﻿
 170 12
 As far as the occupational history is concerned, the 
 best way to proceed is chronologically. Most people 
@@ -17406,7 +16157,7 @@ ships/trains
 ■ Family member of one of the above, and/or working or 
 living near an asbestos source (particularly if asbestos 
 fibres taken home on workers'' clothing)', 4620),
-   ('16565e0a-5b19-5495-8b54-935a97b97178', '7f22787f-cd0e-5322-bfc0-8c1723a2ef95', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 182, 182, 0, 'SECTION Three
+   ('99669e71-34d2-5c2c-9601-3e6b3c8b80b5', 'HUTCHISON_24_2018', 'H1-C12', 171, 182, 0, 'SECTION Three
 Respiratory system ﻿171
 45° (this is often more upright than patients choose 
 for themselves).
@@ -17489,7 +16240,7 @@ Box 12.11  Observing the chest
 ■ Chest expansion
 ■ Symmetry
 ■ Surgical scars', 3206),
-   ('4ab382a7-0ba1-53bb-a2ed-eca5128076cc', '38dadc49-6a6e-5d4a-9668-980b34cd45af', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 183, 183, 0, 'Respiratory system ﻿
+   ('daf2cb90-089e-5ca9-8499-06611d952b62', 'HUTCHISON_24_2018', 'H1-C12', 172, 183, 0, 'Respiratory system ﻿
 172 12
 Examination of the chest
 Relevant anatomy
@@ -17578,7 +16329,7 @@ lobe
 Upper
 lobe
 Figure 12.2  Anterior and posterior aspects of the lungs.', 3418),
-   ('72e54c4a-fe33-5b24-aacb-fe77b8d73384', '118766e5-a780-5db3-8b97-85e5e228dfe4', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 184, 184, 0, 'SECTION Three
+   ('da6144b0-260d-58ab-a5b3-f10b6d3512de', 'HUTCHISON_24_2018', 'H1-C12', 173, 184, 0, 'SECTION Three
 Respiratory system ﻿173
 anteroposterior diameter, making the horizontal crosssection more circular. On X-ray, the hemidiaphragms 
 appear lower than usual, and flattened.
@@ -17669,7 +16420,7 @@ Box 12.13  Points to note on palpation of the chest
 ■ Cardiac impulse
 ■ Asymmetry
 ■ Tactile vocal fremitus', 4071),
-   ('d6f28b72-eaa6-5432-bdd6-52b60f751ccc', NULL, '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 185, 185, 0, 'Respiratory system ﻿
+   ('431ab388-55b8-5efc-b41f-e170ec18ea5f', 'HUTCHISON_24_2018', 'H1-C12', 174, 185, 0, 'Respiratory system ﻿
 174 12
 C
 D
@@ -17689,7 +16440,7 @@ the left side of the cardiac silhouette and obscures the medial
 hemidiaphragmatic silhouette. 
 (Courtesy of 
 Dr Stephen Ellis.)', 773),
-   ('b30fc29e-f9c8-5f67-9204-80ae103db2a4', '71e195ab-9ca0-5d5f-81c8-8346120193e7', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 186, 186, 0, 'SECTION Three
+   ('8e02f293-729f-5cd1-8719-3fe7174dd329', 'HUTCHISON_24_2018', 'H1-C12', 175, 186, 0, 'SECTION Three
 Respiratory system ﻿175
 what you are about to do and avoid heavy-handedness 
 in this situation. Rough technique is uncomfortable 
@@ -17754,7 +16505,7 @@ spots can be discovered on pressure
 ■ A painful costochondral junction
 ■ Secondary malignant deposits in the rib
 ■ Herpes zoster before the appearance of the rash', 3052),
-   ('65136da8-4dfd-5f3c-b1ca-4ca5c5149bd6', 'd4d7e375-a7a6-5445-b71d-664eeb67b6ae', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 187, 187, 0, 'Respiratory system ﻿
+   ('36c2b5c8-cd30-5f9b-ba1c-11e7a0903534', 'HUTCHISON_24_2018', 'H1-C12', 176, 187, 0, 'Respiratory system ﻿
 176 12
 2 When the pleural cavity contains fluid, i.e. a 
 pleural effusion is present.
@@ -17866,7 +16617,7 @@ Box 12.16  Points to note on auscultation of the chest
 - pleural rub - associated with infection
 - wheezes - asthma, COPD, infection, cardiac failure
 - crackles - pulmonary fibrosis, cardiac failure, COPD', 5543),
-   ('e9fe9cd0-105c-5c64-ad87-d4fa6bcbcf06', 'bf7672eb-8e5d-5ba8-aad7-572f18feff81', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 188, 188, 0, 'SECTION Three
+   ('be2ab652-29bb-5bd8-b24c-da96384dca5a', 'HUTCHISON_24_2018', 'H1-C12', 177, 188, 0, 'SECTION Three
 Respiratory system ﻿177
 condition requiring urgent investigation and management. The noise is often both inspiratory and expiratory. It may be heard at the open mouth without the 
 aid of the stethoscope. On auscultation of the chest, 
@@ -17980,7 +16731,7 @@ Wheezing generated in smaller airways should not
 be mistaken for stridor associated with laryngeal 
 disease or localized narrowing of the trachea or the 
 large airways. Stridor almost always indicates a serious', 6016),
-   ('03a307a8-44df-5165-ae78-93037ae63e52', '10fb2ecf-3eb4-58fd-9a1e-0e9b710ae4f6', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 189, 189, 0, 'Respiratory system ﻿
+   ('b2eec84d-7a9b-5efa-9047-b8ca34d4e1da', 'HUTCHISON_24_2018', 'H1-C12', 178, 189, 0, 'Respiratory system ﻿
 178 12
 ■ Feel the position of the trachea and check for 
 axillary lymphadenopathy.
@@ -18092,7 +16843,7 @@ and ensure he is lying comfortably at 45°.
 as well as evidence of ptosis and miosis.
 ■ Inspect the chest movements and the anterior 
 chest wall.', 4877),
-   ('8a42d799-7c0c-5002-8359-397dbe8bb7bb', '734d1722-3799-5ec4-bc26-b47be7598060', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 190, 190, 0, 'SECTION Three
+   ('c7752edf-18ba-53fb-a438-f2d7cc55a4aa', 'HUTCHISON_24_2018', 'H1-C12', 179, 190, 0, 'SECTION Three
 Respiratory system ﻿179
 clinical assessment and other investigations, they may 
 help establish a diagnosis. Second, they will help 
@@ -18208,7 +16959,7 @@ Box 12.17  Characteristics to note when assessing sputum
 ■ Rusty
 ■ Frank haemoptysis
 ■ Casts', 5288),
-   ('a099a2af-1821-55e2-ac67-b3bec75d1b34', NULL, '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 191, 191, 0, 'Respiratory system ﻿
+   ('a4895063-0483-5184-9d9c-ebf9b5ef91cb', 'HUTCHISON_24_2018', 'H1-C12', 180, 191, 0, 'Respiratory system ﻿
 180 12
 Normal gas exchange consists of the uptake of 
 oxygen into the pulmonary capillary blood and the 
@@ -18314,7 +17065,7 @@ Figure 12.7  (A) Normal expiratory spirometer trace. (B) Spirometer trace show
 (10-second) expiration. (C) Spirometer trace showing a restrictive defect. (D) Typical diurnal variation of peak flow, worse in the mornings, 
 seen in a young asthmatic, during an exacerbation. 
 Figure 12.8  A mini-peak flow meter.', 2101),
-   ('b8c233c8-d9db-5ef1-a79a-beae89473062', '060a2e90-c13f-5c66-9e2d-919e4f2a2c7e', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 192, 192, 0, 'SECTION Three
+   ('e50608e6-5554-54aa-9521-05ed8406b85a', 'HUTCHISON_24_2018', 'H1-C12', 181, 192, 0, 'SECTION Three
 Respiratory system ﻿181
 The position of the patient
 Is the patient straight or rotated? If straight, the inner 
@@ -18414,7 +17165,7 @@ Box 12.19  Points to note when assessing the chest X-ray
 ■ Outline of mediastinum
 ■ Diaphragm
 ■ Lung fields', 4228),
-   ('65965c32-be3e-5741-8ffa-924ea20a877c', '347b7239-ccfa-5f19-bbc7-51487250bead', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 193, 193, 0, 'Respiratory system ﻿
+   ('59822790-000b-5f9f-8e55-d5fef1bb5c7f', 'HUTCHISON_24_2018', 'H1-C12', 182, 193, 0, 'Respiratory system ﻿
 182 12
 evidence on CT of mediastinal involvement. CT 
 scanning will demonstrate the presence of dilated 
@@ -18503,7 +17254,7 @@ CT scan thus comprises a series of cross-sectional
 The CT scan is a vital part of the staging of lung 
 cancer, and inoperability may be demonstrated by 
 Figure 12.9  A lateral chest X-ray.', 3825),
-   ('5f2878a6-b475-550f-9a24-a8e8c2922818', '49e75878-b3c7-54ba-9b8e-aabbdd0489a4', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 194, 194, 0, 'SECTION Three
+   ('9085bd00-17b5-5d56-a55b-0da63d27fa5b', 'HUTCHISON_24_2018', 'H1-C12', 183, 194, 0, 'SECTION Three
 Respiratory system ﻿183
 perfused by blood) suggest a high probability of 
 pulmonary embolism.
@@ -18558,7 +17309,7 @@ airways. These sequences of scans are
 suggestive of pulmonary embolism 
 because they show impaired perfusion with 
 normal ventilation.', 2439),
-   ('2adeb56f-e2c6-5311-9057-cbf4b4a53be1', '462eb1c7-e35e-5af2-9427-31727dceb0ca', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 195, 195, 0, 'Respiratory system ﻿
+   ('13b8c666-ba43-5d5b-978d-5f7581b0de7c', 'HUTCHISON_24_2018', 'H1-C12', 184, 195, 0, 'Respiratory system ﻿
 184 12
 brushings of any endobronchial abnormality can be 
 sent to the laboratory for cytological examination.
@@ -18629,7 +17380,7 @@ Figure 12.12  A lung cancer, seen down the bronchoscope.
 Figure 12.13  A CT-guided percutaneous biopsy in progress. 
 The radiodense (white) structure penetrating the chest wall is 
 the biopsy needle.', 3517),
-   ('804da781-0de2-5d71-9ac7-669c7a9770f9', NULL, '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 196, 196, 0, 'SECTION Three
+   ('d30661e0-9d99-5710-8ac9-8c1aa4d07405', 'HUTCHISON_24_2018', 'H1-C12', 185, 196, 0, 'SECTION Three
 Respiratory system ﻿185
 problems when the amount of fluid causes respiratory 
 embarrassment. When a pleural effusion is seen as a 
@@ -18664,7 +17415,7 @@ ultrasound guidance can be helpful, particularly if
 the fluid is loculated in various pockets, and should 
 be used whenever equipment and trained personnel 
 are available.', 1750),
-   ('1b6912eb-ae64-5807-8fac-a8cf891a800c', '29bd4e46-22e9-5229-a627-c105b29aa7ce', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 197, 197, 0, 'Respiratory system ﻿
+   ('a955ee81-0692-57c0-b6e8-c08048282429', 'HUTCHISON_24_2018', 'H1-C12', 186, 197, 0, 'Respiratory system ﻿
 186 12
 suspected, pleural fluid pH should be measured in 
 non-purulent effusions and, if not available, pleural 
@@ -18752,7 +17503,7 @@ consolidated lung, the increased respiratory rate leading to a low
 PaCO2 because of increased clearance of carbon dioxide by the 
 unaffected alveoli. Streptococcus pneumoniae was grown on blood 
 cultures.', 4490),
-   ('d4aed208-c426-5699-83eb-49e5a592e9bc', '1d2e2c25-dadb-5483-a63b-56ab7e527e9c', '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 198, 198, 0, 'SECTION Three
+   ('1fa240ad-1543-59c7-a997-ab5d32877f4f', 'HUTCHISON_24_2018', 'H1-C12', 187, 198, 0, 'SECTION Three
 Respiratory system ﻿187
 drug monoresistance and multidrug-resistant TB 
 (MDR TB) continue to be a major problem in the 
@@ -18796,8 +17547,8 @@ where TB is less common. Sputum can easily be
 tested by light microscopy using a Zeihl-Neelsen or 
 auramine stain to look for the acid-fast bacilli (AFB). 
 Where available, culture should be undertaken as', 2258),
-   ('10b08e27-9b68-56ee-bb26-9c21eb77991e', NULL, '8fc3ebc9-c6b4-54ab-a374-c417d884e81c', 199, 199, 0, 'This page intentionally left blank', 34),
-   ('f2514ea2-e86b-5abc-a55c-e2049f702bfe', 'c3673e84-851b-5c69-9a05-e0d9e9de7ef7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 200, 200, 0, 'Introduction
+   ('3f753524-aa52-51c8-ac79-9dc69ce735ce', 'HUTCHISON_24_2018', 'H1-C12', 188, 199, 0, 'This page intentionally left blank', 34),
+   ('56205200-2da3-5ad1-933f-c365917e9e3c', 'HUTCHISON_24_2018', 'H1-C13', 189, 200, 0, 'Introduction
 The recent decades have seen major changes in patterns of cardiovascular disease. In the developed 
 world, syphilitic and tuberculous involvement of the 
 cardiovascular system has become rare, and the 
@@ -18876,7 +17627,7 @@ BASIC SYSTEMS
 13 
 Cardiovascular system
 Ceri Davies', 4132),
-   ('21bfbd29-5281-5c59-8b92-2f6293ee79bc', 'dd43d573-c69f-5ebd-9466-f9d78f4fd7f9', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 201, 201, 0, 'Cardiovascular system ﻿
+   ('40e663de-6c12-5591-8137-cbacec795b01', 'HUTCHISON_24_2018', 'H1-C13', 190, 201, 0, 'Cardiovascular system ﻿
 190 13
 Myocardial ischaemia
 Ischaemia of the heart results from an imbalance 
@@ -18978,7 +17729,7 @@ Increased myocardial oxygen demand
 - aortic valve disease
 - hypertrophic cardiomyopathy
 ■ Tachyarrhythmias', 4049),
-   ('b57790fc-3486-5d8c-96d3-5b0fa897b9f7', 'f3578fd4-d469-5783-9c6c-ba0469b4c8a2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 202, 202, 0, 'SECTION Three
+   ('92f334b8-6a16-5d3e-bf46-79c1cb809658', 'HUTCHISON_24_2018', 'H1-C13', 191, 202, 0, 'SECTION Three
 Cardiovascular system ﻿191
 exacerbated by lying recumbent and reduced by 
 sitting forward. Pericarditis is usually idiopathic or 
@@ -19096,7 +17847,7 @@ perfusion imaging in low-risk patients
 Comments
 ■ History and troponin testing most useful diagnostic tools 
 in non-ST elevation acute coronary syndromes', 3857),
-   ('2a277985-24f0-5a13-b9ab-7bf6d53e8365', 'd94c86e3-90de-5d0e-82c8-7bf1ac1ea11c', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 203, 203, 0, 'Cardiovascular system ﻿
+   ('b929003c-706e-5a38-8f1c-c1f05d1a7dba', 'HUTCHISON_24_2018', 'H1-C13', 192, 203, 0, 'Cardiovascular system ﻿
 192 13
 with breathlessness and chest pain that can be 
 indistinguishable from ischaemic chest pains and 
@@ -19198,7 +17949,7 @@ associated with shock and/or a dilated right heart on
 echo. Patients with no risk factors for pulmonary 
 embolism should be investigated for prothrombotic 
 states.', 4196),
-   ('bdcda676-6471-541f-ab12-ed8fc4dd46d1', '51e14c7d-5960-58f2-816e-2b532f382cff', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 204, 204, 0, 'SECTION Three
+   ('019e65f6-2e79-5987-a4cf-f0a1b6b52068', 'HUTCHISON_24_2018', 'H1-C13', 193, 204, 0, 'SECTION Three
 Cardiovascular system ﻿193
 left atrial pressure, and other factors must therefore 
 be important. These include respiratory muscle fatigue 
@@ -19310,7 +18061,7 @@ increase in left atrial pressure and this contributes to
 the pathogenesis of dyspnoea by causing pulmonary 
 congestion (see above). However, the severity of 
 dyspnoea does not correlate closely with exertional', 3665),
-   ('d32507f6-26d1-55b0-8651-821507226704', '3652b327-ae40-547a-8599-04ed20bd3c19', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 205, 205, 0, 'Cardiovascular system ﻿
+   ('ff78e6e3-948b-5d18-a7f1-c940e640abec', 'HUTCHISON_24_2018', 'H1-C13', 194, 205, 0, 'Cardiovascular system ﻿
 194 13
 in the elderly in whom it is frequently compounded 
 by medication. Abrupt reductions in blood pres­
@@ -19408,7 +18159,7 @@ rapid, unlike with other common causes of syncope
 Postural hypotension
 Syncope on standing upright reflects inadequate 
 baroreceptor-mediated vasoconstriction. It is common', 4750),
-   ('0ea99583-975e-5350-91ef-eee522c8cc4d', '7ba5651c-eaaa-5d05-b7c1-b65d4f5d867b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 206, 206, 0, 'SECTION Three
+   ('62ddbcb0-fd88-55d9-9575-a86ebeb37be3', 'HUTCHISON_24_2018', 'H1-C13', 195, 206, 0, 'SECTION Three
 Cardiovascular system ﻿195
 and displace the apex, giving a spurious impression 
 of cardiac enlargement. The presence of a median 
@@ -19472,7 +18223,7 @@ respectively
 ■ Auscultate the lungs
 ■ Examine the ankles and sacrum for oedema
 ■ Examine the peripheral pulses', 2826),
-   ('2b2f76f5-3fa0-512b-863a-15e7161a2094', '24d0e3ff-49f9-5997-9155-95745c97f29b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 207, 207, 0, 'Cardiovascular system ﻿
+   ('7ac14d53-c395-5ca0-97d4-826c5d692565', 'HUTCHISON_24_2018', 'H1-C13', 196, 207, 0, 'Cardiovascular system ﻿
 196 13
 1 Reduced sodium delivery to the nephron. This 
 is caused by reduced glomerular filtration due 
@@ -19574,7 +18325,7 @@ Subcutaneous oedema that pits on digital pressure
 is a cardinal feature of congestive heart failure. Pressure should be applied over a bony prominence (tibia, 
 lateral malleoli, sacrum) to provide effective compression. Oedema is caused by salt and water retention 
 by the kidney. Two mechanisms are responsible:', 5143),
-   ('2bbc56bb-a23e-5df9-bd68-23ffc598df47', 'e493120c-4722-5f68-bf5d-4c8b6274cc09', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 208, 208, 0, 'SECTION Three
+   ('e5c3bd4b-9974-581e-a010-20de4c1bde66', 'HUTCHISON_24_2018', 'H1-C13', 197, 208, 0, 'SECTION Three
 Cardiovascular system ﻿197
 inspiration. ''Pulsus paradoxus'' therefore represents 
 an exaggeration of the normal inspiratory decline 
@@ -19671,7 +18422,7 @@ mmHg
 Figure 13.4  Paradoxical pulse (radial artery pressure signal). 
 The patient had severe tamponade. Note the exaggerated 
 (>10 mmHg) decline in arterial pressure during inspiration.', 4208),
-   ('f38d920b-caf9-5030-b45a-0bcac4c9b5ae', '0864167b-c0ae-5e03-b541-5a1c2d05c6e6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 209, 209, 0, 'Cardiovascular system ﻿
+   ('959fd9ed-86c8-56df-9fa0-ba6e67cf6964', 'HUTCHISON_24_2018', 'H1-C13', 198, 209, 0, 'Cardiovascular system ﻿
 198 13
 heart which elevates the jugular venous pulse (hepato­
 jugular reflux).
@@ -19774,7 +18525,7 @@ waveform of the JVP an unusually dynamic appearance. Note the
 inspiratory rise in atrial pressure (Kussmaul''s sign) reflecting 
 the inability of the tamponaded right heart to accommodate 
 the inspiratory increase in venous return.', 5148),
-   ('a37b281e-c9ce-5aff-8274-c6a66b95ecf4', '17d408dc-c7d3-5a90-bb04-681161194a91', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 210, 210, 0, 'SECTION Three
+   ('a6eba8ed-1533-5e80-8ed8-e02776ca4f41', 'HUTCHISON_24_2018', 'H1-C13', 199, 210, 0, 'SECTION Three
 Cardiovascular system ﻿199
 Waveform of jugular venous pulses
 In sinus rhythm, the jugular venous pulse has a double 
@@ -19853,7 +18604,7 @@ lateral point at which the cardiac impulse can be
 palpated. Inferior or lateral displacement from its 
 normal location in the fifth intercostal space in the 
 mid-clavicular line usually indicates cardiac enlargement. Chronic volume loading of the left ventricle', 3302),
-   ('079f8efe-4172-5b9e-884b-e2a8ef639d05', 'fee08af7-9957-5726-93eb-03d480728838', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 211, 211, 0, 'Cardiovascular system ﻿
+   ('11056605-f825-5124-8cea-cfa418de0292', 'HUTCHISON_24_2018', 'H1-C13', 200, 211, 0, 'Cardiovascular system ﻿
 200 13
 the narrowed valve ensures that the thickened leaflets 
 are widely separated at the onset of systole. Thus 
@@ -19982,7 +18733,7 @@ aortic and pulmonary components of the second sound normally
 split during inspiration as increased venous return delays right 
 ventricular emptying. Abnormal splitting of the second heart sound 
 is an important sign of heart disease.', 4580),
-   ('28220e48-775a-550a-9e98-d4a30e662951', '34119638-76f4-53eb-af8e-0f165ed84709', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 212, 212, 0, 'SECTION Three
+   ('f92698e5-8a3a-5074-abc1-030b0fa041dd', 'HUTCHISON_24_2018', 'H1-C13', 201, 212, 0, 'SECTION Three
 Cardiovascular system ﻿201
 the turbulence is caused by increased flow through 
 a normal valve - usually aortic or pulmonary - producing an ''innocent'' murmur. However, murmurs may 
@@ -20085,7 +18836,7 @@ Heart murmurs may be depicted graphically as shown in this illustration. CM, con
 murmur; LSM, late systolic murmur; MDM, mid-diastolic murmur; MSC, mid-systolic click; MSM, mid-systolic murmur; OS, opening snap; 
 PSA, presystolic accentuation of murmur; PSM, pansystolic murmur; S3, third heart sound; S4, fourth heart sound. Parentheses indicate 
 those auscultatory findings that are not constant.', 3919),
-   ('fb2d7e98-4e8d-58e4-8ed2-3f3af7325a10', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 213, 213, 0, 'Cardiovascular system ﻿
+   ('d12ffeda-9681-5f42-bf36-70df4096a040', 'HUTCHISON_24_2018', 'H1-C13', 202, 213, 0, 'Cardiovascular system ﻿
 202 13
 early diastolic, mid-diastolic or presystolic in timing. 
 Continuous murmurs are audible in both phases of 
@@ -20198,7 +18949,7 @@ requires valve surgery (repair or replacement) or, in
 selected cases of mitral stenosis, percutaneous 
 valvuloplasty. Symptomatic aortic valve disease always 
 requires consideration for valve replacement', 5551),
-   ('e34d8c25-e878-59f0-b33a-ef52dc766cd1', '8e593368-af7b-51bb-a09b-b66d75737fc6', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 214, 214, 0, 'SECTION Three
+   ('e04b6051-c894-5597-98f2-a8e957b14c06', 'HUTCHISON_24_2018', 'H1-C13', 203, 214, 0, 'SECTION Three
 Cardiovascular system ﻿203
 The electrocardiogram
 The electrocardiogram (ECG) records the electrical 
@@ -20307,7 +19058,7 @@ abnormalities in hypertension) and abdominal aortic
 aneurysm, auscultation of the chest bases for crackles 
 related to impaired LV function and urinalysis for 
 proteinuria and haematuria.', 5578),
-   ('6075f50d-2d94-5b04-96fe-8ee08005da21', 'e0d28634-3a29-5acd-a134-c233876dade2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 215, 215, 0, 'Cardiovascular system ﻿
+   ('5628324e-5ea7-5b5f-acd1-51c1fe44f289', 'HUTCHISON_24_2018', 'H1-C13', 204, 215, 0, 'Cardiovascular system ﻿
 204 13
 Analysis of the ECG
 Heart rate
@@ -20410,7 +19161,7 @@ QRS complex. The ventricular free-wall depolarization vector (2)
 produces the second deflection, which is usually more pronounced. 
 Lead aVR is orientated towards the cavity of the left ventricle and 
 records an entirely negative deflection.', 4602),
-   ('c5c5e7ab-2a20-58a8-b390-403fe565c901', '6ba4f37e-0eb1-5984-a5b1-b3989c1c4f6b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 216, 216, 0, 'SECTION Three
+   ('cbd3ab0c-5204-560f-b775-265d94d4ea7d', 'HUTCHISON_24_2018', 'H1-C13', 205, 216, 0, 'SECTION Three
 Cardiovascular system ﻿205
 the duration of electrical systole (mechanical systole 
 starts between the QRS complex and the T wave). 
@@ -20520,7 +19271,7 @@ Figure 13.10  Mean frontal QRS axis. This is the mean direction of the left ve
 in the frontal plane of the heart. It lies at right angles to the lead in which the net QRS deflexion is least pronounced. It is quantified using 
 a hexaxial reference system. The QRS axis shows a wide range of normality from −30° to 90°. Thus despite the different ECG patterns in 
 this illustration, only recordings (A) and (G) are abnormal, owing to left and right axis deviation, respectively.', 2103),
-   ('2ef119a2-b1be-5388-a6c2-96f0b1824a06', '5f027d8a-22c3-5b6d-ae92-b79288a03df0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 217, 217, 0, 'Cardiovascular system ﻿
+   ('7e2c79d9-24e0-5a55-a63c-ee187b1195fd', 'HUTCHISON_24_2018', 'H1-C13', 206, 217, 0, 'Cardiovascular system ﻿
 206 13
 T-wave morphology
 The orientation of the T wave should be directionally 
@@ -20589,7 +19340,7 @@ notched R waves in I and V6. (B) Right bundle branch block
 (RBBB). Right ventricular depolarization is delayed, resulting in a 
 broad QRS complex with an ''rSR'' pattern in V1 and prominent S 
 waves in I and V6.', 2794),
-   ('d09111ad-4a28-5f14-8f08-e61a69cb1ccd', '1489120e-1b3a-5712-bf2a-1544495f7cb3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 218, 218, 0, 'SECTION Three
+   ('6e29aa0b-a419-53a1-b204-ad55b04756c4', 'HUTCHISON_24_2018', 'H1-C13', 207, 218, 0, 'SECTION Three
 Cardiovascular system ﻿207
 false-positive or false-negative results being common 
 when the pretest probability of coronary disease is 
@@ -20641,7 +19392,7 @@ ventricular ''strain''. (B) Right ventricular
 hypertrophy. Prominent R waves in V1 and 
 V2 associated with T-wave inversion are 
 shown.', 1847),
-   ('6816ef9d-3569-5494-9985-c41f8fe943b1', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 219, 219, 0, 'Cardiovascular system ﻿
+   ('e91a01bb-f120-5382-a9c9-cf1eb0b2755e', 'HUTCHISON_24_2018', 'H1-C13', 208, 219, 0, 'Cardiovascular system ﻿
 208 13
 Figure 13.14  ST segment morphology: common causes of ST segment elevation and depression. Note that depression of the J point 
 (junction between the QRS complex and ST segment) is physiological during exertion and does not signify myocardial ischaemia. Planar 
@@ -20687,7 +19438,7 @@ I
 aVR
 aVR
 aVR', 1068),
-   ('f8fa08f6-5ab1-54a8-937e-c933aa43c5b5', 'cbe78f21-e5eb-5d62-9187-8651726feead', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 220, 220, 0, 'SECTION Three
+   ('5b5ac767-1e1e-56d7-af6f-a465bde225df', 'HUTCHISON_24_2018', 'H1-C13', 209, 220, 0, 'SECTION Three
 Cardiovascular system ﻿209
 syndrome or unstable angina. It therefore follows 
 that acute myocardial infarction and unstable angina 
@@ -20747,7 +19498,7 @@ Hours after onset of chest pain
 Figure 13.17  Acute myocardial infarction: evolution of ECG changes. Elevation of the ST segment occurs during the first hour of chest 
 pain. The Q wave develops during the subsequent 24 hours and usually persists indefinitely. Within a day of the attack, the ST segment 
 usually returns to the isoelectric line and T-wave inversion may occur.', 2606),
-   ('0be6dd8f-3a28-5128-8f41-876bd0ad3c19', '4f9430c8-0965-5709-a75d-d1aebc824826', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 221, 221, 0, 'Cardiovascular system ﻿
+   ('16394ead-ac21-56d5-bd63-33239bd81839', 'HUTCHISON_24_2018', 'H1-C13', 210, 221, 0, 'Cardiovascular system ﻿
 210 13
 present) should also be obtained. In patients with 
 paroxysmal arrhythmias, the frequency and severity 
@@ -20798,7 +19549,7 @@ I
 Figure 13.19  Acute anterior infarction. ECG 1 hour after the onset of chest pain. Typical ST elevation in leads V2-V5 is diagnostic of 
 anterior myocardial infarction. Additional ST elevation in standard leads I and aVL indicates lateral extension of the infarct. This pattern 
 usually reflects proximal occlusion of the left anterior descending coronary artery.', 2040),
-   ('ad3bebac-71b4-5783-bf77-a9a623898037', '72e27f83-70f1-579d-aa24-f8f6bd3006f7', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 222, 222, 0, 'SECTION Three
+   ('5b2f4134-c862-5096-8ff6-301bbf04815e', 'HUTCHISON_24_2018', 'H1-C13', 211, 222, 0, 'SECTION Three
 Cardiovascular system ﻿211
 24-hour ECG. The availability of portable cassette 
 recorders allows this to be performed as an outpatient. 
@@ -20826,7 +19577,7 @@ are commonly investigated by means of an ambulatory
 Figure 13.20  Ventricular tachycardia: Holter recording. When tachycardias are paroxysmal in nature, continuous ECG monitoring is often 
 necessary to document the arrhythmia. Here a Holter recording illustrates a long burst of rapid VT lasting a total of 6 minutes. Preceding 
 the VT there is second-degree heart block (arrows).', 1002),
-   ('d88c88ab-1d53-5aee-8218-783fdffbcbd0', 'b5d697b9-6ac1-5276-9b51-fe983787c866', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 223, 223, 0, 'Cardiovascular system ﻿
+   ('4d57de25-7a96-5be8-9a1a-2ca5bee5376e', 'HUTCHISON_24_2018', 'H1-C13', 212, 223, 0, 'Cardiovascular system ﻿
 212 13
 toxic stimuli such as caffeine, alcohol and cigarette 
 smoking. They are caused by the premature discharge 
@@ -20933,7 +19684,7 @@ from ventricular tachycardia.
 Atrial ectopic beats
 Atrial ectopic beats rarely indicate heart disease. They 
 often occur spontaneously but may be provoked by', 5122),
-   ('10b24175-148d-5ed3-8f95-cda354c9d3da', '6a45957e-74e0-52a5-b30d-8ac4d2b65e9a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 224, 224, 0, 'SECTION Three
+   ('ded52c11-2790-55f6-b0fd-b993e1336aab', 'HUTCHISON_24_2018', 'H1-C13', 213, 224, 0, 'SECTION Three
 Cardiovascular system ﻿213
 Wolff-Parkinson-White syndrome
 Wolff-Parkinson-White syndrome, a congenital disorder which affects 0.12% of the population, is caused 
@@ -20968,7 +19719,7 @@ ventricular response. The ventricular rate is fairly slow because the patient wa
 2 : 1 block, giving a ventricular rate of about 150/min, which then gives way to 4 : 1 block. Sawtooth flutter waves at a rate of 300/min are 
 clearly visible. (D) AV nodal re-entrant tachycardia (AVNRT). Often called supraventricular tachycardia (SVT), this arrhythmia causes a 
 regular tachycardia, with a ventricular rate of about 180/min.', 2274),
-   ('84c763e8-dc97-5632-af54-b2ce062258cf', 'bfc6c96f-2ac0-5403-956f-518fc4c193e3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 225, 225, 0, 'Cardiovascular system ﻿
+   ('d1e8275f-f682-5256-b94b-808b09bc9ec2', 'HUTCHISON_24_2018', 'H1-C13', 214, 225, 0, 'Cardiovascular system ﻿
 214 13
 impulses rapidly to the ventricles, it may result in 
 ventricular fibrillation and sudden death. Digoxin 
@@ -21036,7 +19787,7 @@ the bundle of Kent, re-enters the proximal conducting
 system and completes the re-entry circuit, initiating a 
 self-sustaining orthodromic re-entry tachycardia (last 
 three complexes).', 3021),
-   ('07c6adaa-de95-57ed-b5f0-23fa163bedaf', '9a4e27a4-1bfc-5d7c-8916-b7d9926a2ee3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 226, 226, 0, 'SECTION Three
+   ('f4a34bc7-1789-515c-8e69-a85d9f97bcf0', 'HUTCHISON_24_2018', 'H1-C13', 215, 226, 0, 'SECTION Three
 Cardiovascular system ﻿215
 and junctional tachycardias which have a narrow 
 QRS complex, although differential diagnosis may 
@@ -21079,7 +19830,7 @@ I
 Figure 13.26  Ventricular tachycardia: 12-lead ECG. The recording shows a broad complex tachycardia. The following features suggest 
 or confirm the ventricular origin of the tachycardia: very broad QRS complex (>140 ms); extreme right axis deviation; atrioventricular 
 dissociation - note the dissociated P waves in lead V1; the ''rSR'' complex in V1.', 2235),
-   ('8fa08299-1c33-5d8c-90c6-8899f6aab130', 'ab626f01-cd91-53e2-b5d3-a7b24ce388e0', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 227, 227, 0, 'Cardiovascular system ﻿
+   ('d6c9a296-76f2-5212-b9e7-8575197e9afc', 'HUTCHISON_24_2018', 'H1-C13', 216, 227, 0, 'Cardiovascular system ﻿
 216 13
 the P wave. The spontaneous discharge of the normal 
 sinus node is influenced by a variety of neurohumoral 
@@ -21157,7 +19908,7 @@ Comments
 ■ Documentation of the sinus pauses (or very slow atrial 
 fibrillation) during an attack of symptoms provides the 
 most robust diagnostic information', 3740),
-   ('6f0b333f-ef9d-5927-8f74-f0c6da7e694b', '82428d74-ce6c-5f52-a646-a015c2679066', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 228, 228, 0, 'SECTION Three
+   ('3307e6a4-a04c-5cc3-bff5-0e1bb7d74bb7', 'HUTCHISON_24_2018', 'H1-C13', 217, 228, 0, 'SECTION Three
 Cardiovascular system ﻿217
 by an escape beat from a ''junctional'' focus in the 
 bundle of His.
@@ -21217,7 +19968,7 @@ interrupted by a single junctional escape beat, before sinus rhythm is re-establ
 fourth complexes are the result of sinoatrial block, which has prevented sinus impulses from depolarizing the atrium. No P waves are seen 
 but, because the sinus discharge continues uninterrupted, the pauses are each a precise multiple of the preceding PP interval. Sinoatrial 
 block is probably rare. (C) Bradycardia-tachycardia syndrome. A slow junctional rhythm gives way to rapid atrial fibrillation.', 3334),
-   ('0b4b7cff-5c23-5059-acda-005207730bde', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 229, 229, 0, 'Cardiovascular system ﻿
+   ('942c950f-c109-5444-9e89-e3b726c5023d', 'HUTCHISON_24_2018', 'H1-C13', 218, 229, 0, 'Cardiovascular system ﻿
 218 13
 A
 B
@@ -21235,7 +19986,7 @@ Note the regular P waves and the regular slower QRS complexes occurring independ
 the AV node, a junctional escape rhythm has taken over with a narrow QRS complex. (E) 3° (complete) AV block at bundle branch level. 
 The atrial and ventricular rhythms are dissociated because none of the atrial impulses is conducted. The ECG shows regular P waves and 
 regular but slower QRS complexes. Because the escape rhythm is ventricular in origin, the QRS complexes are broad and the rate is slow.', 1543),
-   ('73094fca-50dd-5009-af05-ab95308934e0', '4074191d-1a91-521f-a4bf-492f6a8826b4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 230, 230, 0, 'SECTION Three
+   ('c81909db-1a8d-5351-8cfa-74f8bbadd02b', 'HUTCHISON_24_2018', 'H1-C13', 219, 230, 0, 'SECTION Three
 Cardiovascular system ﻿219
 atrium is fibrillating) and regular but slower QRS 
 complexes occurring independently of each other. 
@@ -21324,7 +20075,7 @@ Note the heart is not enlarged (cardiothoracic ratio <50%) and
 the lung fields are clear. AA, aortic arch; LV, left ventricle; PA, 
 pulmonary artery; RA, right atrium; RV, right ventricle; SVC, 
 superior vena cava.', 4013),
-   ('2438d327-15d2-59cb-92f6-19c6d2734df6', '885d6b83-66bb-5c69-a275-e26ec9d813ae', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 231, 231, 0, 'Cardiovascular system ﻿
+   ('6c638076-28c8-5c7f-ba6d-cb262c987b46', 'HUTCHISON_24_2018', 'H1-C13', 220, 231, 0, 'Cardiovascular system ﻿
 220 13
 Localized dilatation of the proximal aorta occurs in 
 aortic valve disease and produces a prominence in 
@@ -21384,7 +20135,7 @@ infiltration has produced effusion and tamponade, evidenced by
 the severely enlarged and globular cardiac silhouette. Malignant 
 disease is now the most common cause of tamponade in most 
 developed countries.', 2877),
-   ('c961eaef-a96a-5971-9e33-da40381689ae', 'f1470cb3-0817-58a2-bfd6-8e81e284e5fd', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 232, 232, 0, 'SECTION Three
+   ('7d0b5aed-5bc3-538c-a856-604069876664', 'HUTCHISON_24_2018', 'H1-C13', 221, 232, 0, 'SECTION Three
 Cardiovascular system ﻿221
 Other lung field abnormalities
 Pulmonary infarction
@@ -21450,7 +20201,7 @@ patient had severe pulmonary oedema caused by acute myocardial
 infarction. The heart is not yet enlarged, but there is prominent 
 alveolar pulmonary oedema in a perihilar (''bat''s-wing'') 
 distribution. Note the bilateral pleural effusions.', 3298),
-   ('d6e9ae13-7dd3-521b-a5ce-3582f0854af8', 'cb079649-53fc-528e-93bc-535c97a293ac', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 233, 233, 0, 'Cardiovascular system ﻿
+   ('becd8439-d8ad-5284-8517-bd5f7cc9876e', 'HUTCHISON_24_2018', 'H1-C13', 222, 233, 0, 'Cardiovascular system ﻿
 222 13
 the M-mode recording. By projecting a fan of echoes 
 in an arc of up to 80°, a 2D ''slice'' through the 
@@ -21552,7 +20303,7 @@ and for timing events within the cardiac cycle
 Two-dimensional echocardiogram
 The two-dimensional (2D) echocardiogram provides 
 more detailed information about morphology than', 5188),
-   ('2f252c29-a334-5410-9494-a3bdc7ae6f49', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 234, 234, 0, 'SECTION Three
+   ('5d25d37d-ec99-5e6a-bd3b-c2aca8a893c8', 'HUTCHISON_24_2018', 'H1-C13', 223, 234, 0, 'SECTION Three
 Cardiovascular system ﻿223
 1s in time marker
 ECG
@@ -21588,7 +20339,7 @@ Figure 13.38  Dilated cardiomyopathy: echocardiogram. This
 M-mode study shows severe dilatation of the left ventricular cavity 
 and severe global contractile impairment. The patient later 
 underwent successful heart transplantation.', 1084),
-   ('1dea4773-bd7e-591a-a70b-a9ea714d0fa8', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 235, 235, 0, 'Cardiovascular system ﻿
+   ('345d4795-2137-527b-a87e-130fd55a1a11', 'HUTCHISON_24_2018', 'H1-C13', 224, 235, 0, 'Cardiovascular system ﻿
 224 13
 IVS
 PW
@@ -21663,7 +20414,7 @@ Comments
 ■ The timing of valve replacement surgery is difficult but 
 should anticipate irreversible left ventricular contractile 
 failure', 2961),
-   ('c481db5c-0032-559d-941a-200dccca2640', 'f778ad7d-4bb4-5a77-9947-57c748cfb061', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 236, 236, 0, 'SECTION Three
+   ('5f0be1b7-4688-57f8-a171-a3717cb88a4b', 'HUTCHISON_24_2018', 'H1-C13', 225, 236, 0, 'SECTION Three
 Cardiovascular system ﻿225
 Figure 13.41  Mitral stenosis: 2D echocardiogram (parasternal 
 long-axis view). The mitral valve leaflets are densely thickened 
@@ -21723,7 +20474,7 @@ Stress echocardiography is increasingly being used
 for the diagnosis of myocardial ischaemia in suspected 
 coronary disease. Left ventricular imaging during 
 increasing dobutamine infusion permits assessment', 2555),
-   ('daaf72a4-477b-54af-b308-f6922905f1bf', '97ea4d66-581a-5ed2-ab2e-545160d69a84', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 237, 237, 0, 'Cardiovascular system ﻿
+   ('42f75e9c-48c8-5ea6-99a2-a9e26c0867b4', 'HUTCHISON_24_2018', 'H1-C13', 226, 237, 0, 'Cardiovascular system ﻿
 226 13
 Box 13.21  Mitral regurgitation
 Typical patient
@@ -21785,7 +20536,7 @@ and great vessels. It is widely used for measuring the
 severity of valvular stenosis and identifying valvular 
 regurgitation and intracardiac shunts through septal 
 defects.', 2984),
-   ('385b6b80-6250-5b27-9c64-11a09528a829', 'fe08e61f-4f1a-5da2-9312-04e552630da2', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 238, 238, 0, 'SECTION Three
+   ('78edccf5-0ec2-5a50-ad16-66a2f68239c5', 'HUTCHISON_24_2018', 'H1-C13', 227, 238, 0, 'SECTION Three
 Cardiovascular system ﻿227
 New developments
 In recent years, real time three-dimensional (3D) 
@@ -21884,7 +20635,7 @@ velocity
 ×
 4
 2', 4485),
-   ('2f26261e-f23b-5d0d-8c5e-f8751a93245b', '2495b885-9b78-5338-9d75-bb6dba90d75c', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 239, 239, 0, 'Cardiovascular system ﻿
+   ('5965f48e-5ac8-5322-bc14-04ddcd52ee50', 'HUTCHISON_24_2018', 'H1-C13', 228, 239, 0, 'Cardiovascular system ﻿
 228 13
 defects. If 201Tl is used, repeat imaging after 2-4 hours'' 
 rest permits the reassessment of scintigraphic defects; 
@@ -21956,7 +20707,7 @@ defect is seen during stress, but it largely disappears during rest
 as isotope ''redistributes'' into the ischaemic area. A smaller fixed 
 defect is seen in the anterior wall, indicating infarction in that 
 territory.', 3707),
-   ('2ccf1862-823f-5d7c-a671-5a570214b652', 'a6dbc194-a4c8-5671-bcf3-3276fbd6647d', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 240, 240, 0, 'SECTION Three
+   ('a3271b46-11b3-51c7-acfa-d4e56b1b4ac2', 'HUTCHISON_24_2018', 'H1-C13', 229, 240, 0, 'SECTION Three
 Cardiovascular system ﻿229
 for tissues such as bone, which are relatively radioopaque, and least for tissues such as lung or fat, which 
 are relatively radiolucent. From X-ray attenuation 
@@ -22006,7 +20757,7 @@ constriction. Antituberculous therapy caused regression of all
 symptoms and signs, although the patient is at major risk of 
 developing constriction later as the pericardium becomes fibrotic 
 and calcified.', 2987),
-   ('ecbd8e51-c93b-567e-943d-6f0a370ec6cc', '6ab6d42a-9086-5e78-aeb9-4d8fab3e0d5b', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 241, 241, 0, 'Cardiovascular system ﻿
+   ('a3c745db-dd39-50c0-9d76-47cb96260929', 'HUTCHISON_24_2018', 'H1-C13', 230, 241, 0, 'Cardiovascular system ﻿
 230 13
 A
 B
@@ -22039,7 +20790,7 @@ heart. If data acquisition is gated to a specific part
 of the cardiac cycle, motion artefact is eliminated 
 and excellent image resolution can be obtained. 
 Different scanning parameters and patterns of', 1670),
-   ('7b73ec1d-3843-5c95-b9a8-15b85d88911d', '0c4f852a-e394-5a27-aa34-1b0aff195107', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 242, 242, 0, 'SECTION Three
+   ('cb583727-88f7-5cf0-b2e8-ed65b7acd030', 'HUTCHISON_24_2018', 'H1-C13', 231, 242, 0, 'SECTION Three
 Cardiovascular system ﻿231
 Cardiac angiography
 Coronary angiography uses relatively small volumes 
@@ -22123,7 +20874,7 @@ underlying coronary artery disease
 ■ Preoperatively in patients requiring valve surgery when 
 advanced age (>50 years) or angina suggest a high 
 probability of coronary artery disease', 4576),
-   ('8cb53995-c458-5f83-bfa0-177f4f726f21', '31357b29-c6f5-5141-9570-f00e037fdf44', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 243, 243, 0, 'Cardiovascular system ﻿
+   ('8d5f7758-b17b-59da-9b41-07a1734f87ee', 'HUTCHISON_24_2018', 'H1-C13', 232, 243, 0, 'Cardiovascular system ﻿
 232 13
 C
 A
@@ -22148,7 +20899,7 @@ Pressure wire is a relatively new catheter laboratorybased technology that is in
 functional significance and guide management of 
 coronary stenoses. The wire has a pressure sensor 
 3 cm from its distal tip. The pressure sensor is calibrated and then equalized to the pressure at the', 1588),
-   ('71b4dcb3-c035-51bb-ab3b-a8eda6a3f7fd', 'cf1075d5-f9df-5b23-a3aa-0dd7adff6c04', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 244, 244, 0, 'SECTION Three
+   ('54302f30-1765-5965-84b2-8aa056233f7a', 'HUTCHISON_24_2018', 'H1-C13', 233, 244, 0, 'SECTION Three
 Cardiovascular system ﻿233
 Intravascular ultrasound
 An ultrasound transducer mounted at the tip of a 
@@ -22192,7 +20943,7 @@ Figure 13.56  Left ventricular angiogram showing mitral
 regurgitation. Contrast injection into the left ventricle has resulted 
 in prompt opacification of the left atrium owing to backflow across 
 the diseased mitral valve.', 2440),
-   ('6b031bc4-c372-5f25-86d2-d581506dd1eb', '45b6b115-d0bf-5839-bcbe-1824b4b18228', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 245, 245, 0, 'Cardiovascular system ﻿
+   ('336d1bac-9918-55c6-b644-2b763ee3249c', 'HUTCHISON_24_2018', 'H1-C13', 234, 245, 0, 'Cardiovascular system ﻿
 234 13
 venous route into the right atrium and then advanced 
 through the right ventricle into the pulmonary artery. 
@@ -22244,7 +20995,7 @@ guide treatment. The fluid-filled catheter is attached
 to a pressure transducer, which converts the pressure 
 waves into electrical signals. For measurement of 
 right-sided pressures, the catheter is directed by the', 2966),
-   ('d6d0a821-9cd8-5f7d-8b62-c808912b79a2', '6a7dc606-ac8d-55c9-8535-f0aa98ef74e3', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 246, 246, 0, 'SECTION Three
+   ('0d492a08-ec2f-5685-a89e-249d448b0c72', 'HUTCHISON_24_2018', 'H1-C13', 235, 246, 0, 'SECTION Three
 Cardiovascular system ﻿235
 the pressure gradient increases. This therefore provides 
 a useful index of the severity of stenosis. However, 
@@ -22273,7 +21024,7 @@ simultaneous recordings of the pulmonary artery wedge (PAW) and left ventricular
 signals should be superimposed throughout diastole. Here there is a pressure gradient >10 mmHg, indicating severe mitral stenosis. Note 
 that the patient is in atrial fibrillation and the pressure gradient varies inversely with the RR interval, tending to increase as the RR 
 interval shortens.', 1555),
-   ('3c24c71d-530b-5ee2-a2a2-d57d43a55961', 'd52b886b-55b7-599d-8dfb-5b23703c24a4', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 247, 247, 0, 'Cardiovascular system ﻿
+   ('8c79dd32-2f2b-5f5c-a805-116920dec1fa', 'HUTCHISON_24_2018', 'H1-C13', 236, 247, 0, 'Cardiovascular system ﻿
 236 13
 small despite the presence of severe stenosis. This 
 applies particularly to the aortic valve because flow 
@@ -22376,7 +21127,7 @@ tamponade, malignant disease being the commonest
 cause in developed countries. Pericardiocentesis relieves 
 the tamponade. Pericardial fluid should always be sent 
 for cytological and bacteriological analysis', 4679),
-   ('b403a15b-2a80-587e-815f-e7c5bdc96097', '2e3d768f-1835-5807-a0ab-dd00ae97ca99', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 248, 248, 0, 'SECTION Three
+   ('3198b285-298f-596c-9e15-686934139968', 'HUTCHISON_24_2018', 'H1-C13', 237, 248, 0, 'SECTION Three
 Cardiovascular system ﻿237
 RV/L V constriction
 100
@@ -22440,7 +21191,7 @@ Increased ventricular wall stress (which occurs in
 heart failure, left ventricular hypertrophy etc.) causes 
 release of natriuretic peptides from the heart (brain 
 natriuretic peptide, BNP and its precursor, N-terminal', 3271),
-   ('3a2e05b3-7318-5546-8dcd-cc78a18cd92f', '1061b426-3bd0-5796-a246-baee1cc55c9a', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 249, 249, 0, 'Cardiovascular system ﻿
+   ('9c844727-544b-5942-aaff-372085b63ff7', 'HUTCHISON_24_2018', 'H1-C13', 238, 249, 0, 'Cardiovascular system ﻿
 238 13
 the cardiovascular event rate by about 25%. Statins 
 lower LDL (''bad'') cholesterol, but if HDL (''good'') 
@@ -22543,7 +21294,7 @@ Comments
 commonly in the elderly
 ■ Diagnosis should always be considered in patients with 
 fever and a heart murmur', 4834),
-   ('721af92e-36b1-52dd-8dc7-54617e921056', '4147cc2f-ccfd-5612-aa60-cc3c62f54aae', '22fe0f7b-b70c-5e17-9514-d068e854ec09', 250, 250, 0, 'SECTION Three
+   ('22584862-d3a6-5ebe-87ba-8b91d713ddf5', 'HUTCHISON_24_2018', 'H1-C13', 239, 250, 0, 'SECTION Three
 Cardiovascular system ﻿239
 Table 13.3  Organisms implicated in endocarditis
 Organism
@@ -22615,8 +21366,8 @@ The author would like to acknowledge the significant contribution of Adam D. Tim
 Archbold, the authors of the equivalent chapter 
 in the previous edition of this textbook, on which 
 this chapter is based.', 2205),
-   ('85a288b0-02c3-5a42-b105-6eb149b34878', NULL, '22fe0f7b-b70c-5e17-9514-d068e854ec09', 251, 251, 0, 'This page intentionally left blank', 34),
-   ('1ed58b98-d126-5142-ac2c-8481ecc33d9a', '0fe0fd95-6dc3-5d7a-8236-e001321bfca5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 252, 252, 0, 'Introduction
+   ('3db7e5eb-abb7-5571-850a-45850e0ca6b1', 'HUTCHISON_24_2018', 'H1-C13', 240, 251, 0, 'This page intentionally left blank', 34),
+   ('50fc288a-cb64-5e8d-9376-feb674f44fb4', 'HUTCHISON_24_2018', 'H1-C14', 241, 252, 0, 'Introduction
 The human gastrointestinal (GI) tract is a complex 
 system of serially connected organs approximately 
 8 m in length, extending from the mouth to the anus, 
@@ -22697,7 +21448,7 @@ BASIC SYSTEMS
 14 
 Gastrointestinal system
 Andrew Rochford and Michael Glynn', 3980),
-   ('2a454b97-d690-5a5e-9847-f6f0612e314e', 'fa40801e-87f6-5137-be46-25b23ba46a4e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 253, 253, 0, 'Gastrointestinal system ﻿
+   ('67a2e21b-73a5-502e-87c3-7524667a2e30', 'HUTCHISON_24_2018', 'H1-C14', 242, 253, 0, 'Gastrointestinal system ﻿
 242 14
 pathology particularly in the upper GI tract. It is 
 important to recognize the symptom of anorexia as 
@@ -22803,7 +21554,7 @@ abdominal disease
 ■ Jaundice
 ■ Itching
 ■ Urinary symptoms', 4719),
-   ('98dfd09f-3e8d-599d-a42f-5f1427cf0dc5', 'd1a6ce17-f43c-5f63-b0b4-c45758ac6538', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 254, 254, 0, 'SECTION Three
+   ('78d84f07-4f98-5577-b3d9-f5b6dd2cb4d6', 'HUTCHISON_24_2018', 'H1-C14', 243, 254, 0, 'SECTION Three
 Gastrointestinal system ﻿243
 looks jet-black, tarry and has a characteristic smell. 
 It usually indicates bleeding proximal to the ileo-caecal 
@@ -22910,7 +21661,7 @@ accompanied by nausea
 accompanied by nausea
 ■ Functional: anywhere in the abdomen, colicky, 
 accompanied by bloating, relieved by bowel action', 5168),
-   ('931176b0-0152-5b62-9818-b7e172803c3c', NULL, '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 255, 255, 0, 'Gastrointestinal system ﻿
+   ('03d6d8d7-3ff3-5ab5-a3b2-84adc3033fa5', 'HUTCHISON_24_2018', 'H1-C14', 244, 255, 0, 'Gastrointestinal system ﻿
 244 14
 circumference (MUAC), skin-fold thickness, waist 
 circumference and waist/hip ratio.
@@ -23015,7 +21766,7 @@ Severely obese
 35-39.9
 Morbidly obese
 >40', 3147),
-   ('b5d7b4e7-a488-5a88-84ea-90338044c49b', 'b55f6112-2b0b-571d-98dd-982c9709cb97', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 256, 256, 0, 'SECTION Three
+   ('aa151876-1745-51de-8ead-405e1f27d4bc', 'HUTCHISON_24_2018', 'H1-C14', 245, 256, 0, 'SECTION Three
 Gastrointestinal system ﻿245
 being more important than the overall redness). 
 Inflammatory bowel disease may give rise to clubbing 
@@ -23091,7 +21842,7 @@ Figure 14.1  A typical spider naevus, with a central arteriole and
 fine radiating vessels. 
 Figure 14.2  Palmar erythema in chronic liver disease (sparing 
 the centre of the palms).', 3342),
-   ('2c6c6e88-b88b-5691-ba3b-23f539d63566', '84fdc419-90e4-575e-a830-04ed008c534f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 257, 257, 0, 'Gastrointestinal system ﻿
+   ('2a595aae-72c1-5b3a-9f18-c9e5cb6359eb', 'HUTCHISON_24_2018', 'H1-C14', 246, 257, 0, 'Gastrointestinal system ﻿
 246 14
 Shape
 Is the abdomen of normal contour and fullness, or 
@@ -23145,7 +21896,7 @@ inspiration
 Stomach
 Tenth rib
 Figure 14.3  Anterior view of the external relationships of the abdominal and thoracic organs.', 1922),
-   ('dc8d108d-05d3-569f-b543-f5a3d6466026', '49b1159c-30a9-58cb-b33f-19dd0873f2bd', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 258, 258, 0, 'SECTION Three
+   ('eb1f8d2a-878f-5ff7-b665-a7f73e26322f', 'HUTCHISON_24_2018', 'H1-C14', 247, 258, 0, 'SECTION Three
 Gastrointestinal system ﻿247
 In generalized peritonitis, this movement is absent 
 or markedly diminished (the ''still, silent abdomen''). 
@@ -23198,7 +21949,7 @@ Sacrum
 Pelvis
 Femur
 Figure 14.4  Posterior view of the external relationships of the abdominal and thoracic organs. The liver is not shown.', 1883),
-   ('ac5f2a52-946c-5a3b-8abd-4253b1726dbb', '70f3eaa5-22a2-541b-a248-e4fdca4f3fbc', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 259, 259, 0, 'Gastrointestinal system ﻿
+   ('4ebeb325-8ea8-5c58-9f91-232d8e09a834', 'HUTCHISON_24_2018', 'H1-C14', 248, 259, 0, 'Gastrointestinal system ﻿
 248 14
 elicited more easily after the infant has been 
 given a feed. Standing behind the child''s mother 
@@ -23287,7 +22038,7 @@ Figure 14.7  Some commonly used abdominal incisions. The
 midline and oblique incisions avoid damage to the innervation of 
 the abdominal musculature and the later development of 
 incisional hernia.', 3225),
-   ('6d6c434e-b06f-5bea-be14-d33a8e23370f', '3add80e5-affa-5d1a-a1e8-b6f33aff46b8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 260, 260, 0, 'SECTION Three
+   ('b03b343a-4832-5bd3-903e-da2f3c37fa8c', 'HUTCHISON_24_2018', 'H1-C14', 249, 260, 0, 'SECTION Three
 Gastrointestinal system ﻿249
 Palpation
 Palpation forms the most important part of the 
@@ -23360,7 +22111,7 @@ examine the penis and scrotum for any swellings and
 to ensure that both testes are in their normal position. 
 Then bring the sheet back up to the level of the 
 symphysis pubis.', 3322),
-   ('2a81f877-e7c2-5eea-ae16-23a1417d3375', '9114f9ae-0105-5f45-8b1c-d823c17d40c1', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 261, 261, 0, 'Gastrointestinal system ﻿
+   ('6314a810-7f79-5440-a9da-fcd3babeca5a', 'HUTCHISON_24_2018', 'H1-C14', 250, 261, 0, 'Gastrointestinal system ﻿
 250 14
 All the organs in the upper abdomen (liver, spleen, 
 kidneys, stomach, pancreas, gallbladder) move downward with inspiration (with the spleen moving more 
@@ -23444,7 +22195,7 @@ features.
 Figure 14.11  Method of deep palpation in an obese, muscular or 
 poorly relaxed patient. 
 Figure 14.12  Palpation of the left kidney.', 3999),
-   ('24d5a732-9956-5241-995c-c96141f44a9b', 'f0f0499f-5a66-54a1-af93-53310406d1b8', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 262, 262, 0, 'SECTION Three
+   ('0495edea-f51b-52dd-971d-ead2f566d312', 'HUTCHISON_24_2018', 'H1-C14', 251, 262, 0, 'SECTION Three
 Gastrointestinal system ﻿251
 ribs, and repeat the examination as above. Alternatively 
 the spleen may be very large and the lower edge may 
@@ -23508,7 +22259,7 @@ Figure 14.14  Palpation of the spleen. Start well out to the left.
 Figure 14.15  Palpation of the spleen more medially than in 
 Fig. 14.14. 
 Figure 14.16  Palpation of the right kidney.', 2830),
-   ('7639ad93-a90b-5a29-b880-523a5196ef0c', '540557a1-91a0-53af-ae59-274515e65968', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 263, 263, 0, 'Gastrointestinal system ﻿
+   ('a8cf81e7-5bcc-5006-bc84-eda773b40d86', 'HUTCHISON_24_2018', 'H1-C14', 252, 263, 0, 'Gastrointestinal system ﻿
 252 14
 tricuspid regurgitation, the liver may be felt to pulsate. 
 Occasionally a congenital variant of the right lobe 
@@ -23574,7 +22325,7 @@ Try to discern the character of the liver surface
 failure, very firm and regular as in obstructive jaundice 
 and cirrhosis, or hard, irregular, painless and sometimes 
 nodular as in advanced secondary carcinoma). In', 3382),
-   ('90f40801-04a7-5079-a73a-c0841d941612', '51508ae4-ccd5-5310-8bc4-2da33c96da54', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 264, 264, 0, 'SECTION Three
+   ('92a74516-8173-5e85-ba63-06392e3a18c8', 'HUTCHISON_24_2018', 'H1-C14', 253, 264, 0, 'SECTION Three
 Gastrointestinal system ﻿253
 The urinary bladder
 Normally the urinary bladder is not palpable. When 
@@ -23648,7 +22399,7 @@ enlargement
 Figure 14.21  Physical signs in retention of urine: a smooth, firm 
 and regular swelling arising out of the pelvis which one cannot 
 ''get below'' and which is dull to percussion.', 3580),
-   ('dc72e034-0909-50cd-b6f0-b7064517d1bb', 'fc9b88c4-bb9b-5291-83cb-8dfab82d9b4f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 265, 265, 0, 'Gastrointestinal system ﻿
+   ('044a4ac2-4a78-5bc4-b9f8-71d586aea822', 'HUTCHISON_24_2018', 'H1-C14', 254, 265, 0, 'Gastrointestinal system ﻿
 254 14
 Causes of diagnostic difficulty on palpation
 In many patients, especially those with a thin or lax 
@@ -23734,7 +22485,7 @@ them from the expansile pulsations palpated in
 aneurysmal dilatation.
 Figure 14.23  Palpation of the femoral vessels. 
 Figure 14.22  Palpation of the abdominal aorta.', 4305),
-   ('7997b724-2e79-5add-a9e5-d19105a4e1c1', '4f6ba726-0ec2-517e-ae12-d402d2bf426f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 266, 266, 0, 'SECTION Three
+   ('6bf2d967-e6d8-5cb5-a556-ed394be53207', 'HUTCHISON_24_2018', 'H1-C14', 255, 266, 0, 'SECTION Three
 Gastrointestinal system ﻿255
 of the abdomen is resonant (tympanic) except over 
 the liver, where the note is dull. A normal spleen is 
@@ -23839,7 +22590,7 @@ transmitted through it.
 Percussion
 Details of how to percuss correctly are given in 
 Chapter 12. The normal percussion note over most', 5016),
-   ('9b2d2d40-ba2a-50e0-a627-8f2427d7e61c', 'd5a26f19-03cb-5b58-b0e3-f41fab1112b0', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 267, 267, 0, 'Gastrointestinal system ﻿
+   ('3e5ccafa-1a0c-5a2f-b3ab-05fa5d3cccdf', 'HUTCHISON_24_2018', 'H1-C14', 256, 267, 0, 'Gastrointestinal system ﻿
 256 14
 musculature), keep your fingers in that position and 
 ask the patient to roll on to his left side. Wait a few 
@@ -23918,7 +22669,7 @@ Intestinal obstruction
 ■ Increased and/or ''tinkling'' bowel sounds
 Figure 14.25  Eliciting a fluid thrill. (The hand in the middle of 
 the abdomen is that of an assistant.)', 3228),
-   ('e38bf4c7-0442-556e-ba81-fcf13cc2e34c', '1220b160-a569-55ef-a100-23a231a67559', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 268, 268, 0, 'SECTION Three
+   ('083d21d4-42e2-5536-b3ca-859615055abd', 'HUTCHISON_24_2018', 'H1-C14', 257, 268, 0, 'SECTION Three
 Gastrointestinal system ﻿257
 canal; place the right hand similarly in the right groin 
 (Fig. 14.26). Now ask the patient to give a loud cough 
@@ -24018,7 +22769,7 @@ none is apparent, place the left hand in the left groin
 so that the fingers lie over and in line with the inguinal 
 Figure 14.26  Palpating the groins to detect an expansile 
 impulse on coughing.', 5144),
-   ('ada0f1e5-7e1d-52e5-9a68-0e624ea1fb7d', '7cb9fce7-4fae-5008-841f-28c9c10e40a5', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 269, 269, 0, 'Gastrointestinal system ﻿
+   ('47d77ca9-b9f0-5a56-b87b-aca34f19bc38', 'HUTCHISON_24_2018', 'H1-C14', 258, 269, 0, 'Gastrointestinal system ﻿
 258 14
 the posterior wall of the inguinal canal, while in 
 an indirect hernia the impulse can often be seen 
@@ -24102,7 +22853,7 @@ the examiner, at the side of the patient, with one hand supporting
 the buttock. 
 Figure 14.28  Left hand: index finger occluding the deep inguinal 
 ring. Right hand: index finger on the pubic tubercle.', 4071),
-   ('5c6674c8-4d05-5618-a35f-58d0df29ad2b', '23acabee-4550-5c8b-b511-1b53131c327e', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 270, 270, 0, 'SECTION Three
+   ('3e6e650a-f921-5aa5-9ad2-c4478c71eb61', 'HUTCHISON_24_2018', 'H1-C14', 259, 270, 0, 'SECTION Three
 Gastrointestinal system ﻿259
 distinguish a fistula-in-ano from a pilonidal sinus, 
 where the opening lies in the midline of the natal 
@@ -24196,7 +22947,7 @@ near the anus with a telltale bead of pus or granulation
 tissue surrounding it, which represents the external 
 opening of a fistula-in-ano. It is usually easy to 
 Figure 14.29  Left lateral position for rectal examination.', 4955),
-   ('9eca624e-f4b8-5ee9-a281-450f129f29f5', '0ae52b49-9278-54f1-9ed8-d2e82316bee2', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 271, 271, 0, 'Gastrointestinal system ﻿
+   ('c9012e50-8c75-5ec1-b900-1ac2325e6c7b', 'HUTCHISON_24_2018', 'H1-C14', 260, 271, 0, 'Gastrointestinal system ﻿
 260 14
 malignant ulcers, proliferative and stenosing carcinomas, polyps and villous adenomas. The hollow of the 
 sacrum and coccyx can be felt posteriorly. Laterally, 
@@ -24277,7 +23028,7 @@ the anal canal.
 Figure 14.30  Correct method for insertion of the index finger 
 in rectal examination. The pad of the finger is placed flat against 
 the anus.', 4067),
-   ('d7debc6f-3a11-5007-ab2f-18ac8beb4a11', '7e1c4581-3599-5781-9f08-4c6250e57967', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 272, 272, 0, 'SECTION Three
+   ('13e810f2-53d6-5105-8c95-0131249da9ee', 'HUTCHISON_24_2018', 'H1-C14', 261, 272, 0, 'SECTION Three
 Gastrointestinal system ﻿261
 free of pain for a further few minutes), is typical of 
 small bowel obstruction. If such pain is suddenly 
@@ -24387,7 +23138,7 @@ to be due to infection. For example, diverticulitis or
 pyelonephritis can present in this manner. Colicky 
 pain, on the other hand (i.e. pain lasting a few seconds 
 or minutes and then passing off, leaving the patient', 5405),
-   ('2185607c-1623-58e2-bbbe-772ec95ae448', 'fbdaee1b-90ca-5684-9a02-6aeb3693662d', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 273, 273, 0, 'Gastrointestinal system ﻿
+   ('9f5152f8-d55d-5b8c-b08b-6d25deca4d35', 'HUTCHISON_24_2018', 'H1-C14', 262, 273, 0, 'Gastrointestinal system ﻿
 262 14
 spasm, the abdominal wall will be felt to relax during 
 expiration.
@@ -24470,7 +23221,7 @@ Figure 14.32  Plain X-ray of the abdomen. Obstruction of the
 large bowel due to carcinoma of the sigmoid colon. Most of the 
 colon is dilated with gas, indicating obstruction, but there appears 
 to be no gas below the sigmoid region.', 3894),
-   ('e29f1a9d-d344-59e5-a1fd-2082a9825e91', 'd0871373-525d-5a1c-b6b3-c4a2959a95e6', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 274, 274, 0, 'SECTION Three
+   ('f9d272f8-04f6-5516-b94e-c9766b3796cc', 'HUTCHISON_24_2018', 'H1-C14', 263, 274, 0, 'SECTION Three
 Gastrointestinal system ﻿263
 cholera, the stools - known as rice-water stools - are 
 colourless, almost devoid of odour, alkaline in reaction 
@@ -24576,7 +23327,7 @@ odour, something like that of semen. Melaena stools
 have a characteristic smell.
 Abnormal stools
 Watery stools are found in all cases of profuse diarrhoea and after the administration of purgatives. In', 5480),
-   ('6b892b94-30f8-5bd1-915c-0cdc2cadbbfd', 'ec08224c-46bc-5e23-a77c-addec9be0e9f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 275, 275, 0, 'Gastrointestinal system ﻿
+   ('815f6be0-10f3-5955-a5dc-cc1f789d8944', 'HUTCHISON_24_2018', 'H1-C14', 264, 275, 0, 'Gastrointestinal system ﻿
 264 14
 puncture, a 20-ml syringe and an 18-gauge needle 
 can be used; clotting and platelet abnormalities do 
@@ -24689,7 +23440,7 @@ iliac spine. With suitable sterile precautions, the skin
 at the point chosen should be infiltrated with local 
 anaesthetic and the anaesthetic then injected down 
 to the parietal peritoneum. For a simple diagnostic', 5712),
-   ('00397fb7-bd19-50cd-9d2c-43d10bf623c2', 'a419d611-4c9e-5bc3-9c01-cad909dedc76', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 276, 276, 0, 'SECTION Three
+   ('af19044b-e946-54ed-9b84-ed35bcd716c3', 'HUTCHISON_24_2018', 'H1-C14', 265, 276, 0, 'SECTION Three
 Gastrointestinal system ﻿265
 Oesophageal function studies
 The oesophageal phase of swallowing can be assessed 
@@ -24748,7 +23499,7 @@ from being bitten. The patient may have received pharyngeal local
 anaesthetic spray or light sedation with midazolam. 
 Figure 14.35  Endoscopic view of a duodenal ulcer that has 
 recently bled with a visible blood vessel on its surface.', 3316),
-   ('bf435849-ab75-578a-8b75-589ff691cbfb', 'e3dcb12f-5ebb-5017-8546-ac245e95efcf', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 277, 277, 0, 'Gastrointestinal system ﻿
+   ('33735746-6842-5374-8005-fbf04bd56fd6', 'HUTCHISON_24_2018', 'H1-C14', 266, 277, 0, 'Gastrointestinal system ﻿
 266 14
 value in cases of suspected peritonitis due to a perforated viscus, when gas may be seen under the 
 diaphragm, usually on the right side (Fig. 14.36). A 
@@ -24841,7 +23592,7 @@ Figure 14.36  Plain X-ray of the chest showing gas under the
 right and left diaphragms after perforation of the duodenal ulcer. 
 The patient was admitted in shock with abdominal pain and 
 abdominal rigidity.', 4641),
-   ('b8389ec6-16a2-536b-864f-6a5a9aca3f8b', '9b2880d8-9f22-5c79-bd29-79ab3751ebbe', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 278, 278, 0, 'SECTION Three
+   ('feeb7797-070d-5fde-a94a-494820e8e9d6', 'HUTCHISON_24_2018', 'H1-C14', 267, 278, 0, 'SECTION Three
 Gastrointestinal system ﻿267
 there is no IgA deficiency), but a biopsy is essential 
 to fully complete or fully exclude the diagnosis. The 
@@ -24943,7 +23694,7 @@ by wireless capsule endoscopy but, as yet, biopsies
 are not possible by this method.
 If coeliac disease is suspected, serum antibodies to 
 gliadin, reticulin, endomysial and tissue transglutaminidase antigens are a useful screening test (provided', 5174),
-   ('31d87ec1-c2cb-5346-a131-81f5f1022fe5', '0b2ec2ba-66f8-5a10-81de-9ad9843284c4', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 279, 279, 0, 'Gastrointestinal system ﻿
+   ('0593e3e8-8ec6-52c8-8b8c-32585f9a1888', 'HUTCHISON_24_2018', 'H1-C14', 268, 279, 0, 'Gastrointestinal system ﻿
 268 14
 colon preparation (similar to barium enema X-ray) 
 but is also an outpatient procedure. Conscious sedation 
@@ -24999,7 +23750,7 @@ with ulcerative colitis, the normal mucosal pattern and the
 haustra themselves have been obliterated. The patient is lying on 
 his right side so that there are clear fluid levels in the barium 
 sulphate suspension in the bowel.', 2960),
-   ('b91db668-3986-5a85-91bf-87024b67bc7e', '504b64d0-eebc-5204-933c-6134a76e9aee', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 280, 280, 0, 'SECTION Three
+   ('48ace109-5840-5d18-b2fe-b02d7af3f01e', 'HUTCHISON_24_2018', 'H1-C14', 269, 280, 0, 'SECTION Three
 Gastrointestinal system ﻿269
 give information about activity and ongoing disease 
 and, in the latter, detection of the viral DNA is helpful.
@@ -25080,7 +23831,7 @@ of hepatitis B can be detected (surface and E) which
 Figure 14.39  View of colonic epithelium at colonoscopy, showing 
 severe ulcerative colitis with extensive ulceration and bleeding. 
 Figure 14.40  Colonoscopic view of a tubulovillous adenoma.', 4336),
-   ('b4a8e55d-7215-5aa9-a540-e0b9af6028f9', '9ac4b750-75d7-5866-8565-439559cc8535', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 281, 281, 0, 'Gastrointestinal system ﻿
+   ('36a88dd6-2206-51f3-ae3a-9050783ba57c', 'HUTCHISON_24_2018', 'H1-C14', 270, 281, 0, 'Gastrointestinal system ﻿
 270 14
 Endoscopic ultrasound
 Endoscopic ultrasound is more sensitive in staging 
@@ -25169,7 +23920,7 @@ the same time.
 Figure 14.41  CT demonstrating liver metastases from colonic 
 carcinoma. Large, lobulated, non-homogeneous masses (arrows) 
 replace most of the left lobe of the liver.', 4724),
-   ('52bab3f2-0c09-5b5c-b351-70d7336a0eca', '55e8d736-7c23-5429-b742-eb2c176fb26f', '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 282, 282, 0, 'SECTION Three
+   ('7e38fc0f-e7cb-50ac-b30f-f5a78772752c', 'HUTCHISON_24_2018', 'H1-C14', 271, 282, 0, 'SECTION Three
 Gastrointestinal system ﻿271
 to relieve obstruction, gallstones can be removed and 
 wires can be passed into the duodenum to facilitate 
@@ -25199,8 +23950,8 @@ or benign and malignant bile duct strictures can be
 accurately localized and differentiated. This technique 
 is usually only used if ERCP fails. It also has a therapeutic function. Transhepatic drains can be placed 
 to treat cholangitis and sepsis, stents can be placed', 1441),
-   ('239b8a1f-33a6-5f08-a14b-c1da3d180324', NULL, '05e9cdbb-91dc-5406-bc28-8792d5f59fc3', 283, 283, 0, 'This page intentionally left blank', 34),
-   ('68a53234-f5a4-54db-afd2-fe6785cab971', '3f9b7ccb-8671-54de-8280-281b5725851b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 284, 284, 0, 'Introduction
+   ('8e0f504f-359d-55a8-a5bf-7102b1cf15cc', 'HUTCHISON_24_2018', 'H1-C14', 272, 283, 0, 'This page intentionally left blank', 34),
+   ('e39b98c3-ff24-5cd8-aef8-c50d345ed456', 'HUTCHISON_24_2018', 'H1-C15', 273, 284, 0, 'Introduction
 Musculoskeletal symptoms are a major cause of pain 
 and disability, accounting for a quarter of all GP 
 consultations in the UK, and have significant economic 
@@ -25286,7 +24037,7 @@ BASIC SYSTEMS
 15 
 Locomotor system
 Stephen Kelly', 3823),
-   ('eebcf6c2-cb39-5955-ab84-080c36031208', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 285, 285, 0, 'Locomotor system ﻿
+   ('df6339d7-c151-50a9-af5b-441331f91ce0', 'HUTCHISON_24_2018', 'H1-C15', 274, 285, 0, 'Locomotor system ﻿
 274 15
 Box 15.1  GALS checklist
 Gait
@@ -25355,7 +24106,7 @@ the neck movements (Fig. 15.2).
 ■ Gently press the mid-point of each 
 supraspinatus muscle to elicit tenderness 
 (Fig. 15.3).', 2088),
-   ('7d5d5006-5165-5c70-a76c-64f814d2b686', '8533d801-fa67-5ceb-ae5c-3533ae66ad18', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 286, 286, 0, 'SECTION Three
+   ('f7ca0b39-b8b2-5f34-8aaf-816b1c7d6550', 'HUTCHISON_24_2018', 'H1-C15', 275, 286, 0, 'SECTION Three
 Locomotor system ﻿275
 Arms
 Ask the patient to follow instructions as in Table 
@@ -25424,7 +24175,7 @@ metacarpophalangeal joints
 to elicit tenderness. 
 Figure 15.8  ''Do the same with your hands back to 
 back.''', 1659),
-   ('5d425484-e42b-5a82-b18c-a465da5b6a25', '158f788a-ab91-591d-a9fb-48532e0650a9', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 287, 287, 0, 'Locomotor system ﻿
+   ('3bfdb4b9-4fca-519d-bac1-5e16f1ff9197', 'HUTCHISON_24_2018', 'H1-C15', 276, 287, 0, 'Locomotor system ﻿
 276 15
 Table 15.3  Instructions for examining legs
 Instruction
@@ -25476,7 +24227,7 @@ Children
 Children should have their height and weight 
 measured and plotted on centile charts to assess 
 growth. When examining children, the assessment', 1553),
-   ('1807cb48-f641-545d-858d-e496dda84105', 'b4ad7b2c-7e38-58b3-9ad6-07156b30450b', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 288, 288, 0, 'SECTION Three
+   ('f231b184-e515-5242-aa0a-d26d06bb4909', 'HUTCHISON_24_2018', 'H1-C15', 277, 288, 0, 'SECTION Three
 Locomotor system ﻿277
 Figure 15.12  Palpate popliteal fossa. 
 Figure 15.13  Test subtalar and ankle movement. 
@@ -25517,7 +24268,7 @@ assessed for pathology. It is normal for toddlers to be
 ''bow-legged'', ''knock-kneed'' and ''flat-footed''. Various 
 foot and toe appearances are also normal, including 
 in-toeing, out-toeing and ''curly'' toes. These appearances usually resolve as the child grows.', 1817),
-   ('9440f48b-07f3-5759-ab8b-96cff7f8c99f', '82f330b4-14c0-5643-bb4c-3f3fb83b9168', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 289, 289, 0, 'Locomotor system ﻿
+   ('a805a440-19c6-5b93-8bb0-f93932eb0f24', 'HUTCHISON_24_2018', 'H1-C15', 278, 289, 0, 'Locomotor system ﻿
 278 15
 Duration
 The temporal description of pain is important in 
@@ -25640,7 +24391,7 @@ paraesthesiae in the foot with a large disc prolapse
 - this is called ''sciatica''.
 ■ Hip-joint pain may radiate to the knee and below.
 ■ Knee pain may radiate above and below the joint.', 4190),
-   ('bd945b36-8f0c-53f0-98c7-6f2156797ab5', '8d7d754d-7122-58d8-b4d8-6e149bd87704', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 290, 290, 0, 'SECTION Three
+   ('4a7db80b-b664-59bb-874d-81c2ab5b8c7e', 'HUTCHISON_24_2018', 'H1-C15', 279, 290, 0, 'SECTION Three
 Locomotor system ﻿279
 Non-inflammatory joint disease
 Pain of a non-inflammatory origin is more directly 
@@ -25762,7 +24513,7 @@ Bladder, bowel or
 sexual dysfunction
 Cauda equina or cord 
 compression', 5107),
-   ('7cb84632-1f4c-55ba-9f36-af3f73cae51e', 'f22ed151-0663-5a2d-bf22-b3b7818fd431', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 291, 291, 0, 'Locomotor system ﻿
+   ('c733e2a7-7e8c-5d2a-8535-020143d15f10', 'HUTCHISON_24_2018', 'H1-C15', 280, 291, 0, 'Locomotor system ﻿
 280 15
 duration of the episodes and any associated clinical 
 symptoms.
@@ -25847,7 +24598,7 @@ Persistent synovitis with none of the above features
 rheumatoid factor or antinuclear antibody)
 Figure 15.15  Gouty tophus on the ear. Other sites include the 
 elbows, fingers and toes.', 3930),
-   ('c5278c13-f5e9-5925-9850-2f7511e526ce', 'ddd6d5b8-ee6d-5567-869a-43fadea95216', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 292, 292, 0, 'SECTION Three
+   ('3492a073-a10e-5969-bec0-f54acf66df1c', 'HUTCHISON_24_2018', 'H1-C15', 281, 292, 0, 'SECTION Three
 Locomotor system ﻿281
 or miscarriages, especially in the context of livedo 
 reticularis, should raise the suspicion of the antiphospholipid syndrome.
@@ -25912,7 +24663,7 @@ Figure 15.17  Schirmer''s test - a sterile strip of filter paper is
 hooked over the lower eyelid. Less than 5 mm of wetness after 
 5 minutes is abnormal and is associated with autoimmune 
 rheumatic disease.', 3633),
-   ('2eefdb50-670e-5d16-87fd-9723ee4de9e3', 'a5af3ce4-8aa7-5c87-b481-db363568870d', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 293, 293, 0, 'Locomotor system ﻿
+   ('0431c726-5ea7-51b5-a688-7ef061b0f85d', 'HUTCHISON_24_2018', 'H1-C15', 282, 293, 0, 'Locomotor system ﻿
 282 15
 that can be pursued in history taking. Observation 
 of any difficulty in undressing and getting onto the 
@@ -25999,7 +24750,7 @@ Fractures
 Figure 15.18  Thenar wasting due to carpal tunnel syndrome. 
 This is often associated with osteoarthritis. Note nodal change on 
 the terminal interphalangeal joints of the index fingers.', 3458),
-   ('447c53ef-f1dd-5c1b-8eb9-224a1a3078e7', '0ba04368-afdb-5d8d-bfb9-d97f268be530', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 294, 294, 0, 'SECTION Three
+   ('0c83c791-fa03-53b7-b72f-76d9861675e8', 'HUTCHISON_24_2018', 'H1-C15', 283, 294, 0, 'SECTION Three
 Locomotor system ﻿283
 Fractures
 Fractures are common and may involve any bone. 
@@ -26022,7 +24773,7 @@ patchy porosis in the X-ray of the upper tibia (B).
 B
 A
 Figure 15.20  Paget''s disease, causing deformity of the skull (A). Note the thickened skull vault with remodelled bone (B).', 989),
-   ('7ea2f4f1-02b8-5bdf-a533-b85cc80b2e63', '987e31d0-69e9-5ff2-a1aa-67ce0274d5f5', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 295, 295, 0, 'Locomotor system ﻿
+   ('76e78845-4732-50d6-a5da-57710a505c3d', 'HUTCHISON_24_2018', 'H1-C15', 284, 295, 0, 'Locomotor system ﻿
 284 15
 separation of the bones at the fracture site and other 
 features are disguised by the thick overlying muscle. 
@@ -26130,7 +24881,7 @@ Cause
 ■ Traumatic
 ■ Spontaneous (osteoporosis or metabolic)
 ■ Pathological', 4888),
-   ('5ff9b3b1-f8b6-5946-8f1f-6fecfba522ae', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 296, 296, 0, 'SECTION Three
+   ('ddec7d87-0695-5a18-ac18-be6dfa87c7d8', 'HUTCHISON_24_2018', 'H1-C15', 285, 296, 0, 'SECTION Three
 Locomotor system ﻿285
 Tenderness and enlargement of the ends of long 
 bones, particularly the radius, ulna and tibia, can 
@@ -26183,7 +24934,7 @@ joint space. Joint effusions usually have a characteristically smooth outline an
 demonstrable. Palpation of the whole joint is important 
 as this may reveal localized enthesitis (lateral epicondylitis at the elbow) or reveal localized effusions 
 (Baker''s cyst in the posterior aspect of the knee joint).', 2690),
-   ('aabbee06-7542-58d9-9432-0c4e00b2d541', 'd9e3b31c-eb10-5909-aaca-b979c13cb7c3', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 297, 297, 0, 'Locomotor system ﻿
+   ('f33b2c7e-50d3-5dbc-949d-71c4e6777a72', 'HUTCHISON_24_2018', 'H1-C15', 286, 297, 0, 'Locomotor system ﻿
 286 15
 overlying joints or in the finger pads (see Figs 15.15 
 and 15.22). Subcutaneous nodules in rheumatoid 
@@ -26263,7 +25014,7 @@ Subcutaneous nodules
 Subcutaneous nodules are associated with several 
 conditions (Box 15.12). If gout is suspected, inspect 
 the helix of the ear for tophi caused by the subcutaneous deposition of urate, which may also be found', 3808),
-   ('f8ea8637-a93d-5994-9a12-a7c773a94f10', '4dc9e24f-01ca-58b7-a9f1-d62536f51dd4', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 298, 298, 0, 'SECTION Three
+   ('1806b44f-ec96-5336-909a-b71211bba710', 'HUTCHISON_24_2018', 'H1-C15', 287, 298, 0, 'SECTION Three
 Locomotor system ﻿287
 excluded. Pitting leg oedema may indicate cardiac 
 failure, pericardial effusion or nephrotic syndrome, 
@@ -26341,7 +25092,7 @@ Local oedema is sometimes seen over inflamed joints
 Figure 15.26  Nail-fold vasculitis in rheumatoid arthritis. This 
 also occurs in SLE and other systemic vasculitides. 
 Figure 15.27  Pitting oedema, right hand.', 3727),
-   ('2d3ea47e-9517-5b70-ac0d-4987e89f6924', 'f0316287-66bd-51d7-be49-26057af5aa18', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 299, 299, 0, 'Locomotor system ﻿
+   ('72878a8f-f301-5290-afee-29256069cece', 'HUTCHISON_24_2018', 'H1-C15', 288, 299, 0, 'Locomotor system ﻿
 288 15
 such a way that the posterior spinous processes come 
 to point towards the concavity of the curve. The 
@@ -26378,7 +25129,7 @@ Figure 15.29  Gibbus of the lumbar spine due to tuberculosis.
 Figure 15.30  X-ray of tuberculous discitis. This shows the 
 underlying deformity shown in Fig. 15.29. There is tuberculous 
 infection of the intervertebral disc, causing the spinal deformity.', 1862),
-   ('ad7f3da1-83f6-5dfd-91ef-2fbf2d78b988', '481ece74-2b74-5bbe-98ee-5aa475150a23', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 300, 300, 0, 'SECTION Three
+   ('bf5b05af-e740-5e0e-b8d8-e6c1355f4744', 'HUTCHISON_24_2018', 'H1-C15', 289, 300, 0, 'SECTION Three
 Locomotor system ﻿289
 sustained extension or lateral flexion, suggesting 
 nerve-root involvement. If indicated, check for any 
@@ -26433,7 +25184,7 @@ Rotation
 Left
 Right
 Figure 15.33  Movements of the lumbar and dorsal spine.', 1997),
-   ('8044ea6f-df84-5179-8ec3-5caf50a2fa13', '9c43d17d-d825-5b0c-aba7-6821e7dce344', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 301, 301, 0, 'Locomotor system ﻿
+   ('7dd2f5bd-f0e0-53c4-a6c3-51d2af184def', 'HUTCHISON_24_2018', 'H1-C15', 290, 301, 0, 'Locomotor system ﻿
 290 15
 stages of this condition lateral flexion of the lumbar 
 spine is typically affected first. In mechanical or 
@@ -26519,7 +25270,7 @@ ankylosing spondylitis (Fig. 15.34), but in the early
 Figure 15.34  Ankylosing spondylitis. Note dorsal kyphosis and 
 protuberant abdomen due to poor chest expansion with abdominal 
 breathing.', 4295),
-   ('596a04fd-aab6-5acb-a191-1febf93f3868', 'f2de042c-9ec8-50bb-9ddc-62b871ef114c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 302, 302, 0, 'SECTION Three
+   ('2a5d4e62-ff57-5f7c-bbab-20ce1c78faf6', 'HUTCHISON_24_2018', 'H1-C15', 291, 302, 0, 'SECTION Three
 Locomotor system ﻿291
 examiner anchors the inferior angle of the scapula 
 between finger and thumb on the posterior chest 
@@ -26581,7 +25332,7 @@ Elevation
 B
 A
 Figure 15.35  (A) Movements of the shoulder. (B) Painful arc of supraspinatus tendinitis.', 2607),
-   ('250e7637-7923-5d71-ab26-cabf46b11ae3', '024c453d-1464-5bac-9551-cca2289e0d86', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 303, 303, 0, 'Locomotor system ﻿
+   ('b4e4155e-426b-5348-bbd3-f7a8184aa2de', 'HUTCHISON_24_2018', 'H1-C15', 292, 303, 0, 'Locomotor system ﻿
 292 15
 extension exacerbates lateral epicondylar tenderness 
 and wrist flexion exacerbates medial epicondylar 
@@ -26673,7 +25424,7 @@ hyperextension
 Hyperextension
 Flexion
 Figure 15.36  Movements of the elbow.', 3875),
-   ('56754b4d-1ad1-5e34-b2e5-27a4285ca913', 'd4a48cc2-20c4-5073-9600-ded1c4d32f26', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 304, 304, 0, 'SECTION Three
+   ('7ed1c4a8-5ed0-5a36-a5aa-541cdc1dc779', 'HUTCHISON_24_2018', 'H1-C15', 293, 304, 0, 'SECTION Three
 Locomotor system ﻿293
 ■ Opposition.
 ■ Abduction (not illustrated; movement at right 
@@ -26731,7 +25482,7 @@ Flexion of the wrist
 Dorsal
 Palmar
 Figure 15.38  Movements of the wrist.', 2136),
-   ('f9c662d3-cdc8-50e5-97e4-7f80b006e809', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 305, 305, 0, 'Locomotor system ﻿
+   ('240326b9-ce6c-5549-8ef9-8a57e2edf7af', 'HUTCHISON_24_2018', 'H1-C15', 294, 305, 0, 'Locomotor system ﻿
 294 15
 Neutral
 Extension
@@ -26763,7 +25514,7 @@ of the fingers at the metacarpophalangeal joints, ''swan
 neck'' (Fig. 15.43) and ''boutonnière'' deformities 
 (flexed proximal and hyperextended distal interphalangeal joints) of the fingers are typical in advanced 
 disease. This is due to the head of the phalanx sliding', 1364),
-   ('0f46c8f4-3e68-5eb6-b4c8-7075a750a7f2', '91a97524-1eb1-5a82-81f4-77e76950c4ac', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 306, 306, 0, 'SECTION Three
+   ('7408c8de-a59c-5097-aedc-8449447ffaaf', 'HUTCHISON_24_2018', 'H1-C15', 295, 306, 0, 'SECTION Three
 Locomotor system ﻿295
 dorsally between the lateral slips of the extensor 
 tendon, the middle slip having been damaged. In 
@@ -26873,7 +25624,7 @@ flexes.
 ■ Rotation in extension.
 ■ Extension: attempt to extend the hip with the patient 
 lying in the lateral or prone position.', 5104),
-   ('3125755e-e582-5501-8f29-f0c793efaf2a', '3cf36a75-7f6d-5090-af78-04c92b8c87b8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 307, 307, 0, 'Locomotor system ﻿
+   ('ced4e33a-1b10-54ea-b3ad-7f65e0e3b580', 'HUTCHISON_24_2018', 'H1-C15', 296, 307, 0, 'Locomotor system ﻿
 296 15
 a deep vein thrombosis. When intact, large poste­
 rior knee cysts can sometimes cause venous 
@@ -26948,7 +25699,7 @@ from the flat hand. Posterior knee joint (Baker''s)
 cysts, particularly in rheumatoid arthritis, may be 
 palpable in the popliteal fossa. They sometimes 
 rupture, producing calf pain, and may then mimic', 3095),
-   ('ef4c3977-11c4-5b32-96f7-2f3c5e487775', 'c6074aff-6248-5f3a-a74b-f552567089ca', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 308, 308, 0, 'SECTION Three
+   ('b8fc6d15-9f0f-59c8-ab97-52fd1dd805b1', 'HUTCHISON_24_2018', 'H1-C15', 297, 308, 0, 'SECTION Three
 Locomotor system ﻿297
 prolapsed intervertebral disc. Look for abnormalities 
 of posture.
@@ -27000,7 +25751,7 @@ Other structures shown are (1) tibia, (2) articular surfaces of femur. (B) The
 anterior cruciate ligament (4). Other structures shown are (1) tibia, (2) femur, 
 (3) patella. (C) The posterior cruciate ligament (4). Other structures shown are 
 (1) tibia, (2) femur, (3) patella, (5) patellar tendon, (6) joint space.', 2367),
-   ('864f1ec9-4dff-5538-a356-4e485c5306ec', '3bcb5ae9-a214-55b9-b634-7b95ce5112a0', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 309, 309, 0, 'Locomotor system ﻿
+   ('1b6bb7f8-85f7-5371-ac47-32170f1b5f88', 'HUTCHISON_24_2018', 'H1-C15', 298, 309, 0, 'Locomotor system ﻿
 298 15
 Neutral
 Flexion
@@ -27039,7 +25790,7 @@ causing the ankle to plantar flex. It is important to
 note that false negative results may occur in older 
 injuries, where organization of a hematoma can cause 
 some reconstitution of the tendon or with an incomplete partial tear. Patients may still be able to walk', 1496),
-   ('47b1c01e-8cb8-5bb0-99a8-30b831608f0d', '8b028948-56e9-5209-b13b-ff4e97678d51', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 310, 310, 0, 'SECTION Three
+   ('c9e8c4d4-3b46-5248-a6e8-16b1ae230c8a', 'HUTCHISON_24_2018', 'H1-C15', 299, 310, 0, 'SECTION Three
 Locomotor system ﻿299
 subjects and is frequently familial. It is also a feature 
 of two inherited connective tissue disorders, Marfan 
@@ -27108,7 +25859,7 @@ Flexion Extension
 Figure 15.50  Movements of the foot. 
 Figure 15.51  Hyperextensibility of the digits in Ehlers-Danlos 
 syndrome.', 2716),
-   ('a3aabf91-37de-5749-b453-2301379b4373', '8e4ece9c-ebf6-56ea-a9a3-bdbae59c086c', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 311, 311, 0, 'Locomotor system ﻿
+   ('cd60a211-5ad1-5129-8bc7-5d73af1879a7', 'HUTCHISON_24_2018', 'H1-C15', 300, 311, 0, 'Locomotor system ﻿
 300 15
 frequently found in patients with other connective 
 tissue diseases, for example SLE and Sjögren''s syndrome, or other inflammatory disorders such as 
@@ -27215,7 +25966,7 @@ diseases such as SLE. Hereditary complement
 deficiencies are also associated with SLE.
 ■ Muscle enzymes. Elevated creatine kinase levels occur in 
 most patients with inflammatory myopathy.', 5284),
-   ('8bc61d0c-5878-5050-9fde-43a35c5811aa', '25517523-aece-5bff-ae10-b078ca446ca3', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 312, 312, 0, 'SECTION Three
+   ('580a3bb7-4514-5a45-8085-19f18e763933', 'HUTCHISON_24_2018', 'H1-C15', 301, 312, 0, 'SECTION Three
 Locomotor system ﻿301
 examination is unlikely to be diagnostic. Frank blood 
 may point to trauma, haemophilia or villonodular 
@@ -27328,7 +26079,7 @@ Coxsackie virus, may cause transient musculoskeletal
 symptoms which may be mistaken for systemic 
 diseases. Rising viral titres may be useful in the 
 differential diagnosis.', 5591),
-   ('e094e302-dabe-546b-bb66-91d7442c6384', '73e1240a-108e-5ef0-99f8-bbfbbdcd884d', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 313, 313, 0, 'Locomotor system ﻿
+   ('40a30bce-dc89-5850-a5b2-81191886d2ef', 'HUTCHISON_24_2018', 'H1-C15', 302, 313, 0, 'Locomotor system ﻿
 302 15
 Figure 15.52  Antineutrophil cytoplasmic autoantibodies with 
 cytoplasmic staining (c-ANCA). This pattern has a high predictive 
@@ -27402,7 +26153,7 @@ Aggressive (malignant) bone lesions are more common
 in the elderly. Certain bone metastases have a 
 Figure 15.53  MRI scan of thigh muscles showing high signal 
 lesions of inflammatory myositis.', 3554),
-   ('0a4b95aa-8465-5792-8715-ff03eba32940', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 314, 314, 0, 'SECTION Three
+   ('e7a7058b-bade-50fd-94e1-b3635be028e6', 'HUTCHISON_24_2018', 'H1-C15', 303, 314, 0, 'SECTION Three
 Locomotor system ﻿303
 Box 15.19  General principles of musculoskeletal imaging
 ■ Use a systematic approach (see Box 15.13)
@@ -27465,7 +26216,7 @@ document joint pathology such as osteoarthritis (joint
 space narrowing, periarticular sclerosis, subchondral 
 cysts and osteophytes) or inflammatory conditions 
 such as rheumatoid arthritis (joint space narrowing,', 2215),
-   ('c791921b-45ea-5a9c-be04-36a9679e5060', 'fd94e024-9f41-5c04-a2cf-b2b0d4d375df', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 315, 315, 0, 'Locomotor system ﻿
+   ('61a58ccb-65b4-5643-a470-8c6b8bebabf5', 'HUTCHISON_24_2018', 'H1-C15', 304, 315, 0, 'Locomotor system ﻿
 304 15
 Figure 15.57  Renal osteodystrophy: generalized demineralization, 
 terminal phalangeal and subperiosteal bone resorption and 
@@ -27531,7 +26282,7 @@ Fibrous dysplasia, giant
 cell tumour of bone
 Fibrous 
 dysplasia', 2064),
-   ('54a66df0-51a1-5fa7-a755-df97936432cb', '4bbf6d59-0c20-5e43-815a-28c9fc4c50e8', 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 316, 316, 0, 'SECTION Three
+   ('70c97265-9411-57a7-8988-02d3ae69671f', 'HUTCHISON_24_2018', 'H1-C15', 305, 316, 0, 'SECTION Three
 Locomotor system ﻿305
 bone lesion or neoplastic invasion by metastases. 
 When there is clinical doubt after a non-diagnostic 
@@ -27595,7 +26346,7 @@ Figure 15.58  Left and right knee joints. The X-rays show normal
 joint anatomy but with chondrocalcinosis (A) and osteoarthritic 
 change (B) on the opposite side. Note the increased bone density 
 and narrowing of the joint space.', 3197),
-   ('a33a2614-21cb-53a8-b7b3-2b7be90bf509', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 317, 317, 0, 'Locomotor system ﻿
+   ('b91bbd0d-f1b0-517c-bae4-70829d35b10e', 'HUTCHISON_24_2018', 'H1-C15', 306, 317, 0, 'Locomotor system ﻿
 306 15
 In the context of inflammatory arthritis, MRI 
 imaging has much to recommend it as an imaging 
@@ -27659,7 +26410,7 @@ correct positioning and sequence selection
 quality. MRI is increasingly used to image the 
 major joints in the limbs, especially the knee 
 (see Fig. 15.45), hip, shoulder and elbow.', 3307),
-   ('b1949330-c5d7-52ce-b446-98a7a3c393dc', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 318, 318, 0, 'SECTION Three
+   ('2b2ada25-1fae-53ad-bd9d-72d67f6e3487', 'HUTCHISON_24_2018', 'H1-C15', 307, 318, 0, 'SECTION Three
 Locomotor system ﻿307
 ■ Isotopic scanning (scintigraphy) can be 
 used in the diagnosis of acute (e.g. infection 
@@ -27689,7 +26440,7 @@ the less bright signal in the intervertebral disc at this level.
 B
 A
 Figure 15.62  MRI of cervical spine in a patient with transverse myelitis due to SLE (A) before and (B) after immunosuppression.', 1311),
-   ('c08fa558-1e0d-5db1-888d-200bd61e518b', NULL, 'a2341edd-7c9f-570c-ae5a-6808ef39ac99', 319, 319, 0, 'Locomotor system ﻿
+   ('d8c94c6c-5b29-599e-903d-bc4c8e6838b9', 'HUTCHISON_24_2018', 'H1-C15', 308, 319, 0, 'Locomotor system ﻿
 308 15
 in metabolic bone disease and osteoporosis. 
 Scans recorded with long intervals (e.g. 
@@ -27718,7 +26469,7 @@ should be used cautiously and appropriately.
 Figure 15.63  Technetium bone scan in a distance runner, 
 showing focally increased uptake in the lower tibia owing to a 
 stress fracture.', 1226),
-   ('fedaa948-4c87-5f9b-a2ac-a928cfe41420', '4a1a468c-5d82-5910-b7f7-d65832fa2168', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 320, 320, 0, 'Introduction
+   ('2afe5d6e-40a8-5ad1-8543-9109f6ab79e2', 'HUTCHISON_24_2018', 'H1-C16', 309, 320, 0, 'Introduction
 In recent years there have been impressive advances 
 throughout the field of neurology - in delineating 
 disease entities and understanding their aetiology and 
@@ -27804,7 +26555,7 @@ BASIC SYSTEMS
 16 
 Nervous system
 Rodney W.H. Walker', 4383),
-   ('3b462070-251e-54a7-bd24-f122837952d3', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 321, 321, 0, 'Nervous system ﻿
+   ('7bdb72de-e636-56a6-9749-f9f47cd9b5bf', 'HUTCHISON_24_2018', 'H1-C16', 310, 321, 0, 'Nervous system ﻿
 310 16
 syncope, epilepsy and psychogenic non-epileptic 
 attacks. It is far more informative to hear a description 
@@ -27905,7 +26656,7 @@ Tongue biting
 Postictal amnesia - paramedical staff present when 
 patient ''comes round'', or patient ''comes round'' in 
 hospital (although he walked to the ambulance)', 4272),
-   ('75e18605-1c1c-577f-9507-573484dca468', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 322, 322, 0, 'SECTION Three
+   ('cfe4af75-1171-5e6e-a9fe-9414596e5437', 'HUTCHISON_24_2018', 'H1-C16', 311, 322, 0, 'SECTION Three
 Nervous system ﻿311
 Table 16.2  Headaches: points to consider in the history
 Aspect of history
@@ -27987,7 +26738,7 @@ Orgasm
 Benign coital headache (SAH has to be excluded in a severe 
 single attack)
 Continued', 1596),
-   ('ea19e777-a69c-5a72-9441-c2ffa0670cd7', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 323, 323, 0, 'Nervous system ﻿
+   ('e21843d6-a97d-5a27-ad99-989eb0cd0754', 'HUTCHISON_24_2018', 'H1-C16', 312, 323, 0, 'Nervous system ﻿
 312 16
 Aspect of history
 Feature
@@ -28094,7 +26845,7 @@ of a cervical spinal cord lesion, commonly a multiple
 sclerosis plaque, although other cord lesions (e.g. 
 spondylotic cord compression) and even cobalamin 
 deficiency may also produce this symptom.', 4654),
-   ('63bfe9e2-a44c-52dd-8cb0-b81c8ba6ad01', '9d14e613-c8da-5444-8218-822b19b7ea51', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 324, 324, 0, 'SECTION Three
+   ('cb35a9c9-6ad5-5d50-b1b7-f64399a387f8', 'HUTCHISON_24_2018', 'H1-C16', 313, 324, 0, 'SECTION Three
 Nervous system ﻿313
 routine neurological examination for such patients 
 should include assessments of vision, the cranial 
@@ -28203,7 +26954,7 @@ once perceived, the pain is severe and
 prolonged and may spread
 Hyperaesthesia
 An ambiguous term, best avoided', 5017),
-   ('5758f590-95d5-54bb-8f0a-fdf89ee72bdc', '2f61820d-4470-58f4-93ec-ef0edb5f1b53', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 325, 325, 0, 'Nervous system ﻿
+   ('c414930f-4839-5aa1-aa51-00e471991f7f', 'HUTCHISON_24_2018', 'H1-C16', 314, 325, 0, 'Nervous system ﻿
 314 16
 gland just behind the optic chiasm, between the optic 
 tracts. Sensory afferents from all points of the retina 
@@ -28302,7 +27053,7 @@ nerve lesion. 2. Optic chiasm lesion (bitemporal hemianopia). 3a or 3b. Uniocula
 (very rare). 4. Optic tract lesion (incongruous homonymous hemianopia). 5. Visual radiation (homonymous quadrantanopia or hemianopia). 
 6a. Occipital cortex lesion sparing the occipital pole (homonymous hemianopia with macular sparing). 6b. Occipital pole lesion 
 (homonymous paracentral hemiscotoma). 7. A bilateral occipital cortex lesion (homonymous altitudinal hemianopia).', 4029),
-   ('133349c4-b96e-59dd-a577-e86f2ced523c', 'c3ed986e-a875-5851-a23b-ed32e89b5fea', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 326, 326, 0, 'SECTION Three
+   ('3a78aded-0ad5-50ed-bf4f-ccddb4a1c399', 'HUTCHISON_24_2018', 'H1-C16', 315, 326, 0, 'SECTION Three
 Nervous system ﻿315
 to look to either side. Hold your hands up one on 
 each side at face level, with your hands about 1 m 
@@ -28415,7 +27166,7 @@ It is best to start by testing the binocular visual fields
 (i.e. the patient and examiner both have both eyes 
 open). Start by asking the patient to look at your 
 face. Ensure that he avoids the common temptation', 6013),
-   ('abab151c-3bf5-5ce2-8fc4-a36166414cbf', 'e4495507-a604-5246-9be4-a794b1f4f864', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 327, 327, 0, 'Nervous system ﻿
+   ('660c2239-cf6c-5c37-8604-9768e5719115', 'HUTCHISON_24_2018', 'H1-C16', 316, 327, 0, 'Nervous system ﻿
 316 16
 sinus and from there through the orbit to the pupil. 
 There is also sympathetic innervation of the levator 
@@ -28529,7 +27280,7 @@ cord, from where second-order neurons project via
 the T1 nerve root and sympathetic chain to the 
 superior cervical ganglion. Third-order axons run up 
 the internal carotid artery as far as the cavernous', 5922),
-   ('bc766fd3-f8ce-5e27-b3a2-5806799b5ee9', '377f84f7-7aec-5eea-a9bf-9ac92d618c7f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 328, 328, 0, 'SECTION Three
+   ('265d9ce7-4aa0-5848-ae00-1efa52e580f4', 'HUTCHISON_24_2018', 'H1-C16', 317, 328, 0, 'SECTION Three
 Nervous system ﻿317
 Fundoscopy
 Fundoscopy is described in Chapter 20. The neurological examination focuses on papilloedema, optic 
@@ -28638,7 +27389,7 @@ territory
 Figure 16.2  A diagram of the midbrain. Note the dorsally 
 positioned third nerve nuclei. Vascular territories are shown on 
 the left.', 4470),
-   ('43f58525-2255-58dd-a6dd-67b5826d785b', '5128bbed-08c8-539f-a0c7-85bb97755d04', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 329, 329, 0, 'Nervous system ﻿
+   ('da8b59b9-eb36-55f3-a623-b2af4ad4312a', 'HUTCHISON_24_2018', 'H1-C16', 318, 329, 0, 'Nervous system ﻿
 318 16
 Medial
 longitudinal
@@ -28801,7 +27552,7 @@ types of nystagmus are outlined below.
 Examination of eye movements
 As with every other component of examination, the 
 detail in which the eye movements are examined', 4345),
-   ('e7b8a6cf-825a-5bff-9f2b-84fd17d994f3', 'cd593789-813e-58d9-937a-e5bc00cfd175', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 330, 330, 0, 'SECTION Three
+   ('2b125c16-165c-5dd2-9273-44440dcd3434', 'HUTCHISON_24_2018', 'H1-C16', 319, 330, 0, 'SECTION Three
 Nervous system ﻿319
 inspection. In this situation, if the ophthalmoparesis 
 affects just one eye, it is possible to work out which 
@@ -28887,7 +27638,7 @@ attempted left gaze (B). In this patient the pupil is spared, as is commonly see
 The other features of a third nerve lesion are paresis of elevation of the eye and intorsion of the eye on attempting to look down, due to 
 the action of the superior oblique muscle on an eye that cannot be adducted (reproduced from Forbes and Jackson, Color Atlas and 
 Text of Clinical Medicine, Mosby, 2002).', 4813),
-   ('df11f386-9f7e-54d3-9b8f-8506500c0221', 'a829fda6-944d-5226-b608-46cb407d1e2f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 331, 331, 0, 'Nervous system ﻿
+   ('8f71cec8-877c-5443-81de-1ecf6679367d', 'HUTCHISON_24_2018', 'H1-C16', 320, 331, 0, 'Nervous system ﻿
 320 16
 large left cerebral hemisphere lesion may be associated 
 with failure of right gaze and a tendency for the eyes 
@@ -28984,7 +27735,7 @@ Abducens
 Paresis of lateral rectus
 Horizontal diplopia
 *Figure 16.5 shows a patient with a severe oculomotor palsy.', 4671),
-   ('503577d7-3369-5fe4-aee7-7573a1ed3f4e', '8ba255b5-959e-566d-bd6c-2f8d5983f4d1', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 332, 332, 0, 'SECTION Three
+   ('73049a1a-510b-50e5-ac03-01750e6e433d', 'HUTCHISON_24_2018', 'H1-C16', 321, 332, 0, 'SECTION Three
 Nervous system ﻿321
 Attempted lateral gaze to left
 Weak adduction
@@ -29092,7 +27843,7 @@ may cause asymmetric gaze paretic nystagmus. In
 cerebellar hemisphere lesions, the nystagmus may be 
 unidirectional with the fast phase towards the side 
 of the lesion.', 4585),
-   ('088d4a82-3d4c-5d2a-bdff-b94758f6c6a1', '3fc5b8af-0dff-511b-ba45-886a7bf72a9a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 333, 333, 0, 'Nervous system ﻿
+   ('58cf9af0-697e-5a93-bef6-072088df0c11', 'HUTCHISON_24_2018', 'H1-C16', 322, 333, 0, 'Nervous system ﻿
 322 16
 the trigeminal nerve: ophthalmic (V1), maxillary 
 (V2) and mandibular (V3). These nerves also mediate 
@@ -29189,7 +27940,7 @@ ganglion, just behind the cavernous sinus at the
 apex of the petrous bone. Central projections run 
 in the trigeminal nerve into the pons. Fig. 16.7 shows 
 the cutaneous distribution of the three divisions of', 4406),
-   ('626627cf-9417-5531-9825-af33fc797acc', '1e2f2519-60a4-55bb-9615-3f1dcb4a5bd6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 334, 334, 0, 'SECTION Three
+   ('cc5460e1-421a-56f4-8908-221ad456744a', 'HUTCHISON_24_2018', 'H1-C16', 323, 334, 0, 'SECTION Three
 Nervous system ﻿323
 membrane, external auditory meatus and tragus of 
 the ear. This accounts for the herpetic vesicles seen 
@@ -29303,7 +28054,7 @@ reach the medulla via the nervus intermedius between
 the facial and eighth cranial nerve.
 The peripheral projections of the small general 
 somatic sensory contribution innervate the tympanic', 5755),
-   ('c30746fc-7b67-57c8-a17c-8993268479bd', 'b3e478a9-763e-5a72-ba6b-038cab965d19', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 335, 335, 0, 'Nervous system ﻿
+   ('ac144e5b-11bc-584d-b8a0-d6e4b8d83b04', 'HUTCHISON_24_2018', 'H1-C16', 324, 335, 0, 'Nervous system ﻿
 324 16
 mild vertigo but nystagmus that does not diminish 
 with repeated testing.
@@ -29428,7 +28179,7 @@ tract
 Figure 16.8  A diagram of cranial nerve nuclei and tracts in the 
 medulla. Vascular territories are shown on the left. ASA, anterior 
 spinal artery; PICA, posterior inferior cerebellar artery.', 5111),
-   ('e9a331b7-ec7b-534f-9cba-8467238f0b2b', '25052954-1263-539a-bc47-6f0a7541f1fb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 336, 336, 0, 'SECTION Three
+   ('308f9573-4715-5ff1-9dc5-be5fb4286333', 'HUTCHISON_24_2018', 'H1-C16', 325, 336, 0, 'SECTION Three
 Nervous system ﻿325
 In addition, ipsilateral vocal cord paresis will lead to 
 dysphonia. Bilateral lesions of the vagus nerves will 
@@ -29534,7 +28285,7 @@ pitched) reveals the weakness of elevation of the
 palate on the affected side, along with deviation of 
 the uvula to the unaffected side, because of the 
 unopposed action of the palatal muscles on that side.', 5565),
-   ('8cc69bac-fcc8-5e23-88ce-849166b09922', 'da9e29ba-f060-5557-9f08-eed7dd30bbc6', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 337, 337, 0, 'Nervous system ﻿
+   ('8e39b1d6-ea3c-59c7-a5b8-96b634261e2c', 'HUTCHISON_24_2018', 'H1-C16', 326, 337, 0, 'Nervous system ﻿
 326 16
 Parkinsonism (hypokinetic dysarthria)
 In parkinsonism there may be dysarthria and other 
@@ -29605,7 +28356,7 @@ at the base of the skull shows abnormal tissue (thick arrow) under the skull and
 hypoglossal canal on the right side is normal (dotted arrow). MRI scans of the neck revealed lymphadenopathy (not shown). A fine needle 
 aspirate from one of the nodes (hence the adhesive dressing seen in the photograph) was not diagnostic. An open lymph node biopsy 
 confirmed the diagnosis of tuberculosis.', 3732),
-   ('1557b76f-bd3e-5750-b9c4-d701d0549ab5', '6f4bf7ef-f082-5543-ac59-723057421766', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 338, 338, 0, 'SECTION Three
+   ('39d0986b-680c-5383-bcd2-13de1db3080a', 'HUTCHISON_24_2018', 'H1-C16', 327, 338, 0, 'SECTION Three
 Nervous system ﻿327
 intercostal and abdominal trunk muscles. Cervical, 
 first thoracic, lumbar and sacral spinal nerve ventral 
@@ -29715,7 +28466,7 @@ Salivation
 Mastication
 Figure 16.10  Somatotopic representation in the primary motor 
 cortex.', 4919),
-   ('7a986181-db92-5915-8315-16350fece128', 'd09b1002-afa1-56cd-8992-a72ff0de177f', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 339, 339, 0, 'Nervous system ﻿
+   ('26f8897a-7e85-56d9-b08c-5a1d05ee70f0', 'HUTCHISON_24_2018', 'H1-C16', 328, 339, 0, 'Nervous system ﻿
 328 16
 the medullary pyramids) and the ''extrapyramidal'' 
 rigidity of parkinsonism.
@@ -29805,7 +28556,7 @@ motor neuron disorder (imprecisely designated
 Figure 16.11  Pes cavus, with clawing of the toes in a patient 
 with familial neuropathy. This patient had Refsum''s disease and 
 the peripheral nerves were slightly enlarged.', 4818),
-   ('ebacd2e7-a64f-5aa1-96dc-9109dd486e3c', '23da4509-2cb4-5d11-9298-bdfa9476ad7e', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 340, 340, 0, 'SECTION Three
+   ('5baaf26f-2f4b-5d9b-8588-0ba05525d6ac', 'HUTCHISON_24_2018', 'H1-C16', 329, 340, 0, 'SECTION Three
 Nervous system ﻿329
 processes and to look for and register the evolving 
 pattern of weakness as you go along.
@@ -29915,7 +28666,7 @@ has to be applied. Conversely some patients will be
 stronger than the examiner. It is important to be 
 thinking about the patterns of muscle weakness which 
 are likely to be found in different kinds of disease', 5969),
-   ('05de3db8-7d83-5228-b12f-b21cdb8b068d', '2a2e1c26-93e9-5684-a3bd-da26b91c3aa4', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 341, 341, 0, 'Nervous system ﻿
+   ('52e09e8d-f124-5875-8e62-adae90beaf6e', 'HUTCHISON_24_2018', 'H1-C16', 330, 341, 0, 'Nervous system ﻿
 330 16
 ■ People sometimes test ulnar nerve-supplied small 
 hand muscles by squeezing together the 
@@ -30001,7 +28752,7 @@ There is pseudohypertrophy of the weak muscles (e.g. the calves
 and deltoids). The child is ''climbing up himself'' with legs widely 
 placed as he gets up from the sitting position to the standing 
 position. This is Gowers'' sign.', 4003),
-   ('f614d456-cd42-53a9-96b0-ab439edc59a9', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 342, 342, 0, 'SECTION Three
+   ('7d65796f-c6df-5554-bccb-baeeb338f8d1', 'HUTCHISON_24_2018', 'H1-C16', 331, 342, 0, 'SECTION Three
 Nervous system ﻿331
 Table 16.6  Muscles of the upper limbs which are commonly examined (P is patient; E is examiner)
 Action
@@ -30138,7 +28889,7 @@ C8
 Hand prone, P extends 
 fingers against resistance
 Continued', 2481),
-   ('ed3392e8-a195-5fb5-9564-3f46c609021a', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 343, 343, 0, 'Nervous system ﻿
+   ('677d1594-67e3-5f06-ae95-cc07c412293a', 'HUTCHISON_24_2018', 'H1-C16', 332, 343, 0, 'Nervous system ﻿
 332 16
 Table 16.6  Continued
 Action
@@ -30265,7 +29016,7 @@ Superior gluteal
 L4, L5, S1
 P tries to separate legs; 
 E pushes them together', 2667),
-   ('eb7a922b-7d92-5a4c-ad95-9a072c9bb9fe', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 344, 344, 0, 'SECTION Three
+   ('aa04bc4f-790d-5b74-873a-750074e5b4e0', 'HUTCHISON_24_2018', 'H1-C16', 333, 344, 0, 'SECTION Three
 Nervous system ﻿333
 Action
 Muscle
@@ -30393,7 +29144,7 @@ joints and flexion more distally,
 seen in association with pes cavus*
 Table 16.7  Continued
 *see Fig. 16.11', 2515),
-   ('9fd67bca-14cf-59d6-ab30-252facb6db53', '0db9292b-3b26-5e91-affd-0b5a5b3134cc', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 345, 345, 0, 'Nervous system ﻿
+   ('e304c76d-631e-5235-8b38-d255b832381f', 'HUTCHISON_24_2018', 'H1-C16', 334, 345, 0, 'Nervous system ﻿
 334 16
 Examination of limb coordination
 The finger-nose test
@@ -30500,7 +29251,7 @@ rather than in the cervical spinal cord.
 Testing the jaw jerk
 Ask the patient to let his jaw hang down in a relaxed 
 manner with the mouth slightly open. Place your', 5658),
-   ('3ca662d5-e011-50bf-884b-5c61558bb2ef', '87432fad-57ac-5812-bef1-d51f86a8546b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 346, 346, 0, 'SECTION Three
+   ('de22b4f0-588d-5701-87ed-bd2c6699c821', 'HUTCHISON_24_2018', 'H1-C16', 335, 346, 0, 'SECTION Three
 Nervous system ﻿335
 is important not to jump to conclusions about the 
 presence of upper motor neuron lesions or polyneuropathies just on the basis of reflexes alone. Normal 
@@ -30623,7 +29374,7 @@ than restricted straight leg raising
 in S1 radiculopathy due to L5/S1 
 disc prolapse
 *The remarks are made with reference to common abnormalities, not every possible one.', 3958),
-   ('24bc3041-04a4-5c89-9382-382422ec1eff', '9282c0a0-1cbc-5068-b886-2c52bcf973f5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 347, 347, 0, 'Nervous system ﻿
+   ('9373fa8c-d814-58d3-b462-7948b52316da', 'HUTCHISON_24_2018', 'H1-C16', 336, 347, 0, 'Nervous system ﻿
 336 16
 extension of the toe towards the pin is an extensor 
 response.
@@ -30719,7 +29470,7 @@ test the dorsum of the toe in question. Involuntary
 Figure 16.13  The plantar response. A firm, stroking stimulus 
 to the outer edge of the sole of the foot evokes dorsiflexion 
 (extension) of the large toe and fanning of the other toes.', 4758),
-   ('5ed93c64-cf1c-5516-8fdc-543d524fde9f', '7b84b26f-9382-5889-a4e1-e12362fd8ebb', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 348, 348, 0, 'SECTION Three
+   ('606cc38f-3811-5b2f-8cb0-fb1244e6db3d', 'HUTCHISON_24_2018', 'H1-C16', 337, 348, 0, 'SECTION Three
 Nervous system ﻿337
 tremor of a patient with essential tremor. In fact, you 
 can quite often establish the presence of rest tremor 
@@ -30816,7 +29567,7 @@ Variable
 Settles when patient distracted from shaking
 Patient cannot maintain the same frequency of tremor when performing a repetitive task with 
 the contralateral limb at a different frequency unless it is a harmonic', 4315),
-   ('b2201e05-df26-579c-9f2d-f73b57f89b6e', '07cd6638-baa6-5f24-bbc5-9d84d9068bf0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 349, 349, 0, 'Nervous system ﻿
+   ('dbb396f4-a20d-5cb5-bc79-2dca5c406456', 'HUTCHISON_24_2018', 'H1-C16', 338, 349, 0, 'Nervous system ﻿
 338 16
 The pull test
 The patient stands with his feet side by side. Stand 
@@ -30921,7 +29672,7 @@ more affected side is readily observed.
 repeatedly on the ground, lifting his whole leg at 
 least 3 inches (8 cm) each time. Test each leg 
 separately.', 4680),
-   ('a39f2b8f-71fd-5c4a-8e7b-1813afc4bd7c', '3b8f30e2-689e-5a7b-8638-f35c7d4e083a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 350, 350, 0, 'SECTION Three
+   ('b25a649b-877c-59e6-af59-4593985b4b79', 'HUTCHISON_24_2018', 'H1-C16', 339, 350, 0, 'SECTION Three
 Nervous system ﻿339
 of sensory loss in spinal cord lesions which affect one 
 side of the spinal cord or which affect either the 
@@ -31018,7 +29769,7 @@ of mouth
 Intra-abdominal
 Figure 16.14  Somatotopic representation in the primary sensory 
 cortex.', 3348),
-   ('01268864-26fe-5498-886f-022967e0d6eb', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 351, 351, 0, 'Nervous system ﻿
+   ('683959c4-cbcb-5ac7-a813-9b4df1fdf552', 'HUTCHISON_24_2018', 'H1-C16', 340, 351, 0, 'Nervous system ﻿
 340 16
 Trigeminal
 Cervical plexus superficial branches
@@ -31097,7 +29848,7 @@ Medial plantar
 Sciatic
 Figure 16.15  Anterior view to show the segmental innervation of the skin, i.e. the dermatomes (left) and the peripheral nerve supply 
 (right).', 906),
-   ('a214e912-6697-503d-a363-df069456ebf3', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 352, 352, 0, 'SECTION Three
+   ('021c338c-6060-56d5-ab92-ce36bc57f341', 'HUTCHISON_24_2018', 'H1-C16', 341, 352, 0, 'SECTION Three
 Nervous system ﻿341
 Trigeminal
 Superficial
@@ -31187,7 +29938,7 @@ Lateral plantar
 Tibial
 Figure 16.16  Posterior view to show the segmental innervation of the skin, i.e. the dermatomes (left) and the peripheral nerve supply 
 (right).', 1189),
-   ('c4d1d106-e5cd-5e3e-8ebc-38fb217b5ee0', 'c7708d03-73dc-582a-bc3e-3c72a7706290', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 353, 353, 0, 'Nervous system ﻿
+   ('32aae300-a9c2-5f4d-b462-61e15a173d20', 'HUTCHISON_24_2018', 'H1-C16', 342, 353, 0, 'Nervous system ﻿
 342 16
 Perception of heat and cold can be tested but in 
 routine clinical practice adds little. A patient with 
@@ -31299,7 +30050,7 @@ spastic paraparesis or tetraparesis might have a
 neurodegenerative disorder, but the finding of a 
 clear-cut sensory level on the trunk or neck would 
 strongly suggest a structural spinal cord lesion.', 5779),
-   ('f105b0ae-2832-5b9a-81f3-dd85e4c374a1', 'b6eaedc4-ade6-523f-85b6-ff485206ed80', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 354, 354, 0, 'SECTION Three
+   ('ec2d88a1-76f0-5aa4-9384-ccc3f04700af', 'HUTCHISON_24_2018', 'H1-C16', 343, 354, 0, 'SECTION Three
 Nervous system ﻿343
 Cortical sensory loss
 Cerebral hemisphere lesions may disrupt sensory 
@@ -31395,7 +30146,7 @@ Figure 16.17  Paraneoplastic sensory neuropathy due to small
 cell carcinoma of the lung. With the eyes closed, the patient''s 
 outstretched arms become flexed and abnormal postures develop 
 in the fingers.', 4874),
-   ('8b5e9236-c75a-5d1c-bd80-f22099798e4d', '040ea243-9c8c-59be-9f71-74e0a65b79e8', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 355, 355, 0, 'Nervous system ﻿
+   ('441861d6-7615-5965-ae9a-a10e5242e27c', 'HUTCHISON_24_2018', 'H1-C16', 344, 355, 0, 'Nervous system ﻿
 344 16
 getting the patient to walk heel to toe. If relevant, 
 test for retropulsion (the pull test; see p. 338).
@@ -31471,7 +30222,7 @@ back again. Mild gait ataxia can be brought out by
 Figure 16.18  Parkinson''s disease, showing the typical rigid, 
 flexed posture involving the trunk and limbs. The face is 
 impassive.', 4000),
-   ('d50480d3-f1ec-5de0-8775-cf5a677fee6a', '977d8311-3433-5bd9-bd9c-575fcbcc9465', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 356, 356, 0, 'SECTION Three
+   ('2b7cea56-52c7-545e-b842-4dba6c1130fb', 'HUTCHISON_24_2018', 'H1-C16', 345, 356, 0, 'SECTION Three
 Nervous system ﻿345
 Table 16.11  Common gait disorders
 Gait
@@ -31557,7 +30308,7 @@ muscles; hence the abnormal findings are of weakness
 in hip flexion (iliopsoas), knee flexion (hamstrings) 
 and ankle dorsiflexion (tibialis anterior). Spasticity 
 usually predominates in the hip adductors and the', 3954),
-   ('9a8dce1f-3259-5c3f-967e-e084a60874b9', '07f7ee93-8dfe-5cd6-a35c-50de5b13a29a', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 357, 357, 0, 'Nervous system ﻿
+   ('7e9874df-1fe1-540f-91bd-bdb3a4301315', 'HUTCHISON_24_2018', 'H1-C16', 346, 357, 0, 'Nervous system ﻿
 346 16
 question (see Table 16.13 and Figs 16.15 and 16.16). 
 In lesions affecting mixed nerves, sensory symptoms 
@@ -31645,7 +30396,7 @@ Weakness and difficulty using the hand but little or no spasticity
 A small lesion in the primary motor cortex subserving the foot
 Weakness and difficulty using the foot but little or no spasticity
 ACA, anterior cerebral artery; MCA, middle cerebral artery.', 4451),
-   ('b7522ac4-f124-5939-abc0-f657f74a74e3', NULL, '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 358, 358, 0, 'SECTION Three
+   ('a1d321fd-e6fc-53c9-8440-5236f9253e7b', 'HUTCHISON_24_2018', 'H1-C16', 347, 358, 0, 'SECTION Three
 Nervous system ﻿347
 Table 16.13  Patterns of sensory loss
 Clinical sensory findings
@@ -31722,7 +30473,7 @@ marked (toes only) or much more marked, only sparing the back close to
 the spine
 Multifocal polyneuropathies have features of a multiplicity of 
 mononeuropathies', 3279),
-   ('853a5884-5120-565d-af19-6b7fe9f66aad', '62ec294a-c86f-54e1-a017-da22f78184f0', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 359, 359, 0, 'Nervous system ﻿
+   ('77c2d80e-1297-5bb7-a9f9-ec3a21693098', 'HUTCHISON_24_2018', 'H1-C16', 348, 359, 0, 'Nervous system ﻿
 348 16
 Central spinal cord lesion 
 (especially syringomyelia)
@@ -31814,7 +30565,7 @@ plantar response
 Figure 16.19  Brown-Séquard syndrome. Note the distribution of 
 corticospinal, posterior column and lateral spinothalamic tract 
 signs. The cord lesion is on the left side.', 4258),
-   ('facfbc8b-10dd-5b84-8fc8-df6d63df0aa8', 'b65c2768-f1f6-507d-b47d-c6a08df33ce5', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 360, 360, 0, 'SECTION Three
+   ('fafdef63-ea78-5520-b715-0c15b257f327', 'HUTCHISON_24_2018', 'H1-C16', 349, 360, 0, 'SECTION Three
 Nervous system ﻿349
 large lesion, such as a middle cerebral artery territory 
 ischaemic stroke affecting the whole of the primary 
@@ -31918,7 +30669,7 @@ A lesion affecting the sensory afferent pathways
 rostral to the principal sensory nucleus of the trigeminal nerve in the pons (i.e. in the midbrain, diencephalon, thalamus or internal capsule) will result in a 
 hemianaesthesia: loss of sensation on the whole of 
 one side of the body including the head and face. A', 5539),
-   ('de7884d2-ddf8-5d9c-a770-a5217a3198d2', '24d8a059-f5ee-54aa-b12e-ca9567b36bf3', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 361, 361, 0, 'Nervous system ﻿
+   ('adcc258a-c665-5ac8-b8ea-eafa1530e005', 'HUTCHISON_24_2018', 'H1-C16', 350, 361, 0, 'Nervous system ﻿
 350 16
 Table 16.14  Some causes of amnesia
 Cause
@@ -32003,7 +30754,7 @@ question is. Other manifestations of ideomotor apraxia
 include inability to carry out actions such as waving 
 goodbye or saluting, inability to mime actions (e.g. 
 using a comb to comb one''s hair, hammering a nail)', 3832),
-   ('9a220e8a-6791-583f-b44a-2796c881a918', 'e020035c-42f1-540e-a9cd-0e50a01135e3', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 362, 362, 0, 'SECTION Three
+   ('b4a94bef-72d9-5807-92ab-e07ca7afca19', 'HUTCHISON_24_2018', 'H1-C16', 351, 362, 0, 'SECTION Three
 Nervous system ﻿351
 degenerative, neoplastic). This can often seem bewildering for students and doctors in training. In addition 
 to those points made above regarding the identification 
@@ -32108,7 +30859,7 @@ Having taken a history and undertaken a neurological
 and relevant general medical examination, it is 
 important to decide where the likely lesion is and, 
 ideally, its likely nature (e.g. vascular, inflammatory,', 5905),
-   ('bc1a177a-0358-5257-a3fc-d4389ee492e7', '55e4d97a-9e80-55e4-b2aa-5ad8db21129b', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 363, 363, 0, 'Nervous system ﻿
+   ('65914236-018f-5115-9d89-59ad089794fa', 'HUTCHISON_24_2018', 'H1-C16', 352, 363, 0, 'Nervous system ﻿
 352 16
 there is an identifiable structural cause for the epilepsy. 
 Electroencephalography (EEG) in this situation is 
@@ -32212,7 +30963,7 @@ setting.
 Epilepsy
 The investigation of choice for late-onset epilepsy is 
 a MRI head scan; the information required is whether', 4758),
-   ('a0cc2db2-b9f7-53c1-9add-e660a884d011', '193317ce-f66c-5366-ad0d-89d3c6d90575', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 364, 364, 0, 'SECTION Three
+   ('34206015-61c7-5d9d-8042-6366ef438526', 'HUTCHISON_24_2018', 'H1-C16', 353, 364, 0, 'SECTION Three
 Nervous system ﻿353
 (axonal, demyelinating, multifocal, small fibre). NCS 
 and EMG are helpful in suspected disorders of 
@@ -32324,7 +31075,7 @@ latter, the combination of careful clinical evaluation
 and imaging should suffice. NCS and EMG help to 
 confirm a diagnosis of polyneuropathy and provide 
 information about the nature of polyneuropathies', 5779),
-   ('1b641f0d-c3e9-5c21-a8fb-807d0e915207', '185bbfd4-be4c-58f8-b093-e0c72e94d238', '0adaaad6-e315-52ae-9d01-9c6fc8bdc1d9', 365, 365, 0, 'Nervous system ﻿
+   ('7ebd0690-ea87-5565-9077-52b9bd0b7ec7', 'HUTCHISON_24_2018', 'H1-C16', 354, 365, 0, 'Nervous system ﻿
 354 16
 scan lesions are inflammatory or ischaemic, or reflect 
 some other pathology. CSF protein electrophoresis to 
@@ -32389,7 +31140,7 @@ features and MRI appearances are typical (particularly
 in a young patient), CSF examination may not be 
 necessary. It remains important if scans do not fulfil 
 diagnostic criteria or if there is ambiguity as to whether', 3384),
-   ('8f16da22-4ce3-528b-ad66-c88b3b22c19b', '9f7ec952-ad3c-5149-a049-4a05461a83dd', '9c71e0e9-9577-5581-9546-054bb5c96415', 366, 366, 0, 'The diagnostic process in nephrology 
+   ('2f8321eb-73c6-5c81-abca-fcd72b92c697', 'HUTCHISON_24_2018', 'H1-C17', 355, 366, 0, 'The diagnostic process in nephrology 
 and urology
 Nephrology and urology systems are more dependent 
 than most on laboratory, histopathology and imaging 
@@ -32469,7 +31220,7 @@ BASIC SYSTEMS
 17 
 Urogenital system
 John Peters, James Green and Lina Hijazi', 3954),
-   ('c3c194a1-0acc-579c-a448-80f6f0400fb6', 'b25cccb3-c45f-58e7-8b34-d7a4803bdd56', '9c71e0e9-9577-5581-9546-054bb5c96415', 367, 367, 0, 'Urogenital system ﻿
+   ('8a8c3028-783e-5a7f-a37a-2b087dd736e3', 'HUTCHISON_24_2018', 'H1-C17', 356, 367, 0, 'Urogenital system ﻿
 356 17
 Polyuria
 Polyuria implies no more than a high urinary flow 
@@ -32576,7 +31327,7 @@ Postrenal
 ■ Prostatic enlargement
 ■ Urethral neoplasms
 ■ Bacterial cystitis', 4616),
-   ('314d06cd-6422-5111-85dc-6724d09d5798', 'e1705436-6354-58af-93e1-830a06181d05', '9c71e0e9-9577-5581-9546-054bb5c96415', 368, 368, 0, 'SECTION Three
+   ('a223f12c-e0f4-5f75-bfcb-b1858e81c6e2', 'HUTCHISON_24_2018', 'H1-C17', 357, 368, 0, 'SECTION Three
 Urogenital system ﻿357
 General features
 Patients with chronic renal failure look unwell. The 
@@ -32660,7 +31411,7 @@ In many renal patients, particularly those with
 advanced chronic renal failure and uraemia, signs 
 from all three of the above categories may be present.
 Figure 17.1  Purpura in Henoch-Schönlein disease.', 4163),
-   ('f4616dcb-55fa-5cf1-89bf-ca7f71133944', '38c80674-84b7-5e26-bffb-a2edb0fe43db', '9c71e0e9-9577-5581-9546-054bb5c96415', 369, 369, 0, 'Urogenital system ﻿
+   ('d5e35f89-dfd5-57cb-96fa-e7f5d761ca74', 'HUTCHISON_24_2018', 'H1-C17', 358, 369, 0, 'Urogenital system ﻿
 358 17
 ■ Sinus tachycardia (exaggerated in the upright 
 position)
@@ -32747,7 +31498,7 @@ osteodystrophy. There is a loss of density of the tips of the digits
 interphalangeal joints and subperiosteal bone resorption. The 
 latter is best seen in the middle phalanges of the index and 
 middle fingers.', 4325),
-   ('8e04ff39-a38c-5df3-81ba-fca6dd5a621b', '98ce8610-8095-5078-b98b-9cf10109ef85', '9c71e0e9-9577-5581-9546-054bb5c96415', 370, 370, 0, 'SECTION Three
+   ('0eefdf64-c0e1-56c4-bdb5-551bd9547bb4', 'HUTCHISON_24_2018', 'H1-C17', 359, 370, 0, 'SECTION Three
 Urogenital system ﻿359
 Chronic renal failure
 Chronic renal failure implies that the GFR has been 
@@ -32862,7 +31613,7 @@ Disturbances of the eyes
 calcium
 ■ Visual blurring from hypertensive retinal damage or 
 retinal vascular disease', 4461),
-   ('e12b1956-88f5-5d5f-9a8f-193e9172d256', 'd5014e97-2460-5a85-bcc1-2515c7b2e776', '9c71e0e9-9577-5581-9546-054bb5c96415', 371, 371, 0, 'Urogenital system ﻿
+   ('8b16226c-70a8-58a5-b39e-84c690595049', 'HUTCHISON_24_2018', 'H1-C17', 360, 371, 0, 'Urogenital system ﻿
 360 17
 Asymptomatic urinary abnormality
 Asymptomatic urinary abnormality is the presentation 
@@ -32970,7 +31721,7 @@ in GFR. Thus, a number of the pathological entities
 capable of causing nephrotic syndrome may also 
 present as acute nephritic syndrome or the syndrome 
 of chronic renal failure in other patients.', 5574),
-   ('c96b406c-561f-52a3-b862-20e3d11f3021', '06326a1e-9e23-5dd4-a715-e8de06df8faf', '9c71e0e9-9577-5581-9546-054bb5c96415', 372, 372, 0, 'SECTION Three
+   ('33803ac0-1896-5df9-bd55-5cea9b85a20f', 'HUTCHISON_24_2018', 'H1-C17', 361, 372, 0, 'SECTION Three
 Urogenital system ﻿361
 renal disease will be found to be the cause, and the 
 likelihood of this is greatly increased in patients with 
@@ -33075,7 +31826,7 @@ Renal hypertension
 By far the most common cause of sustained blood 
 pressure elevation is essential hypertension. However, 
 in a minority of patients with raised blood pressure,', 5461),
-   ('1dc0e271-a521-5cf6-a203-4d5a5813f16f', '074ac83a-4a13-5374-a21d-47064b54a4e1', '9c71e0e9-9577-5581-9546-054bb5c96415', 373, 373, 0, 'Urogenital system ﻿
+   ('4b25b112-ce27-54e6-aa0b-6f08f1b69fdb', 'HUTCHISON_24_2018', 'H1-C17', 362, 373, 0, 'Urogenital system ﻿
 362 17
 advanced renal disease, the osmolality becomes relatively fixed at about 300 mOsmol/kg water, close to 
 that of the glomerular filtrate (Fig. 17.4). This is 
@@ -33185,7 +31936,7 @@ urine of low osmolality. In end-stage renal failure, urine osmolality
 cannot be reduced and the water load is not adequately handled. 
 There is also isosthenuria, i.e. the urine tends towards an 
 iso-osmolar state (specific gravity 1.010).', 4472),
-   ('5cee5442-71cc-562e-b496-905b0303ccb7', '89a9be9c-9a4c-534f-a196-0a4b40ba6896', '9c71e0e9-9577-5581-9546-054bb5c96415', 374, 374, 0, 'SECTION Three
+   ('d0ec85af-88ac-5c18-86da-5d9fc8383510', 'HUTCHISON_24_2018', 'H1-C17', 363, 374, 0, 'SECTION Three
 Urogenital system ﻿363
 20-200 mg/day is termed microalbuminuria. Although 
 this range is frequently too low to be detectable by 
@@ -33304,7 +32055,7 @@ Diabetic nephropathy
 Pre-eclampsia
 Myeloma
 All causes of nephrotic syndrome', 4511),
-   ('092644af-09c6-581d-ba20-0f5448088a47', '41d87984-f357-59f8-9f6e-7a52b3a818d8', '9c71e0e9-9577-5581-9546-054bb5c96415', 375, 375, 0, 'Urogenital system ﻿
+   ('de270c8d-a5c8-5dc1-a72c-8b03898c0a76', 'HUTCHISON_24_2018', 'H1-C17', 364, 375, 0, 'Urogenital system ﻿
 364 17
 matrix has solidified and is studded with red or white 
 blood cells. Granular casts probably represent degenerate cellular casts and have a grainy appearance. Hyaline 
@@ -33344,7 +32095,7 @@ Figure 17.7  Hyaline casts, leukocytes and bacteria in urinary
 sediment. (Reproduced with permission from Spencer ES, Petersen I 
 1971 Hand Atlas of Urinary Sediment. Munksgaard, Copenhagen.)
 Figure 17.8  Granular casts in urinary sediment.', 2280),
-   ('6222bfb6-8104-5151-9768-e3d62ec2441c', '6eeeca49-6644-5612-a29b-0e149180f776', '9c71e0e9-9577-5581-9546-054bb5c96415', 376, 376, 0, 'SECTION Three
+   ('523718b8-3186-584a-adb6-b7725ba15d51', 'HUTCHISON_24_2018', 'H1-C17', 365, 376, 0, 'SECTION Three
 Urogenital system ﻿365
 most commonly used is 51Cr-EDTA, which gives a 
 relatively easy and reproducible measure of GFR. It 
@@ -33461,7 +32212,7 @@ GFR = 186 × Pcr − 1.154 ×
 age − 0.203 × 1.212 (if 
 black) × 0.742 (if female)
 Pcr, plasma creatinine in mg/dl.', 4160),
-   ('a5e8175c-219b-5a27-b37d-4c252af19753', '06b7b5e6-4682-5280-8657-cad738a08003', '9c71e0e9-9577-5581-9546-054bb5c96415', 377, 377, 0, 'Urogenital system ﻿
+   ('e34f0895-885f-5b16-98b5-ce217af5e395', 'HUTCHISON_24_2018', 'H1-C17', 366, 377, 0, 'Urogenital system ﻿
 366 17
 ■ A cooperative patient
 ■ Prior knowledge of the position and size of both 
@@ -33569,7 +32320,7 @@ small but definite risk of serious complications. It
 is therefore important to define the indications and 
 contraindications carefully. The risk of the procedure 
 can be minimized by the following preconditions:', 4987),
-   ('6ddc1164-bb11-5fa4-970a-b7f9ed06c240', '90929e9f-895c-5083-8ca3-2e6f90a239bb', '9c71e0e9-9577-5581-9546-054bb5c96415', 378, 378, 0, 'SECTION Three
+   ('1d92f078-f12f-58ec-a080-9e659179d5b3', 'HUTCHISON_24_2018', 'H1-C17', 367, 378, 0, 'SECTION Three
 Urogenital system ﻿367
 Radionuclide studies
 Diethylenetriamine penta-acetic acid (99Tc-DTPA) 
@@ -33622,7 +32373,7 @@ and the right kidney shows dilated, hydronephrotic calyces.
 The right ureter is partially obstructed at the level of the body of 
 the fifth lumbar vertebra. The circular lucency in the bladder is the 
 dilated balloon of a Foley catheter.', 2655),
-   ('d06492a4-a0f5-5718-a9fc-74901bc9a54f', '91f288cc-209b-59d7-9515-4ec1b74e75b4', '9c71e0e9-9577-5581-9546-054bb5c96415', 379, 379, 0, 'Urogenital system ﻿
+   ('cf23e110-8674-57b9-b2c4-93129c2f8240', 'HUTCHISON_24_2018', 'H1-C17', 368, 379, 0, 'Urogenital system ﻿
 368 17
 Sexually transmitted infections
 Introduction
@@ -33695,7 +32446,7 @@ Hilum
 B
 Figure 17.13  (A) CT scan with (B) drawing showing normal 
 kidneys.', 3067),
-   ('d24069d0-121e-5850-995e-0935934e074d', 'e9b03a48-85d7-526a-af38-6a0c57663be8', '9c71e0e9-9577-5581-9546-054bb5c96415', 380, 380, 0, 'SECTION Three
+   ('10f5567d-1952-51c9-a7ea-fcf1482190d9', 'HUTCHISON_24_2018', 'H1-C17', 369, 380, 0, 'SECTION Three
 Urogenital system ﻿369
 of presenting complaint and sexual activity are taken. 
 A non-judgemental tone and attitude are essential 
@@ -33768,7 +32519,7 @@ Box 17.4  History in sexually transmitted infection
 ■ Pubic genital itch
 ■ Genital rash
 ■ Anorectal symptoms', 3058),
-   ('ac4421e1-ea8f-5cb5-8589-9bf491174a0f', 'd696ec37-3f3c-5547-9292-ce0682ac2610', '9c71e0e9-9577-5581-9546-054bb5c96415', 381, 381, 0, 'Urogenital system ﻿
+   ('2b981c05-e118-5e54-82b2-beb1ad4c4488', 'HUTCHISON_24_2018', 'H1-C17', 370, 381, 0, 'Urogenital system ﻿
 370 17
 mutual masturbation; use of sex toys, etc), whether 
 the patient was the active or receptive partner for these 
@@ -33878,7 +32629,7 @@ the multidisciplinary team including specialist psychology and physiotherapy inp
 Both male and female patients
 There are some presentations that are common to 
 both sexes including anogenital ulceration (also known', 5641),
-   ('86ec0103-3176-59cb-9156-8c9f51507420', '79121e89-0cdd-5a7a-acec-fbbca1f4ad9b', '9c71e0e9-9577-5581-9546-054bb5c96415', 382, 382, 0, 'SECTION Three
+   ('304f1dc9-a1ad-5d8c-9f95-040e62dc7da9', 'HUTCHISON_24_2018', 'H1-C17', 371, 382, 0, 'SECTION Three
 Urogenital system ﻿371
 ''Crabs'' and nits on the hair shaft may be seen in 
 patients with pediculosis pubis, allowing the appropriate treatment to be given quickly.
@@ -33945,7 +32696,7 @@ trachomatis.
 Figure 17.15  Acute ulcers of primary genital herpes. Both herpes 
 simplex virus types I and II can cause genital herpes. 
 Figure 17.16  Genital wart on the frenum of the penis.', 3287),
-   ('46435134-07ec-55c2-a68c-a7969c87f1ee', 'cec421bc-c30a-58a3-bc02-f5b6ff44e2e4', '9c71e0e9-9577-5581-9546-054bb5c96415', 383, 383, 0, 'Urogenital system ﻿
+   ('9e0e11d7-d479-5fbe-bd13-edb21b5a1f1a', 'HUTCHISON_24_2018', 'H1-C17', 372, 383, 0, 'Urogenital system ﻿
 372 17
 should be offered, especially when female patients 
 are being examined by male clinicians.
@@ -34037,7 +32788,7 @@ that the patient understands and consents to the
 examination and that it takes place in a private well-lit 
 room. Gloves should always be worn. Chaperones 
 Figure 17.17  Palpation of the testis. Gloves should be worn.', 4404),
-   ('84fcf825-5178-53cd-af68-cc9d101cb456', '7278a8ca-c84d-5564-9931-644c9e2df7e3', '9c71e0e9-9577-5581-9546-054bb5c96415', 384, 384, 0, 'SECTION Three
+   ('15c81769-3e35-5cc2-93a7-f8a21c43e2d5', 'HUTCHISON_24_2018', 'H1-C17', 373, 384, 0, 'SECTION Three
 Urogenital system ﻿373
 negative test for gonococci indicates non-gonococcal 
 urethritis (Box 17.6). The most common cause of 
@@ -34114,7 +32865,7 @@ Non-sexually transmitted diseases
 ■ Chemical
 ■ Trauma
 ■ Others', 3184),
-   ('44031a7a-4869-57ef-a7f8-594588c0138f', '5844faf3-77ea-52ac-baa6-78d589942d77', '9c71e0e9-9577-5581-9546-054bb5c96415', 385, 385, 0, 'Urogenital system ﻿
+   ('3660b9c2-33e2-5830-b229-29e4afc16afb', 'HUTCHISON_24_2018', 'H1-C17', 374, 385, 0, 'Urogenital system ﻿
 374 17
 dilution or four-fold decrease in antibody titre within 
 6-12 months. After successful treatment of all stages 
@@ -34221,7 +32972,7 @@ The titre of the non-specific tests indicates disease
 activity and is useful for following up patients, particularly those who have been treated for primary, 
 secondary or early latent syphilis, when the test should 
 become negative or sustain a greater than two-fold', 5390),
-   ('b08ac3e5-367f-54b9-b0d2-4ac7216ab9fa', '57296eef-5278-5e84-ac27-2e4d1363b9ca', '9c71e0e9-9577-5581-9546-054bb5c96415', 386, 386, 0, 'SECTION Three
+   ('262d25c6-be7e-5c9b-b76d-f8a4a51703ed', 'HUTCHISON_24_2018', 'H1-C17', 375, 386, 0, 'SECTION Three
 Urogenital system ﻿375
 countries, especially in Africa. HIV infection is categorized as A, B and C (Box 17.7), based broadly on 
 the clinical evolution of the immunodeficiency state 
@@ -34286,7 +33037,7 @@ per day ≥1 month) or chronic weakness and documented fever ≥1 month
 - cervical carcinoma, invasive
 - Kaposi''s sarcoma
 - lymphoma - Burkitt''s, immunoblastic or primary nervous system', 2781),
-   ('8e5f9ba1-31bf-52b7-9eda-a80e64b7673b', NULL, '9c71e0e9-9577-5581-9546-054bb5c96415', 387, 387, 0, 'Urogenital system ﻿
+   ('eff3a230-a731-54ff-a1ef-2af02e03a783', 'HUTCHISON_24_2018', 'H1-C17', 376, 387, 0, 'Urogenital system ﻿
 376 17
 infections. Antiretroviral drug therapy may itself cause 
 serious complications (Fig. 17.21).
@@ -34381,7 +33132,7 @@ survival and can prevent or delay the progression to AIDS.
 Figure 17.21  Lipodystrophy with abdominal adiposity and thin 
 arm resulting from protease inhibitor treatment. Hyperlipidaemia 
 and insulin resistance may be present.', 2629),
-   ('068aed03-8649-585a-a49a-a474d291123f', '51f549cf-5eff-5bba-9c7d-4b248129c272', '9c71e0e9-9577-5581-9546-054bb5c96415', 388, 388, 0, 'SECTION Three
+   ('19e568ed-15f3-5f58-9973-a87b3371b551', 'HUTCHISON_24_2018', 'H1-C17', 377, 388, 0, 'SECTION Three
 Urogenital system ﻿377
 medication. The exact combination offered will 
 depend on the HIV genotype and resistance test 
@@ -34426,8 +33177,8 @@ the timing of HIV treatment initiation. The current
 guidelines say that HIV treatment with highly active 
 antiretroviral therapy should be offered to anyone 
 who is HIV positive and willing to take the lifelong', 2016),
-   ('71d361e3-0386-59d1-a04e-bf879a56bf0e', NULL, '9c71e0e9-9577-5581-9546-054bb5c96415', 389, 389, 0, 'This page intentionally left blank', 34),
-   ('4f2acb03-bcd9-5089-be51-1ee6ca41f8cd', '66f6010f-9167-58ed-af22-159490f92bfa', '65e2c421-da5c-5da3-b89b-86573eb11c94', 390, 390, 0, 'Introduction
+   ('fa3bb786-48f8-51f4-bcc2-c5bde8fc683d', 'HUTCHISON_24_2018', 'H1-C17', 378, 389, 0, 'This page intentionally left blank', 34),
+   ('6ed2cd5d-47b6-5027-9cbc-d5a901bbf2dc', 'HUTCHISON_24_2018', 'H1-C18', 379, 390, 0, 'Introduction
 The endocrine system comprises the classic endocrine 
 organs:
 ■ Hypothalamus/pituitary
@@ -34512,7 +33263,7 @@ BASIC SYSTEMS
 Endocrine and metabolic 
 disorders
 Tahseen A. Chowdhury and William M. Drake', 3760),
-   ('50eab455-a344-5f26-bcc5-4c8e4eb152c0', '2bc0228a-149b-5db6-a7f2-30dde8db8c8b', '65e2c421-da5c-5da3-b89b-86573eb11c94', 391, 391, 0, 'Endocrine and metabolic disorders ﻿
+   ('96f7a65d-cf93-5b6e-9e39-f427b531857b', 'HUTCHISON_24_2018', 'H1-C18', 380, 391, 0, 'Endocrine and metabolic disorders ﻿
 380 18
 climbing stairs, boarding a bus or rising from a sitting 
 position. Most patients with hyperthyroidism have 
@@ -34607,7 +33358,7 @@ Box 18.6  Clinical features of hypothyroidism
 ■ Aching muscles with cramp
 ■ Mild proximal weakness
 ■ Slow pulse and shortness of breath', 3581),
-   ('3751ce92-0f85-5405-9a30-c00ef4deb799', '48b79fbf-cfe4-5406-9b51-499f9ecd3797', '65e2c421-da5c-5da3-b89b-86573eb11c94', 392, 392, 0, 'SECTION Three
+   ('2c7b2bfb-1541-5102-bd4a-4103e6c1ff99', 'HUTCHISON_24_2018', 'H1-C18', 381, 392, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿381
 For example, severe dysthyroid eye disease and orbital 
 or retro-orbital tumours may present in this way. 
@@ -34711,7 +33462,7 @@ Visual disturbance
 Several endocrine conditions may cause visual 
 symptoms. Decreased visual acuity may be due to 
 space-occupying lesions compressing the optic nerve.', 5394),
-   ('3dbe41ce-a67b-54bd-9753-f3cc676baaed', 'efb5ac17-87e3-56fe-b1c6-6bece9e4c590', '65e2c421-da5c-5da3-b89b-86573eb11c94', 393, 393, 0, 'Endocrine and metabolic disorders ﻿
+   ('347999f5-6070-5f35-a74f-93d17d32e901', 'HUTCHISON_24_2018', 'H1-C18', 382, 393, 0, 'Endocrine and metabolic disorders ﻿
 382 18
 ■ Decreased blood supply to the penis (e.g. 
 atherosclerosis)
@@ -34814,7 +33565,7 @@ Testosterone deficiency or oestrogen excess
 Congenital and hereditary
 ■ X-linked spinal muscular atrophy (Kennedy syndrome)
 ■ Klinefelter''s syndrome (karyotype XXY)', 4994),
-   ('24378540-ef96-5b7b-af18-9b226993f286', '84cb2060-0de6-5095-bf24-f63e66b19544', '65e2c421-da5c-5da3-b89b-86573eb11c94', 394, 394, 0, 'SECTION Three
+   ('1bf74556-cfef-5020-8d93-8a3b33a79a7f', 'HUTCHISON_24_2018', 'H1-C18', 383, 394, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿383
 The history is vital in the clinical assessment. If 
 the symptoms commenced shortly after the menarche, 
@@ -34922,7 +33673,7 @@ characteristic. Pathological causes of hirsutism include:
 ■ polycystic ovary syndrome
 ■ late presentation of congenital adrenal hyperplasia
 ■ androgen-secreting ovarian or adrenal tumours.', 5186),
-   ('61925e89-e318-58bb-8d9a-f544b7ece727', 'ca7c1d94-ecd1-57f3-97d5-02ec706698cd', '65e2c421-da5c-5da3-b89b-86573eb11c94', 395, 395, 0, 'Endocrine and metabolic disorders ﻿
+   ('483641cc-ae20-5bc0-bfdd-6469023634f8', 'HUTCHISON_24_2018', 'H1-C18', 384, 395, 0, 'Endocrine and metabolic disorders ﻿
 384 18
 before epiphyseal fusion causes abnormally tall stature 
 (gigantism). Increased adiposity in a child who is 
@@ -34967,7 +33718,7 @@ of features and an increase in soft tissues, most obvious in the
 hands. The patient had a 4-year history of excessive sweating, 
 increased shoe size, frontal headache and ''pins and needles in 
 fingers''.', 2296),
-   ('00c71cc1-a8f2-5642-85e2-ddaff3b0ae07', 'c055b35a-59ca-55cf-b86a-87ba3e276c6a', '65e2c421-da5c-5da3-b89b-86573eb11c94', 396, 396, 0, 'SECTION Three
+   ('da389d1d-e189-5a34-a76e-06ec23eeff16', 'HUTCHISON_24_2018', 'H1-C18', 385, 396, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿385
 Figure 18.3  The hands in pseudohypoparathyroidism. Note the 
 characteristic shortening of the fourth and fifth metacarpals. 
@@ -35014,7 +33765,7 @@ striae, arising as a result of stretching of thin skin
 with exposure of the dermal capillary circulation, 
 suggest the possibility of glucocorticoid excess (Fig. 
 18.6), and abnormal dryness of the skin and coarseness', 2464),
-   ('37070942-1e74-58d1-80c6-e1923f14c2d3', 'f16abd51-b239-5cc4-a159-e720b7137321', '65e2c421-da5c-5da3-b89b-86573eb11c94', 397, 397, 0, 'Endocrine and metabolic disorders ﻿
+   ('8e997354-e796-5621-b4cd-a023f7b2d078', 'HUTCHISON_24_2018', 'H1-C18', 386, 397, 0, 'Endocrine and metabolic disorders ﻿
 386 18
 apparently asymmetrical. There are several methods 
 for examining the thyroid, but a suggested routine 
@@ -35103,7 +33854,7 @@ Figure 18.7  The facial appearance of hypothyroidism. The
 patient demonstrates periorbital puffiness and coarsening of scalp 
 hair. (Figure 14.18 in Jarvis C: Physical examination & health 
 assessment, ed 4, Philadelphia, 2004, Saunders, p 295.)', 4535),
-   ('14871bb6-2f21-5ddb-b8dd-9502fb260442', '92a97f19-5443-51e4-b6a4-0972d2cdc7ad', '65e2c421-da5c-5da3-b89b-86573eb11c94', 398, 398, 0, 'SECTION Three
+   ('228664c1-d67d-5b2e-9a7a-58423b168ee8', 'HUTCHISON_24_2018', 'H1-C18', 387, 398, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿387
 length, as determined by electrocardiography. A 
 hyperdynamic circulation, sinus tachycardia or atrial 
@@ -35139,7 +33890,7 @@ A
 B
 C
 Figure 18.8  Examination of the thyroid. (A) Feeling the isthmus; (B) feeling the lateral lobes; (C) anatomical landmarks;', 1230),
-   ('3cc18d6f-4a04-596b-92af-9575b5dadd05', NULL, '65e2c421-da5c-5da3-b89b-86573eb11c94', 399, 399, 0, 'Endocrine and metabolic disorders ﻿
+   ('03fd4840-bb6b-573a-b56e-9b2ad4df4dc3', 'HUTCHISON_24_2018', 'H1-C18', 388, 399, 0, 'Endocrine and metabolic disorders ﻿
 388 18
 the adolescent female, physiological breast enlargement provides a precise index of pubertal status and 
 signals the onset of the pubertal growth spurt (Tanner 
@@ -35173,7 +33924,7 @@ F
 enlargement; (E) multinodular goitre; 
 (F) single nodule. 
 Figure 18.8, cont''d', 1574),
-   ('474026c3-6a42-5eeb-a032-bcfc7d5fb5f1', '6190257d-7335-5da5-a115-7455528ebef8', '65e2c421-da5c-5da3-b89b-86573eb11c94', 400, 400, 0, 'SECTION Three
+   ('0ca03649-a511-5f64-8ab8-4a5ce0d01d44', 'HUTCHISON_24_2018', 'H1-C18', 389, 400, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿389
 of testosterone or dihydrotestosterone deficiency or 
 resistance in the male; these conditions are rare and 
@@ -35234,7 +33985,7 @@ of the ellipsoids. The patient shown has a reduced testicular
 volume of 8 ml, due to Klinefelter''s syndrome; the normal 
 secondary sexual hair is due to the provision of exogenous 
 testosterone.', 2927),
-   ('e56c676e-6b70-57cd-a78e-2aa7cf584d7a', '59613d43-4c8c-5950-b220-cf05fa6e0205', '65e2c421-da5c-5da3-b89b-86573eb11c94', 401, 401, 0, 'Endocrine and metabolic disorders ﻿
+   ('03685d4a-640f-5542-a993-5c6866dc5338', 'HUTCHISON_24_2018', 'H1-C18', 390, 401, 0, 'Endocrine and metabolic disorders ﻿
 390 18
 compression in severe dysthyroid eye disease or of 
 asymmetrical pressure on the optic chiasm due to 
@@ -35305,7 +34056,7 @@ should be documented.
 Visual acuity should be measured both with and 
 without a pinhole to correct for any refractive error. 
 Reduced acuity may be a feature of optic nerve', 3657),
-   ('38519a97-1750-53bb-ad1a-c647fdd5a21d', '92cd2572-b56c-5bdb-948d-565ccd516534', '65e2c421-da5c-5da3-b89b-86573eb11c94', 402, 402, 0, 'SECTION Three
+   ('b36f65c5-3ee7-5f3a-878a-8ab866b9c074', 'HUTCHISON_24_2018', 'H1-C18', 391, 402, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿391
 Computed tomography (CT) imaging is useful in 
 assessing the pituitary, adrenal glands (Fig. 18.15) 
@@ -35363,7 +34114,7 @@ partial tumour infarction.
 Figure 18.16  Magnetic resonance imaging (sagittal view) of 
 the pituitary, demonstrating a large pituitary adenoma with 
 suprasellar extension.', 2917),
-   ('19ed8da3-6797-50c2-bca5-778f51f9271c', '5f7ecd13-2d01-592c-b2ef-c9b740a3226b', '65e2c421-da5c-5da3-b89b-86573eb11c94', 403, 403, 0, 'Endocrine and metabolic disorders ﻿
+   ('f3f4f8e9-afc2-515f-a780-3db772b64bdd', 'HUTCHISON_24_2018', 'H1-C18', 392, 403, 0, 'Endocrine and metabolic disorders ﻿
 392 18
 cosuria itself (glucose in the urine) is not a reliable 
 diagnostic test for diabetes mellitus.
@@ -35451,7 +34202,7 @@ Figure 18.17  Technetium-labelled isotope scan of the thyroid in
 a patient with a focal thyroid nodule. Note the focal area of uptake 
 corresponding to the palpable lesion, with surrounding inactivity 
 indicating autonomous function within the nodule.', 4558),
-   ('4d96402c-75bc-51d4-bcf6-1d2c46ff4083', '6a707c89-7e59-55ab-880e-12318c2b522e', '65e2c421-da5c-5da3-b89b-86573eb11c94', 404, 404, 0, 'SECTION Three
+   ('24400268-4cb4-5be8-a1c5-2bbd8e9c4158', 'HUTCHISON_24_2018', 'H1-C18', 393, 404, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿393
 Box 18.8  The World Health Organization classification of diabetes mellitus
 Type
@@ -35560,7 +34311,7 @@ features of diabetes mellitus. The presence of the
 characteristic white plaques on the tongue and 
 oropharynx in a previously healthy person not on 
 antibiotic therapy should alert the physician to the', 3051),
-   ('5d399651-626b-5b9b-ad84-1386b3065a08', '1da39a1a-396a-57d7-84ce-9db1ce443f56', '65e2c421-da5c-5da3-b89b-86573eb11c94', 405, 405, 0, 'Endocrine and metabolic disorders ﻿
+   ('f18fd0f4-4ca5-565a-949f-00b1b0840255', 'HUTCHISON_24_2018', 'H1-C18', 394, 405, 0, 'Endocrine and metabolic disorders ﻿
 394 18
 activity may improve glycaemia and weight. At least 
 30 minutes of moderate exercise per day, for example 
@@ -35660,7 +34411,7 @@ as smoking with diabetes is strongly linked to cardiovascular disease. Occupatio
 important, because if insulin therapy is required, this 
 may have an impact on legal requirements for driving. 
 Assess physical activity to ascertain whether increased', 4967),
-   ('31184d77-c692-59b6-8c7e-1ff7c7024e09', 'f10e7dfe-9971-59d5-9b61-93201c442c14', '65e2c421-da5c-5da3-b89b-86573eb11c94', 406, 406, 0, 'SECTION Three
+   ('52628703-8c93-5ae5-b262-8bf85a398586', 'HUTCHISON_24_2018', 'H1-C18', 395, 406, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿395
 feature of selective involvement of small pain fibres. 
 Typically the symptoms start distally and spread up 
@@ -35768,7 +34519,7 @@ Non-alcoholic
 steatohepatitis
 Figure 18.18  Diabetic neuropathic ulcer in a patient with 
 Charcot neuroarthropathy.', 3457),
-   ('8e057cfd-a419-5fd3-be87-1553a987e972', '60b20f9f-5e46-56de-833d-2a129c7ce569', '65e2c421-da5c-5da3-b89b-86573eb11c94', 407, 407, 0, 'Endocrine and metabolic disorders ﻿
+   ('83bdd91d-d0ee-5235-bc77-e70b5802ed6e', 'HUTCHISON_24_2018', 'H1-C18', 396, 407, 0, 'Endocrine and metabolic disorders ﻿
 396 18
 the skin of the feet (tinea pedis). Staphylococcal skin 
 infections leading to pustules, abscesses or carbuncles 
@@ -35873,7 +34624,7 @@ Tests
 ■ Glycated haemoglobin (HbA1c)
 ■ Lipids
 ■ Urine for albumin excretion', 4840),
-   ('943c2a5f-5b11-5716-b473-3ab3aa1f3dc5', 'd7511719-b647-5613-a293-db498a892c41', '65e2c421-da5c-5da3-b89b-86573eb11c94', 408, 408, 0, 'SECTION Three
+   ('235a0857-481b-52a4-8a84-73cdb6a91ec4', 'HUTCHISON_24_2018', 'H1-C18', 397, 408, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿397
 Diabetic cheiroarthropathy, or ''stiff hand syndrome'' 
 or ''limited joint mobility'', is seen in some patients 
@@ -35900,7 +34651,7 @@ Peterson.)
 Figure 18.21  Acanthosis nigricans. 
 Figure 18.22  Lipohypertrophy. (Courtesy of Dr David Peterson.)
 Figure 18.23  Lipoatrophy. (Courtesy of Dr David Peterson.)', 1333),
-   ('dcebc2bd-b9c7-5a77-8efa-c934acac627f', '9d6a2fae-3baf-5fa4-9682-f75387d87c86', '65e2c421-da5c-5da3-b89b-86573eb11c94', 409, 409, 0, 'Endocrine and metabolic disorders ﻿
+   ('0decd643-d33d-51ee-a076-b43a967db3b8', 'HUTCHISON_24_2018', 'H1-C18', 398, 409, 0, 'Endocrine and metabolic disorders ﻿
 398 18
 of the pupils in order to obtain an adequate view. 
 Loss of the red reflex on fundoscopy may indicate 
@@ -35931,7 +34682,7 @@ Figure 18.27  Corneal arcus and xanthelasmata in a patient with
 diabetic dyslipidaemia. 
 Figure 18.28  Diabetic cataract. 
 Figure 18.24  The prayer sign in diabetic cheiroarthropathy.', 1533),
-   ('f787c3f3-91d8-5d10-aa4d-f84d7798c1ef', '255298e2-6808-582f-ad48-9999837499d6', '65e2c421-da5c-5da3-b89b-86573eb11c94', 410, 410, 0, 'SECTION Three
+   ('1ecf6a02-82db-5400-92d5-0650e7b6462b', 'HUTCHISON_24_2018', 'H1-C18', 399, 410, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿399
 Feet
 The feet of patients with diabetes should be examined 
@@ -35982,7 +34733,7 @@ in severe proliferative retinopathy. (Courtesy of Dr Paul Dodson.)
 Figure 18.32  New vessel formation and laser photocoagulation 
 burns in severe proliferative retinopathy. (Courtesy of Dr Paul 
 Dodson.)', 1956),
-   ('7204d12c-12b2-5044-9989-985ccf791d5e', 'ebcfe28f-77ca-5658-bb04-934b7e7632d5', '65e2c421-da5c-5da3-b89b-86573eb11c94', 411, 411, 0, 'Endocrine and metabolic disorders ﻿
+   ('5c08c312-43f5-5c7e-bb0c-0ef30b9183d9', 'HUTCHISON_24_2018', 'H1-C18', 400, 411, 0, 'Endocrine and metabolic disorders ﻿
 400 18
 should be classified as at high risk for ulceration and 
 be given careful education on foot care by a podiatrist.
@@ -36060,7 +34811,7 @@ Figure 18.33  Exudative diabetic maculopathy. (Courtesy of Dr
 Paul Dodson.)
 Figure 18.34  Testing for neuropathy using a Semmes Weinstein 
 monofilament giving standard 10 g of fine touch.', 4030),
-   ('9252345d-3b33-5e2c-8da0-cc8c07e69d98', '4cd7220f-24fa-5be4-ba7c-b56284808112', '65e2c421-da5c-5da3-b89b-86573eb11c94', 412, 412, 0, 'SECTION Three
+   ('e4be4a3f-eb94-538d-9680-d9b27dd74700', 'HUTCHISON_24_2018', 'H1-C18', 401, 412, 0, 'SECTION Three
 Endocrine and metabolic disorders ﻿401
 Other sites include the tibial tuberosities, at the site 
 of insertion of the patellar tendon (subperiosteal 
@@ -36142,7 +34893,7 @@ Figure 18.35  Tendon xanthoma of the hands. (Courtesy of Dr
 David Peterson.)
 Figure 18.36  Eruptive xanthomata in severe 
 hypertriglyceridaemia. (Courtesy of Dr David Peterson.)', 4388),
-   ('fe372160-9174-5314-a6ef-18ab04b637b9', NULL, '65e2c421-da5c-5da3-b89b-86573eb11c94', 413, 413, 0, 'Endocrine and metabolic disorders ﻿
+   ('c576612e-e2e6-576d-9f5a-a460cc4e3890', 'HUTCHISON_24_2018', 'H1-C18', 402, 413, 0, 'Endocrine and metabolic disorders ﻿
 402 18
 of milk. Investigations to exclude secondary causes 
 should include thyroid, liver and renal function and 
@@ -36160,7 +34911,7 @@ confusion, as triglycerides interfere with the amylase
 assay. Severe hypertriglyceridaemia can lead to a pseudohyponatraemia, and care should be exercised when 
 interpreting serum sodium levels in the condition.
 Figure 18.37  Lipaemia retinalis. (Courtesy of Dr Paul Dodson.)', 927),
-   ('ef1a219e-6c33-5dc1-8926-75513406a30c', '093879ba-b2fa-5714-b731-2bfc2b904c92', '3b39b90a-889e-5746-bfe3-75475c945b44', 414, 414, 0, 'Introduction
+   ('73151d83-bb66-5097-8327-46301a319d6a', 'HUTCHISON_24_2018', 'H1-C19', 403, 414, 0, 'Introduction
 The skin is the largest organ in the human body. 
 Forming a major interface between man and his 
 environment, it covers an area of approximately 2 m 
@@ -36241,7 +34992,7 @@ BASIC SYSTEMS
 19 
 Skin, nails and hair
 Rino Cerio', 3898),
-   ('03f8cd56-9935-52f9-8001-a6ca7c7dbefa', NULL, '3b39b90a-889e-5746-bfe3-75475c945b44', 415, 415, 0, 'Skin, nails and hair ﻿
+   ('4279ef0d-e809-5545-8f29-9091a7e92ec4', 'HUTCHISON_24_2018', 'H1-C19', 404, 415, 0, 'Skin, nails and hair ﻿
 404 19
 orange-yellow of carotenaemia, which does not. Slight 
 degrees of jaundice cannot be seen in artificial light.
@@ -36282,7 +35033,7 @@ Figure 19.2  The anatomy of the epidermis.
 Figure 19.3  Vitiligo, a disorder of cutaneous pigmentation 
 that is often autoimmune in origin and associated with other 
 autoimmune disorders.', 1058),
-   ('d885a460-4f15-5d53-998c-c68d6921617e', 'c15684e0-48ca-55b7-b901-509f30e7a7ec', '3b39b90a-889e-5746-bfe3-75475c945b44', 416, 416, 0, 'SECTION Three
+   ('935f5673-3b46-5a4b-a799-7bb324a786aa', 'HUTCHISON_24_2018', 'H1-C19', 405, 416, 0, 'SECTION Three
 Skin, nails and hair ﻿405
 ■ Chronic arsenic poisoning, in which the skin is 
 finely dappled affecting covered more than 
@@ -36384,7 +35135,7 @@ Contacts - family and partners
 Provocating factors - sunlight and foods
 Previous and current treatments
 Figure 19.4  Flat-topped papules of lichen planus.', 3857),
-   ('dde45398-b0d3-5cd9-bce4-efe60f05f6b5', '3be4a140-5ced-5c7c-88c7-6021e50c3f86', '3b39b90a-889e-5746-bfe3-75475c945b44', 417, 417, 0, 'Skin, nails and hair ﻿
+   ('ec6d5e03-83da-5f60-96cb-6deea6db9e30', 'HUTCHISON_24_2018', 'H1-C19', 406, 417, 0, 'Skin, nails and hair ﻿
 406 19
 The elasticity of the skin should be investigated. 
 If a fold of healthy skin is pinched up, it immediately 
@@ -36477,7 +35228,7 @@ the following points:
 ■ Is it dry or moist?
 ■ Is there any visible sweating, either general or 
 local?', 3139),
-   ('e6f79dbb-32e4-5b6c-9298-aa02a8040fed', '18e60003-19fe-5907-8750-21e24821a30b', '3b39b90a-889e-5746-bfe3-75475c945b44', 418, 418, 0, 'SECTION Three
+   ('104fc834-31d6-5c85-b6aa-22d88c4efa5b', 'HUTCHISON_24_2018', 'H1-C19', 407, 418, 0, 'SECTION Three
 Skin, nails and hair ﻿407
 Box 19.5  Secondary skin lesions that evolve from primary 
 lesions
@@ -36580,7 +35331,7 @@ phases of growth (anagen) and rest (telogen). Anagen
 Figure 19.7  Hansen''s disease. There is a depigmented area of 
 anaesthetic and slightly pink skin on the exposed cheek. In this 
 lepromatous lesion, acid-fast bacilli were found in scrapings.', 3937),
-   ('8a05e523-5175-5a48-aead-07543627a843', '9c0d8a8e-a98e-522f-a5b2-56a4d7d63378', '3b39b90a-889e-5746-bfe3-75475c945b44', 419, 419, 0, 'Skin, nails and hair ﻿
+   ('5c646da4-03e8-5148-9a12-3df18993b143', 'HUTCHISON_24_2018', 'H1-C19', 408, 419, 0, 'Skin, nails and hair ﻿
 408 19
 In addition, the clinician should determine whether 
 the alopecia results in scarring and hence, permanent 
@@ -36660,7 +35411,7 @@ Scarring
 ■ Kerion (see Fig. 19.30)
 ■ X-irradiation
 ■ Necrobiosis', 2519),
-   ('7b655323-222d-5194-8efd-159a0cca67a2', 'e56ff10d-4516-5d72-92cb-997eb10b68c7', '3b39b90a-889e-5746-bfe3-75475c945b44', 420, 420, 0, 'SECTION Three
+   ('f0351b4c-b3d3-5e53-b74a-235ac1c59f8f', 'HUTCHISON_24_2018', 'H1-C19', 409, 420, 0, 'SECTION Three
 Skin, nails and hair ﻿409
 The nails
 The nails should be examined carefully. The structure 
@@ -36702,7 +35453,7 @@ Cuticle
 Nail matrix
 Figure 19.11  Structure of the nail (lateral view). 
 Figure 19.13  Psoriasis of the nail beds.', 1722),
-   ('f780babe-9150-565f-9114-d16745fa4137', 'eea18329-958e-5e3c-bb08-1f8a936828f5', '3b39b90a-889e-5746-bfe3-75475c945b44', 421, 421, 0, 'Skin, nails and hair ﻿
+   ('e76b43d2-15af-5756-8f56-91249fb13c69', 'HUTCHISON_24_2018', 'H1-C19', 410, 421, 0, 'Skin, nails and hair ﻿
 410 19
 Rarely, clubbing may be congenital. The distal end 
 of the digit becomes expanded, with the nail curved 
@@ -36766,7 +35517,7 @@ Figure 19.15  Typical heliotrope-coloured erythema seen in
 dermatomyositis (periungual and Gottron''s papules over the 
 knuckles). 
 Figure 19.16  Yellow nail syndrome in bronchiectasis.', 3316),
-   ('c66e857d-3c60-5f94-885b-5cc7abc56510', '4d43539d-a7a0-5bc9-96f5-b40434ed3b6f', '3b39b90a-889e-5746-bfe3-75475c945b44', 422, 422, 0, 'SECTION Three
+   ('fa9f07f6-a527-5a23-aaa7-02eab3e7c3e9', 'HUTCHISON_24_2018', 'H1-C19', 411, 422, 0, 'SECTION Three
 Skin, nails and hair ﻿411
 a few or hundreds may be scattered over the body. 
 Ichthyosis (scaly fish skin) is usually present from 
@@ -36832,7 +35583,7 @@ Chronic abdominal disorders
 ■ Cirrhosis of the liver
 Figure 19.18  Discoid lupus erythematosus, showing atrophic 
 scars.', 3084),
-   ('95d42bb9-e605-5544-a8a4-f09e6cce0e6f', NULL, '3b39b90a-889e-5746-bfe3-75475c945b44', 423, 423, 0, 'Skin, nails and hair ﻿
+   ('4e3ae080-a191-5bb2-8684-d9e319ffe3e4', 'HUTCHISON_24_2018', 'H1-C19', 412, 423, 0, 'Skin, nails and hair ﻿
 412 19
 on the foot and on the calves in small vessel disease. 
 Spider naevi consist of a central arteriole feeding a 
@@ -36892,7 +35643,7 @@ B
 A
 Figure 19.19  (A) Impetigo. (B) Erysipelas. 
 Figure 19.20  Necrobiosis lipoidica diabeticorum.', 2782),
-   ('e666c6f1-3fff-5775-8a76-d71b0acb9293', '74bfd2a8-4bf9-59af-881b-d455956fb75b', '3b39b90a-889e-5746-bfe3-75475c945b44', 424, 424, 0, 'SECTION Three
+   ('deafaaaa-4c6b-5503-8738-4705f0067601', 'HUTCHISON_24_2018', 'H1-C19', 413, 424, 0, 'SECTION Three
 Skin, nails and hair ﻿413
 from capillary haemorrhage or may form larger macules, 
 depending on the extent of haemorrhage and the size of 
@@ -36977,7 +35728,7 @@ Box 19.10  Causes of erythema nodosum
 ■ Other infections, e.g. leprosy, systemic mycoses, 
 toxoplasmosis, lymphogranuloma venereum
 Figure 19.21  Purpura in Henoch-Schönlein disease.', 4225),
-   ('147af265-0eec-5a3c-8b89-5423b926a6d9', 'd41c798a-bb22-54c2-84d0-5bd2febab965', '3b39b90a-889e-5746-bfe3-75475c945b44', 425, 425, 0, 'Skin, nails and hair ﻿
+   ('f085a1aa-f545-59d0-ae8a-262c900dd348', 'HUTCHISON_24_2018', 'H1-C19', 414, 425, 0, 'Skin, nails and hair ﻿
 414 19
 rashes mimic lichen planus. A palpable rash looking 
 like Henoch-Schönlein purpura indicates leucocytoclastic vasculitis. Generalized exfoliative dermatitis 
@@ -37026,7 +35777,7 @@ Figure 19.22  Hairy leukoplakia.
 Figure 19.23  Herpes simplex (type I). 
 Figure 19.24  Herpes zoster vesicles on the ear lobe involving the 
 C2 dermatome.', 2561),
-   ('59280469-2120-5feb-9f2a-7d60b586dfa7', 'c091d369-6f03-5f91-a9cf-621f0fde1d4e', '3b39b90a-889e-5746-bfe3-75475c945b44', 426, 426, 0, 'SECTION Three
+   ('bdb4f080-ef2c-51b0-ac9b-0742ab10627b', 'HUTCHISON_24_2018', 'H1-C19', 415, 426, 0, 'SECTION Three
 Skin, nails and hair ﻿415
 especially on the face, near the nose or on the forehead 
 (Fig. 19.25). The lesion may be ulcerated with a firm, 
@@ -37108,7 +35859,7 @@ Vancomycin
 Erythroderma
 Sulfonylureas, ACE inhibitors, 
 allopurinol', 2613),
-   ('6aeccc36-9892-56bb-9402-4b49f5b43809', '184e4b17-a23d-5167-8f1c-7405926fb995', '3b39b90a-889e-5746-bfe3-75475c945b44', 427, 427, 0, 'Skin, nails and hair ﻿
+   ('15c5087b-c6dd-57ae-b549-e8bc782e59d9', 'HUTCHISON_24_2018', 'H1-C19', 416, 427, 0, 'Skin, nails and hair ﻿
 416 19
 living in rough conditions of war or social upheaval. 
 In contrast, P. capitis is common in school children, 
@@ -37212,7 +35963,7 @@ HLA typing
 Dermatitis herpetiformis
 DNA analysis
 Epidermolysis bullosa', 4286),
-   ('c1801ba1-85a7-5058-819f-b1a139b2fba3', '7580951f-42eb-51a3-bea5-1ef8d394bb3f', '3b39b90a-889e-5746-bfe3-75475c945b44', 428, 428, 0, 'SECTION Three
+   ('314bda1f-6457-5339-aac2-2ed14624a2ec', 'HUTCHISON_24_2018', 'H1-C19', 417, 428, 0, 'SECTION Three
 Skin, nails and hair ﻿417
 Figure 19.29  Lactophenol blue preparation showing macronidia 
 of Microsporum species, isolated from skin scrapings from a 
@@ -37271,8 +36022,8 @@ progress of skin diseases.
 Figure 19.31  Disposable punch skin biopsy, especially useful 
 where minimal scarring is desirable. 
 Figure 19.32  A 4-mm punch diagnostic biopsy.', 2841),
-   ('6ed9137e-8435-58bd-b9f2-481b6e401131', NULL, '3b39b90a-889e-5746-bfe3-75475c945b44', 429, 429, 0, 'This page intentionally left blank', 34),
-   ('13cc52ab-2587-5e77-85d8-939154b2a7e0', 'fb9681ac-1934-532a-8aa2-eaeb0b11a929', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 430, 430, 0, 'Introduction
+   ('1e68c696-39ae-508a-bd04-a7705a1d6d1b', 'HUTCHISON_24_2018', 'H1-C19', 418, 429, 0, 'This page intentionally left blank', 34),
+   ('9d25600d-f08d-5524-b2af-cdbd018a0eb7', 'HUTCHISON_24_2018', 'H1-C20', 419, 430, 0, 'Introduction
 Although proportionally a greater contribution 
 towards the diagnosis of ophthalmic disorders is made 
 by the examination compared to the history, it is 
@@ -37355,7 +36106,7 @@ BASIC SYSTEMS
 20 
 Eyes
 Andrew Coombes', 4199),
-   ('ffa71c35-0029-549c-8175-36726e382d50', '192bca0e-df82-5b21-8b12-ac0650821fbe', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 431, 431, 0, 'Eyes ﻿
+   ('669bf7f5-191a-5389-8e1f-1d543c796fc6', 'HUTCHISON_24_2018', 'H1-C20', 420, 431, 0, 'Eyes ﻿
 420 20
 designated 60, then the test distance should be 
 reduced. If at 1 m the 60 letter cannot be seen, assess 
@@ -37460,7 +36211,7 @@ Suddenly noticed
 Unilateral gradual visual loss from, e.g. dry AMD or cataract
 Functional
 Bilateral or unilateral; diagnosis of exclusion', 4146),
-   ('d9cbba85-c004-5d78-a1d7-960aaf57abd2', '2d145171-22ba-53e8-8757-26e438da2add', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 432, 432, 0, 'SECTION Three
+   ('4ff56892-5ed5-5c5b-8cf6-b35be8d96f73', 'HUTCHISON_24_2018', 'H1-C20', 421, 432, 0, 'SECTION Three
 Eyes ﻿421
 from one line to the other. On a LogMar chart each 
 letter has a score value of 0.02 log units with 5 letters 
@@ -37579,7 +36330,7 @@ Cold sores or ophthalmic shingles?
 Unilateral, branching linear dendrite(s) on 
 cornea (slit lamp) stains with fluorescein
 FB, foreign body; PMH, past medical history; URTI, upper respiratory tract infection.', 4599),
-   ('2cbb8ccb-1aab-549b-b2c3-29fdb6fc0b03', '97f9cb29-a0d3-513f-bba4-1985fa721657', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 433, 433, 0, 'Eyes ﻿
+   ('dfd6f5e3-014b-59c7-bb25-b4fb2c3c778c', 'HUTCHISON_24_2018', 'H1-C20', 422, 433, 0, 'Eyes ﻿
 422 20
 metric field defects are usually due to lesions anterior 
 to the chiasm (i.e. in the optic nerves or retinae). 
@@ -37660,7 +36411,7 @@ B
 0.00
 -0.10
 Figure 20.1b  Log MAR chart for testing distance vision.', 3519),
-   ('eb03fd2b-b24d-55ac-9267-2e68ab766a24', 'a405189f-6316-5fcf-9300-b1c13354f967', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 434, 434, 0, 'SECTION Three
+   ('06fb8e52-8f5c-5959-be1c-c8199a049e6d', 'HUTCHISON_24_2018', 'H1-C20', 423, 434, 0, 'SECTION Three
 Eyes ﻿423
 associated with reduced vision, but if central vision 
 is retained, the acuity will be normal, although severe 
@@ -37684,7 +36435,7 @@ in symmetrical bilateral optic nerve disease, but this
 is rare, and in most bilateral cases the defect will be 
 detected on the more abnormal side. RAPD is often 
 Figure 20.2  Near vision chart based on the point system of the printer.', 1286),
-   ('bb59bb7c-5b05-5012-acea-02253d88a153', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 435, 435, 0, 'Eyes ﻿
+   ('3f7fee84-5f37-5424-9528-3184ee521b4c', 'HUTCHISON_24_2018', 'H1-C20', 424, 435, 0, 'Eyes ﻿
 424 20
 Figure 20.3  Testing vision with a pinhole. Top: light is not 
 focused on the retina owing to refractive error (in this case in 
@@ -37717,7 +36468,7 @@ Box 20.2  Light-near dissociation
 ■ Aberrant third nerve regeneration
 ■ Myotonic dystrophy
 ■ Diabetes mellitus', 1035),
-   ('51e2d94a-bfb9-547d-886a-8fc269118c86', '3119342a-de5e-5cc0-8315-72de16928890', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 436, 436, 0, 'SECTION Three
+   ('7649ae17-defc-5a80-b588-fa2cd035738c', 'HUTCHISON_24_2018', 'H1-C20', 425, 436, 0, 'SECTION Three
 Eyes ﻿425
 Pupil shape
 Slit-lamp examination is the best technique to assess 
@@ -37790,7 +36541,7 @@ symptoms in Table 20.2)
 ■ Narrow anterior chamber angles (detected on slit-lamp 
 gonioscopy)
 ■ Family history of acute angle-closure glaucoma', 3052),
-   ('d0b65b7d-7206-54f9-89df-9c4a3213c39f', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 437, 437, 0, 'Eyes ﻿
+   ('0b2e8099-3b1a-5597-882f-d0e4b32950b1', 'HUTCHISON_24_2018', 'H1-C20', 426, 437, 0, 'Eyes ﻿
 426 20
 Box 20.5  Technique of ophthalmoscopy
 ■ Use your LEFT eye for the patient''s LEFT eye, holding the 
@@ -37859,7 +36610,7 @@ crossing the edge of the disc, from the normal
 causes of optic atrophy are listed in Box 20.6. 
 In primary optic atrophy due to optic nerve 
 lesions, the disc is flat and white, with clear-cut', 2769),
-   ('30befd5b-d881-5a02-8ae6-cf6fe3a82a2b', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 438, 438, 0, 'SECTION Three
+   ('2f29040a-87bc-5762-9faf-26282382a860', 'HUTCHISON_24_2018', 'H1-C20', 427, 438, 0, 'SECTION Three
 Eyes ﻿427
 disc (3 D is equivalent to 1 mm of swelling). If 
 papilloedema develops rapidly, there will be 
@@ -37944,7 +36695,7 @@ Box 20.7  Causes of the appearance of optic disc swelling
 - high hypermetropia
 ■ Optic disc drusen
 Figure 20.12  Severe papilloedema with retinal haemorrhages.', 3620),
-   ('8c405606-791a-59e5-a7a3-33cc98975f0a', 'ad4a2b80-e995-5908-8fdc-f0b54587e5d2', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 439, 439, 0, 'Eyes ﻿
+   ('9cf9ee93-3e74-5c98-aefe-b954a68c86bb', 'HUTCHISON_24_2018', 'H1-C20', 428, 439, 0, 'Eyes ﻿
 428 20
 white appearance, but they are a unilateral, 
 harmless and non-progressive congenital 
@@ -37988,7 +36739,7 @@ wool'' spots (arrow) can be seen.
 Figure 20.13  Glaucomatous disc cupping. The cup is oval in the 
 vertical plane and appears pale. The retinal vessels are displaced 
 nasally.', 2121),
-   ('0f3e3121-49fb-5fa6-82d6-99e1a456b084', '02e07b4b-b011-568f-aabf-041b731d1109', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 440, 440, 0, 'SECTION Three
+   ('6fe489f3-3cd0-5de4-b26d-30444777138e', 'HUTCHISON_24_2018', 'H1-C20', 429, 440, 0, 'SECTION Three
 Eyes ﻿429
 abnormal finding that may occur if the IOP is very 
 high or the central retinal artery pressure very low. 
@@ -38059,7 +36810,7 @@ dots), blot haemorrhages, hard exudates and areas of new vessel
 formation (arrow) are characteristic of this condition. In many 
 patients, hypertensive retinopathy is also present. 
 Figure 20.18  Branch retinal vein occlusion. There are flameshaped retinal haemorrhages, but the disc is normal.', 3635),
-   ('f837a5eb-98b6-5faf-9d0f-582126d2a558', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 441, 441, 0, 'Eyes ﻿
+   ('47aa6e21-5386-504b-9fa4-f6c97fee6fd8', 'HUTCHISON_24_2018', 'H1-C20', 430, 441, 0, 'Eyes ﻿
 430 20
 ■ Conjunctival surfaces (tarsal, forniceal and 
 bulbar). This mucous membrane lines the 
@@ -38127,7 +36878,7 @@ with chronic lid disease.
 Figure 20.19  Slit lamp. 
 Figure 20.20  Everting the upper eyelid to expose the tarsal 
 conjunctiva.', 3138),
-   ('1c852449-6e7b-51c0-b375-d9d8ac90ac1d', '0a6beb18-2cf1-5011-b194-eaf26f46f09f', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 442, 442, 0, 'SECTION Three
+   ('3d0f76db-81b0-5990-90a0-0dcabb46d4f7', 'HUTCHISON_24_2018', 'H1-C20', 431, 442, 0, 'SECTION Three
 Eyes ﻿431
 ■ Anterior vitreous. This is best examined when 
 the pupil is dilated. Opacities may be observed, 
@@ -38204,7 +36955,7 @@ the lens (subluxation) or complete dislocation
 into the vitreous cavity.
 Figure 20.21  Fluorescein used to stain the cornea and tear film. 
 Figure 20.22  Goldman tonometry.', 3492),
-   ('806283fc-4e87-5742-acb0-18274f7ea046', 'f4b2e5d2-a7bf-5c57-84c4-93cf74c392c7', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 443, 443, 0, 'Eyes ﻿
+   ('6d0c86d0-b9a6-5dd8-8afb-ed9cfdfe0944', 'HUTCHISON_24_2018', 'H1-C20', 432, 443, 0, 'Eyes ﻿
 432 20
 wards and inwards. Acute inflammation (dacryo­
 adenitis) causes a tender swollen gland, with oedema 
@@ -38268,7 +37019,7 @@ globe pressure
 Figure 20.23  Diagrammatic representation of tonometry. 
 Figure 20.24  Thyroid eye disease with upper eyelid retraction 
 and mild exophthalmos (bilateral proptosis).', 3060),
-   ('877f7868-dfd3-5dff-9dad-0ef08e95dcf7', '6b1e70b0-59cf-5dd7-9a4a-a37e1d6906e8', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 444, 444, 0, 'SECTION Three
+   ('81d5cbd0-f7d0-56b1-b3ac-52dd70f9d549', 'HUTCHISON_24_2018', 'H1-C20', 433, 444, 0, 'SECTION Three
 Eyes ﻿433
 example in ipsilateral eyelid retraction or myopia 
 (where the eye is longer than normal) or when there 
@@ -38334,7 +37085,7 @@ muscles in the other eye are also slightly enlarged. The optic nerve
 can clearly be seen between the enlarged muscles on the left side. 
 Figure 20.29  Hertel exophthalmometry to quantify proptosis or 
 exophthalmos.', 3547),
-   ('c82fa0d3-5f15-5f1c-9504-647d763f79d4', 'b9305af5-35c6-5ac1-9261-e6942aeea78b', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 445, 445, 0, 'Eyes ﻿
+   ('4dbb683d-a2da-5322-88eb-d9146249bd6d', 'HUTCHISON_24_2018', 'H1-C20', 434, 445, 0, 'Eyes ﻿
 434 20
 lacrimal duct obstruction (Fig. 20.31). It is particularly 
 useful in the watering eye, when carcinoma is suspected, when repeat surgery is planned or when 
@@ -38394,7 +37145,7 @@ computed tomography (CT) or magnetic resonance
 imaging (MRI). Ultrasound is used to assess the globe. 
 A dacryocystogram uses a radiopaque dye introduced 
 into the lacrimal drainage system to identify sites of', 2945),
-   ('5bbc7044-29e3-55d4-9f87-52a2ad7fece9', 'ab009906-44fc-5f42-a1c9-97b020fbfc26', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 446, 446, 0, 'SECTION Three
+   ('1c0e7c61-2ded-53ff-a1b6-8f5b9aa7753e', 'HUTCHISON_24_2018', 'H1-C20', 435, 446, 0, 'SECTION Three
 Eyes ﻿435
 Retinal photography and fundus 
 fluorescein angiography
@@ -38426,7 +37177,7 @@ vitreous opacities but no retinal detachment following penetrating
 trauma. C, cornea; L, lens; ON, optic nerve; V, vitreous. 
 Figure 20.34  Fluorescein retinal angiogram of fundus in papilloedema. Note the late-phase leakage of the dye. 
 Figure 20.35  Fluorescein retinal angiogram of fundus in pseudopapilloedema.', 1746),
-   ('c636d1f4-487f-506a-a7d5-2fd4f4bd2213', '63fde26d-a106-50c1-884f-29a576102db2', '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 447, 447, 0, 'Eyes ﻿
+   ('57d7f6af-ca9d-50fa-bb2d-55dd3ac0a4a4', 'HUTCHISON_24_2018', 'H1-C20', 436, 447, 0, 'Eyes ﻿
 436 20
 hand-held lens in front of the patient''s eye, allows a 
 much greater area of the fundus to be visualized (Fig. 
@@ -38485,7 +37236,7 @@ Figure 20.36  Ocular coherence tomography image of a normal
 macula. C, choroid; RPE, retinal pigment epithelium; PR, 
 photoreceptor layer; ICN, inter-connecting neurone layer; NFL, 
 nerve fibre layer; FD, foveal depression.', 2741),
-   ('f45d91f3-c54f-5ad2-815c-8dc784dde453', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 448, 448, 0, 'SECTION Three
+   ('59697d59-2e57-54eb-8d34-ac2c70f73bca', 'HUTCHISON_24_2018', 'H1-C20', 437, 448, 0, 'SECTION Three
 Eyes ﻿437
 This is attenuated in amplitude and increased in 
 latency in disease of the optic nerve, for example 
@@ -38497,8 +37248,8 @@ Flash, flicker or pattern stimuli are used to generate
 electrical responses from retinal activation. This is 
 useful in assessing hereditary or acquired retinal 
 degeneration.', 510),
-   ('745332dd-26ce-5c09-bf62-aca9aab84102', NULL, '07fc99a7-29c8-5d46-81d7-78e8c9af3214', 449, 449, 0, 'This page intentionally left blank', 34),
-   ('8c2dd4e7-1bef-5ce2-bccf-1617e1f92a21', 'fa0efdff-e4a6-5753-85d0-75ec16406fa0', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 450, 450, 0, 'Introduction
+   ('e28d79af-4b01-599e-87f7-dae161222618', 'HUTCHISON_24_2018', 'H1-C20', 438, 449, 0, 'This page intentionally left blank', 34),
+   ('c2bad794-e343-549d-9dac-f15251cd4e95', 'HUTCHISON_24_2018', 'H1-C21', 439, 450, 0, 'Introduction
 This chapter describes the assessment of potential 
 diseases of the ear, nose and throat. The formal title 
 of the specialty is otorhinolaryngology, which has 
@@ -38585,7 +37336,7 @@ BASIC SYSTEMS
 21 
 Ear, nose and throat
 Michael J. Wareing', 4295),
-   ('3875794e-f38f-5687-82e9-f4b56270874c', 'f0b57c62-7bfc-55bd-824c-181e2dd887fb', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 451, 451, 0, 'Ear, nose and throat ﻿
+   ('2764b78a-7afd-5812-b4b3-659e26044880', 'HUTCHISON_24_2018', 'H1-C21', 440, 451, 0, 'Ear, nose and throat ﻿
 440 21
 branches of the fifth, ninth and tenth cranial nerves, 
 together with nerves from C2 and C3 roots. Because 
@@ -38671,7 +37422,7 @@ process
 Manubrium
 of malleus
 Figure 21.3  The ossicles.', 1973),
-   ('2ad93f6c-71c2-5d8e-94b0-81b45b291dff', '2fff10af-b87c-5fab-a2af-3e91fd7a9336', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 452, 452, 0, 'SECTION Three
+   ('67d655fa-5863-5993-ae24-e35bbc31af1f', 'HUTCHISON_24_2018', 'H1-C21', 441, 452, 0, 'SECTION Three
 Ear, nose and throat ﻿441
 Otorrhoea
 Pus draining from the ear varies in character depending 
@@ -38769,7 +37520,7 @@ Non-otological
 ■ Temporomandibular joint pathology
 ■ Cervical spine disease
 ■ Carcinoma in the upper air and food passages', 2682),
-   ('4205a78e-cd9b-5cc8-b5ba-e44b8b28ddd5', 'b22f4f4c-548f-597d-a46e-c5d018885933', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 453, 453, 0, 'Ear, nose and throat ﻿
+   ('99195103-9e6d-5509-b477-19cb11984c67', 'HUTCHISON_24_2018', 'H1-C21', 442, 453, 0, 'Ear, nose and throat ﻿
 442 21
 notice an apparent difference in the pitch or frequency 
 of a tone between the two ears (diplacusis). Most 
@@ -38895,7 +37646,7 @@ Sensorineural
 ■ Ototoxicity: aminoglycosides, diuretics, cytotoxics
 ■ Neoplastic: vestibular schwannoma, other 
 cerebellopontine angle lesions', 3812),
-   ('7c2b67c2-787f-59e9-9d3b-6bea01d33e08', 'eb0cfa79-35f7-5df0-aa16-a768b839c0c4', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 454, 454, 0, 'SECTION Three
+   ('9ddc1529-4719-55a0-a009-1c1b6148026d', 'HUTCHISON_24_2018', 'H1-C21', 443, 454, 0, 'SECTION Three
 Ear, nose and throat ﻿443
 a few days. The elderly are less able to compensate. 
 In all age groups, vertigo may cause residual vague 
@@ -38969,7 +37720,7 @@ With systemic disorders
 A
 B
 Figure 21.7  Acute mastoiditis (A) before and (B) after incision.', 2771),
-   ('d3223748-5c0f-5d52-a3fa-d915ce224514', '72545636-0e13-5c05-824d-0161448d44ff', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 455, 455, 0, 'Ear, nose and throat ﻿
+   ('befa4fd4-fdf4-5738-a339-524245eb16c1', 'HUTCHISON_24_2018', 'H1-C21', 444, 455, 0, 'Ear, nose and throat ﻿
 444 21
 Wax may be removed with a Jobson Horne probe 
 or wax hook or by syringing with water. Never syringe 
@@ -39033,7 +37784,7 @@ parent''s lap with the head and shoulder held
 (Fig. 21.9).
 Figure 21.8  Examining the ear in an adult. 
 Figure 21.9  Examining the ear in a child.', 3095),
-   ('2459514d-cf71-51dd-90d4-c29a6114f5d3', NULL, 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 456, 456, 0, 'Figure 21.10  A right tympanic membrane showing marked 
+   ('5cff3043-5b05-5df8-b014-ee1d53304011', 'HUTCHISON_24_2018', 'H1-C21', 445, 456, 0, 'Figure 21.10  A right tympanic membrane showing marked 
 posterior tympanosclerosis and a small anterior perforation. 
 Figure 21.11  A left tympanic membrane showing atelectasis 
 and posterior retraction on to the long process of the incus. 
@@ -39046,7 +37797,7 @@ the posterosuperior quadrant.
 Figure 21.15  A left tympanic membrane with a subtotal 
 perforation. The chorda tympani and long process of the incus can 
 clearly be seen, as can the round window niche.', 652),
-   ('047a4298-b367-5a73-a1ce-b32c793b4185', '64e11c37-a866-526a-ae22-018013d57e4d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 457, 457, 0, 'Ear, nose and throat ﻿
+   ('1301026a-703c-5b9c-9ed5-207a46ae7632', 'HUTCHISON_24_2018', 'H1-C21', 446, 457, 0, 'Ear, nose and throat ﻿
 446 21
 tuning fork. Strike the tuning fork and hold it near 
 the external ear canal with the prongs vibrating 
@@ -39163,7 +37914,7 @@ Incomplete eye closure
 Slight mouth movement with effort
 VI
 No facial function perceptible', 5056),
-   ('1f12d89f-66f3-5f1c-ad40-5d54ec6d10a5', NULL, 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 458, 458, 0, 'SECTION Three
+   ('5547b267-3516-5e66-815f-52920564596a', 'HUTCHISON_24_2018', 'H1-C21', 447, 458, 0, 'SECTION Three
 Ear, nose and throat ﻿447
  Rinne test
  Weber test
@@ -39251,7 +38002,7 @@ normally if eyes are open. Patients with
 uncompensated unilateral labyrinthine 
 dysfunction are unstable, tending to fall to the 
 side of the lesion. Patients with central', 1832),
-   ('7faeaa4c-e1c9-5db8-99c1-ac95e6745355', 'd4f3a55a-23e9-505c-b9e1-8d2ef209292f', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 459, 459, 0, 'Ear, nose and throat ﻿
+   ('089a2522-7306-572c-9857-49e7e7ec1c85', 'HUTCHISON_24_2018', 'H1-C21', 448, 459, 0, 'Ear, nose and throat ﻿
 448 21
 in BPPV involves a variable latent period when 
 nothing happens. There is then a torsional 
@@ -39294,7 +38045,7 @@ make sure they are free and painless. The head is
 then turned 45° to the side of test. The patient is 
 laid back rapidly with his head extended over the 
 end of the bed (Fig. 21.18). The classic response', 1850),
-   ('6a40723d-949b-5318-8420-bbed203d23c7', '870532d2-a8e4-5519-bb45-529b3040b015', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 460, 460, 0, 'SECTION Three
+   ('b356a5b6-2505-5843-aa6b-4ea60abf149b', 'HUTCHISON_24_2018', 'H1-C21', 449, 460, 0, 'SECTION Three
 Ear, nose and throat ﻿449
 are often unable to achieve 100% ODS and, in 
 particular, patients with neural/retrocochlear loss 
@@ -39410,7 +38161,7 @@ C
 B
 D
 Figure 21.20  Pure tone audiograms: (A) normal; (B) noise-induced hearing loss; (C) presbycusis; (D) bilateral conductive hearing loss.', 2855),
-   ('8e4f8a31-3f6d-5662-8834-3fe496554ded', NULL, 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 461, 461, 0, 'Ear, nose and throat ﻿
+   ('dfd9c1ca-784c-573f-9af6-20a6f016a78b', 'HUTCHISON_24_2018', 'H1-C21', 450, 461, 0, 'Ear, nose and throat ﻿
 450 21
 100
 80
@@ -39430,7 +38181,7 @@ COMMENTS:
 Figure 21.21  Speech audiogram. 
 Figure 21.22  A tympanogram being performed. 
 Figure 21.23  A tympanogram.', 338),
-   ('a0fbd852-50c9-5345-b060-073ef6e1d0b9', 'eb237e3a-c02f-5771-980e-3ff75a6566c3', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 462, 462, 0, 'SECTION Three
+   ('7c9da351-ebfd-574d-8376-265287145362', 'HUTCHISON_24_2018', 'H1-C21', 451, 462, 0, 'SECTION Three
 Ear, nose and throat ﻿451
 also measures the volume of the canal: a large volume 
 indicates a tympanic perforation. Impedance (the 
@@ -39486,7 +38237,7 @@ Figure 21.25  Videonystagmography.
 Figure 21.26  CT scan of left ear showing a fistula of the lateral 
 semicircular canal in a patient who had previously undergone a 
 mastoidectomy.', 2984),
-   ('3f73024c-1c79-563e-a4d5-c704ae1b185b', '30e46757-7a61-510a-b5dd-eca9eede484c', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 463, 463, 0, 'Ear, nose and throat ﻿
+   ('259e3b68-ecc6-5e9f-9783-32ac588d02ad', 'HUTCHISON_24_2018', 'H1-C21', 452, 463, 0, 'Ear, nose and throat ﻿
 452 21
 maxilla on each side. The lateral cartilages provide 
 support for the nostrils, especially in inspiration (Fig. 
@@ -39542,7 +38293,7 @@ The nose and paranasal sinuses
 Anatomy
 The nose (Box 21.4) is formed by the two nasal 
 bones which articulate with the nasal process of the', 2014),
-   ('7300061a-1b98-5fcb-b227-811114846d6c', '0c9711ad-16b6-5c0f-91b7-f44aa7d3d3f1', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 464, 464, 0, 'SECTION Three
+   ('8c9d883e-c16f-5118-9b5d-4acdb57070d1', 'HUTCHISON_24_2018', 'H1-C21', 453, 464, 0, 'SECTION Three
 Ear, nose and throat ﻿453
 palatine tonsils. These are largest in childhood and 
 regress from the age of about 8 years onwards, 
@@ -39634,7 +38385,7 @@ the cribriform plate to the olfactory bulb lying on
 the floor of the anterior cranial fossa. The postnasal 
 space contains the adenoids, which are lymphoid 
 tissue, part of Waldeyer''s ring, which includes the', 3771),
-   ('73ad6d4f-9478-5bb5-9a97-acda558c5f0e', '431e506b-1bde-5386-b086-1c56af5ba0c9', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 465, 465, 0, 'Ear, nose and throat ﻿
+   ('ba078bc0-b2c7-5030-a049-f2bc2b5fca8d', 'HUTCHISON_24_2018', 'H1-C21', 454, 465, 0, 'Ear, nose and throat ﻿
 454 21
 on the nasal septum and for any perforation (Fig. 
 21.34). Perforations may be secondary to cocaine 
@@ -39705,7 +38456,7 @@ A
 B
 Figure 21.33  Examining the nose. 
 Figure 21.34  A septal perforation.', 3443),
-   ('e04e6b44-c7bf-5951-8b06-c985154b0e3e', '7effc585-8cfc-59b6-a54c-eed0588c6cc4', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 466, 466, 0, 'SECTION Three
+   ('df1708df-d8ff-577d-8bd9-35f6368c9201', 'HUTCHISON_24_2018', 'H1-C21', 455, 466, 0, 'SECTION Three
 Ear, nose and throat ﻿455
 that have been suspected from the history, should be 
 tested and compared to positive and negative controls 
@@ -39762,7 +38513,7 @@ Box 21.5  Common inhalant allergens
 ■ Animal dander: cat, dog, rabbit
 ■ Feathers
 ■ Moulds', 2451),
-   ('f043045d-1e04-5b95-8d8e-5ab9af6f415e', '0bc1128b-690d-51c2-9aaa-5539c98c1eaf', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 467, 467, 0, 'Ear, nose and throat ﻿
+   ('e13283f1-cad3-55ac-a62c-892589e92d60', 'HUTCHISON_24_2018', 'H1-C21', 456, 467, 0, 'Ear, nose and throat ﻿
 456 21
 to overdiagnose and interpretation requires caution. 
 It does have value in assessing spread of sinus 
@@ -39836,7 +38587,7 @@ Figure 21.38  Lateral X-ray of the nasopharynx demonstrating
 adenoidal hypertrophy (arrow). 
 Figure 21.39  Coronal CT scan of the nose showing an opaque 
 right maxillary antrum and anterior ethmoid cells.', 3891),
-   ('43c3df56-54d9-5ff5-a880-2aceb0c334c8', NULL, 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 468, 468, 0, 'SECTION Three
+   ('343a776b-6b3c-54b1-9348-1d902db39e2d', 'HUTCHISON_24_2018', 'H1-C21', 457, 468, 0, 'SECTION Three
 Ear, nose and throat ﻿457
 length and tension of the vocal folds. The quality of 
 this basic laryngeal sound is modulated by resonance 
@@ -39907,7 +38658,7 @@ Glottis
 Trachea
 Transglottic region
 Figure 21.41  The divisions of the larynx.', 1728),
-   ('1cb82ace-d5a3-53ea-9ab5-55604442f61e', 'bca47ebb-386c-57fc-8d74-6865f553dc8b', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 469, 469, 0, 'Ear, nose and throat ﻿
+   ('8613481b-62a1-5f1e-8498-e8d17137f741', 'HUTCHISON_24_2018', 'H1-C21', 458, 469, 0, 'Ear, nose and throat ﻿
 458 21
 ■ stridor, or stertorous (noisy) breathing
 ■ dysphonia (hoarseness)
@@ -39993,7 +38744,7 @@ Symptoms of throat disease
 Patients with throat disorders present with:
 ■ pain
 ■ ulceration', 2170),
-   ('67de7fc6-1d48-5531-b2ad-6e2ffdf6cd88', 'ead5a244-9514-5df2-a6d8-3dc16c90301c', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 470, 470, 0, 'SECTION Three
+   ('f0314da2-61a6-5bfd-a776-5b146eac7937', 'HUTCHISON_24_2018', 'H1-C21', 459, 470, 0, 'SECTION Three
 Ear, nose and throat ﻿459
 is noisy breathing at the oropharyngeal level and is 
 nearly always caused by adenotonsillar hypertrophy. 
@@ -40099,7 +38850,7 @@ Adults
 ■ Laryngeal trauma
 ■ Laryngeal carcinoma
 ■ Supraglottitis (epiglottitis)', 4576),
-   ('36514739-5afe-50c9-bba2-0778f765a875', '019af5f9-2c83-5457-ba06-bb3a629b7a9d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 471, 471, 0, 'Ear, nose and throat ﻿
+   ('509768b9-b775-5303-8983-25c888aaa55d', 'HUTCHISON_24_2018', 'H1-C21', 460, 471, 0, 'Ear, nose and throat ﻿
 460 21
 may cause dysphagia (Box 21.9). Dysphagia results 
 from structural disease of the pharyngo-oesophagus 
@@ -40170,7 +38921,7 @@ Psychogenic
 ■ Mutational falsetto (pubophonia)
 Figure 21.45  Laryngeal carcinoma at the anterior commissure 
 with hyperkeratosis of the right vocal cord.', 2475),
-   ('afbc4576-7a82-55d2-b40d-db166f041a26', '080a2c6d-ded8-566c-a72e-9b2016d4db8d', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 472, 472, 0, 'SECTION Three
+   ('5f71b08f-9e9b-537a-8dd0-5f105667fcf9', 'HUTCHISON_24_2018', 'H1-C21', 461, 472, 0, 'SECTION Three
 Ear, nose and throat ﻿461
 If salivary gland pathology is suspected, bimanual 
 palpation, with one gloved finger in the mouth and 
@@ -40262,7 +39013,7 @@ Over 40 years
 ■ Primary malignancy: lymphoma
 ■ Thyroid pathology: goitre, tumour
 Figure 21.47  Indirect laryngoscopy.', 4628),
-   ('15b433eb-07be-55a9-a6c5-b44b29be9129', '9ecf8df9-9a46-52cc-83d5-d00ee7ff7d89', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 473, 473, 0, 'Ear, nose and throat ﻿
+   ('ca2633f6-ecc6-5a02-a93d-0467b10643d8', 'HUTCHISON_24_2018', 'H1-C21', 462, 473, 0, 'Ear, nose and throat ﻿
 462 21
 pass up the jugular vein, where the most important 
 groups of nodes in the head and neck are situated, 
@@ -40301,7 +39052,7 @@ Figure 21.48  Flexible fibreoptic nasendoscopy.
 A
 B
 Figure 21.49  (A) Videolaryngostroboscopy and (B) the image.', 1855),
-   ('833e9327-0d40-5fc8-8ed4-74afa6f598e3', '1f7ed3a5-2e74-5432-9f3d-f809b98a51b6', 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 474, 474, 0, 'SECTION Three
+   ('f565b12f-5bc9-53cd-b558-6d383a259318', 'HUTCHISON_24_2018', 'H1-C21', 463, 474, 0, 'SECTION Three
 Ear, nose and throat ﻿463
 diagnose the vast majority of metastatic squamous 
 carcinomas. It is less accurate in distinguishing 
@@ -40329,5 +39080,32 @@ palpation (Fig. 21.52). MRI complements CT as an
 imaging technique.
 Figure 21.52  CT scan of neck demonstrating a large metastatic 
 lymph node with central necrosis.', 1344),
-   ('e3d8e88f-042b-5012-a5df-b61a0f7243ad', NULL, 'bc352907-c5e8-527c-9af0-ec8d2309f29a', 475, 475, 0, 'This page intentionally left blank', 34)
+   ('6c894653-0be5-5e1a-87c0-247e9e757abb', 'HUTCHISON_24_2018', 'H1-C21', 464, 475, 0, 'This page intentionally left blank', 34)
 ON CONFLICT (id) DO UPDATE SET chunk_text = EXCLUDED.chunk_text, char_count = EXCLUDED.char_count;
+
+-- -----------------------------------------------------------------------------
+-- extraction_job  (per-chapter extraction/review tracking)
+-- -----------------------------------------------------------------------------
+INSERT INTO knowledge.extraction_job (extraction_id, source_version_id, chapter_id, extraction_type, status) VALUES
+   ('EXT-H01', 'HUTCHISON_24_2018', 'H1-C01', 'CLINICAL_METHOD', 'PENDING'),
+   ('EXT-H02', 'HUTCHISON_24_2018', 'H1-C02', 'EXAMINATION', 'PENDING'),
+   ('EXT-H03', 'HUTCHISON_24_2018', 'H1-C03', 'DIFFERENTIAL_INTERFACE', 'PENDING'),
+   ('EXT-H04', 'HUTCHISON_24_2018', 'H1-C04', 'ETHICS', 'PENDING'),
+   ('EXT-H05', 'HUTCHISON_24_2018', 'H1-C05', 'FEMALE_CONTEXT', 'PENDING'),
+   ('EXT-H06', 'HUTCHISON_24_2018', 'H1-C06', 'PAEDIATRIC_CONTEXT', 'PENDING'),
+   ('EXT-H07', 'HUTCHISON_24_2018', 'H1-C07', 'GERIATRIC_CONTEXT', 'PENDING'),
+   ('EXT-H08', 'HUTCHISON_24_2018', 'H1-C08', 'PSYCHIATRIC_CONTEXT', 'PENDING'),
+   ('EXT-H09', 'HUTCHISON_24_2018', 'H1-C09', 'EMERGENCY_CONTEXT', 'PENDING'),
+   ('EXT-H10', 'HUTCHISON_24_2018', 'H1-C10', 'FEVER_CONTEXT', 'PENDING'),
+   ('EXT-H11', 'HUTCHISON_24_2018', 'H1-C11', 'PAIN_CONTEXT', 'PENDING'),
+   ('EXT-H12', 'HUTCHISON_24_2018', 'H1-C12', 'RESPIRATORY_METHOD', 'PENDING'),
+   ('EXT-H13', 'HUTCHISON_24_2018', 'H1-C13', 'CARDIOVASCULAR_METHOD', 'PENDING'),
+   ('EXT-H14', 'HUTCHISON_24_2018', 'H1-C14', 'GASTROINTESTINAL_METHOD', 'PENDING'),
+   ('EXT-H15', 'HUTCHISON_24_2018', 'H1-C15', 'LOCOMOTOR_METHOD', 'PENDING'),
+   ('EXT-H16', 'HUTCHISON_24_2018', 'H1-C16', 'NEUROLOGICAL_METHOD', 'PENDING'),
+   ('EXT-H17', 'HUTCHISON_24_2018', 'H1-C17', 'UROGENITAL_METHOD', 'PENDING'),
+   ('EXT-H18', 'HUTCHISON_24_2018', 'H1-C18', 'ENDOCRINE_METABOLIC_METHOD', 'PENDING'),
+   ('EXT-H19', 'HUTCHISON_24_2018', 'H1-C19', 'DERMATOLOGY_METHOD', 'PENDING'),
+   ('EXT-H20', 'HUTCHISON_24_2018', 'H1-C20', 'OPHTHALMOLOGY_METHOD', 'PENDING'),
+   ('EXT-H21', 'HUTCHISON_24_2018', 'H1-C21', 'ENT_METHOD', 'PENDING')
+ON CONFLICT (extraction_id) DO UPDATE SET extraction_type = EXCLUDED.extraction_type;

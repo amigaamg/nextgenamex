@@ -53,15 +53,29 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/022_knowledge_symptom_engine.sql` | symptom-centric junction tables (etiology, risk, HPI templates, activation) |
 | `database/migrations/023_knowledge_hpi_documentation_group.sql` | `documentation_group` on HPI templates |
 | `database/migrations/024_knowledge_hpi_documentation_groups.sql` | full internal-medicine HPI group order (adds chronology, previous, health_seeking, severity) |
-| `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1: source → document → chapter → section → chunk → claim + `provenance` bridge |
+| `database/migrations/025_knowledge_source_compiler.sql` | Medical Knowledge Compiler H1 (locked spec): source → version → section → chapter → chunk → claim + `extraction_job` + `provenance` bridge |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
-| `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source layer (generated) |
-| `database/seed/seed_zknowledge_zpf_hutchison_claims.sql` | compiled Hutchison claims ch 1/2/12 (generated) |
+| `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source map — source/version/section/chapter/chunk/extraction_job (generated) |
+| `database/seed/seed_zknowledge_zpf_hutchison_claims.sql` | compiled Hutchison claims ch 1/2/12 — `HC-000001..`, `H1-Cxx`, printed pages (generated) |
 
 ## Knowledge compiler
 
-`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2+ planned). Regenerate:
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1 done, H2+ planned). The locked H1 hierarchy is:
+
+```
+source (HUTCHISON_CM) → version (HUTCHISON_24_2018)
+  → section (H1-S1..H1-S4)  [UNIVERSAL / CONTEXT / SYSTEM / NAVIGATION_ONLY]
+  → chapter (H1-C01..H1-C21) [AMEXAN role / context / system]
+  → chunk (raw page text) → claim (HC-000001..) → extraction_job (EXT-H01..)
+```
+
+**Page convention:** the raw PDF extraction and TOC carry 1-based PDF page
+indices. Printed book page numbers are offset by 11 (`printed = pdf_index - 11`,
+e.g. ch1 PDF p14 → printed p3, ch12 PDF p178 → printed p167). All page columns
+store **printed** pages; the offset is recorded on `knowledge.source_version.pdf_page_offset`.
+
+Regenerate:
 
 ```powershell
 python knowledge-compiler/build_h1_source.py <toc.txt> <full.txt> database/seed/seed_zknowledge_zpe_hutchison_source.sql

@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 
-from compiler_core import clean_ws
+from compiler_core import PAGE_OFFSET, clean_ws
 
 
 class Page:
@@ -33,7 +33,7 @@ def parse_pages(raw: str) -> list[Page]:
     while idx < len(tokens):
         pno = int(tokens[idx])
         text = tokens[idx + 1] if idx + 1 < len(tokens) else ""
-        pages.append(Page(pdf_index=pno, printed_page=pno, text=clean_ws(text)))
+        pages.append(Page(pdf_index=pno, printed_page=pno - PAGE_OFFSET, text=clean_ws(text)))
         idx += 2
     return pages
 
