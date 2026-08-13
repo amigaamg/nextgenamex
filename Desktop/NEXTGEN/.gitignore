@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.suo
+
+# Database scratch
+*.sql.bak
+*.tmp
+
+# Python (future)
+__pycache__/
+*.pyc
+.venv/

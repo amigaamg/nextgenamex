@@ -1,0 +1,27 @@
+{
+  "name": "amexan-clinical-cpu",
+  "version": "0.1.0",
+  "description": "AMEXAN Phase 3 — the Clinical CPU runtime. A reusable clinical reasoning engine that reads the PostgreSQL knowledge graph.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
+    "benchmark": "tsx test/benchmark.ts",
+    "verify:governance": "tsx test/verify-governance-runtime.ts",
+    "verify:replay": "tsx test/verify-replay.ts",
+    "server": "tsx server/server.ts"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

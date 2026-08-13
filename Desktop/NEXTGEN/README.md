@@ -57,6 +57,14 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/migrations/026_h2_universal_history_ontology.sql` | Medical Knowledge Compiler H2 (universal history ontology): `history_concept`, `symptom_history_dimension`, `history_context_rule`, `question_variant`, `question_priority_rule`, `functional_impact`, three-state `fact_value.value_state` (TRUE/FALSE/UNKNOWN vs NOT_ASKED), `clinical_event` timeline, `patient_perspective` (IDEA/CONCERN/EXPECTATION/GOAL), `history_reliability`, `question.history_concept_id` + `question_mode` |
 | `database/migrations/027_h3_question_rule_engine.sql` | Medical Knowledge Compiler H3 (question & rule engine): `question_rule` (fact/context triggers → ACTIVATE/DEACTIVATE question/symptom/module), `question_module` + `question_module_member`, `question_dependency` (blocking prerequisites), `question_rationale` (clinical/safety/differential/documentation/context/educational), `question_differential_weight` (condition-scored answers), `documentation_requirement` (per-section required facts), `history_completion_rule` (and/or completion tree), plus `question_requirement` level CHECK extended with `safety` + `high_priority` |
 | `database/migrations/028_h4_universal_symptom_dimensions.sql` | Medical Knowledge Compiler H4 (universal symptom dimensions): `symptom_dimension` canonical 25-dimension registry (SD001-SD025, universal vs conditional), `symptom_dimension_option` (symptom-specific controlled vocabularies), `red_flag_rule` (FACT + CONTEXT + CLINICAL_SIGNIFICANCE, urgency tiers), `exposure_concept` (15 reusable exposure classes) + `symptom_exposure`, and `symptom_relationship.diagnostic_weight` (hard-vs-soft symptoms) |
+| `database/migrations/029_h5_context_engine.sql` | Medical Knowledge Compiler H5 (age/sex/context adaptation): `clinical_context` + context-aware rule resolution |
+| `database/migrations/030_h6_physical_examination.sql` | Medical Knowledge Compiler H6 (universal examination): examination domains/concepts, techniques, findings, observations |
+| `database/migrations/031_h7_investigation_engine.sql` | Medical Knowledge Compiler H7 (investigation selection): investigation concepts, indications, rules, priority, requests, results |
+| `database/migrations/032_h8_differential_reasoning.sql` | Medical Knowledge Compiler H8 (differential reasoning): hypotheses, evidence, rules, weights, sources, versions |
+| `database/migrations/033_h8_differential_reasoning_completion.sql` | Medical Knowledge Compiler H8 completion: diagnosis concepts/etiologies/complications, criteria, exclusions, reasoning rules, evidence rules |
+| `database/migrations/034_h9_documentation_compiler.sql` | Medical Knowledge Compiler H9 (documentation compiler): sections, templates, elements, order/relevance rules, terms, versions |
+| `database/migrations/035_h9_documentation_completion.sql` | Medical Knowledge Compiler H9 completion: document lifecycle + author_status + document_version |
+| `database/migrations/036_h10_governance.sql` | Medical Knowledge Compiler H10 (provenance, governance & clinical knowledge control): `governance` schema — jurisdiction, population_context, evidence_metadata, knowledge_object/version/relationship/dependency, review, approval, publication (publish gates), deprecation, conflict_record, safety_review, model_registry, system_version + runtime `rule_execution`, `audit_event`, `provenance_record`, `clinical_snapshot`, `reasoning_snapshot`, `documentation_snapshot` |
 | `database/seed/seed_zknowledge_zpc_*.sql`     | cough clinical object (etiology, risk, impact, HPI templates) |
 | `database/seed/seed_zknowledge_zpd_*.sql`     | full HPI narrative groups (chronology, previous, health_seeking, severity) |
 | `database/seed/seed_zknowledge_zpe_hutchison_source.sql` | compiled Hutchison 24e source map — source/version/section/chapter/chunk/extraction_job (generated) |
@@ -66,10 +74,12 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/seed/seed_zknowledge_zq3_question_rule_engine.sql` | H3 engine content — 10 `question_module`s (COUGH_CORE, SPUTUM, DYSPNOEA, CHEST_PAIN, FEVER, CHRONIC_COUGH, HAEMOPTYSIS, PAEDIATRIC_RESPIRATORY, ADULT_RESPIRATORY, PREGNANCY_CONTEXT), 36 members, 13 `question_rule`s QR001-QR013 (cough/dyspnoea/haemoptysis/fever/context modules), 13 `question_dependency`s (blocking sputum/dyspnoea/fever/chest-pain probes), 12 `question_rationale`s, 18 `question_differential_weight`s (vs PNEUMONIA, TUBERCULOSIS, HEART-FAILURE, ASTHMA, ACUTE-BRONCHITIS, GERD), 9 `documentation_requirement`s (HPI/RED_FLAGS), 2 `history_completion_rule`s (HCR-COUGH, HCR-CHEST-PAIN), 7 `question_requirement` safety/high_priority rows, 67 `provenance` edges — all sourced from H1/H12 claims |
 | `database/seed/seed_zknowledge_zq4_question_engine_worked_example.sql` | H3 worked example — makes the L1 universal foundation askable: binds Q001-Q005 to universal facts (REASON_PRESENTATION, SYMPTOM_ONSET_TEXT, SYMPTOM_DURATION_DAYS, SYMPTOM_SEVERITY_SCORE, SYMPTOM_ASSOCIATED_TEXT), marks them MANDATORY, adds provenance |
 | `database/seed/seed_zknowledge_zq5_symptom_dimensions.sql` | H4 universal symptom grammar — 25 canonical dimensions (SD001-SD025) + 9 new history_concept rows (HC058-HC066: presence, distribution, systemic impact, red flag, previous episodes/treatment, treatment response, evolution, resolution), 25 symptom-specific option vocabularies (cough/chest-pain/abdo character, radiation), 10 red-flag rules (RFR-*, emergency/urgent, sourced to H1/H12 claims), 15 exposure concepts + 21 symptom→exposure maps, 9 hard-vs-soft diagnostic weights, 67 provenance edges |
+| `database/seed/seed_zknowledge_zq6/zq7/zq8/zq9/zqA/zqB_h5-h9_*.sql` | H5–H9 engine content seeds: context engine, H6 examination, H7 investigation, H8 differential reasoning + completion, H9 documentation compiler |
+| `database/seed/seed_zknowledge_zqC_h10_governance.sql` | H10 governance catalogue — 2 jurisdictions, 4 populations, 5 evidence levels (EV-A..EV-E), 25 governed objects (real H4-H9 codes: DA001, DEV-003, PHEN-*, MECH-*, PROT-CAP-ADULT, TPL-ADULT-MEDICAL, GL-KENYA-ASTHMA-2021 DRAFT+BLOCKED), 7 versions (v1 SUPERSEDED → v2 ACTIVE, never overwritten), 10 relationships, 8 acyclic dependencies, 4 reviews, 4 approvals, 4 publications (3 PUBLISHED through all six gates + 1 BLOCKED), 1 deprecation, 1 RESOLVED conflict, 4 safety reviews, 2 model-registry rows (deterministic ACTIVE / LLM DRAFT), 1 system_version fingerprint + 82 provenance edges (§46 — one `governance_*` edge per governed object) |
 
 ## Knowledge compiler
 
-`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1-H4 done). The locked H1 hierarchy is:
+`knowledge-compiler/` turns authoritative sources into provenance-backed SQL seeds (H1-H10). The locked H1 hierarchy is:
 
 ```
 source (HUTCHISON_CM) → version (HUTCHISON_24_2018)
@@ -101,6 +111,7 @@ python knowledge-compiler/build_h2_claims.py <toc.txt> <full.txt> database/seed/
 .\scripts\seed.ps1
 .\scripts\run_acceptance.ps1
 .\scripts\run_machine_test.ps1
+.\scripts\run_h10_test.ps1
 
 # drop and recreate the whole database
 .\scripts\reset.ps1
@@ -166,6 +177,64 @@ red flags as fact + context + significance. `exposure_concept` +
 `symptom_exposure` make exposure history reusable across symptoms.
 `symptom_relationship.diagnostic_weight` ranks hard vs soft associations
 (haemoptysis > weight loss > fever as cough companions).
+
+## Governance & clinical knowledge control (H10)
+
+H10 is the **trust layer**. It answers "why should AMEXAN be allowed to
+believe, use, document, compare, or act on this information — and can we prove
+exactly what happened?" (spec §1-3). It does not re-implement the H1 source
+backbone or the per-layer version registries — it **governs them by reference**
+(§4/§34): every governed object cites a real Hutchison claim and object codes
+are the real H4-H9 codes (DA001, DEV-003, PHEN-*, PROT-CAP-ADULT, ...).
+
+The `governance` schema holds the seven responsibilities:
+
+| Family | Tables | Law (§) |
+| ------ | ------ | ------- |
+| Provenance | `knowledge_object`, `knowledge_object_version`, `provenance_record` | no anonymous clinical logic (§49); one `governance_*` provenance edge per object (§46) |
+| Versioning | `knowledge_object_version`, `knowledge_deprecation` | v→v+1 never overwrites history — old version SUPERSEDED, new ACTIVE (§8) |
+| Governance | `knowledge_review`, `knowledge_approval`, `knowledge_publication` | DRAFT→…→APPROVED→ACTIVE; publish fails closed unless all six gates pass (§41) |
+| Auditability | `audit_event`, `rule_execution` | the clinical computation event stream + decision black box (§16-19) |
+| Knowledge lifecycle | `jurisdiction`, `population_context`, `evidence_metadata`, `knowledge_relationship`, `knowledge_dependency` | core + jurisdictional overlay (§22), population overlays (§23), acyclic dependency graph (§28-29) |
+| Safety | `safety_review`, `model_registry` | risk classification + human-in-the-loop (§25-26); deterministic ACTIVE, LLM stays DRAFT (§48) |
+| Reproducibility | `system_version`, `clinical_snapshot`, `reasoning_snapshot`, `documentation_snapshot` | replayable clinical computation (§10/§30-31) |
+
+**Runtime separation.** The CPU writes the runtime tables per computation —
+`rule_execution`/`audit_event`/`provenance_record`/`clinical_snapshot` are empty
+at seed time. In `clinical-cpu/src/governance/GovernanceEngine.ts` (wired into
+`ClinicalCPU.process`), each nephron pass records one `reasoning_run`, one
+`clinical_snapshot` (replayable patient state + knowledge state + input
+fingerprint), the H8 `reasoning_snapshot`, the H9 `documentation_snapshot`, a
+`rule_execution` row per phenotype/condition rule fired, the `audit_event`
+stream (CPU_ENGINE_STARTED → PHENOTYPE_MATCHED → DDX_UPDATED →
+ALERT/DOCUMENT → SYSTEM_VERSION_SELECTED), and FORWARD/BACKWARD
+`provenance_record` links from source claim → governed object → reasoning run →
+facts used (§34-36). The projection carries its own trace
+(`governance.runId` / `governance.clinicalSnapshotId`).
+
+**Runtime knowledge gate (§37).** `KnowledgeResolver.ts` is the runtime gate:
+nothing governed-but-not-live (DRAFT/SUPERSEDED/DEPRECATED/RETIRED) may
+participate in a computation. `CPUOrchestrator` consults it every pass, drops
+BLOCKED phenotypes/conditions/protocols from the projection (fails closed), and
+attaches the `governance.gate` verdict so the UI renders governed knowledge
+only. Ungoverned codes are flagged (§27/§49) rather than silently trusted. The
+DRAFT Kenya asthma guideline is BLOCKED by the gate exactly as its publish
+record was BLOCKED (§41).
+
+**Replay engine (§30/§31).** `ReplayEngine.ts` reconstructs a historical
+computation from its recorded snapshot: it verifies the deterministic input
+fingerprint, rebuilds the exact patient state, re-runs the nephron, and
+reports whether H8 reasoning + H9 documentation reproduce byte-for-byte
+(JSONB-key-canonical comparison). Together with `system_version` this satisfies
+the constitutional rule that no historical computation is silently
+reinterpreted with knowledge that was not active at the time (§9/§49).
+
+The H10 machine test (`database/tests/amexan_machine_test_h10.sql`) verifies
+the catalogue counts, the six-gate publish invariant (including the BLOCKED
+Kenya guideline), dependency cycle detection, the documented conflict
+resolution, model identity, registry reuse, and the 82-edge provenance
+integrity — then rolls back. The runtime gate + replay are verified by
+`npm run verify:governance` and `npm run verify:replay` in `clinical-cpu`.
 
 ## Acceptance criteria
 
