@@ -49,8 +49,8 @@ ON CONFLICT (question_code) DO UPDATE SET
 -- 2. Question variants — the fact stays ONSET, only the presentation changes
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.question_variant
-    (question_id, context, language_code, wording, is_active)
-SELECT q.id, v.context, v.language_code, v.wording, true
+    (question_id, context, language_code, audience, wording, is_active)
+SELECT q.id, v.context, v.language_code, 'patient', v.wording, true
 FROM (VALUES
    ('SYMPTOM_ONSET',    'adult',       'en', 'When did this start?'),
    ('SYMPTOM_ONSET',    'child_proxy', 'en', 'When did you first notice this?'),
@@ -62,7 +62,7 @@ FROM (VALUES
    ('SYMPTOM_DURATION', 'child_proxy', 'en', 'How long has this been going on?')
 ) AS v(question_code, context, language_code, wording)
 JOIN knowledge.question q ON q.question_code = v.question_code
-ON CONFLICT (question_id, context, language_code) DO UPDATE SET
+ON CONFLICT (question_id, context, language_code, audience) DO UPDATE SET
     wording = EXCLUDED.wording;
 
 -- ---------------------------------------------------------------------------
@@ -81,8 +81,7 @@ INSERT INTO knowledge.question_priority_rule (rule_code, factor, effect, descrip
    ('P008', 'general_screening',                  100, 'General screening (systems review) once the acute problem is characterised.'),
    ('P009', 'already_known',                    -1000, 'Fact already captured for this encounter — suppress.'),
    ('P010', 'irrelevant_to_context',            -1000, 'Irrelevant for this patient context — suppress.')
-ON CONFLICT (rule_code) DO UPDATE SET
-    factor = EXCLUDED.factor, effect = EXCLUDED.effect, description = EXCLUDED.description;
+ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. History-context rules (R001-R007)
@@ -91,20 +90,20 @@ ON CONFLICT (rule_code) DO UPDATE SET
 -- context_type_code + context_value bind to the formal context vocabulary
 -- (AGE / SEX / PREGNANCY / CARE_SETTING / ACUITY / ...) when they exist.
 INSERT INTO knowledge.history_context_rule
-    (rule_id, subject_code, context_label, context_type_code, context_value, action, description, sort_order) VALUES
-   ('R001', 'COUGH_PRODUCTIVITY',    'adult',        'AGE',    '18-64Y',
+    (rule_id, subject_code, context_label, context_type_code, context_value_id, action, description, sort_order) VALUES
+   ('R001', 'COUGH_PRODUCTIVITY',    'adult',        'AGE',    (SELECT id FROM knowledge.context_value WHERE context_type_code = 'AGE' AND value = '18-64Y'),
         'ask productive/non-productive cough directly',
         'Adults report productivity; a direct question is appropriate.', 1),
-   ('R002', 'COUGH_PRODUCTIVITY',    'young_child',  'AGE',    '1-4Y',
+   ('R002', 'COUGH_PRODUCTIVITY',    'young_child',  'AGE',    (SELECT id FROM knowledge.context_value WHERE context_type_code = 'AGE' AND value = '1-4Y'),
         'use observed descriptors (wet/dry cough, vomiting after coughing) instead of productivity',
         'Young children cannot report sputum; ask what is observed.', 1),
-   ('R003', 'DYSPNOEA',              'adult',        'AGE',    '18-64Y',
+   ('R003', 'DYSPNOEA',              'adult',        'AGE',    (SELECT id FROM knowledge.context_value WHERE context_type_code = 'AGE' AND value = '18-64Y'),
         'ask exertion threshold: how far can you walk at a normal pace?',
         'Exercise tolerance is the reliable dyspnoea gauge in adults (Box 12.3).', 1),
-   ('R004', 'DYSPNOEA',              'child',        'AGE',    '1-4Y',
+   ('R004', 'DYSPNOEA',              'child',        'AGE',    (SELECT id FROM knowledge.context_value WHERE context_type_code = 'AGE' AND value = '1-4Y'),
         'ask about feeding, play and tummy-breathing impact instead of stairs',
         'Children: dyspnoea presents as feeding difficulty and reduced activity.', 1),
-   ('R005', 'PRESENTING_CONCERN',    'emergency',    'ACUITY', 'emergency',
+   ('R005', 'PRESENTING_CONCERN',    'emergency',    'ACUITY', (SELECT id FROM knowledge.context_value WHERE context_type_code = 'ACUITY' AND value = 'emergency'),
         'prioritise immediate-danger questions over the full open narrative',
         'In emergencies the opening question is still open-ended but danger questions come first.', 1),
    ('R006', 'HISTORY_SOURCE',        'unconscious',  NULL,     NULL,
@@ -113,9 +112,4 @@ INSERT INTO knowledge.history_context_rule
    ('R007', 'REPRODUCTIVE_HISTORY',  'reproductive_context', NULL, NULL,
         'activate reproductive history questions for women of reproductive age',
         'Reproductive history is contextually relevant, not universally mandatory.', 1)
-ON CONFLICT (subject_code, context_label) DO UPDATE SET
-    context_type_code = EXCLUDED.context_type_code,
-    context_value     = EXCLUDED.context_value,
-    action            = EXCLUDED.action,
-    description       = EXCLUDED.description,
-    sort_order        = EXCLUDED.sort_order;
+ON CONFLICT DO NOTHING;

@@ -33,10 +33,7 @@ INSERT INTO knowledge.question_module (module_code, module_name, description, so
    ('PAEDIATRIC_RESPIRATORY','Paediatric respiratory','Child-appropriate respiratory probes (feeding difficulty as dyspnoea surrogate).', 8),
    ('ADULT_RESPIRATORY',     'Adult respiratory',    'Adult risk history: smoking (status + pack-years), dust, biomass exposure.', 9),
    ('PREGNANCY_CONTEXT',     'Pregnancy context',    'Context adaptations for pregnant patients (reserved for disease modules).', 10)
-ON CONFLICT (module_code) DO UPDATE SET
-    module_name = EXCLUDED.module_name,
-    description = EXCLUDED.description,
-    sort_order  = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. question_module_member — bank → question membership
@@ -83,8 +80,7 @@ FROM (VALUES
 ) AS x(module_code, question_code, sort_order)
 JOIN knowledge.question_module m ON m.module_code = x.module_code
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (module_code, question_id) DO UPDATE SET
-    sort_order = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. question_rule — the H3 heart (QR001-QR013)
@@ -149,20 +145,7 @@ INSERT INTO knowledge.question_rule
      'ACTIVATE', 'module', 'CHRONIC_COUGH', 800,
      'A cough beyond two weeks is no longer clearly acute; open the chronic-cough discrimination bank.',
      'HCH12-0004', 1, 'active')
-ON CONFLICT (rule_id) DO UPDATE SET
-    rule_name         = EXCLUDED.rule_name,
-    trigger_type      = EXCLUDED.trigger_type,
-    trigger_code      = EXCLUDED.trigger_code,
-    trigger_operator  = EXCLUDED.trigger_operator,
-    trigger_value     = EXCLUDED.trigger_value,
-    action            = EXCLUDED.action,
-    target_type       = EXCLUDED.target_type,
-    target_code       = EXCLUDED.target_code,
-    priority_delta    = EXCLUDED.priority_delta,
-    rationale         = EXCLUDED.rationale,
-    evidence_claim_code = EXCLUDED.evidence_claim_code,
-    version           = EXCLUDED.version,
-    status            = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. question_dependency — socratic ordering / blocking
@@ -188,10 +171,7 @@ FROM (VALUES
    ('SMOKING_PACK_YEARS', 'fact', 'SMOKING_STATUS',     'in', '["CURRENT","FORMER"]', false, 20, 'Pack-years only for current or former smokers (never for never-smokers).')
 ) AS x(question_code, prerequisite_type, prerequisite_code, operator, value, is_blocking, priority, description)
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (question_id, prerequisite_type, prerequisite_code, operator, value) DO UPDATE SET
-    is_blocking = EXCLUDED.is_blocking,
-    priority    = EXCLUDED.priority,
-    description = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. question_rationale — WHY we ask (grounded in H1 claims)
@@ -213,9 +193,7 @@ FROM (VALUES
    ('HEARTBURN_ASK',      'differential', 'Reflux (GORD) is a common chronic-cough cause; ask about it directly.', 'HCH12-0020')
 ) AS x(question_code, rationale_type, rationale, evidence_claim_code)
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (question_id, rationale_type) DO UPDATE SET
-    rationale           = EXCLUDED.rationale,
-    evidence_claim_code = EXCLUDED.evidence_claim_code;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. question_differential_weight — how answers move the differentials
@@ -247,9 +225,7 @@ FROM (VALUES
 ) AS x(question_code, condition_code, answer_value, weight, evidence_claim_code)
 JOIN knowledge.question q ON q.question_code = x.question_code
 JOIN knowledge.condition c ON c.condition_code = x.condition_code
-ON CONFLICT (question_id, condition_id, answer_value) DO UPDATE SET
-    weight              = EXCLUDED.weight,
-    evidence_claim_code = EXCLUDED.evidence_claim_code;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. documentation_requirement — the care standard for a cough presentation
@@ -270,11 +246,7 @@ FROM (VALUES
    ('RED_FLAGS', 'BLOOD_IN_SPUTUM',    '{"fact":{"code":"COUGH_PRESENT","value":"YES"}}', 20, 'HCH12-0007'),
    ('HPI',       'FEVER_PRESENT',      '{"fact":{"code":"COUGH_PRESENT","value":"YES"}}', 10, 'HCH12-0020')
 ) AS x(section_code, required_fact_code, condition, priority, evidence_claim_code)
-ON CONFLICT (section_code, required_fact_code) DO UPDATE SET
-    condition           = EXCLUDED.condition,
-    priority            = EXCLUDED.priority,
-    is_required         = true,
-    evidence_claim_code = EXCLUDED.evidence_claim_code;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. history_completion_rule — clinical completion, never 100%
@@ -290,9 +262,7 @@ INSERT INTO knowledge.history_completion_rule (rule_id, subject_type, subject_co
    ('HCR-CHEST-PAIN', 'symptom', 'SYM-CHEST-PAIN',
      '{"and":[{"fact":"CHEST_PAIN_PRESENT"},{"or":[{"fact":"CHEST_PAIN_ONSET"},{"fact":"CHEST_PAIN_PLEURITIC"},{"fact":"CHEST_PAIN_RADIATION"}]},{"or":[{"fact":"CHEST_PAIN_PLEURITIC","value":"YES"},{"fact":"CHEST_PAIN_PLEURITIC","value":"NO"}]}]}',
      'Chest pain history is complete when presence, character (pleuritic vs not) and at least one characterization dimension are established.')
-ON CONFLICT (rule_id) DO UPDATE SET
-    condition   = EXCLUDED.condition,
-    description = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. question_requirement — H3 mandatory levels (safety / high_priority)
@@ -311,8 +281,7 @@ FROM (VALUES
    ('SMOKING_STATUS',    'high_priority', '{}', 3)
 ) AS x(question_code, requirement_level, condition, priority)
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (question_id, requirement_level, condition) DO UPDATE SET
-    priority = EXCLUDED.priority;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. provenance — H1 claim → H3 object derivation edges
@@ -397,4 +366,4 @@ FROM (VALUES
    ('HCH12-0009', 'history_completion_rule', '2d8f1c8a-6828-556a-b1c2-b1fe2d6ccca1', 'HCR-CHEST-PAIN')
 ) AS x(claim_code, object_type, object_id, object_code)
 JOIN knowledge.source_claim s ON s.claim_code = x.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

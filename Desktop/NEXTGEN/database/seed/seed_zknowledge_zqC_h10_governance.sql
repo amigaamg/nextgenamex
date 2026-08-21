@@ -42,9 +42,7 @@ INSERT INTO governance.jurisdiction
 VALUES
     ('JUR-GLOBAL', 'Global core', 'Jurisdiction-neutral core knowledge of the universal AMEXAN ontology.', NULL, true,  true,  'active'),
     ('JUR-KENYA',  'Kenya',      'Kenyan jurisdictional overlay for governed knowledge (national guidance).', 'KE', false, true,  'active')
-ON CONFLICT (jurisdiction_code) DO UPDATE SET
-    name = EXCLUDED.name, description = EXCLUDED.description,
-    is_default = EXCLUDED.is_default, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. population_context — 4 rows (#15/#23)
@@ -56,9 +54,7 @@ VALUES
     ('POP-PAEDIATRIC','Paediatric', 'Paediatric population overlay.',                         ARRAY['CHILD','INFANT'], true),
     ('POP-NEONATE',   'Neonate',    'Neonatal population overlay.',                           ARRAY['NEONATE'], true),
     ('POP-PREGNANCY', 'Pregnancy',  'Pregnancy population overlay for governed knowledge.',   ARRAY['PREGNANCY'], true)
-ON CONFLICT (population_code) DO UPDATE SET
-    name = EXCLUDED.name, description = EXCLUDED.description,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. evidence_metadata — 5 levels (#15/#45)
@@ -71,9 +67,7 @@ VALUES
     ('EV-C', 'Expert consensus / textbook method',           3, 'Consensus clinical method (Hutchison cornerstone).', true),
     ('EV-D', 'Case series / expert opinion',                 4, 'Lower-strength single-centre / opinion evidence.',  true),
     ('EV-E', 'Anecdote / in progress at Level D',            5, 'Lowest strength, flagged as such.',                 true)
-ON CONFLICT (evidence_level_code) DO UPDATE SET
-    level_label = EXCLUDED.level_label, ranking = EXCLUDED.ranking,
-    description = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. knowledge_object — 25 governed-object catalogue (#14/#15/#40)
@@ -137,14 +131,7 @@ VALUES
      'JUR-KENYA', NULL, 'EV-B', 'DRAFT', 0.80, '2024-01-01', 'Dr B Njenga', NULL, NULL, false),
     ('RV2024.01.002',          'KNOWLEDGE_VERSION',     'Documentation knowledge version RV2024.01.002 (H9)',  'Governed knowledge version: H9 documentation ruleset (mirrors H8 HUTCHISON_24_2018).','HCH1-0001',
      'JUR-GLOBAL', NULL, 'EV-C', 'ACTIVE', 0.99, '2024-01-01', 'Dr A Otieno', 'Dr A Otieno', 'Dr A Otieno', true)
-ON CONFLICT (object_code) DO UPDATE SET
-    canonical_name    = EXCLUDED.canonical_name,
-    description       = EXCLUDED.description,
-    source_claim_code = EXCLUDED.source_claim_code,
-    evidence_level_code = EXCLUDED.evidence_level_code,
-    lifecycle_status  = EXCLUDED.lifecycle_status,
-    confidence        = EXCLUDED.confidence,
-    is_active         = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. knowledge_object_version — 7 version rows; never overwrite history (#8/#9)
@@ -161,8 +148,7 @@ FROM (VALUES
     ('GL-KENYA-ASTHMA-2021',1,'GO-V-GL-1',    'Draft national asthma guideline overlay (Kenya).',   'DRAFT',      'HCH12-0005')
 ) AS v(object_code, version_no, version_code, change_note, lifecycle_status, source_claim_code)
 JOIN governance.knowledge_object ko ON ko.object_code = v.object_code
-ON CONFLICT (version_code) DO UPDATE SET
-    change_note = EXCLUDED.change_note, lifecycle_status = EXCLUDED.lifecycle_status;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO governance.knowledge_object_version
     (object_id, version_no, version_code, change_note, supersedes_version_id, lifecycle_status, source_claim_code, created_by)
@@ -175,9 +161,7 @@ FROM (VALUES
 ) AS v(object_code, version_no, version_code, change_note, supersedes_code, source_claim_code)
 JOIN governance.knowledge_object ko ON ko.object_code = v.object_code
 JOIN governance.knowledge_object_version vs ON vs.version_code = v.supersedes_code
-ON CONFLICT (version_code) DO UPDATE SET
-    change_note = EXCLUDED.change_note, lifecycle_status = EXCLUDED.lifecycle_status,
-    supersedes_version_id = EXCLUDED.supersedes_version_id;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. knowledge_relationship — 10 governed knowledge-graph edges (#42/#43)
@@ -236,11 +220,11 @@ SELECT r.review_code, o.id, r.review_type, r.reviewer, r.outcome, r.notes, r.rev
 FROM (VALUES
     ('GO-REV-DA001-1','DA001',                'CLINICAL_REVIEW','Dr A Otieno','PASS',
         'Pneumonia diagnostic criteria confirmed against Box 2.3 / 12.16.', '2024-01-03'::timestamptz),
-    ('GO-REV-DEV003-1','DEV-003',             'VALIDATION',     'Dr B Njenga','PASS',
+    ('GO-REV-DEV003-1','DEV-003',             'MEDICAL_VALIDATION',     'Dr B Njenga','PASS',
         'Rule validated against auscultation semantics (bronchial breath sounds).', '2024-01-03'::timestamptz),
-    ('GO-REV-PROT-1','PROT-CAP-ADULT',        'SAFETY',         'Dr C Mwangi','PASS',
+    ('GO-REV-PROT-1','PROT-CAP-ADULT',        'SAFETY_REVIEW',         'Dr C Mwangi','PASS',
         'Protocol safety review passed; escalation/antibiotic steps need human authorization.', '2024-01-03'::timestamptz),
-    ('GO-REV-GL-1','GL-KENYA-ASTHMA-2021',    'SAFETY',         'Dr B Njenga','FAIL',
+    ('GO-REV-GL-1','GL-KENYA-ASTHMA-2021',    'SAFETY_REVIEW',         'Dr B Njenga','FAIL',
         'Guideline population scope not confirmed for all target groups.', '2024-01-03'::timestamptz)
 ) AS r(review_code, object_code, review_type, reviewer, outcome, notes, reviewed_at)
 JOIN objs o ON o.object_code = r.object_code
@@ -273,20 +257,21 @@ WITH objs AS (SELECT object_code, id FROM governance.knowledge_object),
      vers AS (SELECT version_code, id FROM governance.knowledge_object_version)
 INSERT INTO governance.knowledge_publication
     (publication_code, object_id, version_id, provenance_complete, validation_passed,
-     dependency_integrity, jurisdiction_ok, population_ok, safety_review_ok, decision,
-     decision_reason, published_by, published_at)
+     dependency_integrity, jurisdiction_ok, population_ok, safety_review_ok, clinical_review_ok, approval_ok,
+     decision, decision_reason, published_by, published_at)
 SELECT p.publication_code, o.id, v.id, p.provenance_complete, p.validation_passed,
        p.dependency_integrity, p.jurisdiction_ok, p.population_ok, p.safety_review_ok,
+       p.clinical_review_ok, p.approval_ok,
        p.decision, p.decision_reason, p.published_by, p.published_at
 FROM (VALUES
-    ('GO-PUB-DA001','DA001',    'GO-V-DA001-2', true,true,true,true,true,true,'PUBLISHED','All gates passed.',                      'Dr A Otieno','2024-01-05'::timestamptz),
-    ('GO-PUB-DEV003','DEV-003', 'GO-V-DEV003-1', true,true,true,true,true,true,'PUBLISHED','All gates passed.',                      'Dr A Otieno','2024-01-05'::timestamptz),
-    ('GO-PUB-PROT','PROT-CAP-ADULT','GO-V-PROT-2', true,true,true,true,true,true,'PUBLISHED','All gates passed.',                    'Dr A Otieno','2024-01-05'::timestamptz),
-    ('GO-PUB-GL','GL-KENYA-ASTHMA-2021','GO-V-GL-1', true,true,true,true,false,false,'BLOCKED',
-        'BLOCKED: population scope not validated and safety review FAILED — must not go live (#41).', 'Dr A Otieno','2024-01-05'::timestamptz)
+    ('GO-PUB-DA001','DA001',    'GO-V-DA001-2', true,true,true,true,true,true,true,true,'PUBLISHED','All gates passed.',                      'Dr A Otieno','2024-01-05'::timestamptz),
+    ('GO-PUB-DEV003','DEV-003', 'GO-V-DEV003-1', true,true,true,true,true,true,true,true,'PUBLISHED','All gates passed.',                      'Dr A Otieno','2024-01-05'::timestamptz),
+    ('GO-PUB-PROT','PROT-CAP-ADULT','GO-V-PROT-2', true,true,true,true,true,true,true,true,'PUBLISHED','All gates passed.',                    'Dr A Otieno','2024-01-05'::timestamptz),
+    ('GO-PUB-GL','GL-KENYA-ASTHMA-2021','GO-V-GL-1', true,true,true,true,false,false,false,false,'BLOCKED',
+        'BLOCKED: population scope not validated and safety review FAILED — must not go live (#41).', 'Dr A Otieno', NULL)
 ) AS p(publication_code, object_code, version_code, provenance_complete, validation_passed,
-       dependency_integrity, jurisdiction_ok, population_ok, safety_review_ok, decision,
-       decision_reason, published_by, published_at)
+       dependency_integrity, jurisdiction_ok, population_ok, safety_review_ok, clinical_review_ok, approval_ok,
+       decision, decision_reason, published_by, published_at)
 JOIN objs o ON o.object_code = p.object_code
 JOIN vers v ON v.version_code = p.version_code
 ON CONFLICT (publication_code) DO UPDATE SET
@@ -362,11 +347,10 @@ INSERT INTO governance.model_registry
      features, validation_metrics, deployment_date, approval_status, approved_by, is_active)
 VALUES
     ('MODEL-DOC-CPU-1.0', 'Documentation compiler CPU', 'DETERMINISTIC', 'DOCUMENTATION-CPU-1.0', 'HUTCHISON_24_2018',
-     NULL, jsonb_build_object('deterministic', true, 'accuracy', 1.0), '2024-01-01', 'ACTIVE', 'Dr A Otieno', true),
+     jsonb_build_object('role','documentation_compiler','deterministic',true), jsonb_build_object('deterministic', true, 'accuracy', 1.0), '2024-01-01', 'ACTIVE', 'Dr A Otieno', true),
     ('MODEL-LLM-01', 'AMEXAN language realisation model', 'LLM', 'AMEXAN-LLM-1', NULL,
-     jsonb_build_object('role','language_realisation_only'), NULL, NULL, 'DRAFT', NULL, false)
-ON CONFLICT (model_code) DO UPDATE SET
-    approval_status = EXCLUDED.approval_status, is_active = EXCLUDED.is_active;
+     jsonb_build_object('role','language_realisation_only'), '{}'::jsonb, NULL, 'DRAFT', NULL, false)
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 15. system_version — 1 master version fingerprint (#10/#17)
@@ -378,11 +362,7 @@ INSERT INTO governance.system_version
      differential_version_code, engine_version, released_at, is_active)
 VALUES
     ('AMEXAN-1.0.0', 'RV2024.01.001', 'RV2024.01.002', 'RV2024.01.001', 'CLINICAL-CPU-1.0', '2024-01-01', true)
-ON CONFLICT (system_version_code) DO UPDATE SET
-    reasoning_version_code     = EXCLUDED.reasoning_version_code,
-    documentation_version_code = EXCLUDED.documentation_version_code,
-    differential_version_code  = EXCLUDED.differential_version_code,
-    engine_version             = EXCLUDED.engine_version;
+  ON CONFLICT DO NOTHING;
 
 -- =============================================================================
 -- 16. PROVENANCE — one shared knowledge.provenance edge per governed object

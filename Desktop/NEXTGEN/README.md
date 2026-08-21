@@ -76,6 +76,10 @@ intelligence. Those belong to Phase 2+ (the knowledge layer).
 | `database/seed/seed_zknowledge_zq5_symptom_dimensions.sql` | H4 universal symptom grammar — 25 canonical dimensions (SD001-SD025) + 9 new history_concept rows (HC058-HC066: presence, distribution, systemic impact, red flag, previous episodes/treatment, treatment response, evolution, resolution), 25 symptom-specific option vocabularies (cough/chest-pain/abdo character, radiation), 10 red-flag rules (RFR-*, emergency/urgent, sourced to H1/H12 claims), 15 exposure concepts + 21 symptom→exposure maps, 9 hard-vs-soft diagnostic weights, 67 provenance edges |
 | `database/seed/seed_zknowledge_zq6/zq7/zq8/zq9/zqA/zqB_h5-h9_*.sql` | H5–H9 engine content seeds: context engine, H6 examination, H7 investigation, H8 differential reasoning + completion, H9 documentation compiler |
 | `database/seed/seed_zknowledge_zqC_h10_governance.sql` | H10 governance catalogue — 2 jurisdictions, 4 populations, 5 evidence levels (EV-A..EV-E), 25 governed objects (real H4-H9 codes: DA001, DEV-003, PHEN-*, MECH-*, PROT-CAP-ADULT, TPL-ADULT-MEDICAL, GL-KENYA-ASTHMA-2021 DRAFT+BLOCKED), 7 versions (v1 SUPERSEDED → v2 ACTIVE, never overwritten), 10 relationships, 8 acyclic dependencies, 4 reviews, 4 approvals, 4 publications (3 PUBLISHED through all six gates + 1 BLOCKED), 1 deprecation, 1 RESOLVED conflict, 4 safety reviews, 2 model-registry rows (deterministic ACTIVE / LLM DRAFT), 1 system_version fingerprint + 82 provenance edges (§46 — one `governance_*` edge per governed object) |
+| `database/seed/seed_zknowledge_zqd_investigation_result.sql` | investigation result mapping (§3.16 closed loop — `RLL_CONSOLIDATION` → `RLL_DULLNESS` + `RLL_BRONCHIAL_BREATH_SOUNDS` on INV-CXR) + facility-scoped `OVR-CXR-FACILITY-DEFER` override (§3.19). Migration 020's equivalents were silent no-ops (INV-CXR is created by the investigation seeds that run after migrations), so this seed carries the real data and is idempotent |
+| `database/seed/seed_zknowledge_zqD_respiratory_sources.sql` | **R0 respiratory sources (generated)** — Kumar & Clark CM 10e `KUMAR_CLARK_CM / KUMAR_CLARK_10_2017 / KC-C28` printed 927–999 (73 chunks) + Illustrated Baby Nelson `NELSON_ILLUSTRATED / NELSON_ILLUSTRATED_2017 / BN-C01` printed 156–213 (58 chunks), one chunk per printed page |
+| `database/seed/seed_zknowledge_zqE_respiratory_claims.sql` | **R1 respiratory claims (generated)** — 19 curated claims `RC-000001..RC-000019` (KCR-0001..KCR-0012 ← K&C p927/p964–965; BNR-0001..BNR-0007 ← Baby Nelson p166–171) grounded to chunks, status VERIFIED |
+| `database/seed/seed_zknowledge_zqF_paediatric_cough_pneumonia.sql` | **R2 paediatric population** — 4 boolean danger facts (FAST_BREATHING, GRUNTING, NASAL_FLARING, POOR_FEEDING), 7 paediatric `question_variant` wordings, 5 `context_fact_mapping`, 11 `fact_provenance` (CAREGIVER_REPORTED/PARENT), `PAEDIATRIC_DANGER_SIGNS` module + 5 child-only questions (safety-ranked, AGE-excluded for adults), QR014 (5-17Y boost), 4 red flags (RFR-PAED-*), PHEN-PAEDIATRIC-PNEUMONIA-ALARM (danger-sign gated → PNEUMONIA), 48 provenance edges |
 
 ## Knowledge compiler
 
@@ -99,6 +103,19 @@ Regenerate:
 python knowledge-compiler/build_h1_source.py <toc.txt> <full.txt> database/seed/seed_zknowledge_zpe_hutchison_source.sql
 python knowledge-compiler/build_h2_claims.py <toc.txt> <full.txt> database/seed/seed_zknowledge_zpf_hutchison_claims.sql
 ```
+
+**Respiratory vertical slice (R0–R2, universal CPU across adult + child):**
+
+```powershell
+python knowledge-compiler/build_respiratory_sources.py <kumar.pdf> <nelson.pdf> database/seed/seed_zknowledge_zqD_respiratory_sources.sql
+python knowledge-compiler/build_r1_claims.py        database/seed/seed_zknowledge_zqE_respiratory_claims.sql
+python knowledge-compiler/build_r2_paediatric.py    database/seed/seed_zknowledge_zqF_paediatric_cough_pneumonia.sql
+```
+
+Apply the generated seeds individually (the seed runner is not idempotent):
+`zqD` (sources) → `zqE` (claims) → `zqF` (paediatric population). The
+paediatric overlay is proven end-to-end by `clinical-cpu/test/verify-live-paediatric.ts`
+(`npm run verify:paediatric` in `clinical-cpu/`).
 
 ## Running
 

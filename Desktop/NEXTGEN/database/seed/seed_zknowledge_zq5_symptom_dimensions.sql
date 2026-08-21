@@ -36,10 +36,7 @@ INSERT INTO knowledge.history_concept
    ('HC064', 'RESPONSE_TO_TREATMENT', 'Response to treatment', 'background', true, 'Whether previous treatment helped (response / no response / worsened).'),
    ('HC065', 'EVOLUTION',             'Evolution',             'temporal',  true, 'How the symptom has changed character over time (changed quality, spread).'),
    ('HC066', 'RESOLUTION',            'Resolution',            'temporal',  true, 'Whether the symptom disappeared and/or recurred (resolution/recurrence).')
-ON CONFLICT (history_concept_id) DO UPDATE SET
-    concept_name = EXCLUDED.concept_name,
-    concept_type = EXCLUDED.concept_type,
-    description  = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. symptom_dimension — canonical 25-dimension registry (H4 spec §24)
@@ -76,14 +73,7 @@ INSERT INTO knowledge.symptom_dimension
    ('SD023', 'PATIENT_PERSPECTIVE',   'Patient perspective',   true,  'always',      'HC023', 23,  'ideas/concerns/expectations/goals (H2 patient_perspective).'),
    ('SD024', 'EVOLUTION',             'Evolution',             true,  'always',      'HC065', 24,  'changed character / spread over time.'),
    ('SD025', 'RESOLUTION',            'Resolution',            false, 'conditional', 'HC066', 25,  'disappeared and/or recurred.')
-ON CONFLICT (dimension_id) DO UPDATE SET
-    dimension_code     = EXCLUDED.dimension_code,
-    dimension_name     = EXCLUDED.dimension_name,
-    universal          = EXCLUDED.universal,
-    applicability      = EXCLUDED.applicability,
-    history_concept_id = EXCLUDED.history_concept_id,
-    sort_order         = EXCLUDED.sort_order,
-    description        = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. symptom_dimension_option — symptom-specific vocabularies (H4 spec §26)
@@ -111,21 +101,19 @@ INSERT INTO knowledge.symptom_dimension_option
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD009', 'COLICY',     'Colicky',     8),
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD009', 'TEARING',    'Tearing',     9),
    -- ABDOMINAL PAIN × CHARACTER
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'COLICY',     'Colicky',     1),
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'BURNING',    'Burning',     2),
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'SHARP',      'Sharp',       3),
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'DULL',       'Dull',        4),
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'ACHING',     'Aching',      5),
-   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDO-PAIN'),  'SD009', 'CRAMPING',   'Cramping',    6),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'COLICY',     'Colicky',     1),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'BURNING',    'Burning',     2),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'SHARP',      'Sharp',       3),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'DULL',       'Dull',        4),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'ACHING',     'Aching',      5),
+   ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-ABDOMINAL-PAIN'),  'SD009', 'CRAMPING',   'Cramping',    6),
    -- CHEST PAIN × RADIATION
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD008', 'LEFT_ARM',   'Left arm',    1),
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD008', 'JAW',        'Jaw',         2),
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD008', 'NECK',       'Neck',        3),
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD008', 'BACK',       'Back',        4),
    ((SELECT id FROM knowledge.symptom WHERE symptom_code = 'SYM-CHEST-PAIN'), 'SD008', 'EPIGASTRIUM','Epigastrium', 5)
-ON CONFLICT (symptom_id, dimension_id, option_code) DO UPDATE SET
-    option_name = EXCLUDED.option_name,
-    sort_order  = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. red_flag_rule — FACT + CONTEXT + CLINICAL_SIGNIFICANCE (H4 spec §19)
@@ -182,15 +170,7 @@ INSERT INTO knowledge.red_flag_rule
     'CYANOSIS', NULL,
     'Central cyanosis implies significant hypoxaemia — urgent assessment required.',
     'emergency', 100, 'HCH2-0002')
-ON CONFLICT (rule_id) DO UPDATE SET
-    rule_code             = EXCLUDED.rule_code,
-    symptom_id            = EXCLUDED.symptom_id,
-    fact_definition_code  = EXCLUDED.fact_definition_code,
-    context_condition     = EXCLUDED.context_condition,
-    clinical_significance = EXCLUDED.clinical_significance,
-    urgency               = EXCLUDED.urgency,
-    priority              = EXCLUDED.priority,
-    evidence_claim_code   = EXCLUDED.evidence_claim_code;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. exposure_concept — 15 reusable exposure classes (H4 spec §20)
@@ -212,10 +192,7 @@ INSERT INTO knowledge.exposure_concept
    ('DUST',         'occupational','Dust',          'Occupational dust (construction, mining, grain).'),
    ('CHEMICAL',     'occupational','Chemical',      'Occupational chemical / fume exposure.'),
    ('DRUG',         'behavioural','Drug',           'Recreational / illicit drug exposure (incl. inhaled).')
-ON CONFLICT (exposure_code) DO UPDATE SET
-    exposure_class = EXCLUDED.exposure_class,
-    label          = EXCLUDED.label,
-    description    = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. symptom_exposure — which exposure concepts each symptom explores
@@ -246,7 +223,7 @@ FROM (VALUES
    ('SYM-WEIGHT-LOSS',  'TRAVEL',   70)
 ) AS x(symptom_code, exposure_code, priority)
 JOIN knowledge.symptom s ON s.symptom_code = x.symptom_code
-ON CONFLICT (symptom_id, exposure_code) DO UPDATE SET priority = EXCLUDED.priority;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. symptom_relationship.diagnostic_weight — hard vs soft symptoms (H4 §16)
@@ -316,7 +293,7 @@ FROM (VALUES
    ('HCH12-0005', 'symptom_dimension_option', 'd01304fc-00e1-5d59-abd0-826aa0559e77', 'SYM-COUGH:CHARACTER'),
    ('HCH12-0009', 'symptom_dimension_option', 'e3c3359f-8073-5629-847e-9b914a7a6478', 'SYM-CHEST-PAIN:CHARACTER'),
    ('HCH12-0009', 'symptom_dimension_option', '25c5d416-e08b-5947-89d4-4b3bf5afd055', 'SYM-CHEST-PAIN:RADIATION'),
-   ('HCH12-0010', 'symptom_dimension_option', '91c91eb8-07d7-5a3e-a8dc-66a98ce78b20', 'SYM-ABDO-PAIN:CHARACTER'),
+   ('HCH12-0010', 'symptom_dimension_option', '91c91eb8-07d7-5a3e-a8dc-66a98ce78b20', 'SYM-ABDOMINAL-PAIN:CHARACTER'),
    -- red-flag rules
    ('HCH12-0007', 'red_flag_rule', '83d445d6-449b-5d32-aebc-bdc3e29886ec', 'RFR-HAEMOPTYSIS'),
    ('HCH12-0003', 'red_flag_rule', '8b7c033f-6764-5a3e-b45a-6552da59e662', 'RFR-ORTHOPNOEA'),
@@ -351,4 +328,4 @@ FROM (VALUES
    ('HCH12-0013', 'symptom_exposure', '48b4a113-45e7-5039-a41f-7174de09fbc3', 'SYM-FEVER:ANIMAL')
 ) AS x(claim_code, object_type, object_id, object_code)
 JOIN knowledge.source_claim s ON s.claim_code = x.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

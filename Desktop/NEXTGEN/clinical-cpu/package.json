@@ -13,6 +13,8 @@
     "benchmark": "tsx test/benchmark.ts",
     "verify:governance": "tsx test/verify-governance-runtime.ts",
     "verify:replay": "tsx test/verify-replay.ts",
+    "verify:paediatric": "tsx test/verify-live-paediatric.ts",
+    "verify:universal": "tsx test/verify-universal-formats.ts",
     "server": "tsx server/server.ts"
   },
   "dependencies": {

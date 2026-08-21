@@ -50,14 +50,7 @@ INSERT INTO knowledge.clinical_context (context_id, code, category, label, descr
     ('C016', 'UNCONSCIOUS',         'COMMUNICATION', 'Unconscious',         'Cannot provide history; collateral from companion + record only (H5 §12/32).',                                   true,  true,  1.0),
     ('C017', 'PRESCHOOL',           'AGE',           'Preschool',           '3 to <5 years (developmental_stage PRESCHOOL). Play-based reporting; cannot self-report exertion reliably.',        true,  true,  1.0),
     ('C018', 'SCHOOL_AGE',          'AGE',           'School age',          '5 to <12 years (developmental_stage SCHOOL_AGE). Can report with scaffolding; exercise/play relevant.',                true,  true,  1.0)
-ON CONFLICT (context_id) DO UPDATE SET
-    code                = EXCLUDED.code,
-    category            = EXCLUDED.category,
-    label               = EXCLUDED.label,
-    description         = EXCLUDED.description,
-    applies_to_questions= EXCLUDED.applies_to_questions,
-    applies_to_exam     = EXCLUDED.applies_to_exam,
-    priority_weight     = EXCLUDED.priority_weight;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. developmental_stage — the 9 universal age bands (H5 §5)
@@ -74,12 +67,7 @@ INSERT INTO knowledge.developmental_stage (stage_code, label, min_age_days, max_
     ('ADOLESCENT',    'Adolescent',     4381, 6570,   7, '12 to <18 years.'),
     ('ADULT',         'Adult',          6571, 23396,  8, '18 to <65 years.'),
     ('OLDER_ADULT',   'Older adult',    23397,NULL,   9, '>=65 years.')
-ON CONFLICT (stage_code) DO UPDATE SET
-    label        = EXCLUDED.label,
-    min_age_days = EXCLUDED.min_age_days,
-    max_age_days = EXCLUDED.max_age_days,
-    sort_order   = EXCLUDED.sort_order,
-    description  = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. historian_type — who provides the history (H5 §8)
@@ -92,11 +80,7 @@ INSERT INTO knowledge.historian_type (type_code, label, is_patient, description,
     ('RELATIVE',     'Relative',      false, 'Other blood/affinity relative.',                                      5),
     ('HEALTH_WORKER','Health worker', false, 'Nurse, doctor, pharmacist or allied professional with record access.',6),
     ('OTHER',        'Other',         false, 'Another person or source (e.g. court-appointed guardian).',           7)
-ON CONFLICT (type_code) DO UPDATE SET
-    label       = EXCLUDED.label,
-    is_patient  = EXCLUDED.is_patient,
-    description = EXCLUDED.description,
-    sort_order  = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. historian_reliability — how much to trust the source (H5 §8)
@@ -107,10 +91,7 @@ INSERT INTO knowledge.historian_reliability (reliability_code, label, sort_order
     ('POOR',      'Poor',      3, 'Significant limitation (severe distress, cognitive impairment, critical illness).'),
     ('UNRELIABLE','Unreliable',4, 'Unclear motive/context; information not to be trusted as fact.'),
     ('UNKNOWN',   'Unknown',   5, 'Source reliability not yet assessed.')
-ON CONFLICT (reliability_code) DO UPDATE SET
-    label        = EXCLUDED.label,
-    sort_order   = EXCLUDED.sort_order,
-    description  = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. communication_context — interface-level communication constraints (H5 §13)
@@ -122,11 +103,7 @@ INSERT INTO knowledge.communication_context (factor_code, context_type_code, lab
     ('VISUAL_IMPAIRED',     'CARE_SETTING', 'Visual impaired',     'Vision poor; auditory/tactile communication needed.',                         4),
     ('SPEECH_IMPAIRED',     'CARE_SETTING', 'Speech impaired',     'Cannot speak clearly; written/alternative input needed.',                     5),
     ('LOW_LITERACY',        'CARE_SETTING', 'Low literacy',        'Simple language, visual aids, demonstrated scales needed.',                   6)
-ON CONFLICT (factor_code) DO UPDATE SET
-    context_type_code = EXCLUDED.context_type_code,
-    label             = EXCLUDED.label,
-    description       = EXCLUDED.description,
-    sort_order        = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. encounter_mode — how care is delivered (H5 §29)
@@ -137,13 +114,7 @@ INSERT INTO knowledge.encounter_mode (mode_code, label, supports_auscultation, s
     ('AUDIO',              'Audio only',         false, false, false, 'Audio questions only; no visual inspection.',                            3),
     ('CHAT',               'Chat/text',          false, false, false, 'Text-based questions; useful with hearing impairment + interpreter.',     4),
     ('REMOTE_MONITORING',  'Remote monitoring',  false, false, true,  'Vital signs/device readings streamed; limited interaction.',              5)
-ON CONFLICT (mode_code) DO UPDATE SET
-    label                  = EXCLUDED.label,
-    supports_auscultation  = EXCLUDED.supports_auscultation,
-    supports_inspection    = EXCLUDED.supports_inspection,
-    supports_device_readings = EXCLUDED.supports_device_readings,
-    description            = EXCLUDED.description,
-    sort_order             = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. response_mode — the CAPTURE STRATEGY layer (H5 §7 Layer B)
@@ -154,11 +125,7 @@ INSERT INTO knowledge.response_mode (mode_code, label, is_patient_facing, descri
     ('OBSERVATION',       'Clinical observation','false', 'A clinician observes a sign/behaviour (unconscious, infant).', 3),
     ('NUMERIC_SCALE',     'Numeric scale',     true,  'A 0-10 (or other) numeric rating (H5 §40).',                  4),
     ('STRUCTURED_CHOICE', 'Structured choice', true,  'Closed-list answer from controlled vocabulary.',             5)
-ON CONFLICT (mode_code) DO UPDATE SET
-    label            = EXCLUDED.label,
-    is_patient_facing= EXCLUDED.is_patient_facing,
-    description      = EXCLUDED.description,
-    sort_order       = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. response_variant — age-appropriate answer surfaces (H5 §40/§45)
@@ -167,41 +134,30 @@ INSERT INTO knowledge.response_variant (variant_id, response_type, variant_name,
     ('RV001', 'numeric',  'NUMERIC_SCALE',        ARRAY['ADULT','OLDER_ADULT','ADOLESCENT'],            true,  '0-10 numeric severity slider for ages that can self-report numbers.'),
     ('RV002', 'scale',    'FACES_SCALE',          ARRAY['CHILD','TODDLER','PRESCHOOL','SCHOOL_AGE'],      true,  'Age-appropriate faces (emoji) scale for children who cannot number-rate.'),
     ('RV003', 'checklist','OBSERVABLE_CHECKLIST', ARRAY['INFANT','NEONATE','UNCONSCIOUS','CAREGIVER_HISTORY'], true, 'Caregiver/clinician observable checklist (no self-report possible).')
-ON CONFLICT (variant_id) DO UPDATE SET
-    response_type           = EXCLUDED.response_type,
-    variant_name            = EXCLUDED.variant_name,
-    applicable_context_codes= EXCLUDED.applicable_context_codes,
-    is_active               = EXCLUDED.is_active,
-    description             = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. functional_domain — developmental + adult functional domains (H5 §24)
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.functional_domain (domain_code, code, label, category, age_relevance, description, sort_order) VALUES
     ('FD001', 'FEEDING',           'Feeding',           'developmental', 'NEONATE..OLDER_INFANT', 'Ability to feed; breastfeeding, choking, intake. (H5 §24)',  1),
-    ('FD002', 'BREASTFEEDING',     'Breastfeeding',     'developmental', 'NEONATE..OLDER_INFANT', 'Maternal feeding relationship.',                             2),
-    ('FD003', 'SPEECH',            'Speech',            'developmental', 'TODDLER..PRESCHOOL',    'Talking, words, intelligibility.',                             3),
-    ('FD004', 'MOBILITY',          'Mobility',          'developmental', 'TODDLER..',             'Walking, running, gross movement.',                           4),
-    ('FD005', 'PLAY',              'Play',              'developmental', 'TODDLER..SCHOOL_AGE',   'Activity level, play participation.',                         5),
-    ('FD006', 'SCHOOL',            'School',            'developmental', 'SCHOOL_AGE..ADOLESCENT','School attendance, concentration, performance.',             6),
-    ('FD007', 'INTERACTION',       'Interaction',       'developmental', 'TODDLER..SCHOOL_AGE',   'Social engagement with peers/caregivers.',                     7),
-    ('FD008', 'TOILETTING',        'Toileting',         'developmental', 'TODDLER..PRESCHOOL',    'Bladder/bowel control.',                                    8),
-    ('FD009', 'SELF_CARE',         'Self-care',         'developmental', 'TODDLER..',             'Dressing, eating, personal care (ADL basics).',              9),
-    ('FD010', 'OCCUPATION',        'Occupation',        'adult',         'ADULT',                 'Work, job function, productivity.',                          10),
-    ('FD011', 'EDUCATION',         'Education',         'adult',         'ADULT..OLDER_ADULT',    'Study, learning, cognitive work capacity.',                   11),
-    ('FD012', 'SLEEP',             'Sleep',             'adult',         'ADULT..OLDER_ADULT',    'Sleep quality/quantity disturbance.',                         12),
-    ('FD013', 'SOCIAL',            'Social',            'adult',         'ADULT..OLDER_ADULT',    'Social life, relationships, isolation.',                      13),
-    ('FD014', 'EXERCISE',          'Exercise / activity','adult',        'ADULT..OLDER_ADULT',    'Physical activity tolerance (H5 §22-23 translation layer).',  14),
-    ('FD015', 'WORK_PRODUCTIVITY', 'Work productivity', 'adult',         'ADULT',                 'Presenteeism/absenteeism from illness.',                      15),
-    ('FD016', 'ADL',               'ADL',               'geriatric',       'OLDER_ADULT',           'Activities of daily living (geriatric baseline, H5 §26).',      16),
-    ('FD017', 'IADL',              'IADL',              'geriatric',       'OLDER_ADULT',           'Instrumental ADLs (shopping, meds, finance — geriatric).',     17)
-ON CONFLICT (domain_code) DO UPDATE SET
-    code          = EXCLUDED.code,
-    label         = EXCLUDED.label,
-    category      = EXCLUDED.category,
-    age_relevance = EXCLUDED.age_relevance,
-    description   = EXCLUDED.description,
-    sort_order    = EXCLUDED.sort_order;
+    ('FD021', 'BREASTFEEDING',     'Breastfeeding',     'developmental', 'NEONATE..OLDER_INFANT', 'Maternal feeding relationship.',                             2),
+    ('FD022', 'SPEECH',            'Speech',            'developmental', 'TODDLER..PRESCHOOL',    'Talking, words, intelligibility.',                             3),
+    ('FD023', 'MOBILITY',          'Mobility',          'developmental', 'TODDLER..',             'Walking, running, gross movement.',                           4),
+    ('FD024', 'PLAY',              'Play',              'developmental', 'TODDLER..SCHOOL_AGE',   'Activity level, play participation.',                         5),
+    ('FD025', 'SCHOOL',            'School',            'developmental', 'SCHOOL_AGE..ADOLESCENT','School attendance, concentration, performance.',             6),
+    ('FD026', 'INTERACTION',       'Interaction',       'developmental', 'TODDLER..SCHOOL_AGE',   'Social engagement with peers/caregivers.',                     7),
+    ('FD027', 'TOILETTING',        'Toileting',         'developmental', 'TODDLER..PRESCHOOL',    'Bladder/bowel control.',                                    8),
+    ('FD028', 'SELF_CARE',         'Self-care',         'developmental', 'TODDLER..',             'Dressing, eating, personal care (ADL basics).',              9),
+    ('FD029', 'OCCUPATION',        'Occupation',        'adult',         'ADULT',                 'Work, job function, productivity.',                          10),
+    ('FD030', 'EDUCATION',         'Education',         'adult',         'ADULT..OLDER_ADULT',    'Study, learning, cognitive work capacity.',                   11),
+    ('FD031', 'SLEEP',             'Sleep',             'adult',         'ADULT..OLDER_ADULT',    'Sleep quality/quantity disturbance.',                         12),
+    ('FD032', 'SOCIAL',            'Social',            'adult',         'ADULT..OLDER_ADULT',    'Social life, relationships, isolation.',                      13),
+    ('FD033', 'EXERCISE',          'Exercise / activity','adult',        'ADULT..OLDER_ADULT',    'Physical activity tolerance (H5 §22-23 translation layer).',  14),
+    ('FD034', 'WORK_PRODUCTIVITY', 'Work productivity', 'adult',         'ADULT',                 'Presenteeism/absenteeism from illness.',                      15),
+    ('FD035', 'ADL',               'ADL',               'geriatric',       'OLDER_ADULT',           'Activities of daily living (geriatric baseline, H5 §26).',      16),
+    ('FD036', 'IADL',              'IADL',              'geriatric',       'OLDER_ADULT',           'Instrumental ADLs (shopping, meds, finance — geriatric).',     17)
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. fact_capture_method — provenance classes (H5 §10)
@@ -214,11 +170,7 @@ INSERT INTO knowledge.fact_capture_method (method_code, label, is_patient_source
     ('LAB_MEASURED',        'Lab measured',        false, 'Laboratory assay value (blood, urine).',                       5),
     ('IMAGING_DERIVED',     'Imaging derived',     false, 'Derived from an imaging study.',                               6),
     ('SYSTEM_DERIVED',     'System derived',       false, 'Computed/derived by another system (e.g. severity score).',  7)
-ON CONFLICT (method_code) DO UPDATE SET
-    label            = EXCLUDED.label,
-    is_patient_source= EXCLUDED.is_patient_source,
-    description      = EXCLUDED.description,
-    sort_order       = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 11. fact_provenance — which capture methods are lawful per fact (H5 §10)
@@ -238,8 +190,7 @@ INSERT INTO knowledge.fact_provenance (fact_definition_code, capture_method_code
     ('EXERCISE_INTOLERANCE','PATIENT_REPORTED', 'PATIENT',      'GOOD', true),
     ('SYMPTOM_SEVERITY_SCORE','PATIENT_REPORTED','PATIENT',     'GOOD', true),
     ('SYMPTOM_SEVERITY_SCORE','CAREGIVER_REPORTED','CAREGIVER', 'FAIR', true)
-ON CONFLICT (fact_definition_code, capture_method_code, historian_type_code, min_reliability_code) DO UPDATE SET
-    is_valid = EXCLUDED.is_valid;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 12. context_adaptation_rule — the H5 rule engine (spec §32)
@@ -276,15 +227,7 @@ INSERT INTO knowledge.context_adaptation_rule
     ('CR022','ADOLESCENT',          'question',        'SMOKING_PACK_YEARS',  'ACTIVATE', 10, NULL,        'Adolescent smoking screening is age-appropriate.',                            'HCH12-0011'),
     ('CR023','ADOLESCENT',          'functional_domain', 'SOCIAL',            'ACTIVATE',  5, NULL,        'Adolescent social/sexual-health context activates.',                          'HCH1-0018'),
     ('CR024','OLDER_ADULT',         'question',        'FEEDING_DIFFICULTY',  'UNAVAILABLE',0,NULL,'Feeding difficulty is not the right functional frame for an older adult.', 'HCH1-0006')
-ON CONFLICT (rule_code) DO UPDATE SET
-    context_code       = EXCLUDED.context_code,
-    target_type        = EXCLUDED.target_type,
-    target_code        = EXCLUDED.target_code,
-    modification       = EXCLUDED.modification,
-    priority_delta     = EXCLUDED.priority_delta,
-    required_historian = EXCLUDED.required_historian,
-    rationale          = EXCLUDED.rationale,
-    evidence_claim_code= EXCLUDED.evidence_claim_code;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 13. context_fact_mapping — raw expression → canonical fact (H5 §23)
@@ -303,14 +246,7 @@ INSERT INTO knowledge.context_fact_mapping
     ('CFM008','CHILD','wakes up breathless','fact_definition','EXERCISE_INTOLERANCE','reduced','moderate','Child exertional limitation (nocturnal frame).'),
     ('CFM009','ADULT','needs to stop for breath when undressing','fact_definition','EXERCISE_INTOLERANCE','reduced','moderate','Adult exertional breathlessness (canonical).'),
     ('CFM010','OLDER_ADULT','walks slower than peers','fact_definition','EXERCISE_INTOLERANCE','reduced','weak','Functional decline vs baseline in older adult.')
-ON CONFLICT (mapping_code) DO UPDATE SET
-    context_code      = EXCLUDED.context_code,
-    raw_expression    = EXCLUDED.raw_expression,
-    target_type       = EXCLUDED.target_type,
-    target_code       = EXCLUDED.target_code,
-    canonical_value   = EXCLUDED.canonical_value,
-    strength          = EXCLUDED.strength,
-    description       = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 14. Question wording variants per context (H5 §6/§33/§42)
@@ -346,20 +282,16 @@ FROM (VALUES
     ('OPEN_PRESENTING_CONCERN', 'caregiver', 'en', 'Tell me what has been going on with your child today.', true, 'CAREGIVER_REPORT','CAREGIVER')
 ) AS v(question_code, context, language_code, wording, is_active, response_mode, historian_type)
 JOIN knowledge.question q ON q.question_code = v.question_code
-ON CONFLICT (question_id, context, language_code) DO UPDATE SET
-    wording       = EXCLUDED.wording,
-    is_active     = EXCLUDED.is_active,
-    response_mode = EXCLUDED.response_mode,
-    historian_type= EXCLUDED.historian_type;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 15. Tag functional questions with their functional domain (H5 §24/42)
 -- ---------------------------------------------------------------------------
-UPDATE knowledge.question SET functional_domain_code = 'EXERCISE'
+UPDATE knowledge.question SET functional_domain_code = 'EXERCISE_TOLERANCE'
 WHERE question_code IN ('EXERCISE_INTOLERANCE','DYSPNOEA_SEVERITY') AND functional_domain_code IS NULL;
 UPDATE knowledge.question SET functional_domain_code = 'FEEDING'
 WHERE question_code = 'FEEDING_DIFFICULTY' AND functional_domain_code IS NULL;
-UPDATE knowledge.question SET functional_domain_code = 'EXERCISE'
+UPDATE knowledge.question SET functional_domain_code = 'EXERCISE_TOLERANCE'
 WHERE question_code = 'SYMPTOM_SEVERITY' AND functional_domain_code IS NULL;
 
 -- ---------------------------------------------------------------------------
@@ -437,22 +369,22 @@ FROM (VALUES
     ('HCH2-0002', 'response_variant', 'f916097b-80a3-561d-9e3e-42c6b5e703f9'::uuid, 'OBSERVABLE_CHECKLIST'),
     -- functional_domain
     ('HCH1-0006', 'functional_domain', '9639e01d-9c83-50b0-a533-252ff7db998b'::uuid, 'FD001'),
-    ('HCH1-0006', 'functional_domain', '0e288bc4-a0f8-5281-9c8f-125261f28f7b'::uuid, 'FD002'),
-    ('HCH1-0006', 'functional_domain', '3989fc93-8b17-5e49-97a3-806f2bb08564'::uuid, 'FD003'),
-    ('HCH1-0006', 'functional_domain', 'd3bf8c2f-8411-5649-a35f-6ed39607a04c'::uuid, 'FD004'),
-    ('HCH1-0006', 'functional_domain', '79f2f375-4087-5313-a6e4-1a9d73a3c468'::uuid, 'FD005'),
-    ('HCH1-0006', 'functional_domain', '1015bbda-4bb1-5981-bbf8-9f10bc641f18'::uuid, 'FD006'),
-    ('HCH1-0006', 'functional_domain', '227123e8-8766-5f12-bec7-a5f8fc1e7395'::uuid, 'FD007'),
-    ('HCH1-0006', 'functional_domain', '5500bab1-5ac1-5e09-a6ba-b70533938bf5'::uuid, 'FD008'),
-    ('HCH1-0006', 'functional_domain', 'c4f96351-8223-5980-b22a-e8c3f88c13db'::uuid, 'FD009'),
-    ('HCH1-0018', 'functional_domain', '0feed1f5-99b0-5b36-b8c3-fcf9dcca4d92'::uuid, 'FD010'),
-    ('HCH1-0018', 'functional_domain', '3680e02f-200f-5d40-b10e-daa847d85664'::uuid, 'FD011'),
-    ('HCH1-0006', 'functional_domain', '6c6a29cb-619c-5ad8-ba2d-07a17f641ac0'::uuid, 'FD012'),
-    ('HCH1-0006', 'functional_domain', 'd8f48a49-8002-5264-affb-a3dcfa8d74c9'::uuid, 'FD013'),
-    ('HCH12-0003', 'functional_domain', '33a50a99-6aa1-53b8-ba0d-12f1d64b9afd'::uuid, 'FD014'),
-    ('HCH1-0018', 'functional_domain', '26888454-ac89-54c3-955a-8314237c6c9b'::uuid, 'FD015'),
-    ('HCH1-0018', 'functional_domain', '928f0028-d362-5cdf-b9ad-0b583a289b5b'::uuid, 'FD016'),
-    ('HCH1-0018', 'functional_domain', '7f8d2487-c516-574b-a293-2678060abf2a'::uuid, 'FD017'),
+    ('HCH1-0006', 'functional_domain', '0e288bc4-a0f8-5281-9c8f-125261f28f7b'::uuid, 'FD021'),
+    ('HCH1-0006', 'functional_domain', '3989fc93-8b17-5e49-97a3-806f2bb08564'::uuid, 'FD022'),
+    ('HCH1-0006', 'functional_domain', 'd3bf8c2f-8411-5649-a35f-6ed39607a04c'::uuid, 'FD023'),
+    ('HCH1-0006', 'functional_domain', '79f2f375-4087-5313-a6e4-1a9d73a3c468'::uuid, 'FD024'),
+    ('HCH1-0006', 'functional_domain', '1015bbda-4bb1-5981-bbf8-9f10bc641f18'::uuid, 'FD025'),
+    ('HCH1-0006', 'functional_domain', '227123e8-8766-5f12-bec7-a5f8fc1e7395'::uuid, 'FD026'),
+    ('HCH1-0006', 'functional_domain', '5500bab1-5ac1-5e09-a6ba-b70533938bf5'::uuid, 'FD027'),
+    ('HCH1-0006', 'functional_domain', 'c4f96351-8223-5980-b22a-e8c3f88c13db'::uuid, 'FD028'),
+    ('HCH1-0018', 'functional_domain', '0feed1f5-99b0-5b36-b8c3-fcf9dcca4d92'::uuid, 'FD029'),
+    ('HCH1-0018', 'functional_domain', '3680e02f-200f-5d40-b10e-daa847d85664'::uuid, 'FD030'),
+    ('HCH1-0006', 'functional_domain', '6c6a29cb-619c-5ad8-ba2d-07a17f641ac0'::uuid, 'FD031'),
+    ('HCH1-0006', 'functional_domain', 'd8f48a49-8002-5264-affb-a3dcfa8d74c9'::uuid, 'FD032'),
+    ('HCH12-0003', 'functional_domain', '33a50a99-6aa1-53b8-ba0d-12f1d64b9afd'::uuid, 'FD033'),
+    ('HCH1-0018', 'functional_domain', '26888454-ac89-54c3-955a-8314237c6c9b'::uuid, 'FD034'),
+    ('HCH1-0018', 'functional_domain', '928f0028-d362-5cdf-b9ad-0b583a289b5b'::uuid, 'FD035'),
+    ('HCH1-0018', 'functional_domain', '7f8d2487-c516-574b-a293-2678060abf2a'::uuid, 'FD036'),
     -- fact_capture_method
     ('HCH1-0006', 'fact_capture_method', 'fe7d3596-7bc3-5aa1-ad56-654d1bbf60f7'::uuid, 'PATIENT_REPORTED'),
     ('HCH1-0006', 'fact_capture_method', '43cfb8d2-337e-5c9e-9492-0998cc43907a'::uuid, 'CAREGIVER_REPORTED'),
@@ -499,4 +431,4 @@ FROM (VALUES
     ('HCH12-0003', 'context_fact_mapping', 'd54e87f1-fc71-51b5-882f-83b895f24673'::uuid, 'CFM010')
 ) AS x(claim_code, object_type, object_id, object_code)
 JOIN knowledge.source_claim s ON s.claim_code = x.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

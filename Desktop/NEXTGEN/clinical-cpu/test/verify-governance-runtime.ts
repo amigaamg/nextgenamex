@@ -27,13 +27,13 @@ async function main() {
     const patientId = randomUUID();
 
     await client.query(
-      `INSERT INTO identity.person (id, status_code, gender, birth_date, nationality, occupation)
-       VALUES ($1, 'active', 'male', DATE '1990-02-14', 'Kenya', 'Farmer')`,
+      `INSERT INTO identity.person (id, status_code, sex_at_birth, birth_date, nationality_code, occupation)
+       VALUES ($1, 'active', 'male', DATE '1990-02-14', 'KE', 'Farmer')`,
       [personId],
     );
     await client.query(
-      `INSERT INTO patient.patient (id, person_id, mrn, status_code)
-       VALUES ($1, $2, 'MRN-GOV-RUNTIME', 'active')`,
+      `INSERT INTO patient.patient (id, person_id, status_code)
+       VALUES ($1, $2, 'active')`,
       [patientId, personId],
     );
     const { rows: [enc] } = await client.query(

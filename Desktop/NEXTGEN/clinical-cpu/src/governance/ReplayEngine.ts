@@ -1,23 +1,24 @@
 // =============================================================================
 // AMEXAN Clinical CPU — ReplayEngine (H10 §30/§31)
-// The replay engine. Spec §30: "Reconstruct exactly what AMEXAN knew and what
-// it did." Given a historical reasoning run, this engine rebuilds the recorded
-// clinical snapshot (patient facts + knowledge versions + input fingerprint),
-// re-runs the current orchestrator over those exact facts, and reports whether
-// the recomputed reasoning/documentation matches the stored result.
+// Deterministic, read-only reconstruction of a historical clinical computation.
 //
-//   reconstruct(runId):
-//     1. load the reasoning_run envelope + clinical/reasoning/documentation
-//        snapshots recorded by GovernanceEngine at the original computation
-//     2. verify the input fingerprint (deterministic sha256 of the fact state)
-//     3. rebuild the PatientClinicalState exactly as captured
-//     4. re-run the nephron against those historical facts (current knowledge)
-//     5. compare stored vs recomputed H8 reasoning + H9 documentation
-//     6. return rule_executions / audit_events / provenance for the run
+// The replay engine:
+//   1. Loads the original reasoning_run envelope.
+//   2. Loads the exact clinical/reasoning/documentation snapshots.
+//   3. Verifies the stored patient-state fingerprint.
+//   4. Reconstructs the patient state from the historical snapshot.
+//   5. Re-runs the CPU against that reconstructed state.
+//   6. Re-evaluates the H10 knowledge gate.
+//   7. Compares stored vs recomputed reasoning and documentation.
+//   8. Returns the complete historical audit/provenance trail.
 //
-// Replay is a READ-ONLY investigation — nothing is written, nothing changes.
-// A historical computation is never silently reinterpreted (§9/§49): the
-// system_version in the snapshot records which knowledge was active then.
+// IMPORTANT:
+//   - Replay NEVER writes.
+//   - Replay NEVER mutates historical records.
+//   - Replay NEVER silently claims that current knowledge is historically
+//     identical to the knowledge used at the original run.
+//   - "matches" means the recorded state and current recomputation are equal
+//     for the explicitly compared artifacts.
 // =============================================================================
 
 import type { Db, Row } from '../db.js';
@@ -42,8 +43,6 @@ interface RunRow extends Row {
   started_at: string;
 }
 
-// The H8 differential state captured in a reasoning_snapshot (the engine's
-// per-condition view — not the full evidence detail).
 export interface ReplayedCandidateState {
   conditionCode: string;
   name: string;
@@ -58,6 +57,25 @@ interface ReasoningSnapshotRow extends Row {
   candidate_states: ReplayedCandidateState[] | null;
 }
 
+interface SnapshotPatientFacts {
+  ageYears: number | null;
+  sex: string | null;
+  activeSymptoms: string[];
+  facts: {
+    factCode: string;
+    statusCode: string;
+    values: Fact['values'];
+  }[];
+}
+
+interface SnapshotKnowledgeState {
+  reasoningVersion?: string | null;
+  documentationVersion?: string | null;
+  differentialRuleset?: string | null;
+  protocol?: string | null;
+  gate?: KnowledgeGateResult | null;
+}
+
 interface ClinicalSnapshotRow extends Row {
   id: string;
   patient_id: string | null;
@@ -66,13 +84,8 @@ interface ClinicalSnapshotRow extends Row {
   system_version_code: string | null;
   reasoning_version_code: string | null;
   documentation_version_code: string | null;
-  patient_facts: {
-    ageYears: number | null;
-    sex: string | null;
-    activeSymptoms: string[];
-    facts: { factCode: string; statusCode: string; values: Fact['values'] }[];
-  } | null;
-  knowledge_state: { differentialRuleset: string | null; gate: KnowledgeGateResult | null } | null;
+  patient_facts: SnapshotPatientFacts | null;
+  knowledge_state: SnapshotKnowledgeState | null;
   input_fingerprint: string | null;
 }
 
@@ -111,27 +124,51 @@ export interface ReplayResult {
   runId: string;
   snapshotId: string;
   capturedAt: string;
-  run: { status: string; knowledgeVersion: string | null; engineVersion: string | null; startedAt: string };
+
+  run: {
+    status: string;
+    knowledgeVersion: string | null;
+    engineVersion: string | null;
+    startedAt: string;
+  };
+
   versions: {
     system: string | null;
     reasoning: string | null;
     documentation: string | null;
     differentialRuleset: string | null;
   };
-  patient: { patientId: string; encounterId: string | null; ageYears: number | null; sex: string | null; activeSymptoms: string[] };
-  fingerprint: { stored: string | null; recomputed: string; matches: boolean };
+
+  patient: {
+    patientId: string;
+    encounterId: string | null;
+    ageYears: number | null;
+    sex: string | null;
+    activeSymptoms: string[];
+  };
+
+  fingerprint: {
+    stored: string | null;
+    recomputed: string;
+    matches: boolean;
+  };
+
   gate: KnowledgeGateResult;
+
   reasoning: {
     stored: ReplayedCandidateState[];
     recomputed: ReplayedCandidateState[];
     matches: boolean;
   };
+
   documentation: {
     stored: DocumentationSection[];
     recomputed: DocumentationSection[];
     matches: boolean;
   };
+
   matches: boolean;
+
   ruleExecutions: ReplayRuleExecution[];
   auditEvents: ReplayAuditEvent[];
   provenance: ReplayProvenance[];
@@ -146,143 +183,478 @@ export class ReplayEngine {
     this.resolver = new KnowledgeResolver(db);
   }
 
+  // ===========================================================================
+  // PUBLIC REPLAY API
+  // ===========================================================================
+
   async reconstruct(runId: string): Promise<ReplayResult> {
+    if (!runId || runId.trim().length === 0) {
+      throw new Error('runId is required for replay');
+    }
+
+    // -------------------------------------------------------------------------
+    // 1. Load the original computation envelope.
+    // -------------------------------------------------------------------------
     const run = await this.db.queryOne<RunRow>(
-      `SELECT run_id, patient_id, encounter_id, knowledge_version, engine_version, status, started_at
-         FROM knowledge.reasoning_run WHERE run_id = $1`,
+      `SELECT
+          run_id,
+          patient_id,
+          encounter_id,
+          knowledge_version,
+          engine_version,
+          status,
+          started_at
+       FROM knowledge.reasoning_run
+       WHERE run_id = $1`,
       [runId],
     );
-    if (!run) throw new Error(`no reasoning_run ${runId} to replay`);
 
-    const reasonSnap = await this.db.queryOne<ReasoningSnapshotRow>(
-      `SELECT clinical_snapshot_id, run_id, reasoning_version_code, candidate_states
-         FROM governance.reasoning_snapshot WHERE run_id = $1`,
-      [runId],
-    );
-    if (!reasonSnap) throw new Error(`no reasoning_snapshot recorded for run ${runId} — replay requires an H10 recorded computation`);
+    if (!run) {
+      throw new Error(`no reasoning_run ${runId} to replay`);
+    }
 
+    // -------------------------------------------------------------------------
+    // 2. Load the H8 reasoning snapshot.
+    // -------------------------------------------------------------------------
+    const reasoningSnapshot =
+      await this.db.queryOne<ReasoningSnapshotRow>(
+        `SELECT
+            clinical_snapshot_id,
+            run_id,
+            reasoning_version_code,
+            candidate_states
+         FROM governance.reasoning_snapshot
+         WHERE run_id = $1
+         ORDER BY clinical_snapshot_id
+         LIMIT 1`,
+        [runId],
+      );
+
+    if (!reasoningSnapshot) {
+      throw new Error(
+        `no reasoning_snapshot recorded for run ${runId} — ` +
+          'replay requires an H10 recorded computation',
+      );
+    }
+
+    if (
+      reasoningSnapshot.run_id !== null &&
+      reasoningSnapshot.run_id !== runId
+    ) {
+      throw new Error(
+        `reasoning_snapshot ${reasoningSnapshot.clinical_snapshot_id} ` +
+          `does not belong to reasoning_run ${runId}`,
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. Load the clinical snapshot.
+    // -------------------------------------------------------------------------
     const snapshot = await this.db.queryOne<ClinicalSnapshotRow>(
-      `SELECT id, patient_id, encounter_id, captured_at, system_version_code,
-              reasoning_version_code, documentation_version_code,
-              patient_facts, knowledge_state, input_fingerprint
-         FROM governance.clinical_snapshot WHERE id = $1`,
-      [reasonSnap.clinical_snapshot_id],
+      `SELECT
+          id,
+          patient_id,
+          encounter_id,
+          captured_at,
+          system_version_code,
+          reasoning_version_code,
+          documentation_version_code,
+          patient_facts,
+          knowledge_state,
+          input_fingerprint
+       FROM governance.clinical_snapshot
+       WHERE id = $1`,
+      [reasoningSnapshot.clinical_snapshot_id],
     );
-    if (!snapshot) throw new Error(`no clinical_snapshot ${reasonSnap.clinical_snapshot_id}`);
 
-    const docSnap = await this.db.queryOne<DocumentationSnapshotRow>(
-      `SELECT sections, documentation_version_code
-         FROM governance.documentation_snapshot WHERE clinical_snapshot_id = $1`,
-      [snapshot.id],
-    );
+    if (!snapshot) {
+      throw new Error(
+        `no clinical_snapshot ${reasoningSnapshot.clinical_snapshot_id}`,
+      );
+    }
 
+    if (
+      snapshot.patient_id !== null &&
+      run.patient_id !== null &&
+      snapshot.patient_id !== run.patient_id
+    ) {
+      throw new Error(
+        `clinical snapshot ${snapshot.id} does not belong to reasoning_run ${runId}`,
+      );
+    }
+
+    if (
+      snapshot.encounter_id !== null &&
+      run.encounter_id !== null &&
+      snapshot.encounter_id !== run.encounter_id
+    ) {
+      throw new Error(
+        `clinical snapshot ${snapshot.id} has a different encounter from reasoning_run ${runId}`,
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // 4. Load the H9 documentation snapshot.
+    // -------------------------------------------------------------------------
+    const documentationSnapshot =
+      await this.db.queryOne<DocumentationSnapshotRow>(
+        `SELECT
+            sections,
+            documentation_version_code
+         FROM governance.documentation_snapshot
+         WHERE clinical_snapshot_id = $1
+         ORDER BY clinical_snapshot_id
+         LIMIT 1`,
+        [snapshot.id],
+      );
+
+    // -------------------------------------------------------------------------
+    // 5. Reconstruct the exact patient state captured at the time.
+    // -------------------------------------------------------------------------
     const state = rebuildState(snapshot);
-    const recomputed = await this.orchestrator.run(state);
+
+    // -------------------------------------------------------------------------
+    // 6. Verify the historical fingerprint before replay.
+    //
+    // A fingerprint mismatch means the stored patient state and its integrity
+    // hash no longer agree. Replay must still be possible for investigation,
+    // but the result must explicitly report that integrity failure.
+    // -------------------------------------------------------------------------
     const recomputedFingerprint = inputFingerprint(state.facts);
+    const fingerprintMatches =
+      snapshot.input_fingerprint !== null &&
+      snapshot.input_fingerprint === recomputedFingerprint;
 
-    const storedReasoning = reasonSnap.candidate_states ?? [];
-    const recomputedReasoning = recomputed.differentials.map((d) => ({
-      conditionCode: d.conditionCode,
-      name: d.name,
-      compatibility: d.compatibility,
-      viaPhenotypes: d.viaPhenotypes,
-    }));
-    const reasoningMatches = JSON.stringify(canonicalize(storedReasoning)) === JSON.stringify(canonicalize(recomputedReasoning));
+    // -------------------------------------------------------------------------
+    // 7. Re-run the CPU against the reconstructed state.
+    //
+    // This is intentionally the CURRENT CPU/knowledge environment. The result
+    // is therefore a reconstruction comparison, not a claim that the current
+    // knowledge state is identical to the historical knowledge state.
+    // -------------------------------------------------------------------------
+    const recomputed = await this.orchestrator.run(state);
 
-    const storedDocumentation = docSnap?.sections ?? [];
-    const recomputedDocumentation = recomputed.documentation;
-    const documentationMatches = JSON.stringify(canonicalize(storedDocumentation)) === JSON.stringify(canonicalize(recomputedDocumentation));
+    // -------------------------------------------------------------------------
+    // 8. Compare H8 reasoning.
+    // -------------------------------------------------------------------------
+    const storedReasoning =
+      normalizeCandidateStates(reasoningSnapshot.candidate_states);
 
-    const gate = await this.resolver.gate(usedTargets(recomputed));
-
-    const ruleExecutions = await this.db.query<ReplayRuleExecution>(
-      `SELECT re.rule_code, ko.object_code, re.knowledge_version, re.input_facts, re.output, re.executed_at
-         FROM governance.rule_execution re
-         LEFT JOIN governance.knowledge_object ko ON ko.id = re.object_id
-        WHERE re.run_id = $1
-        ORDER BY re.executed_at`,
-      [runId],
-    );
-    const auditEvents = await this.db.query<ReplayAuditEvent>(
-      `SELECT event_type, actor_type, entity_type, entity_code, new_value, occurred_at
-         FROM governance.audit_event WHERE run_id = $1 ORDER BY occurred_at`,
-      [runId],
-    );
-    const provenance = await this.db.query<ReplayProvenance>(
-      `SELECT direction, source_claim_code, governance_object_code, fact_code, link_type
-         FROM governance.provenance_record WHERE reasoning_run_id = $1 ORDER BY created_at`,
-      [runId],
+    const recomputedReasoning = normalizeCandidateStates(
+      recomputed.differentials.map((candidate) => ({
+        conditionCode: candidate.conditionCode,
+        name: candidate.name,
+        compatibility: candidate.compatibility,
+        viaPhenotypes: candidate.viaPhenotypes,
+      })),
     );
 
-    const fingerprintMatches = snapshot.input_fingerprint === recomputedFingerprint;
-    const matches = fingerprintMatches && reasoningMatches && documentationMatches;
+    const reasoningMatches = deepCanonicalEqual(
+      storedReasoning,
+      recomputedReasoning,
+    );
+
+    // -------------------------------------------------------------------------
+    // 9. Compare H9 documentation.
+    // -------------------------------------------------------------------------
+    const storedDocumentation =
+      documentationSnapshot?.sections ?? [];
+
+    const recomputedDocumentation =
+      recomputed.documentation ?? [];
+
+    const documentationMatches = deepCanonicalEqual(
+      storedDocumentation,
+      recomputedDocumentation,
+    );
+
+    // -------------------------------------------------------------------------
+    // 10. Re-run H10 governance against the knowledge actually touched by the
+    // current reconstruction.
+    // -------------------------------------------------------------------------
+    const gate = await this.resolver.gate(
+      usedTargets(recomputed),
+    );
+
+    // -------------------------------------------------------------------------
+    // 11. Retrieve the immutable historical execution trail.
+    // -------------------------------------------------------------------------
+    const [ruleExecutions, auditEvents, provenance] =
+      await Promise.all([
+        this.loadRuleExecutions(runId),
+        this.loadAuditEvents(runId),
+        this.loadProvenance(runId),
+      ]);
+
+    // -------------------------------------------------------------------------
+    // 12. Overall replay equality.
+    //
+    // "matches" is deliberately strict:
+    //   fingerprint + H8 reasoning + H9 documentation
+    //
+    // Governance differences are exposed separately through `gate`; they are
+    // not silently folded into the equality result.
+    // -------------------------------------------------------------------------
+    const matches =
+      fingerprintMatches &&
+      reasoningMatches &&
+      documentationMatches;
 
     return {
       runId,
       snapshotId: snapshot.id,
       capturedAt: snapshot.captured_at,
+
       run: {
         status: run.status,
         knowledgeVersion: run.knowledge_version,
         engineVersion: run.engine_version,
         startedAt: run.started_at,
       },
+
       versions: {
         system: snapshot.system_version_code,
-        reasoning: snapshot.reasoning_version_code,
-        documentation: snapshot.documentation_version_code,
-        differentialRuleset: snapshot.knowledge_state?.differentialRuleset ?? null,
+        reasoning:
+          snapshot.reasoning_version_code ??
+          reasoningSnapshot.reasoning_version_code ??
+          null,
+        documentation:
+          snapshot.documentation_version_code ??
+          documentationSnapshot?.documentation_version_code ??
+          null,
+        differentialRuleset:
+          snapshot.knowledge_state?.differentialRuleset ??
+          null,
       },
+
       patient: {
         patientId: snapshot.patient_id ?? '',
         encounterId: snapshot.encounter_id,
         ageYears: snapshot.patient_facts?.ageYears ?? null,
         sex: snapshot.patient_facts?.sex ?? null,
-        activeSymptoms: snapshot.patient_facts?.activeSymptoms ?? [],
+        activeSymptoms:
+          snapshot.patient_facts?.activeSymptoms ?? [],
       },
-      fingerprint: { stored: snapshot.input_fingerprint, recomputed: recomputedFingerprint, matches: fingerprintMatches },
+
+      fingerprint: {
+        stored: snapshot.input_fingerprint,
+        recomputed: recomputedFingerprint,
+        matches: fingerprintMatches,
+      },
+
       gate,
-      reasoning: { stored: storedReasoning, recomputed: recomputedReasoning, matches: reasoningMatches },
-      documentation: { stored: storedDocumentation, recomputed: recomputedDocumentation, matches: documentationMatches },
+
+      reasoning: {
+        stored: storedReasoning,
+        recomputed: recomputedReasoning,
+        matches: reasoningMatches,
+      },
+
+      documentation: {
+        stored: storedDocumentation,
+        recomputed: recomputedDocumentation,
+        matches: documentationMatches,
+      },
+
       matches,
+
       ruleExecutions,
       auditEvents,
       provenance,
     };
   }
+
+  // ===========================================================================
+  // HISTORICAL EXECUTION TRAIL
+  // ===========================================================================
+
+  private async loadRuleExecutions(
+    runId: string,
+  ): Promise<ReplayRuleExecution[]> {
+    return this.db.query<ReplayRuleExecution>(
+      `SELECT
+          re.rule_code,
+          ko.object_code,
+          re.knowledge_version,
+          re.input_facts,
+          re.output,
+          re.executed_at
+       FROM governance.rule_execution re
+       LEFT JOIN governance.knowledge_object ko
+         ON ko.id = re.object_id
+       WHERE re.run_id = $1
+       ORDER BY re.executed_at ASC`,
+      [runId],
+    );
+  }
+
+  private async loadAuditEvents(
+    runId: string,
+  ): Promise<ReplayAuditEvent[]> {
+    return this.db.query<ReplayAuditEvent>(
+      `SELECT
+          event_type,
+          actor_type,
+          entity_type,
+          entity_code,
+          new_value,
+          occurred_at
+       FROM governance.audit_event
+       WHERE run_id = $1
+       ORDER BY occurred_at ASC`,
+      [runId],
+    );
+  }
+
+  private async loadProvenance(
+    runId: string,
+  ): Promise<ReplayProvenance[]> {
+    return this.db.query<ReplayProvenance>(
+      `SELECT
+          direction,
+          source_claim_code,
+          governance_object_code,
+          fact_code,
+          link_type
+       FROM governance.provenance_record
+       WHERE reasoning_run_id = $1
+       ORDER BY created_at ASC`,
+      [runId],
+    );
+  }
 }
 
-// Rebuild the exact PatientClinicalState the original computation saw, so the
-// recomputation is reproducible (§30). Facts are reconstructed 1:1 from the
-// snapshot's patient_facts jsonb (factCode, statusCode, values, order).
-function rebuildState(snapshot: ClinicalSnapshotRow): PatientClinicalState {
+// =============================================================================
+// SNAPSHOT → PATIENT STATE
+// =============================================================================
+
+/**
+ * Rebuild the exact PatientClinicalState represented by the historical
+ * clinical_snapshot.
+ *
+ * The original snapshot intentionally contains the clinically relevant
+ * captured state rather than live patient-table references. This prevents
+ * later edits to the patient chart from changing what replay means.
+ */
+function rebuildState(
+  snapshot: ClinicalSnapshotRow,
+): PatientClinicalState {
   const stored = snapshot.patient_facts;
-  const facts: Fact[] = (stored?.facts ?? []).map((f, index) => ({
-    id: `replay-${snapshot.id}-${index}`,
-    patientId: snapshot.patient_id ?? '',
-    encounterId: snapshot.encounter_id,
-    factCode: f.factCode,
-    statusCode: f.statusCode,
-    recordedAt: snapshot.captured_at,
-    sourceType: null,
-    values: f.values,
-  }));
+
+  const facts: Fact[] = (stored?.facts ?? []).map(
+    (fact, index): Fact => ({
+      id: `replay-${snapshot.id}-${index}`,
+      patientId: snapshot.patient_id ?? '',
+      encounterId: snapshot.encounter_id,
+      factCode: fact.factCode,
+      statusCode: fact.statusCode,
+      recordedAt: snapshot.captured_at,
+      sourceType: 'REPLAY_SNAPSHOT',
+      values: fact.values,
+    }),
+  );
+
   return {
     patientId: snapshot.patient_id ?? '',
     encounterId: snapshot.encounter_id,
+
     ageYears: stored?.ageYears ?? null,
     sex: stored?.sex ?? null,
-    activeSymptoms: stored?.activeSymptoms ?? [],
+
+    activeSymptoms: [
+      ...(stored?.activeSymptoms ?? []),
+    ],
+
     facts,
+
+    // The historical snapshot does not currently persist answered question
+    // identifiers, so replay must not invent them.
     answeredQuestions: [],
   };
 }
 
-// The knowledge the recomputed projection used — the targets H10 gates (§37).
-function usedTargets(projection: ClinicalRuntimeProjection): { kind: string; code: string }[] {
+// =============================================================================
+// KNOWLEDGE TARGET EXTRACTION
+// =============================================================================
+
+/**
+ * Extract every runtime knowledge object exposed by the recomputed projection.
+ *
+ * Duplicates are removed before the H10 resolver is called. This makes the
+ * gate deterministic and prevents the same object being counted multiple times
+ * merely because several downstream outputs reference it.
+ */
+function usedTargets(
+  projection: ClinicalRuntimeProjection,
+): { kind: string; code: string }[] {
   const targets: { kind: string; code: string }[] = [];
-  for (const phenotype of projection.phenotypes) targets.push({ kind: 'phenotype', code: phenotype.phenotypeCode });
-  for (const candidate of projection.differentials) targets.push({ kind: 'condition', code: candidate.conditionCode });
-  if (projection.protocol) targets.push({ kind: 'protocol', code: projection.protocol.protocolCode });
+  const seen = new Set<string>();
+
+  const add = (kind: string, code: string | null | undefined): void => {
+    if (!code) return;
+
+    const key = `${kind}:${code}`;
+
+    if (seen.has(key)) return;
+
+    seen.add(key);
+    targets.push({ kind, code });
+  };
+
+  for (const phenotype of projection.phenotypes) {
+    add('phenotype', phenotype.phenotypeCode);
+  }
+
+  for (const candidate of projection.differentials) {
+    add('condition', candidate.conditionCode);
+  }
+
+  if (projection.protocol) {
+    add('protocol', projection.protocol.protocolCode);
+  }
+
+  for (const investigation of projection.investigations) {
+    add('investigation', investigation.investigationCode);
+  }
+
+  for (const treatment of projection.treatment) {
+    add('medication', treatment.medicationCode);
+  }
+
   return targets;
+}
+
+// =============================================================================
+// NORMALIZATION / COMPARISON
+// =============================================================================
+
+function normalizeCandidateStates(
+  states: ReplayedCandidateState[] | null | undefined,
+): ReplayedCandidateState[] {
+  return (states ?? []).map((state) => ({
+    conditionCode: state.conditionCode,
+    name: state.name,
+    compatibility: state.compatibility,
+    viaPhenotypes: (state.viaPhenotypes ?? []).map((item) => ({
+      phenotypeCode: item.phenotypeCode,
+      weight: item.weight,
+    })),
+  }));
+}
+
+/**
+ * Canonical structural comparison.
+ *
+ * JSON.stringify alone is unsafe for semantic equality when object-key order
+ * differs. canonicalize() provides deterministic object ordering before
+ * serialization.
+ */
+function deepCanonicalEqual(
+  left: unknown,
+  right: unknown,
+): boolean {
+  return (
+    JSON.stringify(canonicalize(left)) ===
+    JSON.stringify(canonicalize(right))
+  );
 }

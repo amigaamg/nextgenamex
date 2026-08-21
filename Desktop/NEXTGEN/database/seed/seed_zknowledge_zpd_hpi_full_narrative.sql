@@ -33,7 +33,7 @@ INSERT INTO clinical.fact_definition (code, name, data_type, description) VALUES
    ('TREATMENT_RESPONSE',    'Response to prior treatment',         'coded',   'How the illness responded to prior treatment'),
    ('REASON_PRESENTATION',   'Reason for current presentation',     'text',    'Why the patient presents now'),
    ('SYMPTOM_PROGRESSION',   'Progression of symptoms',             'coded',   'Worsening / stable / improving course of the illness')
-ON CONFLICT (code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. HPI templates for the new groups (cough clinical object)
@@ -48,7 +48,7 @@ INSERT INTO knowledge.symptom_hpi_template
        (symptom_id, section, documentation_group, fact_definition_code, fact_value, phrase_template, sort_order) VALUES
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'chronology', 'PREVIOUSLY_WELL', 'true',  'previously well until the onset of the current illness', 10),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'chronology', 'PREVIOUSLY_WELL', 'false', 'underlying chronic illness before this episode', 10)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 2b. Previous episodes — recurrence, prior diagnosis and treatment
 INSERT INTO knowledge.symptom_hpi_template
@@ -57,7 +57,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'previous', 'EPISODE_RECURRENCE', 'RECURRENT', 'recurrent episodes', 20),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'previous', 'PRIOR_DIAGNOSIS',    NULL,        'previously diagnosed with {value}', 30),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'previous', 'PRIOR_TREATMENT',    NULL,        'previously treated with {value}', 35)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 2c. Health-seeking behaviour
 INSERT INTO knowledge.symptom_hpi_template
@@ -70,7 +70,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'health_seeking', 'TREATMENT_RESPONSE', 'UNCHANGED', 'no response to treatment', 50),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'health_seeking', 'TREATMENT_RESPONSE', 'WORSENED',  'symptoms worsened with treatment', 50),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'health_seeking', 'REASON_PRESENTATION', NULL,       'presenting because {value}', 55)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 2d. Severity — progression, complications, red flags
 INSERT INTO knowledge.symptom_hpi_template
@@ -78,4 +78,4 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'severity', 'SYMPTOM_PROGRESSION', 'WORSENING', 'progressive worsening', 60),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'severity', 'SYMPTOM_PROGRESSION', 'STABLE',    'stable course', 60),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'severity', 'SYMPTOM_PROGRESSION', 'IMPROVING', 'improving', 60)
-;
+  ON CONFLICT DO NOTHING;

@@ -58,7 +58,7 @@ INSERT INTO knowledge.concept (id, concept_code, concept_type, canonical_name, d
      'Pleural effusion', 'Pleural effusion', 'Fluid in the pleural space; trachea deviated away from the affected side (mediastinum pushed, HCH12-0019).'),
     ('f0a00000-0000-0000-0000-00000000004b', 'CNS-PNEUMOTHORAX', 'condition',
      'Pneumothorax', 'Pneumothorax', 'Air in the pleural space; trachea deviated away from the affected side (mediastinum pushed, HCH12-0019).')
-ON CONFLICT (id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. differential_status — reasoning lifecycle (H8 §12)
@@ -71,8 +71,7 @@ INSERT INTO knowledge.differential_status (status_code, label, description, sort
     ('DROPPED',           'Dropped',           ' Excluded by evidence or rule action.',             5, true,  'active'),
     ('CONFIRMED',         'Confirmed',         ' Hypothesis confirmed (e.g. molecular TB, HCH12-0007).',6, true, 'active'),
     ('ENTERED_IN_ERROR',  'Entered in error',  ' Hypothesis entered in error.',                     7, true,  'active')
-ON CONFLICT (status_code) DO UPDATE SET label = EXCLUDED.label, description = EXCLUDED.description,
-    sort_order = EXCLUDED.sort_order, is_terminal = EXCLUDED.is_terminal, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. differential_hypothesis — candidate explanations (DH001..DH010)
@@ -81,7 +80,7 @@ ON CONFLICT (status_code) DO UPDATE SET label = EXCLUDED.label, description = EX
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.differential_hypothesis
     (hypothesis_code, concept_id, concept_code, hypothesis_type, canonical_name, short_label, description,
-     body_system_code, pathological_process, base_weight, is_critical, applies_to_context_codes, status)
+     body_system_code, pathological_process_code, base_weight, is_critical, applies_to_context_codes, status)
 VALUES
     ('DH001', (SELECT id FROM knowledge.concept WHERE concept_code='CNS-PNEUMONIA'), 'CNS-PNEUMONIA',
      'CONDITION','Pneumonia','Pneumonia',
@@ -123,13 +122,7 @@ VALUES
      'MECHANISM','Airway obstruction','Airway obstruction',
      ' The disordered FUNCTION underlying wheeze/obstructive spirometry (HCH12-0018/0004).',
      'RESPIRATORY',NULL, 0.80, false, ARRAY['ADULT','OLDER_ADULT','CHILD'], 'active')
-ON CONFLICT (hypothesis_code) DO UPDATE SET
-    concept_id = EXCLUDED.concept_id, concept_code = EXCLUDED.concept_code,
-    hypothesis_type = EXCLUDED.hypothesis_type, canonical_name = EXCLUDED.canonical_name,
-    short_label = EXCLUDED.short_label, description = EXCLUDED.description,
-    body_system_code = EXCLUDED.body_system_code, pathological_process = EXCLUDED.pathological_process,
-    base_weight = EXCLUDED.base_weight, is_critical = EXCLUDED.is_critical,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. differential_evidence — SUPPORTS/REFUTES with weight (EV001..)
@@ -267,13 +260,7 @@ VALUES
      'SUPPORTS',1.50,'DEFINITE','FEV1/FVC <0.70 = obstructive airflow limitation (HCH12-0004).','HCH12-0004',true),
     ('EV092','DH010','MECHANISM',NULL,NULL,'MECH-AIRWAY-OBSTRUCTION',NULL,NULL,
      'SUPPORTS',1.00,'DEFINITE','Airway obstruction mechanism (HCH12-0018).','HCH12-0018',true)
-ON CONFLICT (hypothesis_code, evidence_code) DO UPDATE SET
-    evidence_type = EXCLUDED.evidence_type, fact_definition_code = EXCLUDED.fact_definition_code,
-    phenotype_code = EXCLUDED.phenotype_code, mechanism_code = EXCLUDED.mechanism_code,
-    result_interpretation_code = EXCLUDED.result_interpretation_code, context_code = EXCLUDED.context_code,
-    direction = EXCLUDED.direction, weight = EXCLUDED.weight, certainty = EXCLUDED.certainty,
-    description = EXCLUDED.description, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. differential_rule — data-driven evidence→hypothesis activation (H8 §11)
@@ -324,13 +311,7 @@ VALUES
     ('DR014','FACT','POSTNASAL_DRIP','DH003','CONDITIONAL',0.30,
      'Post-nasal drip is a common cause of chronic cough and coexists with asthma (HCH12-0010).',
      'HCH12-0010', ARRAY['ADULT','OLDER_ADULT','OUTPATIENT'], true, 'active')
-ON CONFLICT (rule_code) DO UPDATE SET
-    trigger_type = EXCLUDED.trigger_type, trigger_code = EXCLUDED.trigger_code,
-    target_hypothesis_code = EXCLUDED.target_hypothesis_code, modification = EXCLUDED.modification,
-    weight_delta = EXCLUDED.weight_delta, rationale = EXCLUDED.rationale,
-    evidence_claim_code = EXCLUDED.evidence_claim_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, is_active = EXCLUDED.is_active,
-    status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. differential_rule_condition — value guards on differential rules (H8 §11)
@@ -338,9 +319,7 @@ ON CONFLICT (rule_code) DO UPDATE SET
 INSERT INTO knowledge.differential_rule_condition (rule_code, condition_code, fact_definition_code, operator, value, rationale, is_active) VALUES
     ('DR007','DRC001','COUGH_DURATION_DAYS','>','56',' Chronic cough = duration >8 weeks = 56 days (HCH12-0004).', true),
     ('DR008','DRC002','COUGH_DURATION_DAYS','>','56',' Chronic cough = duration >8 weeks = 56 days (HCH12-0004).', true)
-ON CONFLICT (rule_code, condition_code) DO UPDATE SET
-    fact_definition_code = EXCLUDED.fact_definition_code, operator = EXCLUDED.operator,
-    value = EXCLUDED.value, rationale = EXCLUDED.rationale, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. differential_weight — the H8 §21 multi-dimension evidence-weighting model
@@ -359,10 +338,7 @@ VALUES
     ('DWT008','EXCLUSION_POWER',       'POSITIVE', 0.60, ' How much a REFUTES piece can remove a hypothesis.',       1,'2024-01-01','active'),
     ('DWT009','REFUTATION_PENALTY',    'NEGATIVE', 1.50, ' Penalty applied for REFUTES evidence.',                   1,'2024-01-01','active'),
     ('DWT010','PREVALENCE_PRIOR',      'POSITIVE', 0.30, ' Prior prevalence weighting of the hypothesis.',            1,'2024-01-01','active')
-ON CONFLICT (weight_code) DO UPDATE SET
-    dimension = EXCLUDED.dimension, direction = EXCLUDED.direction, weight = EXCLUDED.weight,
-    description = EXCLUDED.description, version = EXCLUDED.version,
-    effective_from = EXCLUDED.effective_from, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. differential_source — provenance of differential knowledge (H8 §31/§45)
@@ -380,11 +356,7 @@ VALUES
     ('DH008','HUTCHISON_24_2018','CH12 — tracheal deviation away → pneumothorax; spontaneous pneumothorax pain.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
     ('DH009','HUTCHISON_24_2018','CH12 — bronchial breath sounds indicate consolidation (mechanism).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
     ('DH010','HUTCHISON_24_2018','CH12 — wheeze + FEV1/FVC <0.70 obstructive limitation.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active')
-ON CONFLICT (hypothesis_code, source_version_id) DO UPDATE SET
-    reference = EXCLUDED.reference, organization = EXCLUDED.organization, publication = EXCLUDED.publication,
-    edition = EXCLUDED.edition, year = EXCLUDED.year, chapter_ref = EXCLUDED.chapter_ref,
-    section_ref = EXCLUDED.section_ref, version = EXCLUDED.version,
-    effective_from = EXCLUDED.effective_from, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. differential_version — temporal versioning of differential knowledge (H8)
@@ -392,8 +364,7 @@ ON CONFLICT (hypothesis_code, source_version_id) DO UPDATE SET
 INSERT INTO knowledge.differential_version (hypothesis_code, version_no, effective_from, supersedes, change_note, status)
 SELECT dh.hypothesis_code, 1, '2018-01-01', NULL, ' H8 seed from Hutchison Clinical Methods 24e.', 'active'
 FROM knowledge.differential_hypothesis dh
-ON CONFLICT (hypothesis_code, version_no) DO UPDATE SET
-    effective_from = EXCLUDED.effective_from, change_note = EXCLUDED.change_note, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. provenance — Hutchison claims → H8 knowledge objects (H8 §31/§46)
@@ -410,7 +381,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.differential_hypothesis dh ON dh.hypothesis_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 10b. differential_evidence edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -449,7 +420,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.differential_evidence e ON e.evidence_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 10c. differential_rule + differential_rule_condition edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -470,7 +441,7 @@ JOIN (
     SELECT drc.condition_id, 'differential_rule_condition' AS t, drc.condition_code AS obj FROM knowledge.differential_rule_condition drc
 ) x ON x.t = v.object_type AND x.obj = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 10d. differential_weight edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -484,7 +455,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.differential_weight dw ON dw.weight_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 10e. differential_source edges (source record counterpart of the hypothesis edges)
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -498,7 +469,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.differential_source dsrc ON dsrc.hypothesis_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 10f. new concept edges (CNS-PLEURAL-EFFUSION, CNS-PNEUMOTHORAX from HCH12-0019)
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -509,4 +480,4 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.concept c ON c.concept_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

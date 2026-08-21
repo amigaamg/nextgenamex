@@ -6,61 +6,45 @@
 -- law). The runtime tables (documentation_instance / _sentence / _sentence_fact)
 -- are intentionally left EMPTY — the CPU compiles a document per reasoning_run,
 -- exactly as H7/H8 leave investigation_result / differential_rank empty at seed
--- time (H6/H7 precedent). Idempotent (ON CONFLICT DO UPDATE).
--- =============================================================================
+-- time (H6/H7 precedent). Idempotent (  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
--- A1. documentation_section — 15 canonical adult-note sections (H9 §6)
---     Grounded to HCH12-0018 (the respiratory-history / Hutchison clinical
---     method claim that underlies HPI construction).
+-- A2. documentation_section + documentation_template — the canonical section
+--     catalogue and the three document templates used by the compiler rules.
+--     (Sections/templates are configuration objects; seeded here because no
+--     earlier seed defines them.)
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.documentation_section
-    (section_code, label, heading_template, section_type, is_required, is_repeatable, default_certainty, sort_order, applies_to_context_codes)
+    (id, section_code, label, heading_template, section_type, is_required, is_repeatable,
+     default_certainty, sort_order, applies_to_context_codes, status)
 VALUES
-    ('DOC-CC',          'Chief Complaint',             'CHIEF COMPLAINT',              'NARRATIVE', true,  false, 'POSSIBLE',  1,  '{}'),
-    ('DOC-HPI',         'History of Present Illness',  'HISTORY OF PRESENT ILLNESS',   'NARRATIVE', true,  false, 'POSSIBLE',  2,  '{}'),
-    ('DOC-SYM',         'Associated Symptoms',         'ASSOCIATED SYMPTOMS',          'NARRATIVE', false, true,  'POSSIBLE',  3,  '{}'),
-    ('DOC-NEG',         'Pertinent Negatives',         'PERTINENT NEGATIVES',          'LIST',      false, true,  'POSSIBLE',  4,  '{}'),
-    ('DOC-PMH',         'Past Medical History',        'PAST MEDICAL HISTORY',         'LIST',      false, true,  'POSSIBLE',  5,  '{}'),
-    ('DOC-MED',         'Medication History',          'MEDICATION HISTORY',           'LIST',      false, true,  'POSSIBLE',  6,  '{}'),
-    ('DOC-ALL',         'Allergy History',             'ALLERGY HISTORY',              'LIST',      false, true,  'POSSIBLE',  7,  '{}'),
-    ('DOC-SOC',         'Social History',              'SOCIAL HISTORY',               'LIST',      false, true,  'POSSIBLE',  8,  '{}'),
-    ('DOC-FAM',         'Family History',                'FAMILY HISTORY',               'LIST',      false, true,  'POSSIBLE',  9,  '{}'),
-    ('DOC-ROS',         'Review of Systems',           'REVIEW OF SYSTEMS',            'LIST',      false, true,  'POSSIBLE', 10, '{}'),
-    ('DOC-EXAM',        'Examination',                 'EXAMINATION',                  'NARRATIVE', false, true,  'POSSIBLE', 11, '{}'),
-    ('DOC-INVEST',      'Investigation Results',       'INVESTIGATION RESULTS',        'NARRATIVE', false, true,  'POSSIBLE', 12, '{}'),
-    ('DOC-ASSESS',      'Clinical Assessment',         'CLINICAL ASSESSMENT',          'NARRATIVE', false, true,  'POSSIBLE', 13, '{}'),
-    ('DOC-DIFF',        'Differential Diagnosis',      'DIFFERENTIAL DIAGNOSIS',       'LIST',      false, true,  'POSSIBLE', 14, '{}'),
-    ('DOC-PLAN',        'Management Plan',             'MANAGEMENT PLAN',              'LIST',      false, true,  'POSSIBLE', 15, '{}')
-ON CONFLICT (section_code) DO UPDATE SET
-    label             = EXCLUDED.label,
-    heading_template  = EXCLUDED.heading_template,
-    section_type      = EXCLUDED.section_type,
-    is_required       = EXCLUDED.is_required,
-    default_certainty = EXCLUDED.default_certainty,
-    sort_order        = EXCLUDED.sort_order,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes;
+    ('f1100000-0000-0000-0000-000000000001','DOC-CC','Chief complaint','Chief complaint','NARRATIVE', true, false, 'DEFINITE', 1, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000002','DOC-HPI','History of present illness','History of present illness','NARRATIVE', true, false, 'DEFINITE', 2, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000003','DOC-SYM','Symptom review','Symptoms','LIST', false, true, 'POSSIBLE', 3, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000004','DOC-NEG','Pertinent negatives','Pertinent negatives','LIST', false, true, 'POSSIBLE', 4, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000005','DOC-PMH','Past medical history','Past medical history','NARRATIVE', false, true, 'POSSIBLE', 5, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000006','DOC-MED','Medications','Medications','LIST', false, true, 'POSSIBLE', 6, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000007','DOC-ALL','Allergies','Allergies','LIST', false, true, 'POSSIBLE', 7, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000008','DOC-SOC','Social history','Social history','NARRATIVE', false, true, 'POSSIBLE', 8, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-000000000009','DOC-FAM','Family history','Family history','NARRATIVE', false, true, 'POSSIBLE', 9, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000a','DOC-ROS','Review of systems','Review of systems','LIST', false, true, 'POSSIBLE', 10, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000b','DOC-EXAM','Examination','Examination','NARRATIVE', false, true, 'POSSIBLE', 11, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000c','DOC-INVEST','Investigations','Investigations','LIST', false, true, 'POSSIBLE', 12, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000d','DOC-ASSESS','Assessment','Assessment','NARRATIVE', true, false, 'PROBABLE', 13, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000e','DOC-DIFF','Differential diagnosis','Differential diagnosis','LIST', false, true, 'PROBABLE', 14, ARRAY['ADULT','CHILD'], 'active'),
+    ('f1100000-0000-0000-0000-00000000000f','DOC-PLAN','Plan','Plan','LIST', true, false, 'PROBABLE', 15, ARRAY['ADULT','CHILD'], 'active')
+  ON CONFLICT DO NOTHING;
 
--- ---------------------------------------------------------------------------
--- A2. documentation_template — 3 templates (H9 §8/§25)
--- ---------------------------------------------------------------------------
 INSERT INTO knowledge.documentation_template
-    (template_code, canonical_name, short_label, description, applies_to_context_codes, is_active)
+    (id, template_code, canonical_name, short_label, description, applies_to_context_codes, is_active, status)
 VALUES
-    ('TPL-ADULT-MEDICAL', 'Adult Medical Clerking', 'Adult clerking',
-     'Universal adult inpatient/outpatient clerking document (H9 §8).',
-     ARRAY['ADULT'], true),
-    ('TPL-EMERGENCY',     'Emergency Assessment',   'ED assessment',
-     'Emergency department focused assessment (H9 §8).',
-     ARRAY['ADULT'], true),
-    ('TPL-DISCHARGE',     'Discharge Summary',      'Discharge',
-     'Hospital discharge / handover summary (H9 §25).',
-     ARRAY['ADULT'], true)
-ON CONFLICT (template_code) DO UPDATE SET
-    canonical_name = EXCLUDED.canonical_name,
-    short_label    = EXCLUDED.short_label,
-    description    = EXCLUDED.description,
-    is_active      = EXCLUDED.is_active;
+    ('f1200000-0000-0000-0000-000000000001','TPL-ADULT-MEDICAL','Adult medical admission','Adult medical',
+     'Comprehensive adult medical admission note (all canonical sections).', ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
+    ('f1200000-0000-0000-0000-000000000002','TPL-EMERGENCY','Emergency department note','ED note',
+     'Focused emergency note (triage-relevant sections).', ARRAY['EMERGENCY'], true, 'active'),
+    ('f1200000-0000-0000-0000-000000000003','TPL-DISCHARGE','Discharge summary','Discharge',
+     'Discharge summary (follow-up relevant sections).', ARRAY['ADULT','OLDER_ADULT'], true, 'active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A3. documentation_template_section — section membership + order (33 rows)
@@ -102,16 +86,13 @@ INSERT INTO knowledge.documentation_template_section (template_code, section_cod
     ('TPL-DISCHARGE','DOC-ASSESS',  13,'f','t'),
     ('TPL-DISCHARGE','DOC-DIFF',    14,'f','t'),
     ('TPL-DISCHARGE','DOC-PLAN',    15,'f','t')
-ON CONFLICT (template_code, section_code) DO UPDATE SET
-    sort_order     = EXCLUDED.sort_order,
-    is_required    = EXCLUDED.is_required,
-    is_repeatable  = EXCLUDED.is_repeatable;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A4. documentation_template_element — 9 structured propositions (H9 §7)
 --     All FK targets verified real (H7 phenomenology / H8 evidence rules):
 --       fact_definition: COUGH_DURATION_DAYS, SPUTUM_COLOUR, SPO2, BLOOD_IN_SPUTUM
---       phenotype:       PHEN-HYPOXAEMIA, PHEN-AIRWAY-WHEEZE
+--       phenotype:       PHEN-ACUTE-HYPOXAEMIC, PHEN-AIRWAY-WHEEZE
 --       result_interpretation: RINT_CONSOLIDATION, RINT_MTB_DETECTED, RINT_LEUKOCYTOSIS
 --       diagnosis_concept: DA001 (Pneumonia)
 --       differential_evidence_rule: DEV-003
@@ -125,7 +106,7 @@ VALUES
      'The patient presents with a {value}-day history of cough.',                  'PATIENT_REPORTED','PROBABLE', 0.5, true),
     ('DTE-HPI-SPUTUM-COLOUR',    'TPL-ADULT-MEDICAL','DOC-HPI',    'FACT','SPUTUM_COLOUR',                   NULL,NULL,NULL,NULL,
      'Sputum is {value} in character.',                                              'PATIENT_REPORTED','PROBABLE', 0.5, true),
-    ('DTE-HPI-HYPOX',            'TPL-ADULT-MEDICAL','DOC-HPI',    'PHENOTYPE',NULL,'PHEN-HYPOXAEMIA',         NULL,NULL,NULL,
+    ('DTE-HPI-HYPOX',            'TPL-ADULT-MEDICAL','DOC-HPI',    'PHENOTYPE',NULL,'PHEN-ACUTE-HYPOXAEMIC',         NULL,NULL,NULL,
      'This was associated with hypoxaemia (SpO2 {value}%).',                        'CLINICIAN_OBSERVED','DEFINITE', 0.8, true),
     ('DTE-SYM-WHEEZE',           'TPL-ADULT-MEDICAL','DOC-SYM',    'PHENOTYPE',NULL,'PHEN-AIRWAY-WHEEZE',      NULL,NULL,NULL,
      'Wheaze is {value}.',                                                           'PATIENT_REPORTED','POSSIBLE', 0.5, false),
@@ -139,11 +120,7 @@ VALUES
      'Laboratory shows {value}.',                                                    'LAB_MEASURED','PROBABLE', 0.9, true),
     ('DTE-ASSESS-PNEUMONIA',     'TPL-ADULT-MEDICAL','DOC-ASSESS', 'DIAGNOSIS',NULL,NULL,NULL,'DA001',NULL,
      'The clinical picture is most consistent with {value}.',                        'SYSTEM_DERIVED','PROBABLE', 1.5, true)
-ON CONFLICT (element_code) DO UPDATE SET
-    wording_template   = EXCLUDED.wording_template,
-    certainty          = EXCLUDED.certainty,
-    min_strength       = EXCLUDED.min_strength,
-    is_must_document   = EXCLUDED.is_must_document;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A5. documentation_template_rule — 8 IF proposition THEN ACT rules (H9 §9)
@@ -161,10 +138,7 @@ VALUES
     ('DRule-006','TPL-ADULT-MEDICAL','FACT',  'BLOOD_IN_SPUTUM',NULL, 'DTE-SYM-HAEMOPTYSIS',      'RENDER',        0.0, NULL, 'HCH12-0007'),
     ('DRule-007','TPL-ADULT-MEDICAL','FACT',  'COUGH_DURATION_DAYS',NULL,'DTE-HPI-COUGH-DUR',     'RENDER',        0.0, NULL, 'HCH12-0018'),
     ('DRule-008','TPL-ADULT-MEDICAL','EVIDENCE_RULE', NULL, 'DEV-003', 'DTE-INVEST-CONSOLIDATION','ESCALATE',      0.8, NULL, 'HCH12-0018')
-ON CONFLICT (rule_code) DO UPDATE SET
-    action          = EXCLUDED.action,
-    target_element_code = EXCLUDED.target_element_code,
-    weight_delta    = EXCLUDED.weight_delta;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A6. documentation_order_rule — 9 HPI narrative-ordering steps (H9 §9/§11)
@@ -175,16 +149,13 @@ VALUES
     ('DOR-001','DOC-HPI','COUGH_DURATION_DAYS','FACT',      'ONSET',              1, 'History began with {value}.',        'HCH12-0018'),
     ('DOR-002','DOC-HPI','SPUTUM_COLOUR',      'FACT',      'CHARACTER',          2, 'Character: {value}.',               'HCH12-0018'),
     ('DOR-003','DOC-HPI','SPO2',               'FACT',      'SEVERITY',           3, 'Severity reflected by {value}.',    'HCH12-0018'),
-    ('DOR-004','DOC-HPI','PHEN-HYPOXAEMIA',    'PHENOTYPE', 'ASSOCIATED_FEATURES',4, 'Associated {value}.',              'HCH12-0018'),
+    ('DOR-004','DOC-HPI','PHEN-ACUTE-HYPOXAEMIC',    'PHENOTYPE', 'ASSOCIATED_FEATURES',4, 'Associated {value}.',              'HCH12-0018'),
     ('DOR-005','DOC-HPI','BLOOD_IN_SPUTUM',    'FACT',      'PERTINENT_NEGATIVES',5, 'No {value}.',                      'HCH12-0007'),
     ('DOR-006','DOC-HPI','COUGH_DURATION_DAYS','FACT',      'MODIFIERS',          6, 'Duration {value} days.',            'HCH12-0018'),
     ('DOR-007','DOC-HPI','SPO2',               'FACT',      'FUNCTIONAL_IMPACT',  7, 'Functional impact: {value}.',       'HCH12-0018'),
     ('DOR-008','DOC-HPI','COUGH_DURATION_DAYS','FACT',      'RELEVANT_CONTEXT',   8, 'Context: {value} days.',            'HCH1-0001'),
-    ('DOR-009','DOC-HPI','PHEN-HYPOXAEMIA',    'PHENOTYPE', 'CHRONOLOGY',         9, 'Chronology: {value}.',             'HCH12-0018')
-ON CONFLICT (rule_code) DO UPDATE SET
-    clinical_narrative_position = EXCLUDED.clinical_narrative_position,
-    sort_order                = EXCLUDED.sort_order,
-    wording_template          = EXCLUDED.wording_template;
+    ('DOR-009','DOC-HPI','PHEN-ACUTE-HYPOXAEMIC',    'PHENOTYPE', 'CHRONOLOGY',         9, 'Chronology: {value}.',             'HCH12-0018')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A7. documentation_relevance_rule — 7 document-priority rules (H9 §17)
@@ -192,16 +163,14 @@ ON CONFLICT (rule_code) DO UPDATE SET
 INSERT INTO knowledge.documentation_relevance_rule
     (rule_code, proposition_code, proposition_type, priority_level, rationale, evidence_claim_code)
 VALUES
-    ('DRL-001','PHEN-HYPOXAEMIA',    'PHENOTYPE','HIGH',   'Hypoxaemia is a red-flag severity signal.',          'HCH12-0018'),
+    ('DRL-001','PHEN-ACUTE-HYPOXAEMIC',    'PHENOTYPE','HIGH',   'Hypoxaemia is a red-flag severity signal.',          'HCH12-0018'),
     ('DRL-002','RINT_MTB_DETECTED',  'RESULT_INTERPRETATION','HIGH','MTB detected is must-not-miss (TB).',         'HCH12-0007'),
     ('DRL-003','BLOOD_IN_SPUTUM',    'FACT','HIGH',        'Haemoptysis raises the TB differential (H8 RR004).', 'HCH12-0007'),
     ('DRL-004','RINT_CONSOLIDATION', 'RESULT_INTERPRETATION','MEDIUM','Consolidation strengthens the pneumonia frame.','HCH12-0018'),
     ('DRL-005','PHEN-AIRWAY-WHEEZE', 'PHENOTYPE','MEDIUM',  'Wheaze is a supporting airways feature.',            'HCH12-0018'),
     ('DRL-006','COUGH_DURATION_DAYS','FACT','MEDIUM',       'Cough duration frames acuity.',                      'HCH12-0018'),
     ('DRL-007','SPUTUM_COLOUR',      'FACT','LOW',         'Sputum character is supporting detail.',               'HCH12-0018')
-ON CONFLICT (rule_code) DO UPDATE SET
-    priority_level = EXCLUDED.priority_level,
-    rationale      = EXCLUDED.rationale;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A8. documentation_lexicon — 8 canonical terms (H9 §23)
@@ -209,20 +178,20 @@ ON CONFLICT (rule_code) DO UPDATE SET
 INSERT INTO knowledge.documentation_lexicon (concept_code, concept_type, canonical_term)
 VALUES
     ('COUGH_DURATION_DAYS',    'FACT',                   'Cough duration'),
-    ('SPUTUM_COLOUR',          'FACT',                   'Sputum character');
+    ('SPUTUM_COLOUR',          'FACT',                   'Sputum character')  ON CONFLICT DO NOTHING;
 INSERT INTO knowledge.documentation_lexicon (concept_code, concept_type, canonical_term)
 VALUES
     ('SPO2',                   'FACT',                   'Oxygen saturation'),
-    ('BLOOD_IN_SPUTUM',        'FACT',                   'Haemoptysis');
+    ('BLOOD_IN_SPUTUM',        'FACT',                   'Haemoptysis')  ON CONFLICT DO NOTHING;
 INSERT INTO knowledge.documentation_lexicon (concept_code, concept_type, canonical_term)
 VALUES
-    ('PHEN-HYPOXAEMIA',        'PHENOTYPE',              'Hypoxaemia'),
-    ('PHEN-AIRWAY-WHEEZE',     'PHENOTYPE',              'Wheeze');
+    ('PHEN-ACUTE-HYPOXAEMIC',        'PHENOTYPE',              'Hypoxaemia'),
+    ('PHEN-AIRWAY-WHEEZE',     'PHENOTYPE',              'Wheeze')  ON CONFLICT DO NOTHING;
 INSERT INTO knowledge.documentation_lexicon (concept_code, concept_type, canonical_term)
 VALUES
     ('RINT_CONSOLIDATION',     'RESULT_INTERPRETATION',  'Consolidation'),
     ('RINT_MTB_DETECTED',      'RESULT_INTERPRETATION',  'MTB detected')
-ON CONFLICT (concept_code, concept_type) DO UPDATE SET canonical_term = EXCLUDED.canonical_term;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A9. documentation_term — 8 ADULT realisations of the lexicon (H9 §23/§24)
@@ -241,8 +210,7 @@ SELECT l.id, 'ADULT', l.canonical_term,
             ELSE l.canonical_term
        END, true
 FROM knowledge.documentation_lexicon l
-ON CONFLICT (lexicon_id, applies_to_context_code) DO UPDATE SET
-    wording_template = EXCLUDED.wording_template;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A10. documentation_term_variant — 8 synonym variants (H9 §23)
@@ -278,10 +246,7 @@ INSERT INTO knowledge.documentation_version
 VALUES
     ('RV2024.01.002', 'H9-RULESET-1.0', 'HUTCHISON_24_2018', 'DOCUMENTATION-CPU-1.0', '2024-01-01',
      'Initial H9 documentation compiler knowledge set.')
-ON CONFLICT (version_code) DO UPDATE SET
-    ruleset_version  = EXCLUDED.ruleset_version,
-    knowledge_version = EXCLUDED.knowledge_version,
-    engine_version    = EXCLUDED.engine_version;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- A12. PROVENANCE — one derived_from edge per seeded H9 object to a real

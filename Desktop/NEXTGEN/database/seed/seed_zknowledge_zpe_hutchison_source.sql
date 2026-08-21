@@ -11,14 +11,14 @@
 -- -----------------------------------------------------------------------------
 INSERT INTO knowledge.source (source_id, source_name, edition, year, source_type, authority_scope, amexan_role, description, publisher, language_code, status) VALUES
    ('HUTCHISON_CM', 'Hutchison''s Clinical Methods', 24, 2018, 'clinical_methods_text', 'clinical method', 'HISTORY + EXAMINATION + CLINICAL COMMUNICATION', 'Clinical methods foundation: how to elicit, organise and document history, examination and differential diagnosis.', 'Elsevier', 'en', 'ACTIVE_FOUNDATION')
-ON CONFLICT (source_id) DO UPDATE SET source_name = EXCLUDED.source_name, edition = EXCLUDED.edition, year = EXCLUDED.year, source_type = EXCLUDED.source_type, authority_scope = EXCLUDED.authority_scope, amexan_role = EXCLUDED.amexan_role;
+  ON CONFLICT DO NOTHING;
 
 -- -----------------------------------------------------------------------------
 -- source_version
 -- -----------------------------------------------------------------------------
 INSERT INTO knowledge.source_version (version_id, source_id, edition, publication_year, language, supersedes, effective_from, status, pdf_page_offset, page_count) VALUES
    ('HUTCHISON_24_2018', 'HUTCHISON_CM', 24, 2018, 'English', NULL, '2018-01-01', 'ACTIVE', 11, 499)
-ON CONFLICT (version_id) DO UPDATE SET source_id = EXCLUDED.source_id, edition = EXCLUDED.edition, publication_year = EXCLUDED.publication_year, effective_from = EXCLUDED.effective_from, pdf_page_offset = EXCLUDED.pdf_page_offset, page_count = EXCLUDED.page_count;
+  ON CONFLICT DO NOTHING;
 
 -- -----------------------------------------------------------------------------
 -- source_section
@@ -28,7 +28,7 @@ INSERT INTO knowledge.source_section (section_id, source_version_id, section_no,
    ('H1-S2', 'HUTCHISON_24_2018', 2, 'Assessment in particular groups', 'CONTEXT', 2),
    ('H1-S3', 'HUTCHISON_24_2018', 3, 'Basic systems', 'SYSTEM', 3),
    ('H1-S4', 'HUTCHISON_24_2018', NULL, 'Index', 'NAVIGATION_ONLY', 4)
-ON CONFLICT (source_version_id, section_name) DO UPDATE SET section_no = EXCLUDED.section_no, amexan_layer = EXCLUDED.amexan_layer;
+  ON CONFLICT DO NOTHING;
 
 -- -----------------------------------------------------------------------------
 -- source_chapter
@@ -55,7 +55,7 @@ INSERT INTO knowledge.source_chapter (chapter_id, source_version_id, section_id,
    ('H1-C19', 'HUTCHISON_24_2018', 'H1-S3', 19, 'Skin, nails and hair', 403, 418, NULL, NULL, 'DERMATOLOGY', 18),
    ('H1-C20', 'HUTCHISON_24_2018', 'H1-S3', 20, 'Eyes', 419, 438, NULL, NULL, 'OPHTHALMOLOGY', 19),
    ('H1-C21', 'HUTCHISON_24_2018', 'H1-S3', 21, 'Ear, nose and throat', 439, 464, NULL, NULL, 'ENT', 20)
-ON CONFLICT (source_version_id, chapter_no) DO UPDATE SET chapter_name = EXCLUDED.chapter_name, start_page = EXCLUDED.start_page, end_page = EXCLUDED.end_page, amexan_role = EXCLUDED.amexan_role, amexan_context = EXCLUDED.amexan_context, amexan_system = EXCLUDED.amexan_system;
+  ON CONFLICT DO NOTHING;
 
 -- -----------------------------------------------------------------------------
 -- source_chunk  (page-anchored raw text, printed page numbers)
@@ -39081,7 +39081,7 @@ imaging technique.
 Figure 21.52  CT scan of neck demonstrating a large metastatic 
 lymph node with central necrosis.', 1344),
    ('6c894653-0be5-5e1a-87c0-247e9e757abb', 'HUTCHISON_24_2018', 'H1-C21', 464, 475, 0, 'This page intentionally left blank', 34)
-ON CONFLICT (id) DO UPDATE SET chunk_text = EXCLUDED.chunk_text, char_count = EXCLUDED.char_count;
+  ON CONFLICT DO NOTHING;
 
 -- -----------------------------------------------------------------------------
 -- extraction_job  (per-chapter extraction/review tracking)
@@ -39108,4 +39108,4 @@ INSERT INTO knowledge.extraction_job (extraction_id, source_version_id, chapter_
    ('EXT-H19', 'HUTCHISON_24_2018', 'H1-C19', 'DERMATOLOGY_METHOD', 'PENDING'),
    ('EXT-H20', 'HUTCHISON_24_2018', 'H1-C20', 'OPHTHALMOLOGY_METHOD', 'PENDING'),
    ('EXT-H21', 'HUTCHISON_24_2018', 'H1-C21', 'ENT_METHOD', 'PENDING')
-ON CONFLICT (extraction_id) DO UPDATE SET extraction_type = EXCLUDED.extraction_type;
+  ON CONFLICT DO NOTHING;

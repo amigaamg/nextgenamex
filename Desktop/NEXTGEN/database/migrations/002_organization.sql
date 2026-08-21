@@ -1,595 +1,1365 @@
 -- =============================================================================
--- AMEXAN Phase 1 — Migration 002: organization + security + terminology
+-- AMEXAN
+-- PHASE 1 — MIGRATION 002
+-- ORGANIZATION + SECURITY + TERMINOLOGY
+-- VERSION 2
 -- =============================================================================
--- Where care happens (organizations, facilities, workforce) + who can do what
--- (roles, permissions, API clients) + the universal language (concepts, codes,
--- mappings, value sets, units).
+--
+-- AMEXAN CONSTITUTIONAL LAYER
+--
+-- PERSON
+--   ↓
+-- USER ACCOUNT
+--   ↓
+-- ORGANIZATION MEMBERSHIP / PROFESSIONAL IDENTITY
+--   ↓
+-- ROLE
+--   ↓
+-- PERMISSION
+--   ↓
+-- RESOURCE / ACTION
+--
+-- ORGANIZATION
+--   ↓
+-- FACILITY
+--   ↓
+-- CAMPUS
+--   ↓
+-- BUILDING
+--   ↓
+-- FLOOR
+--   ↓
+-- ROOM
+--   ↓
+-- BED
+--
+-- TERMINOLOGY
+--   CODE SYSTEM
+--      ↓
+--   CODE
+--      ↓
+--   UNIVERSAL CONCEPT
+--      ↓
+--   RELATIONSHIPS / MAPPINGS / VALUE SETS
+--
+-- SECURITY
+--   HUMAN USER + SERVICE CLIENT
+--      ↓
+--   AUTHENTICATION
+--      ↓
+--   SCOPED AUTHORIZATION
+--      ↓
+--   POLICY
+--      ↓
+--   AUDIT
+--
+-- Design goals:
+--   - multi-organization
+--   - multi-facility
+--   - multi-country
+--   - temporal
+--   - interoperable
+--   - terminology-neutral
+--   - API-first
+--   - high-performance
+--   - auditable
+--   - future CPU / engine compatible
 -- =============================================================================
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE SCHEMA IF NOT EXISTS organization;
 CREATE SCHEMA IF NOT EXISTS security;
 CREATE SCHEMA IF NOT EXISTS terminology;
 
-COMMENT ON SCHEMA organization IS 'Organizations, facilities, physical space and workforce.';
-COMMENT ON SCHEMA security IS 'Roles, permissions, access policies, API clients.';
-COMMENT ON SCHEMA terminology IS 'Universal concepts, code systems, mappings, value sets and units.';
+COMMENT ON SCHEMA organization IS
+'AMEXAN organizational, facility, physical-space, service and workforce foundation.';
+
+COMMENT ON SCHEMA security IS
+'AMEXAN authentication-adjacent authorization, roles, permissions, policies,
+API clients, scopes and security controls.';
+
+COMMENT ON SCHEMA terminology IS
+'AMEXAN universal clinical and operational terminology, code systems,
+concepts, mappings, value sets and units.';
 
 -- =============================================================================
--- TERMINOLOGY (built first so every other schema can reference concepts)
+-- ============================================================================
+-- TERMINOLOGY
+-- ============================================================================
+-- Terminology is deliberately independent of clinical schemas.
+--
+-- Clinical modules should reference terminology.concept.id rather than
+-- hard-coding SNOMED/ICD/LOINC/local codes into clinical tables.
 -- =============================================================================
 
-CREATE TABLE terminology.code_system (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   name              text NOT NULL UNIQUE,     -- SNOMED CT / ICD-10 / LOINC / ...
-   oid               text,
-   uri               text,
-   version           text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+-- -----------------------------------------------------------------------------
+-- CODE SYSTEM
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.code_system (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    name TEXT NOT NULL UNIQUE,
+
+    canonical_uri TEXT,
+    oid TEXT,
+
+    publisher TEXT,
+    description TEXT,
+
+    version TEXT,
+
+    release_date DATE,
+
+    country_code TEXT,
+
+    is_external BOOLEAN NOT NULL DEFAULT true,
+    is_local BOOLEAN NOT NULL DEFAULT false,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE terminology.code_system IS 'A source of codes (SNOMED, ICD, LOINC, local codes...).';
+
+CREATE INDEX IF NOT EXISTS idx_code_system_active
+    ON terminology.code_system(is_active);
+
+DROP TRIGGER IF EXISTS trg_code_system_updated_at
+ON terminology.code_system;
 
 CREATE TRIGGER trg_code_system_updated_at
-   BEFORE UPDATE ON terminology.code_system
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON terminology.code_system
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE terminology.code (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   code_system_id    uuid NOT NULL REFERENCES terminology.code_system(id),
-   code              text NOT NULL,
-   display           text NOT NULL,
-   definition        text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now(),
-   UNIQUE (code_system_id, code)
+COMMENT ON TABLE terminology.code_system IS
+'Terminology/code source such as SNOMED CT, ICD-10, ICD-11, LOINC,
+RxNorm, UCUM, local AMEXAN terminology or national terminology.';
+
+-- -----------------------------------------------------------------------------
+-- CODE
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.code (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code_system_id UUID NOT NULL
+        REFERENCES terminology.code_system(id)
+        ON DELETE RESTRICT,
+
+    code TEXT NOT NULL,
+
+    display TEXT NOT NULL,
+
+    definition TEXT,
+
+    designation JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+    version TEXT,
+
+    effective_from DATE,
+    effective_to DATE,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE terminology.code IS 'A raw code as issued by a code system.';
 
-CREATE INDEX idx_code_display ON terminology.code(display);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_code_system_code_version
+    ON terminology.code(code_system_id, code, COALESCE(version, ''));
+
+CREATE INDEX IF NOT EXISTS idx_code_system_code
+    ON terminology.code(code_system_id, code);
+
+CREATE INDEX IF NOT EXISTS idx_code_display
+    ON terminology.code(lower(display));
+
+CREATE INDEX IF NOT EXISTS idx_code_active
+    ON terminology.code(code_system_id, is_active);
+
+DROP TRIGGER IF EXISTS trg_code_updated_at
+ON terminology.code;
+
 CREATE TRIGGER trg_code_updated_at
-   BEFORE UPDATE ON terminology.code
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON terminology.code
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE terminology.concept (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   parent_id         uuid REFERENCES terminology.concept(id),
-   display_name      text NOT NULL,
-   definition        text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+COMMENT ON TABLE terminology.code IS
+'An individual code issued by a terminology/code system.';
+
+-- -----------------------------------------------------------------------------
+-- UNIVERSAL CONCEPT
+-- -----------------------------------------------------------------------------
+-- This is AMEXAN's semantic layer.
+--
+-- A concept is NOT synonymous with a code.
+--
+-- Example:
+--   AMEXAN concept: Pneumonia
+--
+-- may have relationships to:
+--   SNOMED CT
+--   ICD-10
+--   ICD-11
+--   local Kenyan code
+--   local AMEXAN code
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.concept (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    parent_id UUID
+        REFERENCES terminology.concept(id)
+        ON DELETE RESTRICT,
+
+    concept_key TEXT UNIQUE,
+
+    display_name TEXT NOT NULL,
+
+    definition TEXT,
+
+    semantic_type TEXT,
+
+    concept_status TEXT NOT NULL DEFAULT 'active'
+        CHECK (
+            concept_status IN (
+                'active',
+                'inactive',
+                'retired',
+                'deprecated',
+                'draft'
+            )
+        ),
+
+    version INTEGER NOT NULL DEFAULT 1,
+
+    effective_from DATE,
+    effective_to DATE,
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE terminology.concept IS 'Universal concept that can map to many codes across code systems.';
 
-CREATE INDEX idx_concept_display ON terminology.concept(display_name);
+CREATE INDEX IF NOT EXISTS idx_concept_parent
+    ON terminology.concept(parent_id);
+
+CREATE INDEX IF NOT EXISTS idx_concept_name
+    ON terminology.concept(lower(display_name));
+
+CREATE INDEX IF NOT EXISTS idx_concept_status
+    ON terminology.concept(concept_status);
+
+CREATE INDEX IF NOT EXISTS idx_concept_semantic_type
+    ON terminology.concept(semantic_type);
+
+DROP TRIGGER IF EXISTS trg_concept_updated_at
+ON terminology.concept;
+
 CREATE TRIGGER trg_concept_updated_at
-   BEFORE UPDATE ON terminology.concept
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON terminology.concept
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE terminology.concept_code (
-   concept_id        uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   code_id           uuid NOT NULL REFERENCES terminology.code(id) ON DELETE CASCADE,
-   relationship      text NOT NULL DEFAULT 'equivalent',  -- equivalent / narrower / broader
-   PRIMARY KEY (concept_id, code_id)
+COMMENT ON TABLE terminology.concept IS
+'AMEXAN universal semantic concept. Multiple external codes may represent,
+refine or map to one concept.';
+
+-- -----------------------------------------------------------------------------
+-- CONCEPT CODE
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.concept_code (
+    concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    code_id UUID NOT NULL
+        REFERENCES terminology.code(id)
+        ON DELETE CASCADE,
+
+    relationship TEXT NOT NULL DEFAULT 'equivalent'
+        CHECK (
+            relationship IN (
+                'equivalent',
+                'broader',
+                'narrower',
+                'related',
+                'approximate',
+                'contextual'
+            )
+        ),
+
+    is_preferred BOOLEAN NOT NULL DEFAULT false,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    PRIMARY KEY (concept_id, code_id)
 );
-COMMENT ON TABLE terminology.concept_code IS 'Links a universal concept to codes in various code systems.';
 
-CREATE TABLE terminology.concept_synonym (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   concept_id        uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   synonym           text NOT NULL,
-   language_code     text,
-   is_preferred      boolean NOT NULL DEFAULT false
+CREATE INDEX IF NOT EXISTS idx_concept_code_code
+    ON terminology.concept_code(code_id);
+
+CREATE INDEX IF NOT EXISTS idx_concept_code_preferred
+    ON terminology.concept_code(concept_id)
+    WHERE is_preferred = true;
+
+-- -----------------------------------------------------------------------------
+-- SYNONYMS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.concept_synonym (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    synonym TEXT NOT NULL,
+
+    normalized_synonym TEXT,
+
+    language_code TEXT,
+
+    synonym_type TEXT NOT NULL DEFAULT 'clinical'
+        CHECK (
+            synonym_type IN (
+                'preferred',
+                'clinical',
+                'lay',
+                'abbreviation',
+                'acronym',
+                'historical',
+                'local'
+            )
+        ),
+
+    is_preferred BOOLEAN NOT NULL DEFAULT false,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE terminology.concept_synonym IS 'Alternate terms for a concept (clinician term, patient-friendly term...).';
 
-CREATE INDEX idx_concept_synonym_text ON terminology.concept_synonym(synonym);
+CREATE INDEX IF NOT EXISTS idx_synonym_lookup
+    ON terminology.concept_synonym(lower(synonym));
 
-CREATE TABLE terminology.concept_translation (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   concept_id        uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   language_code     text NOT NULL,
-   translation       text NOT NULL,
-   is_preferred      boolean NOT NULL DEFAULT false,
-   UNIQUE (concept_id, language_code, translation)
+CREATE INDEX IF NOT EXISTS idx_synonym_concept
+    ON terminology.concept_synonym(concept_id);
+
+-- -----------------------------------------------------------------------------
+-- TRANSLATIONS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.concept_translation (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    language_code TEXT NOT NULL,
+
+    translation TEXT NOT NULL,
+
+    is_preferred BOOLEAN NOT NULL DEFAULT false,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    UNIQUE (concept_id, language_code, translation)
 );
-COMMENT ON TABLE terminology.concept_translation IS 'Translations of a concept (Kiswahili, Luo, English...).';
 
-CREATE TABLE terminology.concept_relationship (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   source_concept_id uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   target_concept_id uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   relationship_type text NOT NULL,           -- is_a / associated_with / caused_by / ...
-   is_bi_directional boolean NOT NULL DEFAULT false,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   CHECK (source_concept_id <> target_concept_id)
+CREATE INDEX IF NOT EXISTS idx_translation_language
+    ON terminology.concept_translation(language_code);
+
+-- -----------------------------------------------------------------------------
+-- CONCEPT RELATIONSHIPS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.concept_relationship (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    source_concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    target_concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    relationship_type TEXT NOT NULL,
+
+    relationship_group INTEGER,
+
+    is_transitive BOOLEAN NOT NULL DEFAULT false,
+
+    is_symmetric BOOLEAN NOT NULL DEFAULT false,
+
+    effective_from DATE,
+    effective_to DATE,
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    CHECK (source_concept_id <> target_concept_id)
 );
-COMMENT ON TABLE terminology.concept_relationship IS 'Typed relationships between universal concepts.';
 
-CREATE INDEX idx_concept_relationship_target ON terminology.concept_relationship(target_concept_id);
+CREATE INDEX IF NOT EXISTS idx_concept_rel_source
+    ON terminology.concept_relationship(source_concept_id);
 
-CREATE TABLE terminology.mapping (
-   id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   source_concept_id     uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   target_concept_id     uuid NOT NULL REFERENCES terminology.concept(id) ON DELETE CASCADE,
-   mapping_relationship  text NOT NULL,       -- equivalent / source_narrower / source_broader / ...
-   authority             text,
-   confidence            numeric(4,3) CHECK (confidence >= 0 AND confidence <= 1),
-   created_at            timestamptz NOT NULL DEFAULT now(),
-   CHECK (source_concept_id <> target_concept_id)
+CREATE INDEX IF NOT EXISTS idx_concept_rel_target
+    ON terminology.concept_relationship(target_concept_id);
+
+CREATE INDEX IF NOT EXISTS idx_concept_rel_type
+    ON terminology.concept_relationship(relationship_type);
+
+-- -----------------------------------------------------------------------------
+-- CROSS-TERMINOLOGY MAPPINGS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.mapping (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    source_concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    target_concept_id UUID NOT NULL
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
+
+    mapping_relationship TEXT NOT NULL
+        CHECK (
+            mapping_relationship IN (
+                'equivalent',
+                'source_broader',
+                'source_narrower',
+                'target_broader',
+                'target_narrower',
+                'related',
+                'inexact',
+                'unmapped'
+            )
+        ),
+
+    authority TEXT,
+
+    confidence NUMERIC(5,4)
+        CHECK (confidence >= 0 AND confidence <= 1),
+
+    mapping_method TEXT,
+
+    effective_from DATE,
+    effective_to DATE,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    CHECK (source_concept_id <> target_concept_id)
 );
-COMMENT ON TABLE terminology.mapping IS 'Authoritative cross-terminology mappings between concepts.';
 
-CREATE TABLE terminology.value_set (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   name              text NOT NULL UNIQUE,
-   description       text,
-   oid               text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+CREATE INDEX IF NOT EXISTS idx_mapping_source
+    ON terminology.mapping(source_concept_id);
+
+CREATE INDEX IF NOT EXISTS idx_mapping_target
+    ON terminology.mapping(target_concept_id);
+
+-- -----------------------------------------------------------------------------
+-- VALUE SETS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.value_set (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    key TEXT NOT NULL UNIQUE,
+
+    name TEXT NOT NULL,
+
+    description TEXT,
+
+    oid TEXT,
+
+    version TEXT,
+
+    publisher TEXT,
+
+    effective_from DATE,
+    effective_to DATE,
+
+    is_expandable BOOLEAN NOT NULL DEFAULT false,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE terminology.value_set IS 'A named, permitted set of codes (e.g. "vital sign parameters").';
+
+CREATE INDEX IF NOT EXISTS idx_value_set_active
+    ON terminology.value_set(is_active);
+
+DROP TRIGGER IF EXISTS trg_value_set_updated_at
+ON terminology.value_set;
 
 CREATE TRIGGER trg_value_set_updated_at
-   BEFORE UPDATE ON terminology.value_set
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON terminology.value_set
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE terminology.value_set_member (
-   value_set_id      uuid NOT NULL REFERENCES terminology.value_set(id) ON DELETE CASCADE,
-   code_id           uuid NOT NULL REFERENCES terminology.code(id) ON DELETE CASCADE,
-   is_active         boolean NOT NULL DEFAULT true,
-   sort_order        integer NOT NULL DEFAULT 0,
-   PRIMARY KEY (value_set_id, code_id)
-);
-COMMENT ON TABLE terminology.value_set_member IS 'Membership of a code in a value set.';
+CREATE TABLE IF NOT EXISTS terminology.value_set_member (
+    value_set_id UUID NOT NULL
+        REFERENCES terminology.value_set(id)
+        ON DELETE CASCADE,
 
-CREATE TABLE terminology.unit (
-   code              text PRIMARY KEY,
-   label             text NOT NULL,
-   dimension         text,                    -- mass / length / time / temperature / ...
-   symbol            text,
-   si_unit_code      text REFERENCES terminology.unit(code),
-   created_at        timestamptz NOT NULL DEFAULT now()
-);
-COMMENT ON TABLE terminology.unit IS 'Measurement units used by clinical values.';
+    concept_id UUID
+        REFERENCES terminology.concept(id)
+        ON DELETE CASCADE,
 
-CREATE TABLE terminology.unit_conversion (
-   from_unit_code    text NOT NULL REFERENCES terminology.unit(code),
-   to_unit_code      text NOT NULL REFERENCES terminology.unit(code),
-   factor            numeric NOT NULL,        -- to = from * factor + offset_value
-   offset_value      numeric NOT NULL DEFAULT 0,
-   PRIMARY KEY (from_unit_code, to_unit_code)
+    code_id UUID
+        REFERENCES terminology.code(id)
+        ON DELETE CASCADE,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    sort_order INTEGER NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (value_set_id, concept_id, code_id),
+
+    CHECK (
+        concept_id IS NOT NULL
+        OR code_id IS NOT NULL
+    )
 );
-COMMENT ON TABLE terminology.unit_conversion IS 'Linear conversions between units.';
+
+CREATE INDEX IF NOT EXISTS idx_value_set_member_concept
+    ON terminology.value_set_member(concept_id);
+
+CREATE INDEX IF NOT EXISTS idx_value_set_member_code
+    ON terminology.value_set_member(code_id);
+
+-- -----------------------------------------------------------------------------
+-- UNITS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS terminology.unit (
+    code TEXT PRIMARY KEY,
+
+    label TEXT NOT NULL,
+
+    symbol TEXT,
+
+    dimension TEXT,
+
+    ucum_code TEXT,
+
+    si_unit_code TEXT
+        REFERENCES terminology.unit(code),
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_unit_dimension
+    ON terminology.unit(dimension);
+
+CREATE TABLE IF NOT EXISTS terminology.unit_conversion (
+    from_unit_code TEXT NOT NULL
+        REFERENCES terminology.unit(code),
+
+    to_unit_code TEXT NOT NULL
+        REFERENCES terminology.unit(code),
+
+    factor NUMERIC NOT NULL,
+
+    offset_value NUMERIC NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (from_unit_code, to_unit_code),
+
+    CHECK (from_unit_code <> to_unit_code)
+);
 
 -- =============================================================================
--- ORGANIZATION — legal/administrative structure
--- =============================================================================
+-- ============================================================================
+-- ORGANIZATION
+-- ============================================================================
 
-CREATE TABLE organization.organization (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   parent_id         uuid REFERENCES organization.organization(id),
-   name              text NOT NULL,
-   legal_name        text,
-   organization_type text NOT NULL,           -- hospital_network / hospital / clinic / ministry / insurance / ...
-   tax_id            text,
-   country           text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+CREATE TABLE IF NOT EXISTS organization.organization (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    parent_id UUID
+        REFERENCES organization.organization(id),
+
+    organization_key TEXT UNIQUE,
+
+    name TEXT NOT NULL,
+
+    legal_name TEXT,
+
+    organization_type TEXT NOT NULL,
+
+    description TEXT,
+
+    country_code TEXT,
+
+    registration_number TEXT,
+
+    tax_identifier TEXT,
+
+    timezone TEXT NOT NULL DEFAULT 'Africa/Nairobi',
+
+    default_language_code TEXT,
+
+    status TEXT NOT NULL DEFAULT 'active'
+        CHECK (
+            status IN (
+                'active',
+                'inactive',
+                'suspended',
+                'closed',
+                'pending'
+            )
+        ),
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE organization.organization IS 'Legal/administrative organization (group, network, hospital authority...).';
 
-CREATE INDEX idx_organization_parent ON organization.organization(parent_id);
+CREATE INDEX IF NOT EXISTS idx_org_parent
+    ON organization.organization(parent_id);
+
+CREATE INDEX IF NOT EXISTS idx_org_status
+    ON organization.organization(status);
+
+CREATE INDEX IF NOT EXISTS idx_org_country
+    ON organization.organization(country_code);
+
+DROP TRIGGER IF EXISTS trg_organization_updated_at
+ON organization.organization;
+
 CREATE TRIGGER trg_organization_updated_at
-   BEFORE UPDATE ON organization.organization
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON organization.organization
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE organization.organization_identifier (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   organization_id   uuid NOT NULL REFERENCES organization.organization(id) ON DELETE CASCADE,
-   identifier_type   text NOT NULL,           -- registration / license / ministry_code / ...
-   value             text NOT NULL,
-   authority         text,
-   issued_at         date,
-   expires_at        date,
-   UNIQUE (organization_id, identifier_type, value)
+-- -----------------------------------------------------------------------------
+-- ORGANIZATION IDENTIFIERS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.organization_identifier (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    organization_id UUID NOT NULL
+        REFERENCES organization.organization(id)
+        ON DELETE CASCADE,
+
+    identifier_type TEXT NOT NULL,
+
+    value TEXT NOT NULL,
+
+    normalized_value TEXT NOT NULL,
+
+    authority TEXT,
+
+    issued_at DATE,
+    expires_at DATE,
+
+    verified BOOLEAN NOT NULL DEFAULT false,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    UNIQUE (
+        identifier_type,
+        normalized_value,
+        authority
+    )
 );
-COMMENT ON TABLE organization.organization_identifier IS 'Registration/license IDs for an organization.';
 
--- Facilities -----------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_org_identifier_org
+    ON organization.organization_identifier(organization_id);
 
-CREATE TABLE organization.facility (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   organization_id   uuid REFERENCES organization.organization(id),
-   name              text NOT NULL,
-   facility_type     text NOT NULL,           -- hospital / clinic / health_center / dispensary / ...
-   status            text NOT NULL DEFAULT 'active',
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+-- -----------------------------------------------------------------------------
+-- FACILITY
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.facility (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    organization_id UUID NOT NULL
+        REFERENCES organization.organization(id),
+
+    facility_key TEXT,
+
+    name TEXT NOT NULL,
+
+    legal_name TEXT,
+
+    facility_type TEXT NOT NULL,
+
+    ownership_type TEXT,
+
+    status TEXT NOT NULL DEFAULT 'active',
+
+    country_code TEXT,
+
+    county TEXT,
+
+    district TEXT,
+
+    city TEXT,
+
+    timezone TEXT NOT NULL DEFAULT 'Africa/Nairobi',
+
+    latitude NUMERIC(9,6),
+    longitude NUMERIC(9,6),
+
+    phone TEXT,
+    email TEXT,
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    CHECK (
+        latitude IS NULL
+        OR latitude BETWEEN -90 AND 90
+    ),
+
+    CHECK (
+        longitude IS NULL
+        OR longitude BETWEEN -180 AND 180
+    )
 );
-COMMENT ON TABLE organization.facility IS 'A site where care is delivered (hospital, clinic, health centre).';
 
-CREATE INDEX idx_facility_org ON organization.facility(organization_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_facility_org_key
+    ON organization.facility(organization_id, facility_key)
+    WHERE facility_key IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_facility_org
+    ON organization.facility(organization_id);
+
+CREATE INDEX IF NOT EXISTS idx_facility_status
+    ON organization.facility(status);
+
+DROP TRIGGER IF EXISTS trg_facility_updated_at
+ON organization.facility;
+
 CREATE TRIGGER trg_facility_updated_at
-   BEFORE UPDATE ON organization.facility
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON organization.facility
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE organization.facility_identifier (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   identifier_type   text NOT NULL,           -- facility_code / mfl_code / license / ...
-   value             text NOT NULL,
-   authority         text,
-   UNIQUE (facility_id, identifier_type, value)
+-- -----------------------------------------------------------------------------
+-- FACILITY IDENTIFIERS
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.facility_identifier (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    identifier_type TEXT NOT NULL,
+
+    value TEXT NOT NULL,
+
+    normalized_value TEXT NOT NULL,
+
+    authority TEXT,
+
+    issued_at DATE,
+    expires_at DATE,
+
+    verified BOOLEAN NOT NULL DEFAULT false,
+
+    UNIQUE (
+        identifier_type,
+        normalized_value,
+        authority
+    )
 );
-COMMENT ON TABLE organization.facility_identifier IS 'External identifiers for a facility.';
 
-CREATE TABLE organization.campus (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   name              text NOT NULL
+CREATE INDEX IF NOT EXISTS idx_facility_identifier_facility
+    ON organization.facility_identifier(facility_id);
+
+-- =============================================================================
+-- PHYSICAL FACILITY HIERARCHY
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS organization.campus (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    name TEXT NOT NULL,
+
+    code TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    UNIQUE (facility_id, name)
 );
-COMMENT ON TABLE organization.campus IS 'A campus within a facility.';
 
-CREATE TABLE organization.building (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   campus_id         uuid REFERENCES organization.campus(id),
-   facility_id       uuid REFERENCES organization.facility(id),
-   name              text NOT NULL
+CREATE INDEX IF NOT EXISTS idx_campus_facility
+    ON organization.campus(facility_id);
+
+CREATE TABLE IF NOT EXISTS organization.building (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    campus_id UUID
+        REFERENCES organization.campus(id)
+        ON DELETE CASCADE,
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    name TEXT NOT NULL,
+
+    code TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    UNIQUE (facility_id, name)
 );
-COMMENT ON TABLE organization.building IS 'A building within a facility/campus.';
 
-CREATE TABLE organization.floor (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   building_id       uuid NOT NULL REFERENCES organization.building(id) ON DELETE CASCADE,
-   name              text NOT NULL,
-   level             integer
+CREATE INDEX IF NOT EXISTS idx_building_facility
+    ON organization.building(facility_id);
+
+CREATE TABLE IF NOT EXISTS organization.floor (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    building_id UUID NOT NULL
+        REFERENCES organization.building(id)
+        ON DELETE CASCADE,
+
+    name TEXT NOT NULL,
+
+    level INTEGER,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    UNIQUE (building_id, name)
 );
-COMMENT ON TABLE organization.floor IS 'A floor within a building.';
 
-CREATE TABLE organization.room (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   floor_id          uuid REFERENCES organization.floor(id),
-   building_id       uuid REFERENCES organization.building(id),
-   name              text NOT NULL,
-   room_type         text                     -- ward / consultation / theatre / lab / pharmacy / ...
+CREATE TABLE IF NOT EXISTS organization.room (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    floor_id UUID
+        REFERENCES organization.floor(id)
+        ON DELETE CASCADE,
+
+    building_id UUID
+        REFERENCES organization.building(id)
+        ON DELETE CASCADE,
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    name TEXT NOT NULL,
+
+    code TEXT,
+
+    room_type TEXT,
+
+    status TEXT NOT NULL DEFAULT 'active',
+
+    capacity INTEGER,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    CHECK (capacity IS NULL OR capacity >= 0)
 );
-COMMENT ON TABLE organization.room IS 'A physical room where care or services happen.';
 
-CREATE TABLE organization.bed (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   room_id           uuid NOT NULL REFERENCES organization.room(id) ON DELETE CASCADE,
-   name              text NOT NULL,
-   status            text NOT NULL DEFAULT 'available'
-                     CHECK (status IN ('available','occupied','reserved','maintenance')),
-   is_active         boolean NOT NULL DEFAULT true
+CREATE INDEX IF NOT EXISTS idx_room_facility
+    ON organization.room(facility_id);
+
+CREATE INDEX IF NOT EXISTS idx_room_type
+    ON organization.room(room_type);
+
+CREATE TABLE IF NOT EXISTS organization.bed (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    room_id UUID NOT NULL
+        REFERENCES organization.room(id)
+        ON DELETE CASCADE,
+
+    name TEXT NOT NULL,
+
+    code TEXT,
+
+    bed_type TEXT,
+
+    status TEXT NOT NULL DEFAULT 'available'
+        CHECK (
+            status IN (
+                'available',
+                'occupied',
+                'reserved',
+                'blocked',
+                'maintenance',
+                'cleaning',
+                'out_of_service'
+            )
+        ),
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    UNIQUE (room_id, name)
 );
-COMMENT ON TABLE organization.bed IS 'A physical bed. Occupancy is tracked in encounters, not here.';
 
--- Care structure --------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_bed_room
+    ON organization.bed(room_id);
 
-CREATE TABLE organization.department (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   parent_id         uuid REFERENCES organization.department(id),
-   name              text NOT NULL,           -- "Medicine", "Surgery" — free of hardcoding but stored per-facility
-   code              text
+CREATE INDEX IF NOT EXISTS idx_bed_status
+    ON organization.bed(status);
+
+-- =============================================================================
+-- CARE ORGANIZATION
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS organization.department (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    parent_id UUID
+        REFERENCES organization.department(id),
+
+    code TEXT,
+
+    name TEXT NOT NULL,
+
+    department_type TEXT,
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    UNIQUE (facility_id, code)
 );
-COMMENT ON TABLE organization.department IS 'A department within a facility (no special-casing of specialties).';
 
-CREATE INDEX idx_department_facility ON organization.department(facility_id);
+CREATE INDEX IF NOT EXISTS idx_department_facility
+    ON organization.department(facility_id);
 
-CREATE TABLE organization.unit (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   department_id     uuid REFERENCES organization.department(id),
-   name              text NOT NULL,           -- ward / service unit / ICU / labour ward
-   code              text
+CREATE INDEX IF NOT EXISTS idx_department_parent
+    ON organization.department(parent_id);
+
+CREATE TABLE IF NOT EXISTS organization.unit (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    department_id UUID
+        REFERENCES organization.department(id),
+
+    code TEXT,
+
+    name TEXT NOT NULL,
+
+    unit_type TEXT,
+
+    capacity INTEGER,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    CHECK (capacity IS NULL OR capacity >= 0),
+
+    UNIQUE (facility_id, code)
 );
-COMMENT ON TABLE organization.unit IS 'A ward or service unit where care is delivered.';
 
-CREATE INDEX idx_unit_department ON organization.unit(department_id);
+CREATE INDEX IF NOT EXISTS idx_unit_facility
+    ON organization.unit(facility_id);
 
-CREATE TABLE organization.clinic (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   department_id     uuid REFERENCES organization.department(id),
-   unit_id           uuid REFERENCES organization.unit(id),
-   name              text NOT NULL,           -- MOPC / ANC / diabetes clinic / ...
-   code              text
+CREATE INDEX IF NOT EXISTS idx_unit_department
+    ON organization.unit(department_id);
+
+CREATE TABLE IF NOT EXISTS organization.clinic (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    department_id UUID
+        REFERENCES organization.department(id),
+
+    unit_id UUID
+        REFERENCES organization.unit(id),
+
+    code TEXT,
+
+    name TEXT NOT NULL,
+
+    clinic_type TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    UNIQUE (facility_id, code)
 );
-COMMENT ON TABLE organization.clinic IS 'An outpatient/specialty clinic.';
 
--- Service catalogue ------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_clinic_facility
+    ON organization.clinic(facility_id);
 
-CREATE TABLE organization.service (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   code              text NOT NULL UNIQUE,
-   name              text NOT NULL,
-   description       text,
-   service_category  text,                    -- clinical / laboratory / radiology / pharmacy / administrative
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+-- =============================================================================
+-- SERVICE CATALOGUE
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS organization.service (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code TEXT NOT NULL UNIQUE,
+
+    name TEXT NOT NULL,
+
+    description TEXT,
+
+    service_category TEXT,
+
+    service_type TEXT,
+
+    terminology_concept_id UUID
+        REFERENCES terminology.concept(id),
+
+    is_billable BOOLEAN NOT NULL DEFAULT false,
+
+    is_clinical BOOLEAN NOT NULL DEFAULT true,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE organization.service IS 'Catalogue of services AMEXAN can deliver/order.';
+
+CREATE INDEX IF NOT EXISTS idx_service_category
+    ON organization.service(service_category);
+
+CREATE INDEX IF NOT EXISTS idx_service_active
+    ON organization.service(is_active);
+
+DROP TRIGGER IF EXISTS trg_service_updated_at
+ON organization.service;
 
 CREATE TRIGGER trg_service_updated_at
-   BEFORE UPDATE ON organization.service
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON organization.service
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE organization.service_location (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   service_id        uuid NOT NULL REFERENCES organization.service(id) ON DELETE CASCADE,
-   facility_id       uuid REFERENCES organization.facility(id),
-   department_id     uuid REFERENCES organization.department(id),
-   unit_id           uuid REFERENCES organization.unit(id),
-   clinic_id         uuid REFERENCES organization.clinic(id),
-   room_id           uuid REFERENCES organization.room(id),
-   is_active         boolean NOT NULL DEFAULT true
+CREATE TABLE IF NOT EXISTS organization.facility_service (
+    facility_id UUID NOT NULL
+        REFERENCES organization.facility(id)
+        ON DELETE CASCADE,
+
+    service_id UUID NOT NULL
+        REFERENCES organization.service(id)
+        ON DELETE CASCADE,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    available_from DATE,
+    available_to DATE,
+
+    PRIMARY KEY (facility_id, service_id)
 );
-COMMENT ON TABLE organization.service_location IS 'Where a service is physically delivered.';
 
-CREATE TABLE organization.facility_service (
-   facility_id       uuid NOT NULL REFERENCES organization.facility(id) ON DELETE CASCADE,
-   service_id        uuid NOT NULL REFERENCES organization.service(id) ON DELETE CASCADE,
-   is_active         boolean NOT NULL DEFAULT true,
-   PRIMARY KEY (facility_id, service_id)
+CREATE TABLE IF NOT EXISTS organization.department_service (
+    department_id UUID NOT NULL
+        REFERENCES organization.department(id)
+        ON DELETE CASCADE,
+
+    service_id UUID NOT NULL
+        REFERENCES organization.service(id)
+        ON DELETE CASCADE,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    PRIMARY KEY (department_id, service_id)
 );
-COMMENT ON TABLE organization.facility_service IS 'Services available at a facility.';
 
-CREATE TABLE organization.department_service (
-   department_id     uuid NOT NULL REFERENCES organization.department(id) ON DELETE CASCADE,
-   service_id        uuid NOT NULL REFERENCES organization.service(id) ON DELETE CASCADE,
-   is_active         boolean NOT NULL DEFAULT true,
-   PRIMARY KEY (department_id, service_id)
+CREATE TABLE IF NOT EXISTS organization.service_location (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    service_id UUID NOT NULL
+        REFERENCES organization.service(id)
+        ON DELETE CASCADE,
+
+    facility_id UUID
+        REFERENCES organization.facility(id),
+
+    department_id UUID
+        REFERENCES organization.department(id),
+
+    unit_id UUID
+        REFERENCES organization.unit(id),
+
+    clinic_id UUID
+        REFERENCES organization.clinic(id),
+
+    room_id UUID
+        REFERENCES organization.room(id),
+
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
-COMMENT ON TABLE organization.department_service IS 'Services offered by a department.';
 
--- Workforce --------------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_service_location_service
+    ON organization.service_location(service_id);
 
-CREATE TABLE organization.profession (
-   code              text PRIMARY KEY,
-   label             text NOT NULL,
-   description       text,
-   is_active         boolean NOT NULL DEFAULT true
+CREATE INDEX IF NOT EXISTS idx_service_location_facility
+    ON organization.service_location(facility_id);
+
+-- =============================================================================
+-- WORKFORCE
+-- =============================================================================
+
+CREATE TABLE IF NOT EXISTS organization.profession (
+    code TEXT PRIMARY KEY,
+
+    label TEXT NOT NULL,
+
+    description TEXT,
+
+    regulatory_body TEXT,
+
+    is_clinical BOOLEAN NOT NULL DEFAULT false,
+
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
-COMMENT ON TABLE organization.profession IS 'Clinical/non-clinical professions: doctor, nurse, pharmacist...';
 
-CREATE TABLE organization.specialty (
-   code              text PRIMARY KEY,
-   label             text NOT NULL,
-   is_active         boolean NOT NULL DEFAULT true
+CREATE TABLE IF NOT EXISTS organization.specialty (
+    code TEXT PRIMARY KEY,
+
+    label TEXT NOT NULL,
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
-COMMENT ON TABLE organization.specialty IS 'Specialties: internal medicine, paediatrics, surgery...';
 
-CREATE TABLE organization.subspecialty (
-   code              text PRIMARY KEY,
-   specialty_code    text REFERENCES organization.specialty(code),
-   label             text NOT NULL,
-   is_active         boolean NOT NULL DEFAULT true
+CREATE TABLE IF NOT EXISTS organization.subspecialty (
+    code TEXT PRIMARY KEY,
+
+    specialty_code TEXT
+        REFERENCES organization.specialty(code),
+
+    label TEXT NOT NULL,
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
-COMMENT ON TABLE organization.subspecialty IS 'Subspecialties within a specialty.';
 
-CREATE TABLE organization.professional (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   person_id         uuid NOT NULL REFERENCES identity.person(id),
-   profession_code   text REFERENCES organization.profession(code),
-   specialty_code    text REFERENCES organization.specialty(code),
-   subspecialty_code text REFERENCES organization.subspecialty(code),
-   staff_number      text,
-   status            text NOT NULL DEFAULT 'active',
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
+CREATE TABLE IF NOT EXISTS organization.professional (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    person_id UUID NOT NULL
+        REFERENCES identity.person(id),
+
+    profession_code TEXT
+        REFERENCES organization.profession(code),
+
+    specialty_code TEXT
+        REFERENCES organization.specialty(code),
+
+    subspecialty_code TEXT
+        REFERENCES organization.subspecialty(code),
+
+    professional_identifier TEXT,
+
+    staff_number TEXT,
+
+    status TEXT NOT NULL DEFAULT 'active',
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE organization.professional IS 'A person acting in a professional/clinical capacity.';
 
-CREATE INDEX idx_professional_person ON organization.professional(person_id);
+CREATE INDEX IF NOT EXISTS idx_professional_person
+    ON organization.professional(person_id);
+
+CREATE INDEX IF NOT EXISTS idx_professional_profession
+    ON organization.professional(profession_code);
+
+CREATE INDEX IF NOT EXISTS idx_professional_specialty
+    ON organization.professional(specialty_code);
+
+DROP TRIGGER IF EXISTS trg_professional_updated_at
+ON organization.professional;
+
 CREATE TRIGGER trg_professional_updated_at
-   BEFORE UPDATE ON organization.professional
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+BEFORE UPDATE ON organization.professional
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TABLE organization.license (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   professional_id   uuid NOT NULL REFERENCES organization.professional(id) ON DELETE CASCADE,
-   license_type      text NOT NULL,           -- medical_practitioners / nursing_council / ...
-   license_number    text NOT NULL,
-   issuing_body      text,
-   issued_at         date,
-   expires_at        date,
-   verified          boolean NOT NULL DEFAULT false,
-   UNIQUE (license_type, license_number)
+-- -----------------------------------------------------------------------------
+-- LICENSES
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.license (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    professional_id UUID NOT NULL
+        REFERENCES organization.professional(id)
+        ON DELETE CASCADE,
+
+    license_type TEXT NOT NULL,
+
+    license_number TEXT NOT NULL,
+
+    issuing_body TEXT,
+
+    country_code TEXT,
+
+    issued_at DATE,
+
+    expires_at DATE,
+
+    status TEXT NOT NULL DEFAULT 'active',
+
+    verified BOOLEAN NOT NULL DEFAULT false,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    UNIQUE (license_type, license_number, issuing_body)
 );
-COMMENT ON TABLE organization.license IS 'Professional licenses held by a professional.';
 
-CREATE TABLE organization.employment (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   professional_id   uuid NOT NULL REFERENCES organization.professional(id) ON DELETE CASCADE,
-   organization_id   uuid REFERENCES organization.organization(id),
-   facility_id       uuid REFERENCES organization.facility(id),
-   position          text,
-   employment_type   text,                    -- full_time / part_time / locum / volunteer
-   started_on        date,
-   ended_on          date,
-   is_active         boolean NOT NULL DEFAULT true
+CREATE INDEX IF NOT EXISTS idx_license_professional
+    ON organization.license(professional_id);
+
+CREATE INDEX IF NOT EXISTS idx_license_expiry
+    ON organization.license(expires_at);
+
+-- -----------------------------------------------------------------------------
+-- EMPLOYMENT
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.employment (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    professional_id UUID NOT NULL
+        REFERENCES organization.professional(id)
+        ON DELETE CASCADE,
+
+    organization_id UUID
+        REFERENCES organization.organization(id),
+
+    facility_id UUID
+        REFERENCES organization.facility(id),
+
+    position TEXT,
+
+    employment_type TEXT,
+
+    started_on DATE,
+
+    ended_on DATE,
+
+    status TEXT NOT NULL DEFAULT 'active',
+
+    is_primary BOOLEAN NOT NULL DEFAULT false
 );
-COMMENT ON TABLE organization.employment IS 'Employment relationship between a professional and an organization/facility.';
 
-CREATE INDEX idx_employment_professional ON organization.employment(professional_id);
+CREATE INDEX IF NOT EXISTS idx_employment_professional
+    ON organization.employment(professional_id);
 
-CREATE TABLE organization.staff_assignment (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   professional_id   uuid NOT NULL REFERENCES organization.professional(id) ON DELETE CASCADE,
-   facility_id       uuid REFERENCES organization.facility(id),
-   department_id     uuid REFERENCES organization.department(id),
-   unit_id           uuid REFERENCES organization.unit(id),
-   clinic_id         uuid REFERENCES organization.clinic(id),
-   role_text         text,
-   valid_from        timestamptz,
-   valid_to          timestamptz,
-   is_active         boolean NOT NULL DEFAULT true
+CREATE INDEX IF NOT EXISTS idx_employment_org
+    ON organization.employment(organization_id);
+
+CREATE INDEX IF NOT EXISTS idx_employment_facility
+    ON organization.employment(facility_id);
+
+-- -----------------------------------------------------------------------------
+-- STAFF ASSIGNMENT
+-- -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS organization.staff_assignment (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    professional_id UUID NOT NULL
+        REFERENCES organization.professional(id)
+        ON DELETE CASCADE,
+
+    organization_id UUID
+        REFERENCES organization.organization(id),
+
+    facility_id UUID
+        REFERENCES organization.facility(id),
+
+    department_id UUID
+        REFERENCES organization.department(id),
+
+    unit_id UUID
+        REFERENCES organization.unit(id),
+
+    clinic_id UUID
+        REFERENCES organization.clinic(id),
+
+    assignment_role TEXT,
+
+    valid_from TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+    valid_to TIMESTAMPTZ,
+
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
-COMMENT ON TABLE organization.staff_assignment IS 'Where a professional is assigned to work.';
 
-CREATE TABLE organization.team (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   name              text NOT NULL,
-   description       text,
-   facility_id       uuid REFERENCES organization.facility(id),
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
-);
-COMMENT ON TABLE organization.team IS 'A care team (e.g. ward team, trauma team).';
+CREATE INDEX IF NOT EXISTS idx_assignment_professional
+    ON organization.staff_assignment(professional_id);
 
-CREATE TRIGGER trg_team_updated_at
-   BEFORE UPDATE ON organization.team
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+CREATE INDEX IF NOT EXISTS idx_assignment_facility
+    ON organization.staff_assignment(facility_id);
 
-CREATE TABLE organization.team_member (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   team_id           uuid NOT NULL REFERENCES organization.team(id) ON DELETE CASCADE,
-   professional_id   uuid NOT NULL REFERENCES organization.professional(id) ON DELETE CASCADE,
-   member_role       text,                    -- lead / member / consultant
-   valid_from        timestamptz,
-   valid_to          timestamptz,
-   UNIQUE (team_id, professional_id, member_role, valid_from)
-);
-COMMENT ON TABLE organization.team_member IS 'Membership of a professional in a care team.';
+CREATE INDEX IF NOT EXISTS idx_assignment_unit
+    ON organization.staff_assignment(unit_id);
 
 -- =============================================================================
--- SECURITY
+-- TEAMS
 -- =============================================================================
 
-CREATE TABLE security.permission (
-   code              text PRIMARY KEY,
-   resource          text NOT NULL,           -- patient / encounter / order / ...
-   action            text NOT NULL,           -- view / create / update / delete / prescribe
-   description       text,
-   created_at        timestamptz NOT NULL DEFAULT now()
+CREATE TABLE IF NOT EXISTS organization.team (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    organization_id UUID
+        REFERENCES organization.organization(id),
+
+    facility_id UUID
+        REFERENCES organization.facility(id),
+
+    department_id UUID
+        REFERENCES organization.department(id),
+
+    code TEXT,
+
+    name TEXT NOT NULL,
+
+    description TEXT,
+
+    team_type TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT true,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-COMMENT ON TABLE security.permission IS 'Atomic permission. Example: patient.view, encounter.document, order.lab.';
 
-CREATE INDEX idx_permission_resource ON security.permission(resource);
+CREATE INDEX IF NOT EXISTS idx_team_facility
+    ON organization.team(facility_id);
 
-CREATE TABLE security.role (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   code              text NOT NULL UNIQUE,
-   name              text NOT NULL,
-   description       text,
-   is_system         boolean NOT NULL DEFAULT false,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
-);
-COMMENT ON TABLE security.role IS 'A named bundle of permissions (doctor, receptionist, nurse...).';
-
-CREATE TRIGGER trg_role_updated_at
-   BEFORE UPDATE ON security.role
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
-
-CREATE TABLE security.role_permission (
-   role_id           uuid NOT NULL REFERENCES security.role(id) ON DELETE CASCADE,
-   permission_code   text NOT NULL REFERENCES security.permission(code) ON DELETE CASCADE,
-   PRIMARY KEY (role_id, permission_code)
-);
-COMMENT ON TABLE security.role_permission IS 'Permission granted to a role.';
-
-CREATE TABLE security.organization_role (
-   organization_id   uuid NOT NULL REFERENCES organization.organization(id) ON DELETE CASCADE,
-   role_id           uuid NOT NULL REFERENCES security.role(id) ON DELETE CASCADE,
-   label             text,
-   description       text,
-   PRIMARY KEY (organization_id, role_id)
-);
-COMMENT ON TABLE security.organization_role IS 'A role as instantiated/scoped within an organization.';
-
-CREATE TABLE security.user_role (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   user_account_id   uuid NOT NULL REFERENCES identity.user_account(id) ON DELETE CASCADE,
-   role_id           uuid NOT NULL REFERENCES security.role(id) ON DELETE CASCADE,
-   organization_id   uuid REFERENCES organization.organization(id),
-   facility_id       uuid REFERENCES organization.facility(id),
-   department_id     uuid REFERENCES organization.department(id),
-   assigned_by       uuid REFERENCES identity.user_account(id),
-   valid_from        timestamptz NOT NULL DEFAULT now(),
-   valid_to          timestamptz
-);
-COMMENT ON TABLE security.user_role IS 'Role assignment to a user, optionally scoped to org/facility/department.';
-
-CREATE INDEX idx_user_role_user ON security.user_role(user_account_id);
-CREATE INDEX idx_user_role_role ON security.user_role(role_id);
-
-CREATE TABLE security.access_policy (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   name              text NOT NULL UNIQUE,
-   policy_type       text NOT NULL,           -- role_based / attribute_based / organization_scoped
-   rule              jsonb,                   -- machine-evaluable policy expression
-   description       text,
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
-);
-COMMENT ON TABLE security.access_policy IS 'Declarative access rules evaluated by the engine.';
-
-CREATE TRIGGER trg_access_policy_updated_at
-   BEFORE UPDATE ON security.access_policy
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
-
-CREATE TABLE security.resource_policy (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   access_policy_id  uuid NOT NULL REFERENCES security.access_policy(id) ON DELETE CASCADE,
-   resource          text NOT NULL,           -- patient / encounter / document / ...
-   resource_id       uuid,                    -- null = applies to all resources of the type
-   permission_code   text REFERENCES security.permission(code),
-   effect            text NOT NULL DEFAULT 'allow' CHECK (effect IN ('allow','deny')),
-   priority          integer NOT NULL DEFAULT 0
-);
-COMMENT ON TABLE security.resource_policy IS 'Resource-level access rules under an access policy.';
-
-CREATE TABLE security.consent_policy (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   code              text NOT NULL UNIQUE,
-   name              text NOT NULL,
-   data_category     text,                    -- e.g. hiv_status / mental_health / research
-   consent_required  boolean NOT NULL DEFAULT true,
-   retention_days    integer,
-   description       text,
-   is_active         boolean NOT NULL DEFAULT true
-);
-COMMENT ON TABLE security.consent_policy IS 'Categories of data that require consent, and their rules.';
-
-CREATE TABLE security.api_client (
-   id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-   client_id         text NOT NULL UNIQUE,
-   client_name       text NOT NULL,
-   client_secret_hash text,                   -- never plaintext
-   organization_id   uuid REFERENCES organization.organization(id),
-   is_active         boolean NOT NULL DEFAULT true,
-   created_at        timestamptz NOT NULL DEFAULT now(),
-   updated_at        timestamptz NOT NULL DEFAULT now()
-);
-COMMENT ON TABLE security.api_client IS 'External application/credentialed client.';
-
-CREATE TRIGGER trg_api_client_updated_at
-   BEFORE UPDATE ON security.api_client
-   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
-
-CREATE TABLE security.api_scope (
-   code              text PRIMARY KEY,
-   label             text NOT NULL,
-   description       text
-);
-COMMENT ON TABLE security.api_scope IS 'API permission scopes (e.g. patient:read, orders:write).';
-
-CREATE TABLE security.api_client_scope (
-   client_id         uuid NOT NULL REFERENCES security.api_client(id) ON DELETE CASCADE,
-   scope_code        text NOT NULL REFERENCES security.api_scope(code) ON DELETE CASCADE,
-   PRIMARY KEY (client_id, scope_code)
-);
-COMMENT ON TABLE security.api_client_scope IS 'Scopes granted to an API client.';
+DROP TRIGGER IF EXISTS trg_team_updated_at
+ON organization.team;

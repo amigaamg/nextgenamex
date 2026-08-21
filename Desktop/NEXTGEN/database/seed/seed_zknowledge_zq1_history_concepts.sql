@@ -80,12 +80,7 @@ INSERT INTO knowledge.history_concept
    ('HC055', 'WHEEZE',                 'Wheeze',                 'symptom',   true, 'Audible wheeze - question and auscultate (Box 12.8).'),
    ('HC056', 'ALCOHOL_USE',            'Alcohol use',            'background', true, 'Units per week; CAGE screen when indicated (Box 1.12).'),
    ('HC057', 'SMOKING_STATUS',         'Smoking status',         'background', true, 'Current / ex / never; pack-years (Box 1.11).')
-ON CONFLICT (history_concept_id) DO UPDATE SET
-    concept_code = EXCLUDED.concept_code,
-    concept_name = EXCLUDED.concept_name,
-    concept_type = EXCLUDED.concept_type,
-    reusable     = EXCLUDED.reusable,
-    description  = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. functional_impact — the 9 reusable domains (H2 spec §9/functional)
@@ -100,10 +95,7 @@ INSERT INTO knowledge.functional_impact (function_code, domain, label, descripti
    ('SOCIAL_IMPACT',          'social',            'Social impact',           'Social life restricted by the symptom.'),
    ('SELF_CARE_IMPACT',       'adl',               'Self-care impact',        'Dressing, washing, feeding affected.'),
    ('SEXUAL_FUNCTION_IMPACT', 'sexual_health',     'Sexual function impact',  'Sexual function affected (ask sensitively).')
-ON CONFLICT (function_code) DO UPDATE SET
-    domain = EXCLUDED.domain,
-    label  = EXCLUDED.label,
-    description = EXCLUDED.description;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. symptom_history_dimension — meaningful characteristics per symptom
@@ -178,9 +170,7 @@ INSERT INTO knowledge.symptom_history_dimension (symptom_id, history_concept_id,
    ('f0b00000-0000-0000-0000-000000000008','HC038',70,false),
    ('f0b00000-0000-0000-0000-000000000008','HC042',60,false),
    ('f0b00000-0000-0000-0000-000000000008','HC012',60,false)
-ON CONFLICT (symptom_id, history_concept_id) DO UPDATE SET
-    priority  = EXCLUDED.priority,
-    mandatory = EXCLUDED.mandatory;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. provenance — every history_concept derived from its H1 Hutchison claim
@@ -241,7 +231,4 @@ FROM (VALUES
    ('HCH12-0008','ASSOCIATED_WHEEZE',    'fb3b57f1-fdc9-5bbf-ba23-b477385700e6', 1.0)
 ) AS x(claim_code, object_code, object_id, weight)
 JOIN knowledge.source_claim sc ON sc.claim_code = x.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO UPDATE SET
-    relationship = EXCLUDED.relationship,
-    weight       = EXCLUDED.weight,
-    object_code  = EXCLUDED.object_code;
+  ON CONFLICT DO NOTHING;

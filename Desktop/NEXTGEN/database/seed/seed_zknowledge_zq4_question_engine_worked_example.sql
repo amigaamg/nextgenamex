@@ -25,7 +25,7 @@ INSERT INTO clinical.fact_definition (code, name, description, data_type, is_act
    ('SYMPTOM_DURATION_DAYS','Symptom duration (days)',   'How long the presenting symptom has been present.',       'numeric', true),
    ('SYMPTOM_SEVERITY_SCORE','Symptom severity (1-10)',  'Patient-reported severity on the 1-10 scale.',            'numeric', true),
    ('SYMPTOM_ASSOCIATED_TEXT','Associated symptoms text','Other symptoms the patient has noticed, in their own words.', 'text', true)
-ON CONFLICT (code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. bind the universal questions to facts (so the CPU can ask and capture)
@@ -40,7 +40,7 @@ FROM (VALUES
    ('SYMPTOM_ASSOCIATED',      'SYMPTOM_ASSOCIATED_TEXT', NULL)
 ) AS x(question_code, fact_definition_code, unit_code)
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (question_id, fact_definition_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. L1 UNIVERSAL — the foundation is MANDATORY, asked first
@@ -57,8 +57,7 @@ FROM (VALUES
    ('SYMPTOM_ASSOCIATED',      'mandatory', 5)
 ) AS x(question_code, requirement_level, priority)
 JOIN knowledge.question q ON q.question_code = x.question_code
-ON CONFLICT (question_id, requirement_level, condition) DO UPDATE SET
-    priority = EXCLUDED.priority;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. provenance — universal facts + question bindings derive from H1 claims
@@ -78,4 +77,4 @@ FROM (VALUES
    ('HCH1-0004', 'question_fact',   '8d927648-2665-5187-b746-440e32ca0b2d', 'SYMPTOM_ASSOCIATED')
 ) AS x(claim_code, object_type, object_id, object_code)
 JOIN knowledge.source_claim s ON s.claim_code = x.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

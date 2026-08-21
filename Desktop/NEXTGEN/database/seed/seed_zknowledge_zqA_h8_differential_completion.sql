@@ -63,10 +63,7 @@ VALUES
     ('DCAT-AET',      'Aetiology',              'AETIOLOGY',     'NONE',                      'The causative agent/mechanism class (§4).',                         7,'active'),
     ('DCAT-COMP',     'Complication',           'COMPLICATION',  'NONE',                      'A separable complication of an illness (§4/§44).',                  8,'active'),
     ('DCAT-SEV',      'Severity',               'SEVERITY',      'NONE',                      'Severity state (mild..critical; §4).',                              9,'active')
-ON CONFLICT (category_code) DO UPDATE SET
-    label = EXCLUDED.label, reasoning_level = EXCLUDED.reasoning_level,
-    pathological_process = EXCLUDED.pathological_process, description = EXCLUDED.description,
-    sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. diagnosis_concept — universal diagnosis registry (H8 §34)
@@ -111,12 +108,7 @@ VALUES
     ('DA012', (SELECT id FROM knowledge.concept WHERE concept_code='CNS-HYPOXAEMIA'),'CNS-HYPOXAEMIA',
      'Hypoxaemia','Hypoxaemia','Low oxygen saturation <95% (HCH12-0016) — severity/complication state.','DCAT-COMP','COMPLICATION',0.00,
      ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT'],'active')
-ON CONFLICT (code) DO UPDATE SET
-    concept_id = EXCLUDED.concept_id, concept_code = EXCLUDED.concept_code,
-    canonical_name = EXCLUDED.canonical_name, short_label = EXCLUDED.short_label,
-    description = EXCLUDED.description, category_code = EXCLUDED.category_code,
-    diagnosis_type = EXCLUDED.diagnosis_type, base_weight = EXCLUDED.base_weight,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. diagnosis_etiology — the causal dimension, SEPARATE from diagnosis (§4)
@@ -129,8 +121,7 @@ INSERT INTO knowledge.diagnosis_etiology (etiology_code, code, canonical_name, l
     ('AET-005','CARDIAC',      'Cardiac','Cardiac',' Cardiac pump dysfunction causing congestion (HCH12-0002).',      5,'active'),
     ('AET-006','MALIGNANT',    'Malignant','Malignant',' Neoplastic process (Box 2.3; invasive chest-wall pain, HCH12-0009).', 6,'active'),
     ('AET-007','REFLUX',       'Gastro-oesophageal reflux','Reflux',' Acid reflux causing cough (Box 12.5, HCH12-0020).',  7,'active')
-ON CONFLICT (etiology_code) DO UPDATE SET code = EXCLUDED.code, canonical_name = EXCLUDED.canonical_name,
-    label = EXCLUDED.label, description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. diagnosis_complication — separable complications (§4/§44)
@@ -144,10 +135,7 @@ VALUES
      'Hypoxaemia','Hypoxaemia','Oxygen saturation below 95% — treat as respiratory compromise (HCH12-0016).',true,  2,'active'),
     ('DC-003', (SELECT id FROM knowledge.concept WHERE concept_code='CNS-PLEURAL-EFFUSION'),
      'Pleural effusion','Effusion','Fluid collecting in the pleural space (trachea pushed away, HCH12-0019).',false, 3,'active')
-ON CONFLICT (complication_code) DO UPDATE SET
-    concept_id = EXCLUDED.concept_id, canonical_name = EXCLUDED.canonical_name,
-    label = EXCLUDED.label, description = EXCLUDED.description,
-    is_critical = EXCLUDED.is_critical, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. diagnosis_phenotype — diagnosis ↔ phenotype relationships (H8 §35)
@@ -156,21 +144,18 @@ INSERT INTO knowledge.diagnosis_phenotype
     (diagnosis_code, phenotype_code, relationship, weight, description, evidence_claim_code, is_active)
 VALUES
     ('DA001','PHEN-ACUTE-LRTI','STRONGLY_ASSOCIATED',1.20,' Pneumonia typically presents as an acute lower respiratory illness (HCH12-0004).','HCH12-0004',true),
-    ('DA001','PHEN-HYPOXAEMIA','COMMONLY_ASSOCIATED',0.80,' Parenchymal consolidation may cause hypoxaemia (HCH12-0016/0018).','HCH12-0018',true),
+    ('DA001','PHEN-ACUTE-HYPOXAEMIC','COMMONLY_ASSOCIATED',0.80,' Parenchymal consolidation may cause hypoxaemia (HCH12-0016/0018).','HCH12-0018',true),
     ('DA002','PHEN-ACUTE-LRTI','COMMONLY_ASSOCIATED',0.60,' Bronchitis is the archetypal acute LRTI (HCH12-0004).','HCH12-0004',true),
     ('DA003','PHEN-CHF-CONGESTIVE','STRONGLY_ASSOCIATED',1.20,' Cardiac congestion phenotype with crackles/oedema (HCH12-0018).','HCH12-0018',true),
-    ('DA003','PHEN-HYPOXAEMIA','COMMONLY_ASSOCIATED',0.60,' Congestive heart failure may cause hypoxaemia (HCH12-0002).','HCH12-0002',true),
-    ('DA004','PHEN-CHRONIC-PRODUCTIVE','STRONGLY_ASSOCIATED',1.00,' TB is a chronic productive respiratory illness (Box 12.5, HCH12-0020).','HCH12-0020',true),
+    ('DA003','PHEN-ACUTE-HYPOXAEMIC','COMMONLY_ASSOCIATED',0.60,' Congestive heart failure may cause hypoxaemia (HCH12-0002).','HCH12-0002',true),
+    ('DA004','PHEN-CHRONIC-PRODUCTIVE-COUGH','STRONGLY_ASSOCIATED',1.00,' TB is a chronic productive respiratory illness (Box 12.5, HCH12-0020).','HCH12-0020',true),
     ('DA005','PHEN-AIRWAY-WHEEZE','CHARACTERISTIC',1.30,' Variable airway obstruction with wheeze (HCH12-0018).','HCH12-0018',true),
     ('DA006','PHEN-REFLUX-COUGH','CHARACTERISTIC',1.20,' Reflux-associated cough pattern (Box 12.5, HCH12-0020).','HCH12-0020',true),
-    ('DA007','PHEN-HYPOXAEMIA','COMMONLY_ASSOCIATED',0.50,' Effusion restricts ventilation (HCH12-0002).','HCH12-0002',true),
-    ('DA008','PHEN-HYPOXAEMIA','COMMONLY_ASSOCIATED',0.60,' Pneumothorax causes acute hypoxaemia (HCH12-0019).','HCH12-0019',true),
+    ('DA007','PHEN-ACUTE-HYPOXAEMIC','COMMONLY_ASSOCIATED',0.50,' Effusion restricts ventilation (HCH12-0002).','HCH12-0002',true),
+    ('DA008','PHEN-ACUTE-HYPOXAEMIC','COMMONLY_ASSOCIATED',0.60,' Pneumothorax causes acute hypoxaemia (HCH12-0019).','HCH12-0019',true),
     ('DA011','PHEN-RESPIRATORY-FAILURE','CHARACTERISTIC',1.40,' Respiratory failure is the terminal respiratory phenotype (HCH12-0016).','HCH12-0016',true),
-    ('DA011','PHEN-HYPOXAEMIA','STRONGLY_ASSOCIATED',1.20,' Hypoxaemia is the defining feature of hypoxaemic respiratory failure (HCH12-0016).','HCH12-0016',true)
-ON CONFLICT (diagnosis_code, phenotype_code) DO UPDATE SET
-    relationship = EXCLUDED.relationship, weight = EXCLUDED.weight,
-    description = EXCLUDED.description, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    is_active = EXCLUDED.is_active;
+    ('DA011','PHEN-ACUTE-HYPOXAEMIC','STRONGLY_ASSOCIATED',1.20,' Hypoxaemia is the defining feature of hypoxaemic respiratory failure (HCH12-0016).','HCH12-0016',true)
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. diagnosis_mechanism — diagnosis ↔ mechanism relationships (H8 §36)
@@ -185,9 +170,7 @@ VALUES
     ('DA005','MECH-AIRWAY-OBSTRUCTION',1.20,' Asthma is reversible airway obstruction (HCH12-0018).','HCH12-0018',true),
     ('DA006','MECH-GASTROESOPHAGEAL-REFLUX',1.00,' GERD is retrograde acid reflux causing cough (HCH12-0020).','HCH12-0020',true),
     ('DA007','MECH-PLEURAL-INFLAMMATION',0.80,' Effusion commonly follows pleural inflammation (HCH12-0009).','HCH12-0009',true)
-ON CONFLICT (diagnosis_code, mechanism_code) DO UPDATE SET
-    weight = EXCLUDED.weight, description = EXCLUDED.description,
-    evidence_claim_code = EXCLUDED.evidence_claim_code, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. diagnostic_expected_evidence — EXPECTED vs OBSERVED (H8 §19/§20/§37)
@@ -238,11 +221,7 @@ VALUES
     ('DA011','RESULT_INTERPRETATION',NULL,NULL,NULL,'RINT_HYPOXAEMIA',NULL,'VERY_HIGH',' SpO2 <95% is respiratory compromise (HCH12-0016).','HCH12-0016',true,true),
     -- Hypoxaemia (complication)
     ('DA012','RESULT_INTERPRETATION',NULL,NULL,NULL,'RINT_HYPOXAEMIA',NULL,'VERY_HIGH',' SpO2 <95% = hypoxaemia (HCH12-0016).','HCH12-0016',true,true)
-ON CONFLICT (diagnosis_code, evidence_type, fact_definition_code, phenotype_code, mechanism_code,
-            result_interpretation_code, context_code) DO UPDATE SET
-    expected_strength = EXCLUDED.expected_strength, what_it_means = EXCLUDED.what_it_means,
-    evidence_claim_code = EXCLUDED.evidence_claim_code, is_must_not_miss = EXCLUDED.is_must_not_miss,
-    is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. diagnostic_criterion + condition — structured confirmation (§23/§24)
@@ -266,11 +245,7 @@ VALUES
      ' Cough duration <21 days (acute <3 weeks, HCH12-0004).',' Duration threshold', 'HCH12-0004',true),
     ('DCRIT008','DA006','GERD — reflux syndrome','ALL',NULL,
      ' Heartburn + cough after meals (Box 12.5, HCH12-0020).',' Reflux syndrome', 'HCH12-0020',true)
-ON CONFLICT (criterion_code) DO UPDATE SET
-    diagnosis_code = EXCLUDED.diagnosis_code, criterion_name = EXCLUDED.criterion_name,
-    logic = EXCLUDED.logic, min_count = EXCLUDED.min_count, description = EXCLUDED.description,
-    diagnostic_standard = EXCLUDED.diagnostic_standard, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.diagnostic_criterion_condition
     (criterion_code, condition_code, evidence_type, fact_definition_code, phenotype_code, mechanism_code,
@@ -293,12 +268,7 @@ VALUES
     ('DCRIT007','DCC015','FACT','COUGH_DURATION_DAYS',NULL,NULL,NULL,NULL,'PRESENT','<','21',' Acute cough lasts <3 weeks = 21 days (HCH12-0004).',true),
     ('DCRIT008','DCC016','FACT','HEARTBURN',NULL,NULL,NULL,NULL,'PRESENT',NULL,NULL,' Heartburn in reflux syndrome (Box 12.5).',true),
     ('DCRIT008','DCC017','FACT','COUGH_POSITIONAL',NULL,NULL,NULL,NULL,'PRESENT',NULL,NULL,' Cough after meals in reflux syndrome (Box 12.5).',true)
-ON CONFLICT (criterion_code, condition_code) DO UPDATE SET
-    evidence_type = EXCLUDED.evidence_type, fact_definition_code = EXCLUDED.fact_definition_code,
-    phenotype_code = EXCLUDED.phenotype_code, mechanism_code = EXCLUDED.mechanism_code,
-    result_interpretation_code = EXCLUDED.result_interpretation_code, context_code = EXCLUDED.context_code,
-    presence = EXCLUDED.presence, operator = EXCLUDED.operator, value = EXCLUDED.value,
-    rationale = EXCLUDED.rationale, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. diagnostic_exclusion — critical exclusions (H8 §25)
@@ -315,12 +285,7 @@ VALUES
      ' Pneumothorax is hyper-resonant, not dull to percussion (HCH12-0017).','HCH12-0017',true),
     ('DEX004','DA003','EXAMINATION_FINDING','RLL_BRONCHIAL_BREATH_SOUNDS',NULL,NULL,NULL,NULL,'DO_NOT_CONFIRM',
      ' Pure bronchial-breath-sound consolidation points to pneumonic consolidation, not HF congestion (HCH12-0018).','HCH12-0018',true)
-ON CONFLICT (exclusion_code) DO UPDATE SET
-    diagnosis_code = EXCLUDED.diagnosis_code, evidence_type = EXCLUDED.evidence_type,
-    fact_definition_code = EXCLUDED.fact_definition_code, phenotype_code = EXCLUDED.phenotype_code,
-    mechanism_code = EXCLUDED.mechanism_code, result_interpretation_code = EXCLUDED.result_interpretation_code,
-    context_code = EXCLUDED.context_code, does_what = EXCLUDED.does_what, rationale = EXCLUDED.rationale,
-    evidence_claim_code = EXCLUDED.evidence_claim_code, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. clinical_hypothesis_state — explicit candidate lifecycle (H8 §22)
@@ -335,8 +300,7 @@ INSERT INTO knowledge.clinical_hypothesis_state (state_code, label, description,
     ('EXCLUDED',      'Excluded',      ' Removed by explicit exclusion evidence/criteria.',                   7,  true,  'active'),
     ('CONFIRMED',     'Confirmed',     ' Meets its diagnostic standard (e.g. molecular TB, HCH12-0007).',     8,  true,  'active'),
     ('REJECTED',      'Rejected',      ' Overturned after being considered.',                                9,  true,  'active')
-ON CONFLICT (state_code) DO UPDATE SET label = EXCLUDED.label, description = EXCLUDED.description,
-    sort_order = EXCLUDED.sort_order, is_terminal = EXCLUDED.is_terminal, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 11. reasoning_rule + condition + action — versioned IF/THEN (H8 §25/§30/§31)
@@ -374,25 +338,14 @@ VALUES
      ' SpO2 <95% = hypoxaemic respiratory compromise (HCH12-0016).','HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','EMERGENCY','INPATIENT'], true,'active'),
     ('RR014','RESULT_INTERPRETATION','RINT_HYPOXAEMIA','DA012','STRONGLY_SUPPORT',2.00,
      ' SpO2 <95% = hypoxaemia (HCH12-0016).','HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT'], true,'active')
-ON CONFLICT (rule_code) DO UPDATE SET
-    trigger_type = EXCLUDED.trigger_type, trigger_code = EXCLUDED.trigger_code,
-    target_diagnosis_code = EXCLUDED.target_diagnosis_code, action = EXCLUDED.action,
-    weight_delta = EXCLUDED.weight_delta, message = EXCLUDED.message,
-    evidence_claim_code = EXCLUDED.evidence_claim_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, is_active = EXCLUDED.is_active,
-    status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.reasoning_rule_condition
     (rule_code, condition_code, evidence_type, fact_definition_code, phenotype_code, mechanism_code,
      result_interpretation_code, context_code, operator, value, rationale, is_active)
 VALUES
     ('RR010','RRC001','FACT','COUGH_DURATION_DAYS',NULL,NULL,NULL,NULL,'>','56',' Chronic cough = duration >8 weeks = 56 days (HCH12-0004).',true)
-ON CONFLICT (rule_code, condition_code) DO UPDATE SET
-    evidence_type = EXCLUDED.evidence_type, fact_definition_code = EXCLUDED.fact_definition_code,
-    phenotype_code = EXCLUDED.phenotype_code, mechanism_code = EXCLUDED.mechanism_code,
-    result_interpretation_code = EXCLUDED.result_interpretation_code, context_code = EXCLUDED.context_code,
-    operator = EXCLUDED.operator, value = EXCLUDED.value, rationale = EXCLUDED.rationale,
-    is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- reasoning_rule_action — the H8⇄H7 / H8⇄H3 closed loop (§29/§30/§31)
 INSERT INTO knowledge.reasoning_rule_action (rule_code, action_type, question_code, investigation_code, message, sort_order, is_active) VALUES
@@ -404,8 +357,7 @@ INSERT INTO knowledge.reasoning_rule_action (rule_code, action_type, question_co
     ('RR010','TRIGGER_INVESTIGATION','','I008',' Chronic cough → baseline spirometry (HCH12-0004).',2,true),
     ('RR003','CREATE_QUESTION_GAP','COUGH_PRESENT','',' Pneumonia needs cough in the working profile (HCH12-0004).',1,true),
     ('RR013','ESCALATE','','',' Hypoxaemia is a safety signal — escalate respiratory monitoring (HCH12-0016).',1,true)
-ON CONFLICT (rule_code, action_type, question_code, investigation_code) DO UPDATE SET
-    message = EXCLUDED.message, sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 12. differential_evidence_rule — versioned candidate+proposition→effect (§38/§39)
@@ -465,14 +417,7 @@ VALUES
      ' Pneumothorax is hyper-resonant, not dull (HCH12-0017).','HCH12-0017',1,'2018-01-01','active'),
     ('DEV-025','DA011','RESULT_INTERPRETATION',NULL,NULL,NULL,'RINT_HYPOXAEMIA',NULL,'STRONGLY_SUPPORTS',2.00,NULL,NULL,
      ' SpO2 <95% = respiratory failure risk (HCH12-0016).','HCH12-0016',1,'2018-01-01','active')
-ON CONFLICT (evidence_rule_code) DO UPDATE SET
-    diagnosis_code = EXCLUDED.diagnosis_code, evidence_type = EXCLUDED.evidence_type,
-    fact_definition_code = EXCLUDED.fact_definition_code, phenotype_code = EXCLUDED.phenotype_code,
-    mechanism_code = EXCLUDED.mechanism_code, result_interpretation_code = EXCLUDED.result_interpretation_code,
-    context_code = EXCLUDED.context_code, relationship = EXCLUDED.relationship,
-    base_strength = EXCLUDED.base_strength, operator = EXCLUDED.operator, value = EXCLUDED.value,
-    rationale = EXCLUDED.rationale, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    rule_version = EXCLUDED.rule_version, effective_from = EXCLUDED.effective_from, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 13. reasoning_version — version registry (§39/§40)
@@ -482,10 +427,7 @@ INSERT INTO knowledge.reasoning_version
 VALUES
     ('RV2024.01.001','H8-RULESET-1.0','HUTCHISON_24_2018','CLINICAL-CPU-1.0','2024-01-01',
      ' H8 completion knowledge compiled from Hutchison Clinical Methods 24e.','active')
-ON CONFLICT (version_code) DO UPDATE SET
-    ruleset_version = EXCLUDED.ruleset_version, knowledge_version = EXCLUDED.knowledge_version,
-    engine_version = EXCLUDED.engine_version, effective_from = EXCLUDED.effective_from,
-    change_note = EXCLUDED.change_note, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 14. reasoning_provenance — claim → reasoning knowledge edges (H8 §45/§46)
@@ -503,7 +445,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.diagnosis_concept dc ON dc.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 14b. diagnosis_phenotype + diagnosis_mechanism edges
 INSERT INTO knowledge.reasoning_provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -535,7 +477,7 @@ JOIN (
     SELECT dme.id AS obj_id, 'diagnosis_mechanism' AS t, dme.diagnosis_code || '|' || dme.mechanism_code AS obj FROM knowledge.diagnosis_mechanism dme
 ) x ON x.t = v.object_type AND x.obj = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 14c. diagnostic_expected_evidence edges
 INSERT INTO knowledge.reasoning_provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -576,7 +518,7 @@ FROM (VALUES
 JOIN knowledge.diagnostic_expected_evidence dee
        ON dee.diagnosis_code || '|' || dee.evidence_type || '|' || COALESCE(dee.fact_definition_code, dee.result_interpretation_code) = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 14d. diagnostic_criterion + criterion_condition + exclusion edges
 INSERT INTO knowledge.reasoning_provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -601,7 +543,7 @@ JOIN (
     SELECT dx.exclusion_id AS obj_id, 'diagnostic_exclusion' AS t, dx.exclusion_code AS obj FROM knowledge.diagnostic_exclusion dx
 ) x ON x.t = v.object_type AND x.obj = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.reasoning_provenance (claim_id, object_type, object_id, object_code, relationship)
 SELECT s.claim_id, v.object_type, dcc.condition_id, v.object_code, 'derived_from'
@@ -618,7 +560,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.diagnostic_criterion_condition dcc ON dcc.condition_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 14e. reasoning_rule (+ actions) + differential_evidence_rule edges
 INSERT INTO knowledge.reasoning_provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -651,4 +593,4 @@ JOIN (
     SELECT dv.id AS obj_id, 'differential_evidence_rule' AS t, dv.evidence_rule_code AS obj FROM knowledge.differential_evidence_rule dv
 ) x ON x.t = v.object_type AND x.obj = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

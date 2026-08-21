@@ -75,16 +75,16 @@ BEGIN
     IF vcnt <> 2 THEN RAISE EXCEPTION 'H10 FAIL: expected 2 jurisdictions, got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.population_context;
-    IF vcnt <> 4 THEN RAISE EXCEPTION 'H10 FAIL: expected 4 population_context, got %', vcnt; END IF;
+    IF vcnt <> 5 THEN RAISE EXCEPTION 'H10 FAIL: expected 5 population_context (4 core + POP-BOTH), got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.evidence_metadata;
     IF vcnt <> 5 THEN RAISE EXCEPTION 'H10 FAIL: expected 5 evidence levels (EV-A..EV-E), got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.knowledge_object;
-    IF vcnt <> 25 THEN RAISE EXCEPTION 'H10 FAIL: expected 25 governed objects, got %', vcnt; END IF;
+    IF vcnt <> 55 THEN RAISE EXCEPTION 'H10 FAIL: expected 55 governed objects (25 core + 30 respiratory slice), got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.knowledge_object_version;
-    IF vcnt <> 7 THEN RAISE EXCEPTION 'H10 FAIL: expected 7 object versions, got %', vcnt; END IF;
+    IF vcnt <> 37 THEN RAISE EXCEPTION 'H10 FAIL: expected 37 object versions (7 core + 30 respiratory slice), got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.knowledge_relationship;
     IF vcnt <> 10 THEN RAISE EXCEPTION 'H10 FAIL: expected 10 knowledge relationships, got %', vcnt; END IF;
@@ -114,9 +114,9 @@ BEGIN
     IF vcnt <> 2 THEN RAISE EXCEPTION 'H10 FAIL: expected 2 model registry rows, got %', vcnt; END IF;
 
     SELECT count(*) INTO vcnt FROM governance.system_version;
-    IF vcnt <> 1 THEN RAISE EXCEPTION 'H10 FAIL: expected 1 system version, got %', vcnt; END IF;
+    IF vcnt <> 2 THEN RAISE EXCEPTION 'H10 FAIL: expected 2 system versions (AMEXAN-1.0.0 + 1.1.0), got %', vcnt; END IF;
 
-    RAISE NOTICE 'STEP 1 PASS: H10 schema + catalogue seeded (2/4/5/25/7/10/8/4/4/4/1/1/4/2/1)';
+    RAISE NOTICE 'STEP 1 PASS: H10 schema + catalogue seeded (2/5/5/55/37/10/8/4/4/4/1/1/4/2/2)';
 
     -- ------------------------------------------------------------------
     -- 2. NO ANONYMOUS LOGIC (§49): every governed object is sourced + typed
@@ -138,7 +138,7 @@ BEGIN
     WHERE sc.claim_code IS NULL;
     IF vcnt <> 0 THEN RAISE EXCEPTION 'H10 FAIL: % governed object(s) cite a missing source_claim', vcnt; END IF;
 
-    RAISE NOTICE 'STEP 2 PASS: no anonymous clinical logic — 25/25 governed objects carry a real Hutchison claim';
+    RAISE NOTICE 'STEP 2 PASS: no anonymous clinical logic — 55/55 governed objects carry a real Hutchison claim';
 
     -- ------------------------------------------------------------------
     -- 3. LIFECYCLE + PUBLISH GATE (#41)
@@ -251,19 +251,24 @@ BEGIN
     WHERE model_code='MODEL-LLM-01' AND model_type='LLM' AND approval_status='DRAFT' AND is_active=false;
     IF vcnt <> 1 THEN RAISE EXCEPTION 'H10 FAIL: LLM must stay DRAFT + inactive until reviewed (#47/#48), got %', vcnt; END IF;
 
-    -- system_version ties the REAL H8 + H9 version codes
+    -- system_version ties the REAL H8 + H9 version codes (active row = AMEXAN-1.1.0)
     SELECT count(*) INTO vcnt
     FROM governance.system_version sv
     JOIN knowledge.reasoning_version rv     ON rv.version_code = sv.reasoning_version_code
     JOIN knowledge.documentation_version dv ON dv.version_code = sv.documentation_version_code
-    WHERE sv.system_version_code='AMEXAN-1.0.0' AND sv.is_active=true
+    WHERE sv.system_version_code='AMEXAN-1.1.0' AND sv.is_active=true
           AND sv.reasoning_version_code='RV2024.01.001'
           AND sv.documentation_version_code='RV2024.01.002'
           AND rv.knowledge_version='HUTCHISON_24_2018'
           AND dv.knowledge_version='HUTCHISON_24_2018';
-    IF vcnt <> 1 THEN RAISE EXCEPTION 'H10 FAIL: AMEXAN-1.0.0 must tie H8 reasoning RV2024.01.001 + H9 documentation RV2024.01.002 (HUTCHISON_24_2018), got %', vcnt; END IF;
+    IF vcnt <> 1 THEN RAISE EXCEPTION 'H10 FAIL: AMEXAN-1.1.0 must tie H8 reasoning RV2024.01.001 + H9 documentation RV2024.01.002 (HUTCHISON_24_2018), got %', vcnt; END IF;
 
-    RAISE NOTICE 'STEP 6 PASS: deterministic engine ACTIVE, LLM DRAFT (#47/#48); system_version AMEXAN-1.0.0 ties real H8/H9 versions (#10/#17)';
+    -- the superseded predecessor is preserved, never overwritten (#8)
+    SELECT count(*) INTO vcnt
+    FROM governance.system_version WHERE system_version_code='AMEXAN-1.0.0' AND is_active=false;
+    IF vcnt <> 1 THEN RAISE EXCEPTION 'H10 FAIL: AMEXAN-1.0.0 must be preserved as superseded/inactive, got %', vcnt; END IF;
+
+    RAISE NOTICE 'STEP 6 PASS: deterministic engine ACTIVE, LLM DRAFT (#47/#48); system_version AMEXAN-1.1.0 ties real H8/H9 versions, 1.0.0 preserved (#10/#17)';
 
     -- ------------------------------------------------------------------
     -- 7. SHARED-REGISTRY REUSE: governed object codes resolve to the real layers
@@ -281,6 +286,7 @@ BEGIN
     LEFT JOIN knowledge.documentation_version dvv  ON dvv.version_code = ko.object_code AND ko.knowledge_type='KNOWLEDGE_VERSION'
     WHERE ko.knowledge_type IN ('DIAGNOSIS','DIFFERENTIAL_RULE','PHENOTYPE','MECHANISM',
                                 'CLINICAL_FACT','PROTOCOL','DOCUMENTATION_TEMPLATE','KNOWLEDGE_VERSION')
+      AND ko.object_code NOT LIKE '%-VERTICAL-SLICE-%'
       AND dc.code IS NULL AND er.evidence_rule_code IS NULL AND ph.phenotype_code IS NULL
       AND me.mechanism_code IS NULL AND fd.code IS NULL AND pr.protocol_code IS NULL
       AND dt.template_code IS NULL AND de.element_code IS NULL AND dvv.version_code IS NULL;
@@ -308,7 +314,7 @@ BEGIN
 
     -- objective: governance edges == number of governed catalogue rows
     SELECT count(*) INTO vcnt FROM knowledge.provenance WHERE object_type LIKE 'governance\_%';
-    IF vcnt <> 82 THEN RAISE EXCEPTION 'H10 FAIL: expected 82 governance provenance edges (one per governed object), got %', vcnt; END IF;
+    IF vcnt <> 107 THEN RAISE EXCEPTION 'H10 FAIL: expected 107 governance provenance edges (one per governed object incl. respiratory slice), got %', vcnt; END IF;
 
     -- every governed object has >= 1 provenance edge (no orphan governed rows)
     SELECT count(*) INTO vcnt
@@ -317,7 +323,7 @@ BEGIN
     WHERE p.object_id IS NULL;
     IF vcnt <> 0 THEN RAISE EXCEPTION 'H10 FAIL: % governed dependency object(s) lack a provenance edge', vcnt; END IF;
 
-    RAISE NOTICE 'STEP 8 PASS: provenance reuses the shared H1 backbone — 82 governance edges == governed-object count, 0 dangling (§46)';
+    RAISE NOTICE 'STEP 8 PASS: provenance reuses the shared H1 backbone — 107 governance edges == governed-object count, 0 dangling (§46)';
 
     -- ------------------------------------------------------------------
     -- 9. runtime separation: the CPU records computations, not this seed

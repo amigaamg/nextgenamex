@@ -1,0 +1,41 @@
+/* =============================================================================
+   AMEXAN — Tailwind CSS v4 theme
+   Keeps the existing design language as Tailwind utilities so components are
+   composed inline and the global stylesheet shrinks over time.
+   ============================================================================= */
+
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette (identical to :root in styles.css) */
+  --color-bg: #f4f6ff;
+  --color-panel: #ffffff;
+  --color-panel-alt: #f7f9ff;
+  --color-line: #e1e6ff;
+  --color-line-strong: #c3ceff;
+  --color-ink: #0b1028;
+  --color-muted: #5a6480;
+  --color-brand: #0000ff;
+  --color-brand-2: #0000cc;
+  --color-brand-light: #e4e9ff;
+  --color-good: #059669;
+  --color-good-bg: #d1fae5;
+  --color-warn: #d97706;
+  --color-warn-bg: #fef3c7;
+  --color-bad: #dc2626;
+  --color-bad-bg: #fee2e2;
+  --color-info: #1d4ed8;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 255, 0.1);
+  --shadow-card-lg: 0 4px 12px rgba(0, 0, 255, 0.08);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.12);
+
+  /* Radius */
+  --radius-card: 0.875rem;
+  --radius-field: 0.625rem;
+
+  /* Fonts */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}

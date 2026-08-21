@@ -1,0 +1,2 @@
+@echo off
+powershell -NoProfile -Command ". 'C:\Users\Administrator\Desktop\NEXTGEN\scripts\amexan-config.ps1'; Invoke-Psql 'amexan' -ScriptPath 'C:\Users\Administrator\Desktop\NEXTGEN\scripts\seed_context_adaptation_v2.sql'"

@@ -1,95 +1,673 @@
 ﻿-- =============================================================================
--- AMEXAN Phase 2 â€” Seed ZP0: Phase 1E fact definitions + concepts + specialties
+-- AMEXAN Phase 2 — Z9 Runtime Intelligence Resolver
 -- =============================================================================
--- Extends the Phase 2 base seed with the fact definitions and concepts the MVP
--- knowledge population needs (chest pain, abdominal pain, examination facts,
--- the three new mechanisms, asthma/HF/GERD conditions, investigations,
--- examination modules, medications, monitoring, education, protocols).
--- Named seed_zp* so it runs after all existing seed_z* files.
+-- PURPOSE
+-- -------
+-- Converts immutable canonical knowledge + contextual overrides into the
+-- CURRENT operational interpretation.
+--
+-- Resolution:
+--
+--   CANONICAL
+--      ↓
+--   APPLICABLE OVERRIDES
+--      ↓
+--   SAFETY FILTER
+--      ↓
+--   SPECIFICITY
+--      ↓
+--   EVIDENCE
+--      ↓
+--   PRIORITY
+--      ↓
+--   VERSION
+--      ↓
+--   CURRENT
+--
+-- Z9 NEVER mutates canonical knowledge.
 -- =============================================================================
 
--- ---------------------------------------------------------------------------
--- Additional clinical fact definitions (history + examination)
--- ---------------------------------------------------------------------------
 
-INSERT INTO clinical.fact_definition (code, name, data_type, description) VALUES
-   ('COUGH_PRESENT',         'Cough present',           'coded',  'Presence of cough'),
-   ('CHEST_PAIN_PRESENT',    'Chest pain present',      'coded',  'Presence of chest pain'),
-   ('CHEST_PAIN_PLEURITIC',  'Pleuritic chest pain',    'coded',  'Chest pain worsened by breathing/coughing'),
-   ('ABDO_PAIN_PRESENT',     'Abdominal pain present',  'coded',  'Presence of abdominal pain'),
-   ('CHILLS',                'Chills',                  'coded',  'Chills with febrile illness'),
-   ('WHEEZE_PRESENT',        'Wheeze present',          'coded',  'Wheezing / whistling on breathing'),
-   ('RESP_RATE',             'Respiratory rate',        'numeric','Measured respiratory rate (breaths/min)'),
-   ('SPO2',                  'Oxygen saturation',       'numeric','Peripheral oxygen saturation (%)'),
-   ('TEMPERATURE',           'Body temperature',        'numeric','Measured temperature (degC)'),
-   ('HEART_RATE',            'Heart rate',              'numeric','Measured heart rate (beats/min)'),
-   ('RLL_DULLNESS',          'Right lower lobe dullness','boolean','Percussion dullness right lower lobe'),
-   ('RLL_BRONCHIAL_BREATH_SOUNDS', 'RLL bronchial breath sounds','boolean','Bronchial breath sounds right lower lobe'),
-   ('CRACKLES',              'Crackles',                'boolean','Crackles on auscultation'),
-   ('CYANOSIS',              'Cyanosis',                'boolean','Cyanosis present'),
-   ('CHEST_INDRAWING',       'Chest indrawing',         'boolean','Subcostal indrawing / increased work of breathing'),
-   ('RESPIRATORY_DISTRESS',  'Respiratory distress',    'boolean','Clinical respiratory distress'),
-   ('ORTHOPNOEA',            'Orthopnoea',              'coded',  'Breathlessness lying flat'),
-   ('PND',                   'Paroxysmal nocturnal dyspnoea','coded','Sudden breathlessness at night'),
-   ('PERIPHERAL_OEDEMA',     'Peripheral oedema',       'boolean','Bilateral peripheral oedema'),
-   ('HEARTBURN',             'Heartburn / regurgitation','coded','Reflux symptoms'),
-   ('CHEST_PAIN_ONSET',      'Chest pain onset',        'coded',  'Sudden / gradual onset')
-ON CONFLICT (code) DO NOTHING;
+CREATE OR REPLACE FUNCTION knowledge.z9_scope_rank(
+    p_scope_code text
+)
+RETURNS integer
+LANGUAGE sql
+IMMUTABLE
+AS $$
+    SELECT CASE p_scope_code
+        WHEN 'patient'       THEN 800
+        WHEN 'clinician'     THEN 700
+        WHEN 'department'    THEN 600
+        WHEN 'facility'      THEN 500
+        WHEN 'health_system' THEN 400
+        WHEN 'country'       THEN 300
+        WHEN 'global'        THEN 100
+        ELSE 0
+    END;
+$$;
 
--- ---------------------------------------------------------------------------
--- New universal concepts
--- ---------------------------------------------------------------------------
 
-INSERT INTO knowledge.concept (id, concept_code, concept_type, canonical_name, display_name, description) VALUES
-   ('f0a00000-0000-0000-0000-000000000017', 'CNS-CHEST-PAIN',       'symptom',       'Chest pain',        'Chest pain',        'Pain or discomfort perceived in the chest'),
-   ('f0a00000-0000-0000-0000-000000000018', 'CNS-ABDO-PAIN',        'symptom',       'Abdominal pain',    'Abdominal pain',    'Pain perceived within the abdomen'),
-   ('f0a00000-0000-0000-0000-000000000019', 'CNS-ASTHMA',           'condition',      'Asthma',            'Asthma',            'Chronic inflammatory airway disease with variable airflow limitation'),
-   ('f0a00000-0000-0000-0000-00000000001a', 'CNS-HEART-FAILURE',    'condition',      'Heart failure',     'Heart failure',     'Impaired cardiac pump function with congestion'),
-   ('f0a00000-0000-0000-0000-00000000001b', 'CNS-GERD',             'condition',      'Gastroesophageal reflux disease', 'GERD', 'Reflux of gastric contents causing symptoms'),
-   ('f0a00000-0000-0000-0000-00000000001c', 'CNS-GRANULOMATOUS-INFECTION', 'mechanism', 'Chronic granulomatous pulmonary infection', 'Granulomatous infection', 'Persistent host-pathogen interaction producing chronic pulmonary disease'),
-   ('f0a00000-0000-0000-0000-00000000001d', 'CNS-PULMONARY-CONGESTION', 'mechanism', 'Pulmonary vascular congestion', 'Pulmonary congestion', 'Raised pulmonary venous pressure with fluid accumulation'),
-   ('f0a00000-0000-0000-0000-00000000001e', 'CNS-GASTROESOPHAGEAL-REFLUX', 'mechanism', 'Gastroesophageal reflux', 'GER', 'Retrograde movement of gastric contents'),
-   ('f0a00000-0000-0000-0000-00000000001f', 'CNS-FBC',              'investigation',  'Full blood count',  'FBC',               'Haemoglobin, leukocyte and platelet assessment'),
-   ('f0a00000-0000-0000-0000-000000000020', 'CNS-CRP',              'investigation',  'C-reactive protein','CRP',               'Systemic inflammatory marker'),
-   ('f0a00000-0000-0000-0000-000000000021', 'CNS-UREA-CREAT',       'investigation',  'Urea and electrolytes', 'U+E',           'Renal function and electrolytes'),
-   ('f0a00000-0000-0000-0000-000000000022', 'CNS-EXAM-GENERAL',     'examination_module', 'General examination', 'General exam', 'Initial general clinical assessment'),
-   ('f0a00000-0000-0000-0000-000000000023', 'CNS-EXAM-RESP',        'examination_module', 'Respiratory examination', 'Resp exam',   'Structured respiratory examination'),
-   ('f0a00000-0000-0000-0000-000000000024', 'CNS-EXAM-CVS',         'examination_module', 'Cardiovascular examination', 'CVS exam',    'Structured cardiovascular examination'),
-   ('f0a00000-0000-0000-0000-000000000025', 'CNS-EXAM-ABDO',        'examination_module', 'Abdominal examination', 'Abdo exam',     'Structured abdominal examination'),
-   ('f0a00000-0000-0000-0000-000000000026', 'CNS-EXAM-NEURO',       'examination_module', 'Neurological examination', 'Neuro exam',   'Structured neurological examination'),
-   ('f0a00000-0000-0000-0000-000000000027', 'CNS-AMOXICILLIN',      'medication',     'Amoxicillin',       'Amoxicillin',       'Aminopenicillin antibiotic'),
-   ('f0a00000-0000-0000-0000-000000000028', 'CNS-AMOXICILLIN-CLAV', 'medication',     'Amoxicillin/clavulanate', 'Co-amoxiclav', 'Beta-lactam/beta-lactamase inhibitor combination'),
-   ('f0a00000-0000-0000-0000-000000000029', 'CNS-CEFTRIAXONE',      'medication',     'Ceftriaxone',       'Ceftriaxone',       'Third-generation cephalosporin'),
-   ('f0a00000-0000-0000-0000-00000000002a', 'CNS-AZITHROMYCIN',     'medication',     'Azithromycin',      'Azithromycin',      'Macrolide antibiotic'),
-   ('f0a00000-0000-0000-0000-00000000002b', 'CNS-PARACETAMOL',      'medication',     'Paracetamol',       'Paracetamol',       'Analgesic / antipyretic'),
-   ('f0a00000-0000-0000-0000-00000000002c', 'CNS-MON-SPO2',         'monitoring',     'Oxygen saturation monitoring', 'SpO2 monitor', 'Oxygenation trajectory'),
-   ('f0a00000-0000-0000-0000-00000000002d', 'CNS-MON-RR',           'monitoring',     'Respiratory rate monitoring', 'RR monitor',    'Respiratory workload trajectory'),
-   ('f0a00000-0000-0000-0000-00000000002e', 'CNS-MON-TEMP',         'monitoring',     'Temperature monitoring', 'Temp monitor',      'Febrile trajectory'),
-   ('f0a00000-0000-0000-0000-00000000002f', 'CNS-MON-HR',           'monitoring',     'Heart rate monitoring', 'HR monitor',        'Physiological response'),
-   ('f0a00000-0000-0000-0000-000000000030', 'CNS-MON-WOB',          'monitoring',     'Work of breathing', 'WOB',                 'Respiratory effort'),
-   ('f0a00000-0000-0000-0000-000000000031', 'CNS-EDU-CAP-BASICS',   'education',      'Understanding pneumonia', 'Pneumonia basics',  'Patient education on pneumonia'),
-   ('f0a00000-0000-0000-0000-000000000032', 'CNS-EDU-CAP-DANGER',   'education',      'Pneumonia danger signs', 'Danger signs',      'When to seek urgent care'),
-   ('f0a00000-0000-0000-0000-000000000033', 'CNS-EDU-CAP-MED',      'education',      'Taking pneumonia treatment', 'Medication guidance', 'How to take treatment'),
-   ('f0a00000-0000-0000-0000-000000000034', 'CNS-EDU-CAP-TEACHBACK','education',      'Pneumonia teach-back', 'Teach-back',         'Confirm understanding'),
-   ('f0a00000-0000-0000-0000-000000000035', 'CNS-EDU-CAP-CLINICIAN','education',      'Pneumonia reasoning summary', 'Clinician summary','Explanation of reasoning'),
-   ('f0a00000-0000-0000-0000-000000000036', 'CNS-PROT-CAP',         'protocol',       'Adult community-acquired pneumonia pathway', 'CAP pathway', 'Adult CAP care pathway'),
-   ('f0a00000-0000-0000-0000-000000000037', 'CNS-PROT-TB',          'protocol',       'Suspected pulmonary TB pathway', 'TB pathway',      'TB diagnostic pathway'),
-   ('f0a00000-0000-0000-0000-000000000038', 'CNS-PROT-ASTHMA',      'protocol',       'Acute asthma pathway', 'Asthma pathway',      'Acute asthma care pathway'),
-   ('f0a00000-0000-0000-0000-000000000039', 'CNS-PROT-HF',          'protocol',       'Decompensated heart failure pathway', 'HF pathway', 'Acute heart failure pathway'),
-   ('f0a00000-0000-0000-0000-00000000003a', 'CNS-PROT-CHEST-PAIN',  'protocol',       'Acute chest pain pathway', 'Chest pain pathway','Undifferentiated chest pain pathway'),
-   ('f0a00000-0000-0000-0000-00000000003b', 'CNS-WHEEZE',           'finding',        'Wheeze',            'Wheeze',            'Whistling sound on breathing'),
-   ('f0a00000-0000-0000-0000-00000000003c', 'CNS-CRACKLES',         'finding',        'Crackles',          'Crackles',          'Fine or coarse crackles on auscultation'),
-   ('f0a00000-0000-0000-0000-00000000003d', 'CNS-PLEURITIC-PAIN',   'sign',           'Pleuritic chest pain', 'Pleuritic pain',  'Pain worsened by breathing or cough')
-ON CONFLICT (id) DO NOTHING;
+-- =============================================================================
+-- 1. Resolve all applicable overrides
+-- =============================================================================
 
--- ---------------------------------------------------------------------------
--- Additional specialties used by the MVP graph
--- ---------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION knowledge.z9_resolve_overrides(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS TABLE
+(
+    override_id uuid,
+    override_code text,
+    target_type text,
+    target_id uuid,
+    scope_code text,
+    scope_entity_id uuid,
+    config jsonb,
+    reason text,
+    status text,
+    version integer,
+    supersedes_id uuid,
+    scope_rank integer,
+    priority integer,
+    safety boolean,
+    specificity integer
+)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT
+        ko.id,
+        ko.override_code,
+        ko.target_type,
+        ko.target_id,
+        ko.scope_code,
+        ko.scope_entity_id,
+        ko.config,
+        ko.reason,
+        ko.status,
+        ko.version,
+        ko.supersedes_id,
 
-INSERT INTO organization.specialty (code, label) VALUES
-   ('respiratory_medicine',  'Respiratory Medicine'),
-   ('cardiology',            'Cardiology'),
-   ('gastroenterology',      'Gastroenterology'),
-   ('infectious_disease',    'Infectious Disease'),
-   ('emergency_department',  'Emergency Department')
-ON CONFLICT (code) DO NOTHING;
+        knowledge.z9_scope_rank(ko.scope_code) AS scope_rank,
+
+        COALESCE(
+            NULLIF(
+                ko.config ->> 'priority',
+                ''
+            )::integer,
+            0
+        ) AS priority,
+
+        COALESCE(
+            (ko.config ->> 'safety')::boolean,
+            false
+        ) AS safety,
+
+        CASE ko.scope_code
+            WHEN 'patient'       THEN 800
+            WHEN 'clinician'     THEN 700
+            WHEN 'department'    THEN 600
+            WHEN 'facility'      THEN 500
+            WHEN 'health_system' THEN 400
+            WHEN 'country'       THEN 300
+            WHEN 'global'        THEN 100
+            ELSE 0
+        END AS specificity
+
+    FROM knowledge.knowledge_override ko
+
+    WHERE ko.target_type = p_target_type
+      AND ko.target_id = p_target_id
+      AND ko.status = 'active'
+
+      AND (
+            (
+                ko.scope_code = 'global'
+                AND ko.scope_entity_id IS NULL
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'country'
+                AND ko.scope_entity_id = p_country_id
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'health_system'
+                AND ko.scope_entity_id = p_health_system_id
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'facility'
+                AND ko.scope_entity_id = p_facility_id
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'department'
+                AND ko.scope_entity_id = p_department_id
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'clinician'
+                AND ko.scope_entity_id = p_clinician_id
+            )
+
+            OR
+
+            (
+                ko.scope_code = 'patient'
+                AND ko.scope_entity_id = p_patient_context_id
+            )
+      );
+$$;
+
+
+-- =============================================================================
+-- 2. Resolve CURRENT winner
+-- =============================================================================
+--
+-- Ordering intentionally separates:
+--
+--   SAFETY
+--   SCOPE
+--   PRIORITY
+--   VERSION
+--
+-- A later insertion never automatically wins.
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_resolve_current(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS TABLE
+(
+    override_id uuid,
+    override_code text,
+    target_type text,
+    target_id uuid,
+    scope_code text,
+    scope_entity_id uuid,
+    config jsonb,
+    reason text,
+    status text,
+    version integer,
+    supersedes_id uuid
+)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT
+        r.override_id,
+        r.override_code,
+        r.target_type,
+        r.target_id,
+        r.scope_code,
+        r.scope_entity_id,
+        r.config,
+        r.reason,
+        r.status,
+        r.version,
+        r.supersedes_id
+
+    FROM knowledge.z9_resolve_overrides(
+        p_target_type,
+        p_target_id,
+        p_patient_context_id,
+        p_clinician_id,
+        p_department_id,
+        p_facility_id,
+        p_health_system_id,
+        p_country_id
+    ) r
+
+    ORDER BY
+        r.safety DESC,
+        r.specificity DESC,
+        r.priority DESC,
+        r.version DESC,
+        r.override_code ASC
+
+    LIMIT 1;
+$$;
+
+
+-- =============================================================================
+-- 3. Resolve CURRENT configuration only
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_current_config(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT COALESCE(
+        (
+            SELECT r.config
+            FROM knowledge.z9_resolve_current(
+                p_target_type,
+                p_target_id,
+                p_patient_context_id,
+                p_clinician_id,
+                p_department_id,
+                p_facility_id,
+                p_health_system_id,
+                p_country_id
+            ) r
+        ),
+        '{}'::jsonb
+    );
+$$;
+
+
+-- =============================================================================
+-- 4. Explain CURRENT resolution
+-- =============================================================================
+--
+-- This is the WHY layer.
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_explain(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT COALESCE(
+        (
+            SELECT jsonb_build_object(
+                'target_type', r.target_type,
+                'target_id', r.target_id,
+
+                'current', jsonb_build_object(
+                    'override_id', r.override_id,
+                    'override_code', r.override_code,
+                    'scope', r.scope_code,
+                    'scope_entity_id', r.scope_entity_id,
+                    'version', r.version,
+                    'status', r.status,
+                    'config', r.config
+                ),
+
+                'why', jsonb_build_object(
+                    'reason', r.reason,
+                    'supersedes_id', r.supersedes_id
+                ),
+
+                'resolution', jsonb_build_object(
+                    'model',
+                    'DEFAULT -> LOCAL -> WHY -> CURRENT',
+                    'immutable_canonical', true,
+                    'safety_preserved', true
+                )
+            )
+
+            FROM knowledge.z9_resolve_current(
+                p_target_type,
+                p_target_id,
+                p_patient_context_id,
+                p_clinician_id,
+                p_department_id,
+                p_facility_id,
+                p_health_system_id,
+                p_country_id
+            ) r
+        ),
+        jsonb_build_object(
+            'target_type', p_target_type,
+            'target_id', p_target_id,
+            'current', NULL,
+            'why', NULL,
+            'resolution', jsonb_build_object(
+                'model',
+                'DEFAULT -> LOCAL -> WHY -> CURRENT',
+                'immutable_canonical', true,
+                'safety_preserved', true
+            )
+        )
+    );
+$$;
+
+
+-- =============================================================================
+-- 5. Full resolution trace
+-- =============================================================================
+--
+-- Unlike z9_resolve_current(), this returns every applicable active override.
+-- This is required for auditing and debugging conflicts.
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_resolution_trace(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT COALESCE(
+        jsonb_agg(
+            jsonb_build_object(
+                'override_id', r.override_id,
+                'override_code', r.override_code,
+                'scope', r.scope_code,
+                'scope_entity_id', r.scope_entity_id,
+                'priority', r.priority,
+                'specificity', r.specificity,
+                'safety', r.safety,
+                'version', r.version,
+                'status', r.status,
+                'config', r.config,
+                'reason', r.reason,
+                'supersedes_id', r.supersedes_id
+            )
+            ORDER BY
+                r.safety DESC,
+                r.specificity DESC,
+                r.priority DESC,
+                r.version DESC,
+                r.override_code ASC
+        ),
+        '[]'::jsonb
+    )
+
+    FROM knowledge.z9_resolve_overrides(
+        p_target_type,
+        p_target_id,
+        p_patient_context_id,
+        p_clinician_id,
+        p_department_id,
+        p_facility_id,
+        p_health_system_id,
+        p_country_id
+    ) r;
+$$;
+
+
+-- =============================================================================
+-- 6. Detect conflicting active overrides
+-- =============================================================================
+--
+-- AMEXAN must expose conflicts instead of silently hiding them.
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_detect_conflicts(
+    p_target_type text,
+    p_target_id uuid,
+    p_patient_context_id uuid DEFAULT NULL,
+    p_clinician_id uuid DEFAULT NULL,
+    p_department_id uuid DEFAULT NULL,
+    p_facility_id uuid DEFAULT NULL,
+    p_health_system_id uuid DEFAULT NULL,
+    p_country_id uuid DEFAULT NULL
+)
+RETURNS TABLE
+(
+    conflict boolean,
+    override_count integer,
+    override_codes text[]
+)
+LANGUAGE sql
+STABLE
+AS $$
+    WITH applicable AS
+    (
+        SELECT *
+        FROM knowledge.z9_resolve_overrides(
+            p_target_type,
+            p_target_id,
+            p_patient_context_id,
+            p_clinician_id,
+            p_department_id,
+            p_facility_id,
+            p_health_system_id,
+            p_country_id
+        )
+    )
+    SELECT
+        COUNT(*) > 1 AS conflict,
+        COUNT(*)::integer AS override_count,
+        ARRAY_AGG(override_code ORDER BY override_code) AS override_codes
+    FROM applicable;
+$$;
+
+
+-- =============================================================================
+-- 7. Indexes
+-- =============================================================================
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_override_target
+ON knowledge.knowledge_override
+(
+    target_type,
+    target_id
+);
+
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_override_scope
+ON knowledge.knowledge_override
+(
+    scope_code,
+    scope_entity_id
+);
+
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_override_active
+ON knowledge.knowledge_override
+(
+    status,
+    target_type,
+    target_id
+)
+WHERE status = 'active';
+
+
+CREATE INDEX IF NOT EXISTS idx_knowledge_override_supersedes
+ON knowledge.knowledge_override
+(
+    supersedes_id
+)
+WHERE supersedes_id IS NOT NULL;
+
+
+-- =============================================================================
+-- 8. Z9 invariant validation
+-- =============================================================================
+
+CREATE OR REPLACE FUNCTION knowledge.z9_validate_invariants()
+RETURNS TABLE
+(
+    invariant text,
+    passed boolean,
+    violation_count bigint
+)
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT
+        'GLOBAL_OVERRIDES_REQUIRE_NULL_SCOPE_ENTITY',
+        COUNT(*) = 0,
+        COUNT(*)
+    FROM knowledge.knowledge_override
+    WHERE scope_code = 'global'
+      AND scope_entity_id IS NOT NULL
+
+    UNION ALL
+
+    SELECT
+        'ACTIVE_OVERRIDES_REQUIRE_REASON',
+        COUNT(*) = 0,
+        COUNT(*)
+    FROM knowledge.knowledge_override
+    WHERE status = 'active'
+      AND NULLIF(BTRIM(reason), '') IS NULL
+
+    UNION ALL
+
+    SELECT
+        'ACTIVE_OVERRIDES_REQUIRE_VERSION',
+        COUNT(*) = 0,
+        COUNT(*)
+    FROM knowledge.knowledge_override
+    WHERE status = 'active'
+      AND version IS NULL
+
+    UNION ALL
+
+    SELECT
+        'SAFETY_OVERRIDES_CANNOT_HAVE_ZERO_PRIORITY',
+        COUNT(*) = 0,
+        COUNT(*)
+    FROM knowledge.knowledge_override
+    WHERE status = 'active'
+      AND COALESCE((config ->> 'safety')::boolean, false) = true
+      AND COALESCE((config ->> 'priority')::integer, 0) <= 0;
+$$;
+
+
+-- =============================================================================
+-- 9. Z9 current intelligence view
+-- =============================================================================
+
+CREATE OR REPLACE VIEW knowledge.v_z9_active_overrides
+AS
+SELECT
+    ko.id,
+    ko.override_code,
+    ko.target_type,
+    ko.target_id,
+    ko.scope_code,
+    ko.scope_entity_id,
+    ko.config,
+    ko.reason,
+    ko.status,
+    ko.version,
+    ko.supersedes_id,
+
+    knowledge.z9_scope_rank(ko.scope_code) AS scope_rank,
+
+    COALESCE(
+        NULLIF(ko.config ->> 'priority', '')::integer,
+        0
+    ) AS priority,
+
+    COALESCE(
+        (ko.config ->> 'safety')::boolean,
+        false
+    ) AS safety
+
+FROM knowledge.knowledge_override ko
+
+WHERE ko.status = 'active';
+
+
+-- =============================================================================
+-- 10. TEST — GLOBAL PNEUMONIA
+-- =============================================================================
+
+SELECT *
+FROM knowledge.z9_resolve_current(
+    'rule',
+    'f1100000-0000-0000-0000-000000000004'
+);
+
+
+-- =============================================================================
+-- 11. TEST — COUGH
+-- =============================================================================
+
+SELECT *
+FROM knowledge.z9_resolve_current(
+    'symptom',
+    'f0b00000-0000-0000-0000-000000000001'
+);
+
+
+-- =============================================================================
+-- 12. TEST — DYSPNOEA
+-- =============================================================================
+
+SELECT *
+FROM knowledge.z9_resolve_current(
+    'symptom',
+    'f0b00000-0000-0000-0000-000000000003'
+);
+
+
+-- =============================================================================
+-- 13. TEST — EXPLAINABILITY
+-- =============================================================================
+
+SELECT knowledge.z9_explain(
+    'rule',
+    'f1100000-0000-0000-0000-000000000004'
+);
+
+
+-- =============================================================================
+-- 14. TEST — FULL TRACE
+-- =============================================================================
+
+SELECT knowledge.z9_resolution_trace(
+    'rule',
+    'f1100000-0000-0000-0000-000000000004'
+);
+
+
+-- =============================================================================
+-- 15. TEST — INVARIANTS
+-- =============================================================================
+
+SELECT *
+FROM knowledge.z9_validate_invariants();
+
+
+-- =============================================================================
+-- END Z9 RUNTIME RESOLUTION
+-- =============================================================================

@@ -1,0 +1,66 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R /F2 6 0 R /F3 7 0 R /F4 8 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 1582 >>
+stream
+BT 0 0 0 rg F2 16 Tf 0 Tc 1 0 0 1 44 744 Tm (AMEXAN CLINICAL RECORD) Tj ET
+BT 0.42 0.44 0.50 rg F1 7.8 Tf 0 Tc 1 0 0 1 44 720 Tm (ENC-ENC1 · 19 Aug 2026) Tj ET
+0.086 0.13 0.22 rg 44 699 3 12.5 re f
+BT 0 0 0 rg F2 9.5 Tf 0 Tc 1 0 0 1 53 701 Tm (PATIENT) Tj ET
+BT 0 0 0 rg F4 11 Tf 0 Tc 1 0 0 1 44 685 Tm (kimunya njogu) Tj ET
+BT 0.42 0.44 0.50 rg F1 7.8 Tf 0 Tc 1 0 0 1 44 669 Tm (28 years · Male · MRN Patient No 00130) Tj ET
+BT 0.42 0.44 0.50 rg F1 7.8 Tf 0 Tc 1 0 0 1 44 656 Tm (teacher · kimunye · kirinyaga) Tj ET
+BT 0.42 0.44 0.50 rg F1 7.8 Tf 0 Tc 1 0 0 1 44 643 Tm (Informant: self, good) Tj ET
+0.086 0.13 0.22 rg 44 623 3 12.5 re f
+BT 0 0 0 rg F2 9.5 Tf 0 Tc 1 0 0 1 53 625 Tm (CHIEF COMPLAINT) Tj ET
+BT 0 0 0 rg F2 9.6 Tf 0 Tc 1 0 0 1 44 609 Tm (1. ) Tj ET
+BT 0 0 0 rg F4 9.6 Tf 0 Tc 1 0 0 1 55.0976 609 Tm (Cough) Tj ET
+BT 0 0 0 rg F3 9.6 Tf 0 Tc 1 0 0 1 80.7008 609 Tm ( for 4 days.) Tj ET
+BT 0 0 0 rg F2 9.6 Tf 0 Tc 1 0 0 1 44 595 Tm (2. ) Tj ET
+BT 0 0 0 rg F4 9.6 Tf 0 Tc 1 0 0 1 55.0976 595 Tm (Fever) Tj ET
+BT 0 0 0 rg F3 9.6 Tf 0 Tc 1 0 0 1 76.9568 595 Tm ( for 3 days.) Tj ET
+0.086 0.13 0.22 rg 44 572 3 12.5 re f
+BT 0 0 0 rg F2 9.5 Tf 0 Tc 1 0 0 1 53 574 Tm (HPI) Tj ET
+BT 0 0 0 rg F3 9.6 Tf 0 Tc 1 0 0 1 44 558 Tm (The illness began with cough 4 days ago. Fever developed 1 day) Tj ET
+BT 0 0 0 rg F3 9.6 Tf 0 Tc 1 0 0 1 44 545 Tm (after the cough began.) Tj ET
+0.78 G 0.5 w 44 38 524 0.5 re S
+BT 0.42 0.44 0.50 rg /F1 7 Tf 1 0 0 1 44 28 Tm (AMEXAN Clinical Record · ENC-ENC1) Tj ET
+BT 0.42 0.44 0.50 rg /F1 7 Tf 1 0 0 1 532.1949999999999 28 Tm (Page 1 of 1) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000271 00000 n 
+0000000305 00000 n 
+0000001887 00000 n 
+0000001905 00000 n 
+0000002002 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+2301
+%%EOF

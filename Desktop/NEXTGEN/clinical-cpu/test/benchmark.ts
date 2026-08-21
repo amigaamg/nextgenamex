@@ -15,7 +15,31 @@
 
 import { Pool } from 'pg';
 import { ClinicalCPU, Db } from '../src/index.js';
+import type { Row } from '../src/db.js';
 import type { ClinicalRuntimeProjection, ProcessRequest } from '../src/types.js';
+
+class TraceDb extends Db {
+  private seen = new Set<string>();
+  override async query<T extends Row = Row>(sql: string, params: unknown[] = []): Promise<T[]> {
+    try {
+      return await super.query(sql, params);
+    } catch (e) {
+      const err = e as Error & { position?: string; code?: string };
+      const key = sql.slice(0, 80);
+      if (!this.seen.has(key)) {
+        this.seen.add(key);
+        console.error(`\n=== SQL FAILURE [${err.code}] ===`);
+        console.error(sql.slice(0, 500));
+        if (err.position) {
+          const pos = Number(err.position);
+          console.error('--- around ---');
+          console.error(sql.slice(Math.max(0, pos - 100), pos + 30));
+        }
+      }
+      throw e;
+    }
+  }
+}
 
 const POOL = new Pool({
   host: process.env.AMEXAN_PGHOST || 'localhost',
@@ -46,21 +70,21 @@ async function main(): Promise<void> {
   const client = await POOL.connect();
   try {
     await client.query('BEGIN');
-    const db = new Db(client);
+    const db = new TraceDb(client);
     const cpu = new ClinicalCPU(db);
 
     // --- Set up the 35-year-old male patient + encounter -------------------
     const personId = crypto.randomUUID();
     const patientId = crypto.randomUUID();
     await db.query(
-      `INSERT INTO identity.person (id, status_code, gender, birth_date, nationality, occupation)
-       VALUES ($1, 'active', 'male', $2, 'Kenya', 'Farmer')`,
+      `INSERT INTO identity.person (id, status_code, sex_at_birth, birth_date, nationality_code, occupation)
+       VALUES ($1, 'active', 'male', $2, 'KE', 'Farmer')`,
       [personId, '1990-02-14'],
     );
     await db.query(
-      `INSERT INTO patient.patient (id, person_id, mrn, status_code)
-       VALUES ($1, $2, $3, 'active')`,
-      [patientId, personId, `MRN-CPU-${Date.now()}`],
+      `INSERT INTO patient.patient (id, person_id, status_code)
+       VALUES ($1, $2, 'active')`,
+      [patientId, personId],
     );
     const { id: encounterId } = (await db.queryOne<{ id: string }>(
       `INSERT INTO encounter.encounter (patient_id, encounter_type_code, status_code, phase_code)
@@ -78,7 +102,7 @@ async function main(): Promise<void> {
     let projection = await send({ type: 'SYMPTOM_PRESENTED', payload: { symptom: 'cough' } });
     check('cough activates the respiratory question branch', projection.nextQuestions.length > 0, projectionSummary(projection));
     check('chest-pain questions NOT offered before chest pain is reported',
-      !projection.nextQuestions.some((q) => q.questionCode === 'CHEST_PAIN_PLEURITIC'));
+      !projection.nextQuestions.some((q) => q.questionCode === 'PLEURITIC_CHEST_PAIN'));
 
     // --- 2. Adaptive interview: cough branch -------------------------------
     projection = await send({ type: 'QUESTION_ANSWERED', payload: { questionCode: 'COUGH_PRODUCTIVITY', answerCode: 'PRODUCTIVE' } });
@@ -95,11 +119,11 @@ async function main(): Promise<void> {
     // --- 3. Pleuritic chest pain emerges during the interview --------------
     projection = await send({ type: 'SYMPTOM_PRESENTED', payload: { symptom: 'chest pain' } });
     check('chest-pain questions appear once chest pain is reported',
-      projection.nextQuestions.some((q) => q.questionCode === 'CHEST_PAIN_PRESENT'), projectionSummary(projection));
+      projection.nextQuestions.some((q) => q.questionCode === 'CHEST_PAIN_CHARACTER'), projectionSummary(projection));
     projection = await send({ type: 'QUESTION_ANSWERED', payload: { questionCode: 'CHEST_PAIN_PRESENT', answerCode: 'YES' } });
-    projection = await send({ type: 'QUESTION_ANSWERED', payload: { questionCode: 'CHEST_PAIN_PLEURITIC', answerCode: 'YES' } });
+    projection = await send({ type: 'QUESTION_ANSWERED', payload: { questionCode: 'PLEURITIC_CHEST_PAIN', answerCode: 'YES' } });
     check('pleuritic chest pain captured as a fact',
-      projection.capturedFacts.some((f) => f.factCode === 'CHEST_PAIN_PLEURITIC' && f.values[0]?.text === 'YES'));
+      projection.capturedFacts.some((f) => f.factCode === 'PLEURITIC_CHEST_PAIN' && f.values[0]?.boolean === true));
 
     // --- 4. Finish the interview (negatives + sputum) ----------------------
     projection = await send({ type: 'QUESTION_ANSWERED', payload: { questionCode: 'SPUTUM_COLOUR', answerCode: 'CLEAR' } });
@@ -171,13 +195,28 @@ async function main(): Promise<void> {
       !projection.investigations.some((i) => i.investigationCode === 'INV-SPO2'));
 
     check('CAP protocol activated', projection.protocol?.protocolCode === 'PROT-CAP-ADULT', projection.protocol?.protocolCode ?? 'none');
-    check('CAP protocol has 10 steps', projection.protocol?.steps.length === 10, String(projection.protocol?.steps.length));
+    check('CAP protocol has 11 steps incl. CURB-65 severity classification',
+      projection.protocol?.steps.length === 11 &&
+        projection.protocol.steps.some((s) => s.stepCode === 'STEP-04A' && s.actions.some((a) => a.actionType === 'score' && a.actionCode === 'SCORE-CURB65')),
+      String(projection.protocol?.steps.length));
     check('monitoring includes SpO2/RR/temp',
       ['MON-SPO2', 'MON-RR', 'MON-TEMP'].every((code) => projection.monitoring.some((m) => m.monitoringCode === code)));
     check('education includes danger signs', projection.education.some((e) => e.educationCode === 'EDU-CAP-DANGER-SIGNS'));
     check('treatment offers an eligible antibiotic (with verification flag)',
       projection.treatment.some((t) => t.role === 'treatment' && !t.verified && t.safetyNotes.length > 0),
       projection.treatment.map((t) => `${t.genericName}(${t.role})`).join(','));
+
+    // --- 7b. CURB-65 severity score (structured scoring object) -------------
+    const curb = projection.severityScores.find((s) => s.scoreCode === 'SCORE-CURB65');
+    check('CURB-65 severity score computed for suspected CAP',
+      !!curb, projection.severityScores.map((s) => s.scoreCode).join(','));
+    check('CURB-65 = 0 for the stable 35yo (age<65, RR 24, no urea/BP/confusion)',
+      curb?.score === 0 && curb?.severityLabel === 'Low' && curb?.disposition === 'Treat as outpatient',
+      curb ? `${curb.score}/${curb.maxScore} ${curb.severityLabel}` : 'no score');
+    check('CURB-65 component computation is transparent',
+      (curb?.components.length ?? 0) === 5 &&
+        curb!.components.every((c) => (c.matched ? c.points : 0) === (c.points === 1 && c.matched ? 1 : 0)),
+      curb?.components.map((c) => `${c.componentCode}=${c.matched}`).join(','));
 
     // --- 8. Adaptive interview hygiene -------------------------------------
     const answeredSoFar = new Set([
@@ -240,6 +279,15 @@ async function main(): Promise<void> {
       projection.alerts.some((a) => a.level === 'urgent' && a.code === 'PHEN-HYPOXAEMIA'),
       projection.alerts.map((a) => `${a.code}:${a.level}`).join(','));
     check('working diagnosis is preserved and re-confirmed after reassessment', projection.differentials[0]?.name === 'Pneumonia');
+
+    // --- 11b. CURB-65 escalates with the laboratory picture -----------------
+    // Urea >7 and RR >=30 (both now documented) push the score to 2 → admit.
+    projection = await send({ type: 'LAB_RESULT_RECEIVED', payload: { factCode: 'UREA', value: 9.2, unit: 'mmol/l', sourceType: 'lab' } });
+    projection = await send({ type: 'VITAL_CHANGED', payload: { factCode: 'RESP_RATE', value: 34, unit: 'min', sourceType: 'device' } });
+    const curbEscalated = projection.severityScores.find((s) => s.scoreCode === 'SCORE-CURB65');
+    check('CURB-65 rises to 2 when urea 9.2 + RR 34 are documented (admit)',
+      curbEscalated?.score === 2 && curbEscalated?.severityLabel === 'Moderate' && curbEscalated?.disposition === 'Admit to hospital',
+      curbEscalated ? `${curbEscalated.score}/${curbEscalated.maxScore} ${curbEscalated.severityLabel} (${curbEscalated.disposition})` : 'no score');
 
     // --- 12. Evidence ledger for the differential ---------------------------
     const tb = projection.differentials.find((d) => d.name === 'Tuberculosis');

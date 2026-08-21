@@ -41,8 +41,7 @@ INSERT INTO clinical.fact_definition (code, name, description, data_type, allow_
     ('ABDOMEN_ASSESSMENT',          'Abdomen assessment',           ' Inspection/palpation/percussion of the abdomen (tenderness, organomegaly, HCH2-0004).',        'coded',   false, true),
     ('FUNCTIONAL_MOBILITY',         'Functional mobility',          ' Posture, gait, speech and interaction as a functional screen (HCH2-0003).',                   'coded',   false, true),
     ('MUSCULOSKELETAL_ASSESSMENT',  'Musculoskeletal assessment',   ' Colour, texture, oedema, varicosities, gait and limb swelling (HCH2-0004).',                   'coded',   false, true)
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description,
-    data_type = EXCLUDED.data_type, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. examination_domain — the universal domains (H6 §33/§32)
@@ -57,9 +56,7 @@ INSERT INTO knowledge.examination_domain (domain_code, code, body_system_code, l
     ('DOM07', 'NEUROLOGICAL',       'NEUROLOGICAL',      'Neurological',            ' Mental status, cranial nerves, motor and sensory (HCH2-0004).',                                    7, false, 'active'),
     ('DOM08', 'FUNCTIONAL',         'CONSTITUTIONAL',    'Functional',              ' Posture, gait, speech and interaction (HCH2-0003).',                                               8, false, 'active'),
     ('DOM09', 'MUSCULOSKELETAL',    'MUSCULOSKELETAL',   'Musculoskeletal',         ' Limbs, swelling, varicosities, gait (HCH2-0004).',                                                 9, false, 'active')
-ON CONFLICT (domain_code) DO UPDATE SET code = EXCLUDED.code, body_system_code = EXCLUDED.body_system_code,
-    label = EXCLUDED.label, description = EXCLUDED.description, sort_order = EXCLUDED.sort_order,
-    is_mandatory = EXCLUDED.is_mandatory, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. observation_concept — one per canonical fact (H6 §33/§38), OC001..OC016
@@ -85,10 +82,7 @@ VALUES
     ('OC014','PULSE_PRESENCE','Pulse presence','Pulse',                           'BOOLEAN',     NULL, NULL,'{"min":null,"max":null,"unit":null,"inclusive":true}',        ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 'CLINICIAN_OBSERVED', 'FIN_PRESENT', 'active'),
     ('OC015','FUNCTIONAL_MOBILITY','Functional mobility','Mobility',              'CATEGORICAL', NULL, 'VS_FUNCTIONAL','{"min":null,"max":null,"unit":null,"inclusive":true}',      ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 'CLINICIAN_OBSERVED', 'FIN_NORMAL', 'active'),
     ('OC016','MUSCULOSKELETAL_ASSESSMENT','Musculoskeletal assessment','MSK',      'CATEGORICAL', NULL, 'VS_MSK','{"min":null,"max":null,"unit":null,"inclusive":true}',         ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 'CLINICIAN_OBSERVED', 'FIN_NORMAL', 'active')
-ON CONFLICT (code) DO UPDATE SET fact_definition_code = EXCLUDED.fact_definition_code, name = EXCLUDED.name,
-    short_label = EXCLUDED.short_label, value_type = EXCLUDED.value_type, unit = EXCLUDED.unit, value_set_code = EXCLUDED.value_set_code,
-    normal_range = EXCLUDED.normal_range, applies_to_context_codes = EXCLUDED.applies_to_context_codes,
-    capture_method_code = EXCLUDED.capture_method_code, interpretation_default = EXCLUDED.interpretation_default, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. examination_concept — universal exam bundles EX001..EX009 (H6 §33)
@@ -107,10 +101,7 @@ VALUES
     ('EX007','DOM07', NULL, 'Neurological examination',' GCS / neuro',' Mental status (Glasgow Coma Score), cranial nerves, motor and sensory (HCH2-0004).', 'NEUROLOGICAL', false,  990, ARRAY['TECH_INSPECTION','TECH_PALPATION'], ARRAY['CLINICIAN_OBSERVED'], ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 'active'),
     ('EX008','DOM08', NULL, 'Functional assessment',' Mobility/gait',' Posture, gait, speech and interaction as the functional screen (HCH2-0003).', 'CONSTITUTIONAL', false,  100, ARRAY['TECH_INSPECTION'], ARRAY['CLINICIAN_OBSERVED','OBSERVATION'], ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 'active'),
     ('EX009','DOM09', NULL, 'Musculoskeletal examination',' Limbs',' Colour, texture, oedema, varicose veins, gait and limb swelling (HCH2-0004).', 'MUSCULOSKELETAL', false,  200, ARRAY['TECH_INSPECTION','TECH_PALPATION'], ARRAY['CLINICIAN_OBSERVED','OBSERVATION'], ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 'active')
-ON CONFLICT (code) DO UPDATE SET domain_code = EXCLUDED.domain_code, name = EXCLUDED.name, short_label = EXCLUDED.short_label,
-    description = EXCLUDED.description, body_system_code = EXCLUDED.body_system_code, is_mandatory = EXCLUDED.is_mandatory,
-    base_priority = EXCLUDED.base_priority, technique_codes = EXCLUDED.technique_codes, capture_method_codes = EXCLUDED.capture_method_codes,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. examination_component — each exam concept's constituent observations (H6 §34)
@@ -137,8 +128,7 @@ INSERT INTO knowledge.examination_component (examination_concept_code, observati
     ('EX007','OC007', true,  1),  -- Glasgow Coma Score
     ('EX008','OC015', true,  1),  -- functional mobility
     ('EX009','OC016', true,  1)   -- musculoskeletal assessment
-ON CONFLICT (examination_concept_code, observation_concept_code) DO UPDATE SET
-    is_mandatory = EXCLUDED.is_mandatory, sort_order = EXCLUDED.sort_order;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. examination_technique — The Four Techniques (H6 §12)
@@ -148,7 +138,7 @@ INSERT INTO knowledge.examination_technique (code, name, description, sort_order
     ('TECH_PALPATION',    'Palpation','Feeling with the hands: texture, temperature, tenderness, tracheal position, chest expansion (HCH12-0017).', 2, 'active'),
     ('TECH_PERCUSSION',   'Percussion','Tapping: resonance vs dullness over the chest, comparing sides (HCH12-0017).', 3, 'active'),
     ('TECH_AUSCULTATION', 'Auscultation','Listening: breath sounds and added sounds (vesicular/bronchial, wheeze, crackles) (HCH12-0018).', 4, 'active')
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. examination_position — standardised patient positions (H6 §14)
@@ -160,7 +150,7 @@ INSERT INTO knowledge.examination_position (position_code, name, description, so
     ('POS_RIGHT_LATERAL',   'Right lateral',    'On the right side; aids hepatic dullness and gallbladder exam.',                               4, 'active'),
     ('POS_KNEELING_FLEXED', 'Kneeling, forward flexed', 'For back/vertebral and lower-lung posterior bases.',                                    5, 'active'),
     ('POS_OUTLET',          'Arm raised (outlet)', 'For brachial/radial pulse and BV access assessment.',                                      6, 'active')
-ON CONFLICT (position_code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. examination_site — anatomical surfaces (H6 §13)
@@ -174,8 +164,7 @@ INSERT INTO knowledge.examination_site (code, body_system_code, name, descriptio
     ('SITE_LEGS',         'MUSCULOSKELETAL',  'Lower limbs',' Colour, texture, hair, oedema, varicose veins, DVT (HCH2-0003/0004).', 'POS_SUPINE','active'),
     ('SITE_ABDOMEN',      'GASTROINTESTINAL', 'Abdomen',' Inspection, palpation, percussion, auscultation (HCH2-0004).', 'POS_SUPINE','active'),
     ('SITE_AIRWAY',       'HEAD_NECK',        'Airway / face',' Facial symmetry, airway patency, consciousness (HCH2-0004).', 'POS_SUPINE','active')
-ON CONFLICT (code) DO UPDATE SET body_system_code = EXCLUDED.body_system_code, name = EXCLUDED.name, description = EXCLUDED.description,
-    default_position_code = EXCLUDED.default_position_code, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. examination_rule — priority / safety / availability engine (H6 §8/§32)
@@ -201,10 +190,7 @@ VALUES
     ('ER015','CONTEXT',      'OLDER_ADULT',   'examination_concept','EX008','ACTIVATE',    0, 'Geriatric functional baseline (ADL/IADL) is the comparator in older adults.',    'HCH1-0006', ARRAY['OLDER_ADULT'], true, 'active'),
     ('ER016','SYMPTOM_SIGN', 'DYSPNOEA',      'examination_concept','EX001','ACTIVATE',    0, 'Severe dyspnoea: reconfirm severity by global assessment first.',                 'HCH2-0002', ARRAY['EMERGENCY'], true, 'active'),
     ('ER017','ALWAYS',       NULL,            'examination_concept','EX002','PRIORITY',    0, 'Vital signs are captured on EVERY encounter (safety gate, HCH2-0003).',         'HCH2-0003', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','OUTPATIENT','INPATIENT'], true, 'active')
-ON CONFLICT (rule_code) DO UPDATE SET trigger_type = EXCLUDED.trigger_type, trigger_code = EXCLUDED.trigger_code,
-    target_type = EXCLUDED.target_type, target_code = EXCLUDED.target_code, modification = EXCLUDED.modification,
-    priority_delta = EXCLUDED.priority_delta, rationale = EXCLUDED.rationale, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, is_active = EXCLUDED.is_active, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. reference_standard — age-adjusted normal ranges (H6 §9), RS001..RS016
@@ -230,10 +216,7 @@ VALUES
     ('RS014','OC004', ARRAY['NEONATE'],          30,    60,   'breaths per minute','t','NORMAL',' Hutchison (neonate RR 30-60; apnoea = cessation, HCH12-0016).', 'HCH12-0016','moderate','active'),
     ('RS015','OC005', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 95, 100, '%','t','NORMAL',' Oxygen saturation ≥95 % is normal (HCH12-0016 respiratory monitoring).', 'HCH12-0016','moderate','active'),
     ('RS016','OC007', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 13, 15, 'score','t','NORMAL',' Glasgow Coma Score ≥13 normal (consciousness screen, HCH2-0003).', 'HCH2-0003','moderate','active')
-ON CONFLICT (code) DO UPDATE SET observation_concept_code = EXCLUDED.observation_concept_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, range_low = EXCLUDED.range_low, range_high = EXCLUDED.range_high,
-    range_unit = EXCLUDED.range_unit, is_inclusive = EXCLUDED.is_inclusive, interpretation = EXCLUDED.interpretation,
-    source = EXCLUDED.source, source_claim_code = EXCLUDED.source_claim_code, evidence_strength = EXCLUDED.evidence_strength, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 11. finding_interpretation — the interpretation vocabulary (H6 §10)
@@ -255,9 +238,7 @@ INSERT INTO knowledge.finding_interpretation (code, canonical_name, label, value
     ('FIN_JVD_ELEVATED',  'Jugular venous distension','Elevated JVP','BOOLEAN', true,  false, ' Raised JVP: fluid overload / cardiac failure (HCH2-0003).',                    14,'active'),
     ('FIN_PALLOR',        'Pallor','Pallor',            'CATEGORICAL', true,  false, ' Pallor of conjunctiva/skin: anaemia/perfusion (HCH2-0003/HCH12-0015).',        15,'active'),
     ('FIN_CLUBBING',      'Clubbing','Clubbing',        'BOOLEAN',     true,  false, ' Digital clubbing: carcinoma, fibrosis, bronchiectasis, abscess (HCH12-0015).', 16,'active')
-ON CONFLICT (code) DO UPDATE SET canonical_name = EXCLUDED.canonical_name, label = EXCLUDED.label,
-    value_type_constraint = EXCLUDED.value_type_constraint, is_abnormal = EXCLUDED.is_abnormal, is_critical = EXCLUDED.is_critical,
-    description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 12. finding_phenotype_link — sign value → associated clinical concept (H6 §44)
@@ -277,8 +258,7 @@ VALUES
     ('OC016','BRUISING',            'BLEEDING_RISK_SIGN',           'moderate',' Thin skin/bruising: possible coagulopathy (HCH12-0015).',                   'HCH12-0015', true),
     ('OC011','TENDERNESS',          'ABDOMINAL_PATHOLOGY_SIGN',     'moderate',' Localised abdominal tenderness localises pathology (HCH2-0004).',            'HCH2-0004', true),
     ('OC015','RESTRICTED',          'FUNCTIONAL_DECLINE_SIGN',      'moderate',' Restricted gait/posture/interaction: functional decline (HCH2-0003).',         'HCH2-0003', true)
-ON CONFLICT (observation_concept_code, finding_value, associated_concept_code) DO UPDATE SET
-    strength = EXCLUDED.strength, description = EXCLUDED.description, evidence_claim_code = EXCLUDED.evidence_claim_code, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 13. provenance — Hutchison claims → H6 knowledge objects (H6 §46)
@@ -287,7 +267,7 @@ ON CONFLICT (observation_concept_code, finding_value, associated_concept_code) D
 -- ---------------------------------------------------------------------------
 -- 13a. examination_concept edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
-SELECT s.claim_id, v.object_type, ec.id, v.object_code, 'derived_from'
+SELECT s.claim_id, v.object_type, md5(ec.code)::uuid, v.object_code, 'derived_from'
 FROM (VALUES
      ('HCH2-0002','examination_concept','EX001'), ('HCH2-0003','examination_concept','EX001'),
      ('HCH2-0003','examination_concept','EX002'), ('HCH12-0016','examination_concept','EX002'),
@@ -301,11 +281,11 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.examination_concept ec ON ec.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 13b. observation_concept edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
-SELECT s.claim_id, v.object_type, oc.id, v.object_code, 'derived_from'
+SELECT s.claim_id, v.object_type, md5(oc.code)::uuid, v.object_code, 'derived_from'
 FROM (VALUES
      ('HCH2-0003','observation_concept','OC001'),('HCH2-0003','observation_concept','OC002'),
      ('HCH2-0003','observation_concept','OC003'),('HCH2-0003','observation_concept','OC006'),
@@ -318,11 +298,11 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.observation_concept oc ON oc.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 13c. examination_rule edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
-SELECT s.claim_id, v.object_type, er.id, er.rule_code, 'derived_from'
+SELECT s.claim_id, v.object_type, md5(er.rule_code)::uuid, er.rule_code, 'derived_from'
 FROM (VALUES
      ('HCH2-0002','examination_rule','ER001'),('HCH2-0003','examination_rule','ER002'),
      ('HCH2-0003','examination_rule','ER003'),('HCH12-0016','examination_rule','ER004'),
@@ -336,11 +316,11 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.examination_rule er ON er.rule_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 13d. reference_standard edges (joined by RS code)
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
-SELECT s.claim_id, v.object_type, rs.id, v.object_code, 'derived_from'
+SELECT s.claim_id, v.object_type, md5(rs.code)::uuid, v.object_code, 'derived_from'
 FROM (VALUES
      ('HCH2-0003','reference_standard','RS001'),('HCH2-0003','reference_standard','RS002'),
      ('HCH2-0003','reference_standard','RS003'),('HCH2-0003','reference_standard','RS004'),
@@ -353,11 +333,11 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.reference_standard rs ON rs.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 13e. finding_interpretation edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
-SELECT s.claim_id, v.object_type, x.id, v.object_code, 'derived_from'
+SELECT s.claim_id, v.object_type, md5(x.code)::uuid, v.object_code, 'derived_from'
 FROM (VALUES
      ('HCH12-0018','finding_interpretation','FIN_VESICULAR'),('HCH12-0018','finding_interpretation','FIN_BRONCHIAL'),
      ('HCH12-0018','finding_interpretation','FIN_WHEEZE'),   ('HCH12-0018','finding_interpretation','FIN_CRACKLES'),
@@ -367,7 +347,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.finding_interpretation x ON x.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 13e. finding_phenotype_link edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -389,4 +369,4 @@ FROM (VALUES
 JOIN knowledge.finding_phenotype_link fpl
        ON fpl.observation_concept_code || '|' || fpl.associated_concept_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;

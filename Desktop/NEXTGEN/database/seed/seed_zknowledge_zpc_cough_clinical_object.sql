@@ -33,7 +33,7 @@ INSERT INTO knowledge.concept (id, concept_code, concept_type, canonical_name, d
     'GeneXpert MTB/RIF', 'Molecular assay for tuberculosis and rifampicin resistance'),
    ('f0a00000-0000-0000-0000-000000000048', 'CNS-BLOOD-CULTURE', 'investigation',
     'Blood culture', 'Aerobic and anaerobic blood culture for bacteraemia')
-ON CONFLICT (concept_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.investigation (id, concept_id, investigation_code, canonical_name, description,
                                      investigation_type, body_system_code, specimen, preparation) VALUES
@@ -45,13 +45,13 @@ INSERT INTO knowledge.investigation (id, concept_id, investigation_code, canonic
     'microbiology', 'RESPIRATORY', 'sputum', 'Early morning sample'),
    ('f1300000-0000-0000-0000-000000000009', 'f0a00000-0000-0000-0000-000000000048', 'INV-BLOOD-CULTURE',
     'Blood culture', 'Aerobic and anaerobic blood culture', 'microbiology', 'HAEMATOLOGICAL', 'blood', 'Before antimicrobials')
-ON CONFLICT (investigation_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.investigation_condition (investigation_id, condition_id, weight, rationale) VALUES
    ('f1300000-0000-0000-0000-000000000007', 'f1000000-0000-0000-0000-000000000001', 0.6, 'Confirms bacterial pathogen and guides antibiotics'),
    ('f1300000-0000-0000-0000-000000000008', 'f1000000-0000-0000-0000-000000000002', 1.0, 'Molecular TB confirmation and RIF resistance'),
    ('f1300000-0000-0000-0000-000000000009', 'f1000000-0000-0000-0000-000000000001', 0.6, 'Detects bacteraemia in severe pneumonia')
-ON CONFLICT (investigation_id, condition_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 1. Etiology — every category of disease that can present as cough
@@ -94,7 +94,7 @@ INSERT INTO knowledge.symptom_etiology (symptom_id, etiology_code, canonical_nam
     'Pneumoconiosis or irritant-induced cough from dust / fumes', 'occupational', 0.4),
    ('f0b00000-0000-0000-0000-000000000001', 'ETH-COUGH-PLEURAL', 'Pleural disease',
     'Pleurisy, pleural effusion or pneumothorax presenting with cough', 'pleural', 0.5)
-ON CONFLICT (symptom_id, etiology_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. Risk factors — exposures and host factors relevant to cough
@@ -123,7 +123,7 @@ INSERT INTO knowledge.symptom_risk_factor (symptom_id, risk_factor_code, canonic
     'Older adults have more severe disease and atypical presentation', 'demographic', 0.6),
    ('f0b00000-0000-0000-0000-000000000001', 'RISK-COUGH-PREGNANT', 'Pregnancy',
     'Pregnancy affects chest X-ray interpretation and antibiotic choices', 'demographic', 0.5)
-ON CONFLICT (symptom_id, risk_factor_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. Functional impact — how cough disrupts the patient's life
@@ -144,7 +144,7 @@ INSERT INTO knowledge.symptom_functional_impact (symptom_id, functional_impact_c
     'Cough-induced urinary leakage', 0.3),
    ('f0b00000-0000-0000-0000-000000000001', 'FUNC-COUGH-SOCIAL', 'Social distress',
     'Cough causes embarrassment, anxiety or avoidance of public places', 0.4)
-ON CONFLICT (symptom_id, functional_impact_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. Complications — adverse outcomes to watch for, with urgency
@@ -171,7 +171,7 @@ INSERT INTO knowledge.symptom_complication (symptom_id, complication_code, canon
     'Stress fracture from prolonged severe coughing', 'urgent', 0.4),
    ('f0b00000-0000-0000-0000-000000000001', 'COMP-COUGH-CACHEXIA', 'Weight loss / cachexia',
     'Wasting associated with TB or malignancy', 'urgent', 0.5)
-ON CONFLICT (symptom_id, complication_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. Examination targets — structured findings to look for when cough present
@@ -194,7 +194,7 @@ INSERT INTO knowledge.symptom_examination_target (symptom_id, finding_code, prio
    ('f0b00000-0000-0000-0000-000000000001', 'FIND-JVP-ELEVATED', 30, 'Raised JVP supports cardiac cause'),
    ('f0b00000-0000-0000-0000-000000000001', 'FIND-ABDO-TENDERNESS', 40, 'Basal pneumonia may present with abdominal pain'),
    ('f0b00000-0000-0000-0000-000000000001', 'FIND-FOCAL-NEURO', 40, 'Focal deficit raises aspiration risk')
-ON CONFLICT (symptom_id, finding_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. Investigation targets — investigations a cough workup may need
@@ -211,7 +211,7 @@ INSERT INTO knowledge.symptom_investigation_target (symptom_id, investigation_co
    ('f0b00000-0000-0000-0000-000000000001', 'INV-SPUTUM-CULTURE', 20, 'Pathogen identification and sensitivity'),
    ('f0b00000-0000-0000-0000-000000000001', 'INV-GENEXPERT', 30, 'Molecular TB confirmation and RIF resistance'),
    ('f0b00000-0000-0000-0000-000000000001', 'INV-BLOOD-CULTURE', 30, 'Bacteraemia detection in severe disease')
-ON CONFLICT (symptom_id, investigation_code) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. HPI documentation templates
@@ -241,7 +241,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'presenting', 'COUGH_DURATION_DAYS', NULL,       '{value}-day history', 30),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'presenting', 'COUGH_PRODUCTIVITY', 'PRODUCTIVE',     'productive', 40),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'presenting', 'COUGH_PRODUCTIVITY', 'NON_PRODUCTIVE', 'dry', 40)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7b. History — cough character (severity, character, timing, triggers, relieving, positional)
 INSERT INTO knowledge.symptom_hpi_template
@@ -266,7 +266,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'character', 'COUGH_RELIEVING',  'POSITION','relieved by sitting up', 75),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'character', 'COUGH_POSITIONAL', 'YES', 'worse on lying flat', 80),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'character', 'COUGH_POSITIONAL', 'NO',  'not positional', 80)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7c. History — sputum detail
 INSERT INTO knowledge.symptom_hpi_template
@@ -285,7 +285,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'sputum', 'SPUTUM_ODOUR',       'FOUL', 'foul-smelling', 105),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'sputum', 'BLOOD_IN_SPUTUM',    'YES', 'haemoptysis', 110),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'sputum', 'BLOOD_IN_SPUTUM',    'NO',  'no haemoptysis', 110)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7d. History — associated respiratory & cardiac symptoms
 INSERT INTO knowledge.symptom_hpi_template
@@ -315,7 +315,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'associated', 'CHEST_PAIN_RADIATION', 'LEFT_ARM', 'radiating to the left arm', 205),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'associated', 'CHEST_PAIN_RADIATION', 'JAW',      'radiating to the jaw', 205),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'associated', 'CHEST_PAIN_RADIATION', 'BACK',     'radiating to the back', 205)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7e. History — ENT, reflux and upper airway symptoms
 INSERT INTO knowledge.symptom_hpi_template
@@ -332,7 +332,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'ent_gi', 'HEARTBURN',     'NO',  'no heartburn', 230),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'ent_gi', 'VOICE_CHANGE',  'YES', 'voice change', 235),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'ent_gi', 'VOICE_CHANGE',  'NO',  'no voice change', 235)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7f. History — systemic symptoms
 INSERT INTO knowledge.symptom_hpi_template
@@ -349,7 +349,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'systemic', 'WEIGHT_LOSS',    'UNKNOWN', 'weight loss status unclear', 260),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'systemic', 'NIGHT_SWEATS',   'YES', 'night sweats', 265),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'systemic', 'NIGHT_SWEATS',   'NO',  'no night sweats', 265)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7g. History — risk factors and exposures
 INSERT INTO knowledge.symptom_hpi_template
@@ -376,7 +376,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'risk', 'DYSPHAGIA',         'NO',  'no dysphagia', 310),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'risk', 'ACE_INHIBITOR',     'YES', 'on an ACE inhibitor', 315),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'risk', 'ACE_INHIBITOR',     'NO',  'not on an ACE inhibitor', 315)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7h. History — functional impact
 INSERT INTO knowledge.symptom_hpi_template
@@ -389,7 +389,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'functional', 'EXERCISE_INTOLERANCE', 'NO',  'no exercise limitation', 330),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'functional', 'FEEDING_DIFFICULTY',   'YES', 'cough interferes with feeding', 335),
    ('f0b00000-0000-0000-0000-000000000001', 'history', 'functional', 'FEEDING_DIFFICULTY',   'NO',  'no feeding difficulty', 335)
-;
+  ON CONFLICT DO NOTHING;
 
 -- 7i. Examination section — findings as facts become sentences
 INSERT INTO knowledge.symptom_hpi_template
@@ -406,7 +406,7 @@ INSERT INTO knowledge.symptom_hpi_template
    ('f0b00000-0000-0000-0000-000000000001', 'examination', 'examination', 'CRACKLES',                   'true', 'crackles', 100),
    ('f0b00000-0000-0000-0000-000000000001', 'examination', 'examination', 'WHEEZE_PRESENT',             'YES',  'wheeze on auscultation', 110),
    ('f0b00000-0000-0000-0000-000000000001', 'examination', 'examination', 'PERIPHERAL_OEDEMA',          'true', 'peripheral oedema', 120)
-;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. Socratic activation corrections (value-aware questioning)
@@ -422,9 +422,11 @@ INSERT INTO knowledge.symptom_hpi_template
 
 UPDATE knowledge.question_requirement
    SET condition = NULL
- WHERE question_id = 'f0c00000-0000-0000-0000-00000000000c'
+ WHERE question_id = (SELECT id FROM knowledge.question WHERE question_code = 'DYSPNOEA_PRESENT')
    AND requirement_level = 'conditionally_required';
 
-INSERT INTO knowledge.question_trigger (question_id, trigger_type, trigger_concept_id, trigger_code, priority)
-VALUES ('f0c00000-0000-0000-0000-000000000006', 'symptom', 'f0a00000-0000-0000-0000-000000000001', 'cough', 20)
-ON CONFLICT DO NOTHING;
+INSERT INTO knowledge.question_trigger (question_id, trigger_type, trigger_code, priority)
+SELECT q.id, 'symptom', 'cough', 20
+  FROM knowledge.question q
+ WHERE q.question_code = 'FEVER_PRESENT'
+  ON CONFLICT DO NOTHING;

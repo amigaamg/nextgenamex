@@ -64,20 +64,18 @@ INSERT INTO clinical.fact_definition (code, name, description, data_type, allow_
     ('FORCED_EXPIRATORY_VOLUME_1','FEV1',                      'Forced expiratory volume in 1 second (L).',                                       'numeric', false, true),
     ('FORCED_VITAL_CAPACITY',    'FVC',                        'Forced vital capacity (L).',                                                     'numeric', false, true),
     ('FEV1_FVC_RATIO',           'FEV1/FVC ratio',             'FEV1/FVC ratio; <0.70 suggests obstructive airflow limitation.',                 'numeric', false, true)
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description,
-    data_type = EXCLUDED.data_type, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. investigation_domain — the universal domains (H7 §12)
 -- ---------------------------------------------------------------------------
-INSERT INTO knowledge.investigation_domain (domain_code, code, body_system_code, label, description, sort_order, status) VALUES
-    ('IDOM01','HAEMATOLOGY',   'HAEMATOLOGICAL', 'Haematology',        'Full blood count and its components (H7 §13 CBC; Box 2.4 first-pass workup, HCH2-0006).',  1, 'active'),
-    ('IDOM02','BIOCHEMISTRY',  'CONSTITUTIONAL', 'Biochemistry',       'Inflammation (CRP), urea/electrolytes and creatinine (H7 §13; immediate workup, HCH2-0006).', 2, 'active'),
-    ('IDOM03','MICROBIOLOGY',  'IMMUNE',         'Microbiology',       'Blood cultures, sputum microscopy and molecular TB testing (HCH12-0004/0007, HCH2-0006).',   3, 'active'),
-    ('IDOM04','IMAGING',       'RESPIRATORY',    'Imaging',            'Chest radiography, CT and echocardiography (HCH12-0004 CXR, HCH12-0019 effusion/pneumothorax).', 4, 'active'),
-    ('IDOM05','PHYSIOLOGY',    'CONSTITUTIONAL', 'Physiology',         'Pulse oximetry, ECG and spirometry (HCH12-0016 monitoring; HCH12-0004 baseline spirometry).', 5, 'active')
-ON CONFLICT (domain_code) DO UPDATE SET code = EXCLUDED.code, body_system_code = EXCLUDED.body_system_code,
-    label = EXCLUDED.label, description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+INSERT INTO knowledge.investigation_domain (domain_code, code, label, description, sort_order, status) VALUES
+    ('IDOM01','HAEMATOLOGY',   'Haematology',        'Full blood count and its components (H7 13 CBC; Box 2.4 first-pass workup, HCH2-0006).',  1, 'active'),
+    ('IDOM02','BIOCHEMISTRY',  'Biochemistry',       'Inflammation (CRP), urea/electrolytes and creatinine (H7 13; immediate workup, HCH2-0006).', 2, 'active'),
+    ('IDOM03','MICROBIOLOGY',  'Microbiology',       'Blood cultures, sputum microscopy and molecular TB testing (HCH12-0004/0007, HCH2-0006).',   3, 'active'),
+    ('IDOM04','IMAGING',       'Imaging',            'Chest radiography, CT and echocardiography (HCH12-0004 CXR, HCH12-0019 effusion/pneumothorax).', 4, 'active'),
+    ('IDOM05','PHYSIOLOGY',    'Physiology',         'Pulse oximetry, ECG and spirometry (HCH12-0016 monitoring; HCH12-0004 baseline spirometry).', 5, 'active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. investigation_purpose — the 14 clinical purposes, first-class objects (H7 §6/§7)
@@ -97,8 +95,7 @@ INSERT INTO knowledge.investigation_purpose (purpose_code, code, label, descript
     ('PUR012','RESPONSE_ASSESSMENT','Response assessment','Assess response to treatment (H7 §6).',12,'active'),
     ('PUR013','SCREENING','Screening','Screen a risk group (H7 §6).',13,'active'),
     ('PUR014','SURVEILLANCE','Surveillance','Ongoing monitoring for change (H7 §6).',14,'active')
-ON CONFLICT (purpose_code) DO UPDATE SET code = EXCLUDED.code, label = EXCLUDED.label,
-    description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 4. investigation_specimen — specimens/studies (H7 §18)
@@ -109,9 +106,7 @@ INSERT INTO knowledge.investigation_specimen (specimen_code, name, description, 
     ('SPEC_URINE','Urine',' Mid-stream urine sample.',' urethra',' clean-catch mid-stream',' sterile universal container', 3, 'active'),
     ('SPEC_IMAGE','Imaging study',' No physical specimen; the imaging series itself.',' n/a',' n/a',' imaging series', 4, 'active'),
     ('SPEC_NONE','No specimen',' Investigation requires no specimen (e.g. spirometry, ECG).',' n/a',' n/a',' n/a', 5, 'active')
-ON CONFLICT (specimen_code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description,
-    collection_site = EXCLUDED.collection_site, collection_method = EXCLUDED.collection_method,
-    container_type = EXCLUDED.container_type, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. investigation_method — techniques/assays (H7 §12)
@@ -126,8 +121,7 @@ INSERT INTO knowledge.investigation_method (method_code, name, description, sort
     ('METHOD_ECG',             'Electrocardiography',' 12-lead ECG recording.', 7, 'active'),
     ('METHOD_SPIROMETRY',      'Spirometry',' Flow-volume manoeuvre (baseline for chronic cough, HCH12-0004).', 8, 'active'),
     ('METHOD_PULSE_OXIMETRY',  'Pulse oximetry',' SpO2 monitoring (HCH12-0016).', 9, 'active')
-ON CONFLICT (method_code) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description,
-    sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 6. investigation_concept — universal investigation definitions I001..I012 (H7 §13)
@@ -162,7 +156,7 @@ VALUES
      'ECG','Electrocardiogram','ECG',' 12-lead ECG; chest pain/cardiac assessment and rhythm monitoring (HCH2-0004 cardiovascular examination).',
      'PHYSIOLOGY','SPEC_NONE','','{}','',
      'STRUCTURED_FINDINGS', ARRAY['PUR001','PUR003','PUR007'], 580, ARRAY['ADULT','OLDER_ADULT','CHILD'], ARRAY['DEVICE_MEASURED'], false, 'active'),
-    ('I007','IDOM04', NULL, NULL,
+    ('I013','IDOM04', NULL, NULL,
      'ECHO','Echocardiogram','Echo',' Transthoracic echocardiography; assesses cardiac function/valvular disease/effusion.',
      'IMAGING','SPEC_IMAGE','','{}','',
      'STRUCTURED_FINDINGS', ARRAY['PUR001','PUR005'], 400, ARRAY['ADULT','OLDER_ADULT','CHILD'], ARRAY['IMAGING_DERIVED'], false, 'active'),
@@ -170,7 +164,7 @@ VALUES
      'SPIROMETRY','Spirometry','Spirometry',' Flow-volume manoeuvre. Baseline investigation for ANY chronic cough (>8 weeks) — alongside CXR (HCH12-0004).',
      'PHYSIOLOGY','SPEC_NONE','Maximal forced manoeuvre; withhold bronchodilators if assessing reversibility','{}','',
      'COMPONENT_PANEL', ARRAY['PUR002','PUR004','PUR006','PUR011'], 320, ARRAY['ADULT','OLDER_ADULT','CHILD'], ARRAY['DEVICE_MEASURED'], false, 'active'),
-    ('I009','IDOM05', (SELECT id FROM knowledge.concept WHERE concept_code='CNS-PULSE-OXIMETRY'), 'SPO2',
+    ('I007','IDOM05', (SELECT id FROM knowledge.concept WHERE concept_code='CNS-PULSE-OXIMETRY'), 'SPO2',
      'PULSE_OXIMETRY','Pulse oximetry','SpO2',' Oxygen saturation monitoring. Respiratory safety gate; normal SpO2 ≥95 % (HCH12-0016).',
      'PHYSIOLOGY','SPEC_NONE','','{}','',
      'NUMERIC', ARRAY['PUR005','PUR011'], 1000, ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT','OUTPATIENT'], ARRAY['DEVICE_MEASURED'], true, 'active'),
@@ -186,38 +180,27 @@ VALUES
      'CT_CHEST','CT chest','CT chest',' CT of the thorax; advanced imaging for masses, complex effusions, mediastinal shift (HCH12-0019).',
      'IMAGING','SPEC_IMAGE','Iodinated contrast','{"PREGNANCY"}',' Renal function (U&E/creatinine) required BEFORE iodinated contrast (H7 §25/§26).',
      'STRUCTURED_FINDINGS', ARRAY['PUR001','PUR002','PUR004'], 220, ARRAY['ADULT','OLDER_ADULT'], ARRAY['IMAGING_DERIVED'], false, 'active')
-ON CONFLICT (code) DO UPDATE SET domain_code = EXCLUDED.domain_code, concept_id = EXCLUDED.concept_id,
-    fact_definition_code = EXCLUDED.fact_definition_code, canonical_code = EXCLUDED.canonical_code,
-    canonical_name = EXCLUDED.canonical_name, short_label = EXCLUDED.short_label, description = EXCLUDED.description,
-    modality = EXCLUDED.modality, specimen_type_code = EXCLUDED.specimen_type_code,
-    preparation_requirements = EXCLUDED.preparation_requirements, patient_constraints = EXCLUDED.patient_constraints,
-    safety_requirements = EXCLUDED.safety_requirements, result_structure = EXCLUDED.result_structure,
-    clinical_purposes = EXCLUDED.clinical_purposes, base_priority = EXCLUDED.base_priority,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, capture_method_codes = EXCLUDED.capture_method_codes,
-    is_mandatory = EXCLUDED.is_mandatory, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 7. investigation_component — measurable parts of panel investigations (H7 §14/§15)
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.investigation_component
-    (investigation_concept_code, component_code, fact_definition_code, name, short_label, value_type, unit, normal_range, sort_order, is_mandatory, status)
+    (investigation_concept_code, component_code, fact_definition_code, name, short_label, value_type, canonical_unit_code, sort_order, is_mandatory, status)
 VALUES
-    ('I001','HAEMOGLOBIN','HAEMOGLOBIN','Haemoglobin','Hb',   'NUMERIC','g/dL',      '{"min":13.0,"max":17.0,"unit":"g/dL","inclusive":true}',   1,true,'active'),
-    ('I001','WHITE_CELL_COUNT','WHITE_CELL_COUNT','White blood cell count','WBC','NUMERIC','x10^9/L','{"min":4.0,"max":11.0,"unit":"x10^9/L","inclusive":true}',   2,true,'active'),
-    ('I001','NEUTROPHIL_COUNT','NEUTROPHIL_COUNT','Neutrophil count','Neut','NUMERIC','x10^9/L','{"min":2.0,"max":7.5,"unit":"x10^9/L","inclusive":true}',      3,true,'active'),
-    ('I001','PLATELET_COUNT','PLATELET_COUNT','Platelet count','Plt', 'NUMERIC','x10^9/L','{"min":150.0,"max":400.0,"unit":"x10^9/L","inclusive":true}',   4,true,'active'),
-    ('I001','MEAN_CELL_VOLUME','MEAN_CELL_VOLUME','Mean cell volume','MCV','NUMERIC','fL','{"min":80.0,"max":100.0,"unit":"fL","inclusive":true}',          5,true,'active'),
-    ('I003','UREA','UREA','Urea','Urea',               'NUMERIC','mmol/L','{"min":2.5,"max":7.8,"unit":"mmol/L","inclusive":true}',                    1,true,'active'),
-    ('I003','CREATININE','CREATININE','Creatinine','Cr', 'NUMERIC','umol/L','{"min":60.0,"max":110.0,"unit":"umol/L","inclusive":true}',               2,true,'active'),
-    ('I003','SODIUM','SODIUM','Sodium','Na',            'NUMERIC','mmol/L','{"min":135.0,"max":145.0,"unit":"mmol/L","inclusive":true}',              3,true,'active'),
-    ('I003','POTASSIUM','POTASSIUM','Potassium','K',     'NUMERIC','mmol/L','{"min":3.5,"max":5.0,"unit":"mmol/L","inclusive":true}',                 4,true,'active'),
-    ('I008','FORCED_EXPIRATORY_VOLUME_1','FORCED_EXPIRATORY_VOLUME_1','FEV1','FEV1','NUMERIC','L','{"min":null,"max":null,"unit":"L","inclusive":true}',1,true,'active'),
-    ('I008','FORCED_VITAL_CAPACITY','FORCED_VITAL_CAPACITY','FVC','FVC','NUMERIC','L','{"min":null,"max":null,"unit":"L","inclusive":true}',            2,true,'active'),
-    ('I008','FEV1_FVC_RATIO','FEV1_FVC_RATIO','FEV1/FVC ratio','Ratio','NUMERIC','ratio','{"min":0.70,"max":1.00,"unit":"ratio","inclusive":true}',    3,true,'active')
-ON CONFLICT (investigation_concept_code, component_code) DO UPDATE SET
-    fact_definition_code = EXCLUDED.fact_definition_code, name = EXCLUDED.name, short_label = EXCLUDED.short_label,
-    value_type = EXCLUDED.value_type, unit = EXCLUDED.unit, normal_range = EXCLUDED.normal_range,
-    sort_order = EXCLUDED.sort_order, is_mandatory = EXCLUDED.is_mandatory, status = EXCLUDED.status;
+    ('I001','HAEMOGLOBIN','HAEMOGLOBIN','Haemoglobin','Hb',   'NUMERIC','g/dL',   1,true,'active'),
+    ('I001','WHITE_CELL_COUNT','WHITE_CELL_COUNT','White blood cell count','WBC','NUMERIC','x10^9/L',   2,true,'active'),
+    ('I001','NEUTROPHIL_COUNT','NEUTROPHIL_COUNT','Neutrophil count','Neut','NUMERIC','x10^9/L',      3,true,'active'),
+    ('I001','PLATELET_COUNT','PLATELET_COUNT','Platelet count','Plt', 'NUMERIC','x10^9/L',   4,true,'active'),
+    ('I001','MEAN_CELL_VOLUME','MEAN_CELL_VOLUME','Mean cell volume','MCV','NUMERIC','fL',          5,true,'active'),
+    ('I003','UREA','UREA','Urea','Urea',               'NUMERIC','mmol/L',                    1,true,'active'),
+    ('I003','CREATININE','CREATININE','Creatinine','Cr', 'NUMERIC','umol/L',               2,true,'active'),
+    ('I003','SODIUM','SODIUM','Sodium','Na',            'NUMERIC','mmol/L',              3,true,'active'),
+    ('I003','POTASSIUM','POTASSIUM','Potassium','K',     'NUMERIC','mmol/L',                 4,true,'active'),
+    ('I008','FORCED_EXPIRATORY_VOLUME_1','FORCED_EXPIRATORY_VOLUME_1','FEV1','FEV1','NUMERIC','L',1,true,'active'),
+    ('I008','FORCED_VITAL_CAPACITY','FORCED_VITAL_CAPACITY','FVC','FVC','NUMERIC','L',            2,true,'active'),
+    ('I008','FEV1_FVC_RATIO','FEV1_FVC_RATIO','FEV1/FVC ratio','Ratio','NUMERIC','ratio',    3,true,'active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 8. investigation_indication — "phenotype/fact X → investigation Y → question Z" (H7 §44)
@@ -231,40 +214,34 @@ VALUES
     ('I005','PUR001','Does consolidation explain bronchial breath sounds/crackles?',     ARRAY['RLL_BRONCHIAL_BREATH_SOUNDS','CRACKLES'],'{}', ARRAY['ADULT','OLDER_ADULT'],'HCH12-0018','moderate', true, 'active'),
     ('I008','PUR006','Baseline spirometry for chronic cough (>8 weeks).',             ARRAY['COUGH_DURATION_DAYS'],'{}', ARRAY['ADULT','OLDER_ADULT'],'HCH12-0004','strong', true, 'active'),
     ('I008','PUR004','Is the limitation obstructive or restrictive (FEV1/FVC)?',      ARRAY['COUGH_DURATION_DAYS','WHEEZE_PRESENT'],'{}', ARRAY['ADULT','OLDER_ADULT'],'HCH12-0004','moderate', true, 'active'),
-    ('I009','PUR011','Is the patient hypoxic?',                                        ARRAY['DYSPNOEA_PRESENT','RESPIRATORY_DISTRESS'],'{}', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT'],'HCH12-0016','strong', true, 'active'),
+    ('I007','PUR011','Is the patient hypoxic?',                                        ARRAY['DYSPNOEA_PRESENT','RESPIRATORY_DISTRESS'],'{}', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT'],'HCH12-0016','strong', true, 'active'),
     ('I001','PUR005','Is there infection/anaemia explaining the presentation?',         ARRAY['FEVER_PRESENT','WEIGHT_LOSS'],'{}', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'],'HCH2-0006','moderate', true, 'active'),
     ('I010','PUR001','Is an infective organism present in the sputum?',                 ARRAY['BLOOD_IN_SPUTUM','SPUTUM_COLOUR'],'{}', ARRAY['ADULT','OLDER_ADULT'],'HCH12-0007','moderate', true, 'active'),
     ('I011','PUR002','Is TB confirmed by molecular testing?',                            ARRAY['TB_CONTACT','BLOOD_IN_SPUTUM','NIGHT_SWEATS'],'{}', ARRAY['ADULT','OLDER_ADULT'],'HCH12-0007','moderate', true, 'active')
-ON CONFLICT (investigation_concept_code, purpose_code, clinical_question) DO UPDATE SET
-    trigger_fact_codes = EXCLUDED.trigger_fact_codes, trigger_phenotype_codes = EXCLUDED.trigger_phenotype_codes,
-    context_codes = EXCLUDED.context_codes, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    strength = EXCLUDED.strength, is_active = EXCLUDED.is_active, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 9. investigation_rule — the H7 selection/priority/safety/dependency engine (H7 §11/§25/§26)
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.investigation_rule
-    (rule_code, trigger_type, trigger_code, target_type, target_code, modification, priority_delta, rationale, evidence_claim_code, applies_to_context_codes, is_active, status)
+    (rule_code, trigger_type, trigger_code, investigation_concept_code, modification, priority_delta, rationale, evidence_claim_code, applies_to_context_codes, is_active, status)
 VALUES
-    ('IR001','ALWAYS',       NULL,              'investigation_concept','I009','SAFETY',     0,     'Pulse oximetry is a physiological safety gate (respiratory monitoring, HCH12-0016).',  'HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT','OUTPATIENT'], true, 'active'),
-    ('IR002','FACT',         'BLOOD_IN_SPUTUM', 'investigation_concept','I005','MANDATORY', 100,   'Haemoptysis requires prompt assessment with at least a baseline chest X-ray (HCH12-0004/0007).','HCH12-0007', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
-    ('IR003','FACT',         'COUGH_DURATION_DAYS', 'investigation_concept','I008','ACTIVATE', 40, 'Chronic cough (>8 weeks) → baseline spirometry (HCH12-0004).',                    'HCH12-0004', ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
-    ('IR004','FACT',         'COUGH_DURATION_DAYS', 'investigation_concept','I005','ACTIVATE', 40, 'Chronic cough (>8 weeks) → baseline chest X-ray (HCH12-0004).',                  'HCH12-0004', ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
-    ('IR005','FACT',         'DYSPNOEA_PRESENT','investigation_concept','I009','ACTIVATE',  90,   'Dyspnoea → pulse oximetry to detect hypoxaemia (HCH12-0016).',                   'HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','EMERGENCY','INPATIENT'], true, 'active'),
-    ('IR006','FACT',         'DYSPNOEA_PRESENT','investigation_concept','I005','ACTIVATE',  70,   'Dyspnoea with respiratory findings → chest X-ray for consolidation/effusion.',    'HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
-    ('IR007','FACT',         'RLL_DULLNESS',    'investigation_concept','I005','ACTIVATE',  60,   'Percussion dullness → imaging for consolidation/effusion/pneumothorax (HCH12-0019).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
-    ('IR008','FACT',         'CRACKLES',        'investigation_concept','I005','ACTIVATE',  60,   'Crackles on auscultation → chest X-ray (consolidation/fibrosis/failure, HCH12-0018).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
-    ('IR009','FACT',         'RLL_BRONCHIAL_BREATH_SOUNDS','investigation_concept','I005','ACTIVATE', 60, 'Bronchial breath sounds → chest X-ray for consolidation (HCH12-0018).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
-    ('IR010','CONTEXT',      'PREGNANCY',       'investigation_concept','I012','UNAVAILABLE', 0,  'CT with contrast is avoided in pregnancy (radiation safety, H7 §26).',           NULL,          ARRAY['PREGNANCY'], true, 'active'),
-    ('IR011','FACT',         'FEVER_PRESENT',   'investigation_concept','I001','ACTIVATE',  50,   'Fever → full blood count as an immediate first-pass workup (Box 2.4, HCH2-0006).','HCH2-0006', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], true, 'active'),
-    ('IR012','CONTEXT',      'EMERGENCY',       'investigation_concept','I001','ACTIVATE',  30,   'Emergency → full blood count immediately (Box 2.4, HCH2-0006).',                 'HCH2-0006', ARRAY['EMERGENCY'], true, 'active'),
-    ('IR013','FACT',         'TEMPERATURE',     'investigation_concept','I004','CONDITIONAL', 40, 'Fever ≥38.5 °C → blood cultures before antibiotics (Box 2.4, HCH2-0006).',       'HCH2-0006', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], true, 'active'),
-    ('IR014','ALWAYS',       NULL,              'investigation_concept','I012','DEPENDENCY',  0,  'Contrast CT requires renal function (U&E) result BEFORE contrast (H7 §25/§26).', NULL,          ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
-    ('IR015','FACT',         'BLOOD_IN_SPUTUM', 'investigation_concept','I010','ACTIVATE',  30,   'Haemoptysis → sputum microscopy for infective organisms (HCH12-0007).',         'HCH12-0007', ARRAY['ADULT','OLDER_ADULT'], true, 'active')
-ON CONFLICT (rule_code) DO UPDATE SET trigger_type = EXCLUDED.trigger_type, trigger_code = EXCLUDED.trigger_code,
-    target_type = EXCLUDED.target_type, target_code = EXCLUDED.target_code, modification = EXCLUDED.modification,
-    priority_delta = EXCLUDED.priority_delta, rationale = EXCLUDED.rationale, evidence_claim_code = EXCLUDED.evidence_claim_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, is_active = EXCLUDED.is_active, status = EXCLUDED.status;
+    ('IR001','ALWAYS',       NULL,              'I007','SAFETY',     0,     'Pulse oximetry is a physiological safety gate (respiratory monitoring, HCH12-0016).',  'HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE','EMERGENCY','INPATIENT','OUTPATIENT'], true, 'active'),
+    ('IR002','FACT',         'BLOOD_IN_SPUTUM', 'I005','MANDATORY', 100,   'Haemoptysis requires prompt assessment with at least a baseline chest X-ray (HCH12-0004/0007).','HCH12-0007', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
+    ('IR003','FACT',         'COUGH_DURATION_DAYS', 'I008','ACTIVATE', 40, 'Chronic cough (>8 weeks) → baseline spirometry (HCH12-0004).',                    'HCH12-0004', ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
+    ('IR004','FACT',         'COUGH_DURATION_DAYS', 'I005','ACTIVATE', 40, 'Chronic cough (>8 weeks) → baseline chest X-ray (HCH12-0004).',                  'HCH12-0004', ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
+    ('IR005','FACT',         'DYSPNOEA_PRESENT','I007','ACTIVATE',  90,   'Dyspnoea → pulse oximetry to detect hypoxaemia (HCH12-0016).',                   'HCH12-0016', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','EMERGENCY','INPATIENT'], true, 'active'),
+    ('IR006','FACT',         'DYSPNOEA_PRESENT','I005','ACTIVATE',  70,   'Dyspnoea with respiratory findings → chest X-ray for consolidation/effusion.',    'HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
+    ('IR007','FACT',         'RLL_DULLNESS',    'I005','ACTIVATE',  60,   'Percussion dullness → imaging for consolidation/effusion/pneumothorax (HCH12-0019).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
+    ('IR008','FACT',         'CRACKLES',        'I005','ACTIVATE',  60,   'Crackles on auscultation → chest X-ray (consolidation/fibrosis/failure, HCH12-0018).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
+    ('IR009','FACT',         'RLL_BRONCHIAL_BREATH_SOUNDS','I005','ACTIVATE', 60, 'Bronchial breath sounds → chest X-ray for consolidation (HCH12-0018).','HCH12-0018', ARRAY['ADULT','OLDER_ADULT','CHILD'], true, 'active'),
+    ('IR010','CONTEXT',      'PREGNANCY',       'I012','UNAVAILABLE', 0,  'CT with contrast is avoided in pregnancy (radiation safety, H7 §26).',           NULL,          ARRAY['PREGNANCY'], true, 'active'),
+    ('IR011','FACT',         'FEVER_PRESENT',   'I001','ACTIVATE',  50,   'Fever → full blood count as an immediate first-pass workup (Box 2.4, HCH2-0006).','HCH2-0006', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], true, 'active'),
+    ('IR012','CONTEXT',      'EMERGENCY',       'I001','ACTIVATE',  30,   'Emergency → full blood count immediately (Box 2.4, HCH2-0006).',                 'HCH2-0006', ARRAY['EMERGENCY'], true, 'active'),
+    ('IR013','FACT',         'TEMPERATURE',     'I004','CONDITIONAL', 40, 'Fever ≥38.5 °C → blood cultures before antibiotics (Box 2.4, HCH2-0006).',       'HCH2-0006', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], true, 'active'),
+    ('IR014','ALWAYS',       NULL,              'I012','DEPENDENCY',  0,  'Contrast CT requires renal function (U&E) result BEFORE contrast (H7 §25/§26).', NULL,          ARRAY['ADULT','OLDER_ADULT'], true, 'active'),
+    ('IR015','FACT',         'BLOOD_IN_SPUTUM', 'I010','ACTIVATE',  30,   'Haemoptysis → sputum microscopy for infective organisms (HCH12-0007).',         'HCH12-0007', ARRAY['ADULT','OLDER_ADULT'], true, 'active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 10. investigation_rule_condition — value guards (H7 §10 filter stage)
@@ -273,8 +250,7 @@ INSERT INTO knowledge.investigation_rule_condition (rule_code, condition_code, f
     ('IR003','COND001','COUGH_DURATION_DAYS','>',   '56',' Chronic cough = duration > 8 weeks = 56 days (HCH12-0004: "more than 8 weeks").',      true),
     ('IR004','COND002','COUGH_DURATION_DAYS','>',   '56',' Chronic cough = duration > 8 weeks = 56 days (HCH12-0004).',                          true),
     ('IR013','COND003','TEMPERATURE','>=',          '38.5',' Significant fever threshold for blood cultures (HCH2-0006 immediate workup).',          true)
-ON CONFLICT (rule_code, condition_code) DO UPDATE SET fact_definition_code = EXCLUDED.fact_definition_code,
-    operator = EXCLUDED.operator, value = EXCLUDED.value, rationale = EXCLUDED.rationale, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 11. investigation_rule_action — dependencies and sequencing (H7 §25)
@@ -286,8 +262,7 @@ FROM (VALUES
      ('IR004','REQUEST_ALONGSIDE','I008',' Baseline CXR and spirometry are performed together for chronic cough (HCH12-0004).',1)
 ) AS v(rule_code, action_type, target_investigation_code, rationale, sort_order)
 JOIN knowledge.investigation_rule ir ON ir.rule_code = v.rule_code
-ON CONFLICT (rule_code, action_type, target_investigation_code) DO UPDATE SET
-    rationale = EXCLUDED.rationale, sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 INSERT INTO knowledge.investigation_rule_action
     (rule_code, action_type, target_investigation_code, rationale, sort_order, is_active)
@@ -296,29 +271,8 @@ FROM (VALUES
      ('IR014','REQUIRE_RESULT_BEFORE','I003',' Renal function (U&E/creatinine) must be available BEFORE iodinated contrast (H7 §25/§26).',1)
 ) AS v(rule_code, action_type, target_investigation_code, rationale, sort_order)
 JOIN knowledge.investigation_rule ir ON ir.rule_code = v.rule_code
-ON CONFLICT (rule_code, action_type, target_investigation_code) DO UPDATE SET
-    rationale = EXCLUDED.rationale, sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
--- ---------------------------------------------------------------------------
--- 12. investigation_priority_rule — the H7 §21 multi-dimensional priority model
--- ---------------------------------------------------------------------------
-INSERT INTO knowledge.investigation_priority_rule
-    (priority_code, dimension, direction, weight, description, version, effective_from, status)
-VALUES
-    ('IPR001','CLINICAL_URGENCY',     'POSITIVE', 3.00, ' How urgent the clinical situation makes this investigation.',          1, '2024-01-01','active'),
-    ('IPR002','EXPECTED_INFORMATION', 'POSITIVE', 1.00, ' How much new information the result is expected to add.',             1, '2024-01-01','active'),
-    ('IPR003','DIAGNOSTIC_RELEVANCE', 'POSITIVE', 1.50, ' How directly the result bears on the leading differential.',          1, '2024-01-01','active'),
-    ('IPR004','SEVERITY_RELEVANCE',   'POSITIVE', 1.00, ' How well it grades severity/risk.',                                   1, '2024-01-01','active'),
-    ('IPR005','MANAGEMENT_IMPACT',    'POSITIVE', 1.50, ' How much it would change management (culture → antibiotic choice).',  1, '2024-01-01','active'),
-    ('IPR006','SAFETY_VALUE',         'POSITIVE', 1.00, ' How much it protects patient safety (renal function before contrast).',1, '2024-01-01','active'),
-    ('IPR007','CONTEXT_FIT',          'POSITIVE', 0.50, ' How well it fits the active context (telemedicine/pregnancy/age).',   1, '2024-01-01','active'),
-    ('IPR008','HARM_PENALTY',         'NEGATIVE', 2.00, ' Harm penalty (radiation, contrast nephrotoxicity).',                  1, '2024-01-01','active'),
-    ('IPR009','COST_PENALTY',         'NEGATIVE', 0.50, ' Cost penalty of the investigation.',                                   1, '2024-01-01','active'),
-    ('IPR010','REDUNDANCY_PENALTY',   'NEGATIVE', 0.50, ' Penalty for duplicating an already-captured result.',                 1, '2024-01-01','active'),
-    ('IPR011','AVAILABILITY_PENALTY', 'NEGATIVE', 0.50, ' Penalty when the investigation is not locally available.',            1, '2024-01-01','active')
-ON CONFLICT (priority_code) DO UPDATE SET dimension = EXCLUDED.dimension, direction = EXCLUDED.direction,
-    weight = EXCLUDED.weight, description = EXCLUDED.description, version = EXCLUDED.version,
-    effective_from = EXCLUDED.effective_from, status = EXCLUDED.status;
 
 -- ---------------------------------------------------------------------------
 -- 13. investigation_status — operational lifecycle (H7 §20/§12)
@@ -332,32 +286,27 @@ INSERT INTO knowledge.investigation_status (status_code, label, description, sor
     ('REPORTED',         'Reported',          ' Interpreted result reported.',                                 6, true,  'active'),
     ('CANCELLED',        'Cancelled',         ' Order cancelled (e.g. no longer indicated).',                  7, true,  'active'),
     ('ENTERED_IN_ERROR', 'Entered in error',  ' Order/result entered in error.',                               8, true,  'active')
-ON CONFLICT (status_code) DO UPDATE SET label = EXCLUDED.label, description = EXCLUDED.description,
-    sort_order = EXCLUDED.sort_order, is_terminal = EXCLUDED.is_terminal, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 14. investigation_source — provenance of investigation knowledge (H7 §31)
 -- ---------------------------------------------------------------------------
 INSERT INTO knowledge.investigation_source
-    (investigation_concept_code, source_version_id, reference, organization, publication, edition, year, chapter_ref, section_ref, version, effective_from, status)
+    (investigation_concept_code, source_version_id, reference, organization, publication, edition, year, chapter_ref, section_ref, effective_from, status)
 VALUES
-    ('I001','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4','v1','2018-01-01','active'),
-    ('I002','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4','v1','2018-01-01','active'),
-    ('I003','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4','v1','2018-01-01','active'),
-    ('I004','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4','v1','2018-01-01','active'),
-    ('I005','HUTCHISON_24_2018','CH12 respiratory — cough thresholds + haemoptysis + tracheal deviation.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
-    ('I006','HUTCHISON_24_2018','Box 2.5 — complete examination order (cardiovascular).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.5','v1','2018-01-01','active'),
-    ('I007','HUTCHISON_24_2018','Box 2.5 — complete examination order (cardiovascular).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.5','v1','2018-01-01','active'),
-    ('I008','HUTCHISON_24_2018','CH12 — chronic cough (>8 weeks) baseline CXR + spirometry.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
-    ('I009','HUTCHISON_24_2018','CH12 — respiratory rate and rhythm / SpO2 monitoring.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
-    ('I010','HUTCHISON_24_2018','CH12 — cough/sputum + haemoptysis careful evaluation.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
-    ('I011','HUTCHISON_24_2018','CH12 — respiratory red flags (haemoptysis, weight loss, TB risk).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active'),
-    ('I012','HUTCHISON_24_2018','CH12 — tracheal deviation → effusion/pneumothorax → imaging.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12','v1','2018-01-01','active')
-ON CONFLICT (investigation_concept_code, source_version_id) DO UPDATE SET
-    reference = EXCLUDED.reference, organization = EXCLUDED.organization, publication = EXCLUDED.publication,
-    edition = EXCLUDED.edition, year = EXCLUDED.year, chapter_ref = EXCLUDED.chapter_ref,
-    section_ref = EXCLUDED.section_ref, version = EXCLUDED.version,
-    effective_from = EXCLUDED.effective_from, status = EXCLUDED.status;
+    ('I001','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4', '2018-01-01','active'),
+    ('I002','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4', '2018-01-01','active'),
+    ('I003','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4', '2018-01-01','active'),
+    ('I004','HUTCHISON_24_2018','Box 2.4 — investigations to do immediately.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.4', '2018-01-01','active'),
+    ('I005','HUTCHISON_24_2018','CH12 respiratory — cough thresholds + haemoptysis + tracheal deviation.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active'),
+    ('I006','HUTCHISON_24_2018','Box 2.5 — complete examination order (cardiovascular).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.5', '2018-01-01','active'),
+    ('I013','HUTCHISON_24_2018','Box 2.5 — complete examination order (cardiovascular).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C02','Box 2.5', '2018-01-01','active'),
+    ('I008','HUTCHISON_24_2018','CH12 — chronic cough (>8 weeks) baseline CXR + spirometry.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active'),
+    ('I007','HUTCHISON_24_2018','CH12 — respiratory rate and rhythm / SpO2 monitoring.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active'),
+    ('I010','HUTCHISON_24_2018','CH12 — cough/sputum + haemoptysis careful evaluation.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active'),
+    ('I011','HUTCHISON_24_2018','CH12 — respiratory red flags (haemoptysis, weight loss, TB risk).','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active'),
+    ('I012','HUTCHISON_24_2018','CH12 — tracheal deviation → effusion/pneumothorax → imaging.','Hutchison','Hutchison Clinical Methods','24',2018,'H1-C12','CH12', '2018-01-01','active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 15. investigation_version — temporal versioning of investigation knowledge (H7 §24/§30)
@@ -365,37 +314,33 @@ ON CONFLICT (investigation_concept_code, source_version_id) DO UPDATE SET
 INSERT INTO knowledge.investigation_version (investigation_concept_code, version_no, effective_from, supersedes, change_note, status)
 SELECT ic.code, 1, '2018-01-01', NULL, ' H7 seed from Hutchison Clinical Methods 24e.', 'active'
 FROM knowledge.investigation_concept ic
-ON CONFLICT (investigation_concept_code, version_no) DO UPDATE SET
-    effective_from = EXCLUDED.effective_from, change_note = EXCLUDED.change_note, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 16. result_reference_standard — contextual ranges for result classification (H7 §29/§30)
 --    RAW RESULT → STANDARD → CLASSIFICATION → PHENOTYPE.
 -- ---------------------------------------------------------------------------
+INSERT INTO knowledge.measurement_unit (unit_code, symbol, name, quantity_type, is_si, status) VALUES
+    ('UNIT_MG_PER_L','mg/L','milligrams per litre','MASS_CONCENTRATION','f','active')
+  ON CONFLICT DO NOTHING;
+
 INSERT INTO knowledge.result_reference_standard
-    (code, investigation_concept_code, component_code, fact_definition_code, method_code, applies_to_context_codes, sex, range_low, range_high, range_unit, is_inclusive, classification, source, source_claim_code, evidence_strength, status)
+    (code, investigation_concept_code, component_code, fact_definition_code, method_code, applies_to_context_codes, sex, range_low, range_high, range_unit_code, lower_inclusive, upper_inclusive, classification, source_version_id, source_claim_code, evidence_strength, status)
 VALUES
-    ('RRS001','I001','HAEMOGLOBIN','HAEMOGLOBIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'MALE',   13.0,  17.0, 'g/dL',   true,'NORMAL','Hutchison 24e adult male FBC reference.',    'HCH2-0006','moderate','active'),
-    ('RRS002','I001','HAEMOGLOBIN','HAEMOGLOBIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'FEMALE', 12.0,  16.0, 'g/dL',   true,'NORMAL','Hutchison 24e adult female FBC reference.',    'HCH2-0006','moderate','active'),
-    ('RRS003','I001','WHITE_CELL_COUNT','WHITE_CELL_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 'ANY', 4.0, 11.0, 'x10^9/L', true,'NORMAL','Hutchison 24e adult WBC reference.',         'HCH2-0006','moderate','active'),
-    ('RRS004','I001','NEUTROPHIL_COUNT','NEUTROPHIL_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 2.0, 7.5, 'x10^9/L', true,'NORMAL','Hutchison 24e adult neutrophil reference.',    'HCH2-0006','moderate','active'),
-    ('RRS005','I001','PLATELET_COUNT','PLATELET_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 150.0, 400.0, 'x10^9/L', true,'NORMAL','Hutchison 24e adult platelet reference.',   'HCH2-0006','moderate','active'),
-    ('RRS006','I001','MEAN_CELL_VOLUME','MEAN_CELL_VOLUME','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 80.0, 100.0, 'fL', true,'NORMAL','Hutchison 24e adult MCV reference.',        'HCH2-0006','moderate','active'),
-    ('RRS007','I002',NULL,'C_REACTIVE_PROTEIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 0.0, 10.0, 'mg/L', true,'NORMAL','Hutchison 24e CRP (normal <10 mg/L).',        'HCH2-0006','moderate','active'),
-    ('RRS008','I003','UREA','UREA','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 2.5, 7.8, 'mmol/L', true,'NORMAL','Hutchison 24e urea reference.',              'HCH2-0006','moderate','active'),
-    ('RRS009','I003','CREATININE','CREATININE','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 60.0, 110.0, 'umol/L', true,'NORMAL','Hutchison 24e creatinine reference.',       'HCH2-0006','moderate','active'),
-    ('RRS010','I003','SODIUM','SODIUM','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 135.0, 145.0, 'mmol/L', true,'NORMAL','Hutchison 24e sodium reference.',           'HCH2-0006','moderate','active'),
-    ('RRS011','I003','POTASSIUM','POTASSIUM','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 3.5, 5.0, 'mmol/L', true,'NORMAL','Hutchison 24e potassium reference.',        'HCH2-0006','moderate','active'),
-    ('RRS012','I008','FEV1_FVC_RATIO','FEV1_FVC_RATIO','METHOD_SPIROMETRY', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 0.70, 1.00, 'ratio', true,'NORMAL','Obstructive limitation when FEV1/FVC <0.70 (baseline spirometry, HCH12-0004).','HCH12-0004','moderate','active'),
-    ('RRS013','I009',NULL,'SPO2','METHOD_PULSE_OXIMETRY', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 'ANY', 95.0, 100.0, '%', true,'NORMAL','Normal oxygen saturation ≥95 % (HCH12-0016).','HCH12-0016','strong','active')
-ON CONFLICT (code) DO UPDATE SET
-    investigation_concept_code = EXCLUDED.investigation_concept_code, component_code = EXCLUDED.component_code,
-    fact_definition_code = EXCLUDED.fact_definition_code, method_code = EXCLUDED.method_code,
-    applies_to_context_codes = EXCLUDED.applies_to_context_codes, sex = EXCLUDED.sex,
-    range_low = EXCLUDED.range_low, range_high = EXCLUDED.range_high,
-    range_unit = EXCLUDED.range_unit, is_inclusive = EXCLUDED.is_inclusive, classification = EXCLUDED.classification,
-    source = EXCLUDED.source, source_claim_code = EXCLUDED.source_claim_code,
-    evidence_strength = EXCLUDED.evidence_strength, status = EXCLUDED.status;
+    ('RRS001','I001','HAEMOGLOBIN','HAEMOGLOBIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'MALE',   13.0,  17.0, 'UNIT_G_PER_DL', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS002','I001','HAEMOGLOBIN','HAEMOGLOBIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'FEMALE', 12.0,  16.0, 'UNIT_G_PER_DL', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS003','I001','WHITE_CELL_COUNT','WHITE_CELL_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT'], 'ANY', 4.0, 11.0, 'UNIT_X10E9_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS004','I001','NEUTROPHIL_COUNT','NEUTROPHIL_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 2.0, 7.5, 'UNIT_X10E9_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS005','I001','PLATELET_COUNT','PLATELET_COUNT','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 150.0, 400.0, 'UNIT_X10E9_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS006','I001','MEAN_CELL_VOLUME','MEAN_CELL_VOLUME','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 80.0, 100.0, 'UNIT_FEMTOLITRE', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS007','I002',NULL,'C_REACTIVE_PROTEIN','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 0.0, 10.0, 'UNIT_MG_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS008','I003','UREA','UREA','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 2.5, 7.8, 'UNIT_MMOL_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS009','I003','CREATININE','CREATININE','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 60.0, 110.0, 'UNIT_UMOL_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS010','I003','SODIUM','SODIUM','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 135.0, 145.0, 'UNIT_MMOL_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS011','I003','POTASSIUM','POTASSIUM','METHOD_LAB_ANALYSER', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 3.5, 5.0, 'UNIT_MMOL_PER_L', true, true, 'NORMAL', 'HUTCHISON_24_2018', 'HCH2-0006','moderate','active'),
+    ('RRS012','I008','FEV1_FVC_RATIO','FEV1_FVC_RATIO','METHOD_SPIROMETRY', ARRAY['ADULT','OLDER_ADULT'], 'ANY', 0.70, 1.00, NULL, true, true, 'NORMAL','HUTCHISON_24_2018','HCH12-0004','moderate','active'),
+    ('RRS013','I007',NULL,'SPO2','METHOD_PULSE_OXIMETRY', ARRAY['ADULT','OLDER_ADULT','CHILD','INFANT','NEONATE'], 'ANY', 95.0, 100.0, 'UNIT_PERCENT', true, true, 'NORMAL','HUTCHISON_24_2018','HCH12-0016','strong','active')
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 17. result_interpretation — controlled interpretation vocabulary (H7 §32)
@@ -416,9 +361,7 @@ INSERT INTO knowledge.result_interpretation (code, canonical_name, label, result
     ('RINT_OBSTRUCTIVE_SPIROMETRY','Obstructive spirometry','Obstructive pattern','PHYSIOLOGY', true, false, ' FEV1/FVC <0.70 — obstructive airflow limitation (baseline spirometry, HCH12-0004).', 13,'active'),
     ('RINT_MTB_DETECTED','TB detected','MTB detected',    'MICROBIOLOGY',   true,  false, ' Molecular amplification detects Mycobacterium tuberculosis.',                               14,'active'),
     ('RINT_ORGANISM_DETECTED','Organism detected','Organism','MICROBIOLOGY', true,  false, ' Microorganism identified by microscopy/culture.',                                          15,'active')
-ON CONFLICT (code) DO UPDATE SET canonical_name = EXCLUDED.canonical_name, label = EXCLUDED.label,
-    result_type_constraint = EXCLUDED.result_type_constraint, is_abnormal = EXCLUDED.is_abnormal, is_critical = EXCLUDED.is_critical,
-    description = EXCLUDED.description, sort_order = EXCLUDED.sort_order, status = EXCLUDED.status;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 18. result_phenotype_link — interpretation → concept bridge for H8 (H7 §33)
@@ -431,9 +374,7 @@ INSERT INTO knowledge.result_phenotype_link (result_interpretation_code, associa
     ('RINT_OBSTRUCTIVE_SPIROMETRY','CNS-AIRWAY-OBSTRUCTION','strong',    ' FEV1/FVC <0.70 = obstructive airway limitation (baseline spirometry, HCH12-0004).','HCH12-0004', true),
     ('RINT_MTB_DETECTED','CNS-TUBERCULOSIS','strong',    ' Molecular detection of MTB confirms pulmonary tuberculosis (respiratory red flags).','HCH12-0007', true),
     ('RINT_LEUKOCYTOSIS','CNS-ALVEOLAR-INFLAMMATION','weak',    ' Raised WBC supports an inflammatory/consolidative process (HCH2-0006 workup).','HCH2-0006', true)
-ON CONFLICT (result_interpretation_code, associated_concept_code) DO UPDATE SET
-    strength = EXCLUDED.strength, description = EXCLUDED.description,
-    evidence_claim_code = EXCLUDED.evidence_claim_code, is_active = EXCLUDED.is_active;
+  ON CONFLICT DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 19. provenance — Hutchison claims → H7 knowledge objects (H7 §31/§46)
@@ -446,13 +387,13 @@ FROM (VALUES
      ('HCH2-0006','investigation_concept','I003'),('HCH2-0006','investigation_concept','I004'),
      ('HCH12-0004','investigation_concept','I005'),('HCH12-0007','investigation_concept','I005'),
      ('HCH12-0019','investigation_concept','I005'),('HCH2-0004','investigation_concept','I006'),
-     ('HCH2-0004','investigation_concept','I007'),('HCH12-0004','investigation_concept','I008'),
-     ('HCH12-0016','investigation_concept','I009'),('HCH12-0007','investigation_concept','I010'),
+     ('HCH2-0004','investigation_concept','I013'),('HCH12-0004','investigation_concept','I008'),
+     ('HCH12-0016','investigation_concept','I007'),('HCH12-0007','investigation_concept','I010'),
      ('HCH12-0007','investigation_concept','I011'),('HCH12-0019','investigation_concept','I012')
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.investigation_concept ic ON ic.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19b. investigation_component edges (joined by concept|component composite code)
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -468,7 +409,7 @@ FROM (VALUES
 JOIN knowledge.investigation_component cmp
        ON cmp.investigation_concept_code || '|' || cmp.component_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19c. investigation_rule edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -484,7 +425,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.investigation_rule ir ON ir.rule_code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19d. investigation_indication edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -504,7 +445,7 @@ FROM (VALUES
 JOIN knowledge.investigation_indication ind
        ON ind.investigation_concept_code || '|' || ind.purpose_code || '|' || ind.clinical_question = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19e. result_reference_standard edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -520,7 +461,7 @@ FROM (VALUES
 ) AS v(claim_code, object_type, object_code)
 JOIN knowledge.result_reference_standard rrs ON rrs.code = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19f. result_interpretation + result_phenotype_link edges
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -545,7 +486,7 @@ JOIN (
     SELECT id, 'result_phenotype_link' AS t, result_interpretation_code || '|' || associated_concept_code AS obj FROM knowledge.result_phenotype_link
 ) x ON x.t = v.object_type AND x.obj = v.object_code
 JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
 
 -- 19g. investigation_source edges (source record counterpart of the concept edges)
 INSERT INTO knowledge.provenance (claim_id, object_type, object_id, object_code, relationship)
@@ -555,9 +496,9 @@ FROM (VALUES
      ('HCH2-0006','investigation_source','I003'),('HCH2-0006','investigation_source','I004'),
      ('HCH12-0004','investigation_source','I005'),('HCH12-0007','investigation_source','I005'),
      ('HCH12-0019','investigation_source','I005'),('HCH2-0004','investigation_source','I006'),
-     ('HCH2-0004','investigation_source','I007'),('HCH12-0004','investigation_source','I008'),
-     ('HCH12-0016','investigation_source','I009'),('HCH12-0007','investigation_source','I010'),
+     ('HCH2-0004','investigation_source','I013'),('HCH12-0004','investigation_source','I008'),
+     ('HCH12-0016','investigation_source','I007'),('HCH12-0007','investigation_source','I010'),
      ('HCH12-0007','investigation_source','I011'),('HCH12-0019','investigation_source','I012')
 ) AS v(claim_code, object_type, object_code) JOIN knowledge.source_claim s ON s.claim_code = v.claim_code
 JOIN knowledge.investigation_source isrc ON isrc.investigation_concept_code = v.object_code
-ON CONFLICT (claim_id, object_type, object_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
