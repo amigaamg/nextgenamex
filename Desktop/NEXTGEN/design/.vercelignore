@@ -1,0 +1,9 @@
+# Vercel ignore
+node_modules
+.git
+.gitignore
+README.md
+*.log
+.vercel
+*.tmp
+*.bak
