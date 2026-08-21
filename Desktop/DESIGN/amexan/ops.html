@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMEXAN — Operations Console (Demo)</title>
+<style>
+  body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;color:#0f172a}
+  .wrap{max-width:520px;margin:0 auto;padding:24px 16px}
+  h1{font-size:22px;margin:0 0 4px}
+  p{color:#475569;font-size:14px;margin:4px 0;line-height:1.5}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;margin-top:16px;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+  .brand{display:flex;align-items:center;gap:10px}
+  .mark{width:38px;height:38px;border-radius:12px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+  .brand b{font-size:16px}
+  .brand small{color:#64748b;display:block;font-size:12px}
+  .btn{display:block;width:100%;text-align:center;padding:12px;border-radius:12px;border:1px solid #059669;background:#059669;color:#fff;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;margin-top:16px;box-sizing:border-box}
+  .btn.ghost{background:#fff;color:#059669;border-color:#a7f3d0}
+  iframe{width:100%;height:calc(100vh - 92px);border:0;border-radius:14px;margin-top:12px;background:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="mark">O</div>
+    <div><b>AMEXAN Operations Console</b><small>Queues, theatre, pharmacy, labs — same records</small></div>
+  </div>
+  <div class="card">
+    <h1>Operations at a glance</h1>
+    <p>Open the operations workspace directly. Every queue, order and bed references the same patient records by MRN as the clinical system.</p>
+    <p><b>Demo facility:</b> Kisii Teaching &amp; Referral Hospital (KTRH) · Level 6</p>
+    <a class="btn" href="amexan.html?role=admin&view=clinicalops">Open Clinical Operations Monitor →</a>
+    <a class="btn ghost" href="amexan.html?role=admin&view=ops">Operations queue →</a>
+  </div>
+  <iframe src="amexan.html?role=admin&view=clinicalops" title="AMEXAN Operations Console"></iframe>
+</div>
+</body>
+</html>

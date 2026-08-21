@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMEXAN — Clinical Intelligence Operating System (Demo)</title>
+<link rel="stylesheet" href="styles.css">
+<body>
+
+<!-- ======================= DEMO BANNER ======================= -->
+<div class="demo-banner" id="demoBanner">
+  <svg class="ic" width="16" height="16" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 15h-2v-2h2Zm0-4h-2V7h2Z"/></svg>
+  Demo environment — all data is simulated. No real patients, no real records, no real backend.
+</div>
+
+<!-- ======================= LANDING ======================= -->
+<section class="landing" id="view-landing">
+  <nav class="landing-nav">
+    <div class="brand-mark" style="width:34px;height:34px;font-size:15px">A</div>
+    <div>
+      <div class="brand-name">AMEXAN</div>
+      <div class="brand-sub">Clinical Intelligence Operating System</div>
+    </div>
+    <span class="spacer"></span>
+    <span class="badge badge-sky"><span class="dot dot-sky"></span> UI Prototype v1.0</span>
+  </nav>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-logo">A</div>
+      <div class="tagline"><span class="dot dot-sky"></span> Demo Environment — No Real Patient Data</div>
+      <h1 class="hero-title">The Operating System for <span>Clinical Intelligence</span></h1>
+      <p class="hero-sub">One connected journey: patient, encounter, HPI, examination, investigations, reasoning, plan, documentation and the systems around them — all simulated, all connected.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="go('auth')">Enter Demo</button>
+        <button class="btn btn-outline btn-lg" onclick="scrollToFeatures()">Explore the System</button>
+      </div>
+    </div>
+  </div>
+  <div class="features" id="features">
+    <h2>Every part of the clinical journey, connected</h2>
+    <p class="lead">Same demo patients, same demo facilities — one coherent simulation of the full operating system.</p>
+    <div class="feature-grid">
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><h3>Command Center</h3><p>Facility and clinician dashboards, queues, alerts and live activity.</p></div>
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-7-10a7 7 0 1 1 14 0c0 5.4-7 10-7 10Z"/></svg></div><h3>Patient World</h3><p>Search, register, profile, timeline, medications, documents and care plans.</p></div>
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg></div><h3>Encounter World</h3><p>Biodata, C/C, HPI, examination, investigations, assessment, plan, closure.</p></div>
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h3>Clinical Intelligence</h3><p>Demo reasoning, risk, differentials and ICD-11 coding — clearly labelled demo.</p></div>
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3v12M6 21v-6M18 3v6M18 21v-3M6 9h12M6 15h12"/></svg></div><h3>Operations &amp; Reporting</h3><p>Queues, admissions, lab, pharmacy, HMIS reporting and research cohorts.</p></div>
+      <div class="feature"><div class="fi"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 12h.01M15 12h.01M9 16h.01M15 16h.01"/></svg></div><h3>Integrations &amp; Governance</h3><p>HIE, DHA, HMIS, payers — and audit, privacy and access controls.</p></div>
+    </div>
+  </div>
+  <footer class="landing-foot">AMEXAN UI Prototype &middot; Sky blue + white &middot; Responsive &middot; Demo only</footer>
+</section>
+
+<!-- ======================= AUTH: ROLE ======================= -->
+<section class="auth hide" id="view-auth">
+  <div class="auth-card">
+    <div class="brand" style="border:none;padding:0;margin-bottom:var(--sp5);min-height:0">
+      <div class="brand-mark">A</div>
+      <div><div class="brand-name">AMEXAN</div><div class="brand-sub">Demo sign-in</div></div>
+    </div>
+    <h1>Who is signing in?</h1>
+    <p class="sub">Choose a demo role to explore the system. All data is simulated.</p>
+    <div class="role-grid" id="roleGrid"></div>
+    <button class="btn btn-ghost btn-sm mt3" onclick="go('landing')">&larr; Back to landing</button>
+  </div>
+</section>
+
+<!-- ======================= AUTH: FACILITY ======================= -->
+<section class="auth hide" id="view-facility">
+  <div class="auth-card">
+    <div class="row-b mb4">
+      <button class="btn btn-icon" onclick="go('auth')" aria-label="Back"><svg class="ic" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="grow"><h1 style="font-size:var(--xl)">Select facility</h1></div>
+      <span class="badge badge-sky" id="facilityRoleBadge">Clinician</span>
+    </div>
+    <p class="sub" style="margin-bottom:var(--sp4)">Where are you working today?</p>
+    <div id="facilityList" style="display:grid;gap:10px"></div>
+    <button class="btn btn-ghost btn-sm mt3" onclick="go('auth')">Change role</button>
+  </div>
+</section>
+
+<!-- ======================= APP SHELL ======================= -->
+<div id="shell" class="shell hide">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>
+        <div class="brand-name">AMEXAN</div>
+        <div class="brand-sub" id="brandFacility">KTRH</div>
+      </div>
+      <button class="btn btn-icon" style="margin-left:auto" onclick="toggleSidebar(false)"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="sidebar-foot">
+      <div class="row gap1">
+        <span class="dot dot-green"></span> Demo session
+      </div>
+      <div style="margin-top:4px">Data is simulated and resets on reload.</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn btn-icon menu-btn" onclick="toggleSidebar(true)"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="crumb" id="crumb"></div>
+      <button class="btn btn-outline btn-sm top-fac" id="facBtn" onclick="showFacilitySwitch()" title="Switch facility / workspace">KTRH <span class="caret">▼</span></button>
+      <span class="ctx" id="ctxBar">
+        <span id="ctxPatient" style="display:none"><svg class="ic" width="15" height="15" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5Z"/></svg> <span id="ctxPatientName">—</span><span class="ctx-sep"></span></span>
+        <span id="ctxEnc" style="display:none"><span class="ctx-label">Encounter</span> <span id="ctxEncName">—</span></span>
+      </span>
+      <div class="row gap1 grow" style="justify-content:flex-end">
+        <button class="btn btn-ghost btn-sm hide-sm" onclick="openPalette()" title="Search (Ctrl+K)"><svg class="ic" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm10 17-5-5"/></svg> Search</button>
+        <button class="btn btn-ghost btn-sm notif-btn" onclick="showNotifications()" title="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="notif-dot" id="notifDot"></span></button>
+        <button class="btn btn-primary btn-sm quickbtn" onclick="showQuickActions()" title="Context-aware quick actions">+ New</button>
+        <span class="badge badge-sky" id="userBadge">Dr. Kamau</span>
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Log out</button>
+      </div>
+    </header>
+    <main class="content" id="content">
+      <!-- screens injected here -->
+    </main>
+  </div>
+
+  <nav class="mobile-nav">
+    <a data-mnav="dashboard" onclick="go('dashboard')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 13h6V4H4Zm10 7h6v-9h-6Zm-10 0h6v-5H4Zm10-13v4h6V4Z"/></svg>Home</a>
+    <a data-mnav="patients" onclick="go('patients')"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 4a3 3 0 0 1 0 6M19 15c2 0 3 1.5 3 3"/></svg>Patients</a>
+    <a data-mnav="encounters" onclick="go('encounters')"><svg class="ic" viewBox="0 0 24 24"><path d="M12 8v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Encounters</a>
+    <a data-mnav="activity" onclick="go('activity')"><svg class="ic" viewBox="0 0 24 24"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg>Activity</a>
+    <a onclick="logout()"><svg class="ic" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Exit</a>
+  </nav>
+</div>
+
+<!-- ======================= MODAL / TOAST ======================= -->
+<div class="modal-ov" id="modalOv" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBox"></div>
+</div>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="palette-ov" id="paletteOv" onclick="if(event.target===this)closePalette()">
+  <div class="palette">
+    <input id="paletteInput" placeholder="Search patients, encounters, actions…  (Ctrl+K)" autocomplete="off">
+    <div class="palette-list" id="paletteList"></div>
+    <div class="palette-hint"><span><kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>Enter</kbd> open · <kbd>Esc</kbd> close</span><span>AMEXAN Command Palette</span></div>
+  </div>
+</div>
+<div id="printArea" style="display:none"></div>
+
+<!-- ======================= NOTIFICATION DRAWER ======================= -->
+<div class="drawer-ov" id="drawerOv" onclick="if(event.target===this)closeDrawer()">
+  <div class="drawer" id="drawerBox"></div>
+</div>
+
+<!-- ======================= MODULES (load order matters) ======================= -->
+<script src="js/data.js"></script>
+<script src="js/org.js"></script>
+<script src="js/core.js"></script>
+<script src="js/intelligence.js"></script>
+<script src="js/clinical.js"></script>
+<script src="js/documentation.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/clinician.js"></script>
+<script src="js/facility.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>
