@@ -1,0 +1,3753 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amexan | Medical & Surgical Marketplace</title>
+
+  <!-- Modern browsers (PNG) -->
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+
+  <!-- Fallback for older browsers -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandBlue: '#0000CD',
+            searchBlue: '#1a1aff',
+            crimsonRed: '#dc2626', // deep powerful red
+    prestigeGold: '#bfa76f', // optional
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif']
+          },
+          fontSize: {
+            base: ['1.05rem', '1.6'],
+            lg: ['1.25rem', '1.5'],
+            xl: ['1.5rem', '1.4']
+          },
+          screens: {
+            'xs': '475px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .mobile-menu {
+      transition: transform 0.3s ease;
+      width: 60%;
+      max-width: 260px;
+    }
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+    .menu-toggle:hover .dropdown-icon {
+      transform: rotate(180deg);
+    }
+    .dropdown-icon {
+      transition: transform 0.3s ease;
+    }
+    .mega-menu {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .accordion-content.active {
+      max-height: 1000px;
+    }
+    .accordion-toggle::after {
+      content: '+';
+      font-weight: bold;
+      transition: transform 0.3s ease;
+      margin-left: auto;
+      padding-left: 10px;
+    }
+    .accordion-toggle.active::after {
+      content: '-';
+    }
+    
+    /* Swipeable Products */
+    .products-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 12px;
+      padding: 0 8px 15px;
+      margin: 0 -8px;
+    }
+    .products-carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .product-card {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      min-width: calc(50% - 12px);
+      max-width: calc(50% - 12px);
+    }
+    @media (min-width: 475px) {
+      .product-card {
+        min-width: calc(33.33% - 12px);
+        max-width: calc(33.33% - 12px);
+      }
+    }
+    @media (min-width: 768px) {
+      .products-carousel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        padding: 0;
+        margin: 0;
+      }
+      .product-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+    }
+    @media (min-width: 1024px) {
+      .products-carousel {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+    
+    /* Search bar adjustments */
+    .search-bar-container {
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .search-bar-container {
+        width: 40%;
+      }
+    }
+    .search-bar .category-select {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .search-bar .category-select {
+        display: block;
+        max-width: 180px;
+      }
+    }
+    .search-bar input {
+      font-size: 16px;
+      padding: 12px 15px;
+      color: #000;
+    }
+    .search-bar input::placeholder {
+      color: #666;
+    }
+    .search-bar button {
+      padding: 12px 20px;
+      font-weight: 600;
+      background-color: #1a1aff;
+    }
+    
+    /* Mobile menu item height reduction */
+    .mobile-menu li button, .mobile-menu li a {
+      padding: 8px 12px;
+      font-size: 0.95rem;
+    }
+    .mobile-menu .accordion-content {
+      padding: 5px 0;
+    }
+    .mobile-menu .accordion-content h3 {
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+    .mobile-menu .accordion-content li a {
+      padding: 4px 12px;
+      font-size: 0.85rem;
+    }
+    
+    /* Hide scrollbars globally */
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    
+    /* Desktop header layout */
+    @media (min-width: 768px) {
+      .desktop-header {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        align-items: center;
+        gap: 20px;
+      }
+      .header-logo {
+        justify-self: start;
+      }
+      .header-search {
+        justify-self: center;
+        width: 100%;
+        max-width: 600px;
+      }
+      .header-icons {
+        justify-self: end;
+      }
+    }
+    
+    /* Featured products padding */
+    .featured-products-container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    @media (min-width: 768px) {
+      .featured-products-container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+    
+    /* Mega menu active indicator */
+    .menu-toggle.active {
+      color: #1a1aff;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 text-base hide-scrollbar">
+
+  <!-- Top Info Bar -->
+  <div class="bg-gray-100 text-sm py-2 px-4 md:py-3 md:px-10 flex flex-wrap justify-between items-center">
+    <div class="text-base md:text-lg gap-4 md:gap-6 text-gray-600 flex flex-wrap">
+      <span class="flex items-center">🌐 EN</span>
+      <span class="flex items-center">💱 KSh</span>
+    </div>
+    <div class="flex gap-4 md:gap-8 text-base md:text-lg text-gray-700 font-semibold tracking-wide">
+      <a href="login.html" class="hover:text-brandBlue transition-colors duration-200">Login</a>
+      <a href="regi.html" class="hover:text-brandBlue transition-colors duration-200">Register</a>
+      <a href="#" class="hover:text-brandBlue transition-colors duration-200">Help</a>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="bg-brandBlue text-white py-4 px-4 md:px-12 desktop-header">
+    <!-- Left: Logo -->
+    <div class="header-logo flex items-center">
+      <button id="mobileMenuButton" class="mr-4 md:hidden text-white text-2xl">☰</button>
+      <div class="text-2xl md:text-3xl font-extrabold tracking-wide">Amexan</div>
+    </div>
+    
+    <!-- Center: Search Bar -->
+<div class="header-search search-bar-container w-full mt-3 md:mt-0">
+  <form onsubmit="return false;" class="search-bar flex rounded-lg overflow-hidden shadow-md border border-gray-300 bg-white">
+    <select class="category-select text-gray-700 text-sm md:text-base px-3 md:px-4 py-2 md:py-3 bg-white border-r border-gray-300 focus:outline-none w-full sm:w-auto">
+      <option>All Categories</option>
+      <option>Medical Equipment</option>
+      <option>Surgical Instruments</option>
+      <option>Hospital Furniture</option>
+      <option>Laboratory Supplies</option>
+    </select>
+    <input type="text" placeholder="Search medical solutions..." class="flex-1 px-4 py-3 text-base border-0 focus:outline-none placeholder-gray-500" />
+    <button type="button" onclick="runCategorySearch()" 
+  class="text-white px-5 py-3 text-base font-semibold bg-searchBlue hover:bg-blue-700 transition-colors duration-200">
+  Search
+</button>
+
+  </form>
+</div>
+
+
+    <!-- Right: Quick Icons -->
+    <div class="header-icons hidden md:flex gap-6 text-lg">
+      <a href="cart" class="hover:text-gray-200 transition flex items-center gap-1">🛒 <span class="text-sm hidden lg:inline">Cart</span></a>
+      <a href="#" class="hover:text-gray-200 transition flex items-center gap-1">📦 <span class="text-sm hidden lg:inline">Orders</span></a>
+      <a href="fetch.html" class="hover:text-gray-200 transition flex items-center gap-1">💬 <span class="text-sm hidden lg:inline">Messages</span></a>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu fixed inset-y-0 left-0 bg-white z-50 shadow-xl transform -translate-x-full md:hidden">
+    <div class="p-4 border-b">
+      <div class="flex justify-between items-center">
+        <div class="text-xl text text-blue-600 font-bold">Amexan</div>
+        <button id="closeMobileMenu" class="text-2xl">×</button>
+      </div>
+    </div>
+    
+    <div class="overflow-y-auto h-full pb-20">
+      <ul class="py-2">
+        <li>
+          <button class="accordion-toggle w-full text-left py-2 px-4 flex justify-between items-center border-b" data-accordion="medical">
+            Medical Equipment
+          </button>
+          <div class="accordion-content bg-gray-50">
+            <div class="px-4 py-2">
+              <h3 class="text-brandBlue font-bold text-base mb-1">Diagnostics</h3>
+              <ul class="space-y-1 text-gray-800">
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Stethoscopes</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Thermometers</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Pulse Oximeters</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">ECG</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Defibrillators</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Analyzers</a></li>
+              </ul>
+            </div>
+            <div class="px-4 py-2">
+              <h3 class="text-brandBlue font-bold text-base mb-1">Laboratory</h3>
+              <ul class="space-y-1 text-gray-800">
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Centrifuges</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Microscopes</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Blood Analyzers</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Urine Analyzers</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Lab Supplies</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Autoclaves</a></li>
+              </ul>
+            </div>
+          </div>
+          
+        </li>
+        
+        <li>
+          <button class="accordion-toggle w-full text-left py-2 px-4 flex justify-between items-center border-b" data-accordion="surgical">
+            Surgical Tools
+          </button>
+          <div class="accordion-content bg-gray-50">
+            <div class="px-4 py-2">
+              <h3 class="text-brandBlue font-bold text-base mb-1">General Surgical Instruments</h3>
+              <ul class="space-y-1 text-gray-800">
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Scalpels & Blades</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Surgical Scissors</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Needle Holders</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Forceps</a></li>
+              </ul>
+              
+            </div>
+            
+            
+          </div>
+        
+          
+        </li>
+        
+        <li>
+          <button class="accordion-toggle w-full text-left py-2 px-4 flex justify-between items-center border-b" data-accordion="furniture">
+            Hospital Furniture
+          </button>
+          <div class="accordion-content bg-gray-50">
+            <div class="px-4 py-2">
+              <h3 class="text-brandBlue font-bold text-base mb-1">Hospital Beds & Accessories</h3>
+              <ul class="space-y-1 text-gray-800">
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Manual Hospital Beds</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Electric ICU Beds</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Pediatric Cribs</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        
+        <li>
+          <button class="accordion-toggle w-full text-left py-2 px-4 flex justify-between items-center border-b" data-accordion="realestate">
+            Real Estate
+          </button>
+          <div class="accordion-content bg-gray-50">
+            <div class="px-4 py-2">
+              <h3 class="text-brandBlue font-bold text-base mb-1">Rent & Lease Facilities</h3>
+              <ul class="space-y-1 text-gray-800">
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Outpatient Clinics</a></li>
+                <li><a href="#" class="block py-1 hover:text-brandBlue">Inpatient Wards</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        
+        <li>
+          <a href="student.html" class="w-full text-left py-2 px-4 flex items-center border-b">Student Resources</a>
+        </li>
+        
+        <li>
+          <a href="#" class="w-full text-left py-2 px-4 flex items-center border-b">Blogs</a>
+        </li>
+        
+        <li>
+          <a href="#" class="w-full text-left py-2 px-4 flex items-center border-b">Partners</a>
+        </li>
+      </ul>
+      
+      <div class="p-4 border-t">
+        <div class="flex flex-col gap-3 text-gray-700">
+          <a href="login.html" class="font-medium hover:text-brandBlue">Login</a>
+          <a href="regi.html" class="font-medium hover:text-brandBlue">Register</a>
+          <a href="fetch.html" class="font-medium hover:text-brandBlue">Help</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="mobileMenuBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"></div>
+
+  <!-- Navigation Menu -->
+  <nav id="mainNav" class="sticky top-0 bg-white border-b z-50 shadow-sm hidden md:block">
+    <ul class="flex flex-wrap px-6 py-4 gap-6 text-base font-semibold text-gray-800 bg-white">
+      <li><button data-menu="medical" class="menu-toggle flex items-center gap-1 hover:text-brandBlue">Medical Equipment <span class="dropdown-icon text-xs">▼</span></button></li>
+      <li><button data-menu="surgical" class="menu-toggle flex items-center gap-1 hover:text-brandBlue">Surgical Tools <span class="dropdown-icon text-xs">▼</span></button></li>
+      <li><button data-menu="furniture" class="menu-toggle flex items-center gap-1 hover:text-brandBlue">Hospital Furniture <span class="dropdown-icon text-xs">▼</span></button></li>
+      <li><button data-menu="realestate" class="menu-toggle flex items-center gap-1 hover:text-brandBlue">Real Estate <span class="dropdown-icon text-xs">▼</span></button></li>
+      <li><button data-menu="tech" class="menu-toggle flex items-center gap-1 hover:text-brandBlue">Health Tech & AI <span class="dropdown-icon text-xs">▼</span></button></li>
+      <li><a href="#" class="hover:text-brandBlue">Student Resources</a></li>
+      <li><a href="#" class="hover:text-brandBlue">Blogs</a></li>
+      <li><a href="#" class="hover:text-brandBlue">Partners</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mega Menu Section -->
+  <div id="menu-medical" class="mega-menu hidden bg-white border-y px-4 md:px-12 py-6 z-40">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Diagnostics</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Stethoscopes</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Thermometers</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Pulse Oximeters</a></li>
+          <li><a href="#" class="hover:text-brandBlue">ECG</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Defibrillators</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Analyzers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Laboratory</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Centrifuges</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Microscopes</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Blood Analyzers</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Urine Analyzers</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Lab Supplies</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Autoclaves</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Imaging</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">X-ray Machines</a></li>
+          <li><a href="#" class="hover:text-brandBlue">MRI</a></li>
+          <li><a href="#" class="hover:text-brandBlue">CT Scan</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu-surgical" class="mega-menu hidden bg-white border-y px-4 md:px-12 py-6 z-40">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">General Surgical Instruments</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Scalpels & Blades</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Surgical Scissors</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Needle Holders</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Forceps (Tissue, Dressing)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Specialty Surgical Tools</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Bone Instruments</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Retractors</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Laparoscopic Instruments</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Microsurgery & ENT Sets</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Surgical Devices & Lighting</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Electrosurgical Units (ESUs)</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Cautery Machines</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Surgical Headlamps & Loupes</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Surgical Lights</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Mega Menus -->
+  <div id="menu-furniture" class="mega-menu hidden bg-white border-y px-4 md:px-12 py-6 z-40">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Hospital Beds & Accessories</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Manual Hospital Beds</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Electric ICU Beds</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Pediatric Cribs</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Overbed Tables</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Examination & Procedure Furniture</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Examination Tables</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Gynecological Chairs</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Instrument Trolleys</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Folding Stretchers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Patient Room Furniture & Storage</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Bedside Lockers</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Attendant Chairs</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Wardrobes / Cabinets</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Privacy Screens</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu-realestate" class="mega-menu hidden bg-white border-y px-4 md:px-12 py-6 z-40">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Rent & Lease Facilities</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Outpatient Clinics</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Inpatient Wards & Private Suites</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Surgical Theaters</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Medical Office Spaces</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Build, Renovate & Design</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Turnkey Clinic Setup</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Hospital Renovation Projects</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Diagnostic & Imaging Centers</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Dental/ENT/Gyne Clinics</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Mobile & Modular Unit</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Mobile Clinics & Labs</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Field Hospitals</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Container-based Surgical Units</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Modular Isolation Wards</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu-tech" class="mega-menu hidden bg-white border-y px-4 md:px-12 py-6 z-40">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Digital Health Solutions</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Telemedicine Platform Development</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Facility & Doctor Website Portfolios</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Online Patient Booking Systems</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Smart Health Cards (ID + EHR)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Medical Software & AI Tools</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Electronic Medical Record (EMR) Systems</a></li>
+          <li><a href="#" class="hover:text-brandBlue">AI-Powered History Taking Tools</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Symptom Sorting & Differential AI</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Lab Result Interpretation AI</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-brandBlue font-bold text-base md:text-lg mb-2 md:mb-3">Hardware & IT Infrastructure</h3>
+        <ul class="space-y-1 md:space-y-2 text-gray-800 text-sm md:text-base">
+          <li><a href="#" class="hover:text-brandBlue">Medical Laptops & Tablets</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Smart Consultation Kiosks</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Digital Whiteboards & Displays</a></li>
+          <li><a href="#" class="hover:text-brandBlue">Secure Data Servers & Hosting</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero section Section -->
+<section class="hero-banner text-white min-h-[15vh] bg-cover bg-center" style="background-image: url('/images/hero.webp');">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+    <div class="max-w-2xl">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">
+        Empowering Global Health Systems
+      </h1>
+      <p class="text-base sm:text-lg md:text-xl mb-5">
+        Premium medical equipment and solutions for hospitals, clinics, and healthcare professionals worldwide.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="login.html">
+  <button class="bg-white text-brandBlue font-bold px-6 py-2 rounded-lg hover:bg-gray-100 transition shadow">
+    Shop Now <i class="fas fa-arrow-right ml-2"></i>
+  </button>
+</a>
+
+        <button class="bg-transparent border-2 border-white text-white font-bold px-6 py-2 rounded-lg hover:bg-white hover:text-brandBlue transition">
+          Partner With Us
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <section class="bg-white py-8 sm:py-10">
+  <div class="container mx-auto px-4 text-center">
+    <!-- Subheading -->
+   <p class="font-bold text-black uppercase tracking-widest mb-6">
+  Trusted By Leading Brands
+</p>
+
+
+    <!-- Brand Logos (scrollable on mobile) -->
+    <div class="flex overflow-x-auto no-scrollbar justify-start sm:justify-center gap-6 sm:gap-10 mb-6 px-1 sm:px-0">
+      <img src="/images/omron.png" alt="Omron" class="h-8 flex-shrink-0 ">
+      <img src="/images/mindray.png" alt="Mindray" class="h-8 flex-shrink-0 ">
+      <img src="/images/littman.webp" alt="Littmann" class="h-8 flex-shrink-0 ">
+      <img src="/images/philips.png" alt="Philips" class="h-8 flex-shrink-0 ">
+      <img src="/images/siemens.png" alt="Siemens" class="h-8 flex-shrink-0 ">
+      <img src="/images/ge.png" alt="GE Healthcare" class="h-8 flex-shrink-0 ">
+    </div>
+
+    <!-- Impact Numbers (scrollable on small screens) -->
+    <div class="flex overflow-x-auto no-scrollbar gap-6 justify-start sm:justify-center sm:grid sm:grid-cols-5 sm:gap-2 text-slate-700 text-sm sm:text-base font-medium px-1 sm:px-0">
+      <div class="min-w-[120px]">
+        <p class="text-xl font-bold text-brandBlue">+50</p>
+        <p>Hospitals Served</p>
+      </div>
+      <div class="min-w-[120px]">
+        <p class="text-xl font-bold text-green-700">+1000</p>
+        <p>Happy Clients</p>
+      </div>
+      <div class="min-w-[120px]">
+        <p class="text-xl font-bold text-crimsonRed">+3</p>
+        <p>Countries Reached</p>
+      </div>
+      <div class="min-w-[120px]">
+        <p class="text-xl font-bold text-crimsonRed">+5K</p>
+        <p>Devices Supplied</p>
+      </div>
+      <div class="min-w-[120px]">
+        <p class="text-xl font-bold text-brandBlue">+50</p>
+        <p>Healthcare Partners</p>
+      </div>
+    </div>
+  </div>
+</section>
+    
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amexan | Medical & Surgical Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandBlue: '#0000CD',
+            searchBlue: '#1a1aff',
+            crimsonRed: '#dc2626',
+            prestigeGold: '#bfa76f',
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif']
+          },
+          fontSize: {
+            base: ['1.05rem', '1.6'],
+            lg: ['1.25rem', '1.5'],
+            xl: ['1.5rem', '1.4']
+          },
+          screens: {
+            'xs': '475px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    .category-btn {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .category-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .category-btn.active {
+      border-color: #0000CD;
+      background: linear-gradient(45deg, #0000CD, #1a1aff);
+      color: white;
+    }
+    .category-btn.active i {
+      color: white !important;
+    }
+
+    .product-item {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .product-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .category-section {
+      display: none;
+    }
+    .category-section.active {
+      display: block;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 text-base">
+
+  <!-- Categories Section -->
+  <section class="bg-white py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-brandBlue mb-8 uppercase">Explore Our Categories</h2>
+      
+      <div class="relative">
+        <button onclick="scrollCategoriesLeft()" class="hidden md:block absolute left-0 z-10 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-3 hover:bg-blue-500 hover:text-white transition">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div id="categoryScroll" class="flex space-x-4 sm:space-x-6 overflow-x-auto scrollbar-hide pb-4 px-2 scroll-smooth">
+          <!-- Categories will be dynamically added here -->
+        </div>
+
+        <button onclick="scrollCategoriesRight()" class="hidden md:block absolute right-0 z-10 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-3 hover:bg-blue-500 hover:text-white transition">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+ <!-- Category Products Section --> 
+  <section class="py-8 px-4 bg-gray-50"> 
+    <div class="max-w-7xl mx-auto"> 
+      <div id="categoryProducts" class="space-y-8"> 
+    <!-- Category products will be dynamically added here -->
+     </div> </div> </section>
+
+  <!-- Special Sections -->
+  <section class="py-6 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div id="specialSections" class="space-y-6">
+        <!-- Special sections will be dynamically added here -->
+      </div>
+    </div>
+  </section>
+
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+<!-- WHY CHOOSE US -->
+<section class="py-10 bg-gradient-to-b from-white to-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-extrabold text-brandBlue drop-shadow-md">Why Choose Amexan?</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto mt-3">
+        Empowering Kenyan healthcare with world-class medical solutions, trusted by professionals across the nation.
+      </p>
+    </div>
+
+    <div class="swiper whySwiper">
+      <div class="swiper-wrapper">
+        <!-- Feature Cards -->
+        <div class="swiper-slide feature-card border-t-4 border-brandBlue">
+          <div class="icon-wrap bg-blue-100 text-brandBlue"><i class="fas fa-shield-alt"></i></div>
+          <h3>100% Verified Quality</h3>
+          <p>International standard products, rigorously tested, trusted by top hospitals in Kenya.</p>
+        </div>
+
+        <div class="swiper-slide feature-card border-t-4 border-green-500">
+          <div class="icon-wrap bg-green-100 text-green-600"><i class="fas fa-truck"></i></div>
+          <h3>Fast Nationwide Delivery</h3>
+          <p>Swift, M-Pesa–integrated delivery to all counties with real-time tracking updates.</p>
+        </div>
+
+        <div class="swiper-slide feature-card border-t-4 border-yellow-500">
+          <div class="icon-wrap bg-yellow-100 text-yellow-600"><i class="fas fa-headset"></i></div>
+          <h3>Expert Support</h3>
+          <p>On-site & virtual assistance from biomedical engineers and medical equipment specialists.</p>
+        </div>
+
+        <div class="swiper-slide feature-card border-t-4 border-purple-500">
+          <div class="icon-wrap bg-purple-100 text-purple-600"><i class="fas fa-handshake"></i></div>
+          <h3>Trusted Partnerships</h3>
+          <p>Supplying institutions like Kisii University, Moi University, UON, and KEMU.</p>
+        </div>
+
+        <div class="swiper-slide feature-card border-t-4 border-red-500">
+          <div class="icon-wrap bg-red-100 text-red-600"><i class="fas fa-tag"></i></div>
+          <h3>Competitive Pricing</h3>
+          <p>Premium quality at fair prices, with special packages for students and bulk buyers.</p>
+        </div>
+
+        <div class="swiper-slide feature-card border-t-4 border-teal-500">
+          <div class="icon-wrap bg-teal-100 text-teal-600"><i class="fas fa-leaf"></i></div>
+          <h3>Eco-Conscious Practices</h3>
+          <p>Committed to sustainability by using recyclable packaging and energy-efficient processes.</p>
+        </div>
+      </div>
+      <div class="swiper-pagination why-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="py-10 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-extrabold text-brandBlue drop-shadow-md">What Our Clients Say</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        From medical students to leading specialists, here’s how AMEXAN is transforming healthcare in Kenya.
+      </p>
+    </div>
+
+    <div class="swiper testimonialSwiper">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide testimonial-card border-t-4 border-brandBlue">
+          <div class="profile"><img src="images/BRAYO.png" /></div>
+          <h4>Dr. Brian Otieno</h4>
+          <span>Intern, Kenyatta National Hospital</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Our internship equipment package from AMEXAN had everything we needed — delivered in just 2 days."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-green-500">
+          <div class="profile"><img src="images/MERCY.png" /></div>
+          <h4>Mercy Wanjiku</h4>
+          <span>Medical Student, UON</span>
+          <div class="stars">★★★★☆</div>
+          <p class="quote">"Our entire class now uses AMEXAN’s diagnostic kits — affordable, durable, and student-friendly."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-purple-500">
+          <div class="profile"><img src="images/OTIENO.png" /></div>
+          <h4>Prof. Kenneth Otieno</h4>
+          <span>Specialist Surgeon, Aga Khan Hospital</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"From surgical sets to imaging equipment, AMEXAN delivers excellence every single time."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-red-500">
+          <div class="profile"><img src="images/LUCY.png" /></div>
+          <h4>Lucy Kamau</h4>
+          <span>Clinic Owner, Mombasa</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Switching to AMEXAN was the best decision. My clinic has never run smoother."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-teal-500">
+          <div class="profile"><img src="images/PETERO.png" /></div>
+          <h4>Dr. Peter Njoroge</h4>
+          <span>Eldoret Medical Centre</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Prices are great, but the peace of mind is priceless. AMEXAN is our only supplier now."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-yellow-500">
+          <div class="profile"><img src="images/MUTUA.png" /></div>
+          <h4>Dr. KOKO MUTUA</h4>
+          <span>Radiologist, Nairobi</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"Exceptional quality and unmatched customer support — truly the gold standard in medical supplies."</p>
+        </div>
+
+        <div class="swiper-slide testimonial-card border-t-4 border-pink-500">
+          <div class="profile"><img src="images/KIBET.png" /></div>
+          <h4>Samuel Kibet</h4>
+          <span>Pharmacist, Kisumu</span>
+          <div class="stars">★★★★★</div>
+          <p class="quote">"I recommend AMEXAN to all my colleagues — reliable, fast, and trustworthy."</p>
+        </div>
+
+      </div>
+      <div class="swiper-pagination testimonial-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+  var whySwiper = new Swiper(".whySwiper", {
+    slidesPerView: 1.2,
+    spaceBetween: 24,
+    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 4 } },
+    pagination: { el: ".why-pagination", clickable: true },
+    autoplay: { delay: 3500, disableOnInteraction: true },
+    grabCursor: true
+  });
+
+  var testimonialSwiper = new Swiper(".testimonialSwiper", {
+    slidesPerView: 1.1,
+    spaceBetween: 24,
+    breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } },
+    pagination: { el: ".testimonial-pagination", clickable: true },
+    autoplay: { delay: 4000, disableOnInteraction: true },
+    grabCursor: true
+  });
+</script>
+
+<style>
+
+/* Make Why Choose Us headings bold and color-match border */
+.feature-card h3 {
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Dynamically match testimonial quote color to border color */
+.testimonial-card {
+  text-align: center;
+}
+.testimonial-card .quote {
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Match h3 colors to border */
+.feature-card.border-brandBlue h3 { color: #2563eb; }
+.feature-card.border-green-500 h3 { color: #22c55e; }
+.feature-card.border-yellow-500 h3 { color: #eab308; }
+.feature-card.border-purple-500 h3 { color: #9333ea; }
+.feature-card.border-red-500 h3 { color: #ef4444; }
+.feature-card.border-teal-500 h3 { color: #14b8a6; }
+
+/* Match testimonial quote colors to border */
+.testimonial-card.border-brandBlue .quote { color: #2563eb; }
+.testimonial-card.border-green-500 .quote { color: #22c55e; }
+.testimonial-card.border-yellow-500 .quote { color: #eab308; }
+.testimonial-card.border-purple-500 .quote { color: #9333ea; }
+.testimonial-card.border-red-500 .quote { color: #ef4444; }
+.testimonial-card.border-teal-500 .quote { color: #14b8a6; }
+.testimonial-card.border-pink-500 .quote { color: #ec4899; }
+
+
+/* Feature & Testimonial Card Base */
+.feature-card, .testimonial-card {
+  background: linear-gradient(145deg, #ffffff, #f3f4f6);
+  border-radius: 1.5rem;
+  padding: 1.2rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feature-card:hover, .testimonial-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12), inset 0 1px 3px rgba(255,255,255,0.5);
+}
+
+/* Icon circle */
+.feature-card .icon-wrap {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Testimonials Styling */
+.testimonial-card {
+  text-align: center;
+}
+.testimonial-card .profile img {
+  width: 80px;  /* Reduce this number for smaller icons */
+  height: 80px;
+  object-fit: cover; /* Keeps image cropped nicely in a circle */
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+    margin: 0 auto 0.5rem; /* centers it */
+  box-shadow: 0 3px 3px rgba(0,0,0,0.08);
+}
+
+.testimonial-card h4 {
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+.testimonial-card span {
+  font-size: 0.8rem;
+  color: #6B7280;
+}
+.testimonial-card .stars {
+  color: #FBBF24;
+  margin: 0.4rem 0;
+}
+
+/* Psychology-inspired quote colors */
+.testimonial-card .quote {
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.4;
+  font-weight: 500;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Pagination dots */
+.swiper-pagination-bullet {
+  background: #2563eb !important;
+  opacity: 0.4;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amexan CEO Section - Scoped</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  
+  <style>
+    /* ===== AMEXAN CEO SECTION - SCOPED STYLES ===== */
+    .amexan-ceo-leadership {
+      position: relative;
+      background: white;
+      overflow: hidden;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      isolation: isolate; /* Creates new stacking context */
+    }
+
+    /* Reset only within this section */
+    .amexan-ceo-leadership *,
+    .amexan-ceo-leadership *::before,
+    .amexan-ceo-leadership *::after {
+      box-sizing: border-box;
+    }
+
+    /* Background Pattern */
+    .amexan-ceo-leadership::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 0, 205, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(26, 26, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ===== DESKTOP LAYOUT ===== */
+    .amexan-desktop-flow {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(6, minmax(120px, auto));
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      width: 100%;
+    }
+
+    /* Connection Lines */
+    .amexan-flow-line {
+      position: absolute;
+      background: linear-gradient(45deg, #0000CD 0%, #1a1aff 50%, #0000CD 100%);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0, 0, 205, 0.2);
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .amexan-line-vertical-1 { width: 4px; height: 150px; left: 25%; top: 180px; transform: translateX(-50%); }
+    .amexan-line-horizontal-1 { width: 230px; height: 4px; left: 25%; top: 330px; transform: translateX(-50%); }
+    .amexan-line-vertical-2 { width: 4px; height: 150px; right: 25%; top: 330px; transform: translateX(50%); }
+    .amexan-line-horizontal-2 { width: 230px; height: 4px; right: 25%; top: 480px; transform: translateX(50%); }
+    .amexan-line-vertical-3 { width: 4px; height: 150px; left: 25%; top: 480px; transform: translateX(-50%); }
+    .amexan-line-center-connect { width: 4px; height: 110px; left: 50%; top: 630px; transform: translateX(-50%); }
+
+    /* ===== CEO PORTRAIT ===== */
+    .amexan-ceo-container {
+      grid-column: 5 / 9;
+      grid-row: 3 / 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      position: relative;
+    }
+
+    .amexan-ceo-portrait {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0000CD 0%, #1a1aff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 15px 30px rgba(0, 0, 205, 0.2);
+      border: 6px solid white;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      animation: amexan-float 6s ease-in-out infinite;
+    }
+
+    .amexan-ceo-portrait:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 205, 0.3);
+    }
+
+    .amexan-ceo-portrait::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover no-repeat;
+      border-radius: 50%;
+      transition: transform 0.5s ease;
+    }
+
+    .amexan-ceo-portrait:hover::before {
+      transform: scale(1.05);
+    }
+
+    .amexan-ceo-info {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .amexan-ceo-title {
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 205, 0.2);
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .amexan-ceo-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #0000CD;
+      margin-bottom: 8px;
+    }
+
+    .amexan-ceo-subtitle {
+      font-size: 0.95rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* ===== PRODUCT CARDS ===== */
+    .amexan-product-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 205, 0.08);
+      border-top: 4px solid #0000CD;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      z-index: 5;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .amexan-product-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-top-color: #1a1aff;
+    }
+
+    .amexan-card-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: white;
+      font-size: 1.4rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 205, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .amexan-product-card:hover .amexan-card-icon {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .amexan-card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0000CD;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .amexan-card-description {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .amexan-card-audience {
+      background: linear-gradient(135deg, rgba(0, 0, 205, 0.08), rgba(26, 26, 255, 0.06));
+      color: #0000CD;
+      padding: 7px 14px;
+      border-radius: 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 205, 0.15);
+    }
+
+    /* Card Positioning */
+    .amexan-card-1 { grid-column: 1 / 4; grid-row: 1; }
+    .amexan-card-2 { grid-column: 1 / 4; grid-row: 2; }
+    .amexan-card-3 { grid-column: 10 / 13; grid-row: 2; }
+    .amexan-card-4 { grid-column: 10 / 13; grid-row: 4; }
+    .amexan-card-5 { grid-column: 1 / 4; grid-row: 5; }
+    .amexan-card-6 { grid-column: 4 / 10; grid-row: 6; }
+
+    /* ===== FINAL MESSAGE ===== */
+    .amexan-final-message {
+      background: linear-gradient(135deg, #0000CD 0%, #1a1aff 100%);
+      color: white;
+      padding: 45px 35px;
+      border-radius: 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 205, 0.2);
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+    }
+
+    .amexan-final-message::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .amexan-final-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .amexan-final-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      opacity: 0.95;
+    }
+
+    /* ===== MOBILE SWIPER ===== */
+    .amexan-mobile-swiper {
+      display: none;
+      padding: 20px 0 70px;
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .amexan-mobile-swiper .swiper {
+      overflow: hidden;
+    }
+
+    .amexan-mobile-swiper .swiper-slide {
+      height: auto;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      border-top: 4px solid #0000CD;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s ease;
+      transform: scale(0.95);
+      opacity: 0.8;
+      width: 85%;
+      max-width: 400px;
+    }
+
+    .amexan-mobile-swiper .swiper-slide-active {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .amexan-ceo-slide {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 35px 25px;
+      border-top: 4px solid transparent;
+      background: linear-gradient(white, white), 
+                 linear-gradient(135deg, #0000CD, #1a1aff);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .amexan-mobile-ceo-portrait {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 12px 25px rgba(0, 0, 205, 0.2);
+      border: 4px solid white;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .amexan-mobile-ceo-portrait::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover no-repeat;
+      border-radius: 50%;
+    }
+
+    /* Swiper Navigation - Scoped */
+    .amexan-mobile-swiper .swiper-button-next,
+    .amexan-mobile-swiper .swiper-button-prev {
+      background: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      box-shadow: 0 5px 20px rgba(0, 0, 205, 0.2);
+      border: 1px solid rgba(0, 0, 205, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .amexan-mobile-swiper .swiper-button-next:hover,
+    .amexan-mobile-swiper .swiper-button-prev:hover {
+      background: #f8faff;
+      transform: scale(1.05);
+    }
+
+    .amexan-mobile-swiper .swiper-button-next::after,
+    .amexan-mobile-swiper .swiper-button-prev::after {
+      color: #0000CD;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .amexan-mobile-swiper .swiper-pagination {
+      bottom: -30px !important;
+    }
+
+    .amexan-mobile-swiper .swiper-pagination-bullet {
+      background: #0000CD;
+      opacity: 0.3;
+      width: 10px;
+      height: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .amexan-mobile-swiper .swiper-pagination-bullet-active {
+      opacity: 1;
+      transform: scale(1.2);
+      background: #1a1aff;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes amexan-float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes amexan-fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0px); }
+    }
+
+    /* Animation Classes */
+    .amexan-animate-in {
+      animation: amexan-fadeUp 0.8s ease-out forwards;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 1024px) {
+      .amexan-desktop-flow {
+        display: none;
+      }
+      
+      .amexan-mobile-swiper {
+        display: block;
+      }
+      
+      .amexan-flow-line {
+        display: none;
+      }
+      
+      .amexan-ceo-leadership .amexan-section-title {
+        font-size: 2.3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .amexan-ceo-leadership {
+        padding: 30px 0;
+      }
+      
+      .amexan-ceo-leadership .amexan-section-title {
+        font-size: 1.8rem;
+        padding: 0 20px;
+      }
+      
+      .amexan-ceo-leadership .amexan-section-subtitle {
+        font-size: 1rem;
+        padding: 0 20px;
+      }
+      
+      .amexan-final-title {
+        font-size: 1.6rem;
+      }
+      
+      .amexan-final-description {
+        font-size: 0.95rem;
+      }
+      
+      .amexan-final-message {
+        padding: 35px 25px;
+        margin: 0 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .amexan-ceo-leadership .amexan-section-title {
+        font-size: 1.6rem;
+      }
+      
+      .amexan-mobile-swiper {
+        padding: 20px 15px 60px;
+      }
+      
+      .amexan-mobile-swiper .swiper-slide {
+        padding: 20px;
+      }
+      
+      .amexan-ceo-slide {
+        padding: 30px 20px;
+      }
+      
+      .amexan-mobile-ceo-portrait {
+        width: 130px;
+        height: 130px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amexan CEO Leadership Section</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <style>
+    /* ===== GLOBAL RESETS - SCOPED TO SECTION ===== */
+    .amexan-ceo-section *,
+    .amexan-ceo-section *::before,
+    .amexan-ceo-section *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* ===== BASE STYLES ===== */
+    .amexan-ceo-section {
+      position: relative;
+      background: white;
+      overflow: hidden;
+      width: 100%;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      isolation: isolate;
+      padding: 60px 20px;
+    }
+
+    /* Background Pattern */
+    .amexan-ceo-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 0, 205, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(26, 26, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Section Header */
+    .amexan-section-header {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 50px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .amexan-section-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #0000CD;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .amexan-section-subtitle {
+      font-size: 1.2rem;
+      color: #555;
+      line-height: 1.7;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ===== DESKTOP LAYOUT ===== */
+    .amexan-desktop-layout {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(6, minmax(120px, auto));
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+    }
+
+    /* Connection Lines */
+    .amexan-flow-line {
+      position: absolute;
+      background: linear-gradient(45deg, #0000CD 0%, #1a1aff 50%, #0000CD 100%);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0, 0, 205, 0.2);
+      z-index: 2;
+      opacity: 0.7;
+    }
+
+    .amexan-line-vertical-1 { width: 4px; height: 150px; left: 25%; top: 180px; transform: translateX(-50%); }
+    .amexan-line-horizontal-1 { width: 230px; height: 4px; left: 25%; top: 330px; transform: translateX(-50%); }
+    .amexan-line-vertical-2 { width: 4px; height: 150px; right: 25%; top: 330px; transform: translateX(50%); }
+    .amexan-line-horizontal-2 { width: 230px; height: 4px; right: 25%; top: 480px; transform: translateX(50%); }
+    .amexan-line-vertical-3 { width: 4px; height: 150px; left: 25%; top: 480px; transform: translateX(-50%); }
+    .amexan-line-center-connect { width: 4px; height: 110px; left: 50%; top: 630px; transform: translateX(-50%); }
+
+    /* ===== CEO PORTRAIT ===== */
+    .amexan-ceo-container {
+      grid-column: 5 / 9;
+      grid-row: 3 / 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      position: relative;
+    }
+
+    .amexan-ceo-portrait {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0000CD 0%, #1a1aff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 15px 30px rgba(0, 0, 205, 0.2);
+      border: 6px solid white;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      animation: amexan-float 6s ease-in-out infinite;
+    }
+
+    .amexan-ceo-portrait:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 205, 0.3);
+    }
+
+    .amexan-ceo-portrait::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('images/ceo.png') center/cover no-repeat;
+      border-radius: 50%;
+      transition: transform 0.5s ease;
+    }
+
+    .amexan-ceo-portrait:hover::before {
+      transform: scale(1.05);
+    }
+
+    .amexan-ceo-info {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .amexan-ceo-title {
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 205, 0.2);
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .amexan-ceo-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #0000CD;
+      margin-bottom: 8px;
+    }
+
+    .amexan-ceo-subtitle {
+      font-size: 0.95rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* ===== PRODUCT CARDS ===== */
+    .amexan-product-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 205, 0.08);
+      border-top: 4px solid #0000CD;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      z-index: 5;
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .amexan-product-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-top-color: #1a1aff;
+    }
+
+    .amexan-card-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: white;
+      font-size: 1.4rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 205, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .amexan-product-card:hover .amexan-card-icon {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .amexan-card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0000CD;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .amexan-card-description {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .amexan-card-audience {
+      background: linear-gradient(135deg, rgba(0, 0, 205, 0.08), rgba(26, 26, 255, 0.06));
+      color: #0000CD;
+      padding: 7px 14px;
+      border-radius: 18px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 205, 0.15);
+    }
+
+    /* Card Positioning */
+    .amexan-card-1 { grid-column: 1 / 4; grid-row: 1; }
+    .amexan-card-2 { grid-column: 1 / 4; grid-row: 2; }
+    .amexan-card-3 { grid-column: 10 / 13; grid-row: 2; }
+    .amexan-card-4 { grid-column: 10 / 13; grid-row: 4; }
+    .amexan-card-5 { grid-column: 1 / 4; grid-row: 5; }
+    .amexan-card-6 { grid-column: 4 / 10; grid-row: 6; }
+
+    /* ===== FINAL MESSAGE ===== */
+    .amexan-final-message {
+      background: linear-gradient(135deg, #0000CD 0%, #1a1aff 100%);
+      color: white;
+      padding: 45px 35px;
+      border-radius: 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 205, 0.2);
+      max-width: calc(100% - 40px);
+      margin: 70px auto 0;
+    }
+
+    .amexan-final-message::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .amexan-final-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .amexan-final-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      opacity: 0.95;
+    }
+
+    /* ===== MOBILE SWIPER ===== */
+    .amexan-mobile-swiper {
+      display: none;
+      padding: 20px 0 70px;
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .amexan-mobile-swiper .swiper {
+      overflow: hidden;
+      padding-bottom: 40px;
+    }
+
+    .amexan-mobile-swiper .swiper-wrapper {
+      padding: 10px 0;
+    }
+
+    .amexan-mobile-swiper .swiper-slide {
+      height: auto;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      border-top: 4px solid #0000CD;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s ease;
+      transform: scale(0.95);
+      opacity: 0.8;
+      width: 85%;
+      max-width: 400px;
+    }
+
+    .amexan-mobile-swiper .swiper-slide-active {
+      transform: scale(1);
+      opacity: 1;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .amexan-ceo-slide {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 35px 25px;
+      border-top: 4px solid transparent;
+      background: linear-gradient(white, white), 
+                 linear-gradient(135deg, #0000CD, #1a1aff);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .amexan-mobile-ceo-portrait {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0000CD, #1a1aff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 12px 25px rgba(0, 0, 205, 0.2);
+      border: 4px solid white;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .amexan-mobile-ceo-portrait::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('images/ceo.png') 
+      center/cover no-repeat;
+      border-radius: 50%;
+    }
+
+    /* Blue Dot Pagination */
+    .amexan-swiper-pagination {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      padding: 15px 0;
+    }
+
+    .amexan-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: #0000CD;
+      opacity: 0.3;
+      border-radius: 50%;
+      margin: 0 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .amexan-pagination-bullet-active {
+      opacity: 1;
+      transform: scale(1.2);
+      background: #1a1aff;
+      box-shadow: 0 0 10px rgba(26, 26, 255, 0.5);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes amexan-float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes amexan-fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0px); }
+    }
+
+    /* Animation Classes */
+    .amexan-animate-in {
+      animation: amexan-fadeUp 0.8s ease-out forwards;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 1024px) {
+      .amexan-desktop-layout {
+        display: none;
+      }
+      
+      .amexan-mobile-swiper {
+        display: block;
+      }
+      
+      .amexan-flow-line {
+        display: none;
+      }
+      
+      .amexan-section-title {
+        font-size: 2.3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .amexan-ceo-section {
+        padding: 40px 15px;
+      }
+      
+      .amexan-section-title {
+        font-size: 1.8rem;
+      }
+      
+      .amexan-section-subtitle {
+        font-size: 1rem;
+      }
+      
+      .amexan-final-title {
+        font-size: 1.6rem;
+      }
+      
+      .amexan-final-description {
+        font-size: 0.95rem;
+      }
+      
+      .amexan-final-message {
+        padding: 35px 25px;
+        margin: 40px 20px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .amexan-section-title {
+        font-size: 1.6rem;
+      }
+      
+      .amexan-mobile-swiper {
+        padding: 20px 0 60px;
+      }
+      
+      .amexan-mobile-swiper .swiper-slide {
+        padding: 20px;
+      }
+      
+      .amexan-ceo-slide {
+        padding: 30px 20px;
+      }
+      
+      .amexan-mobile-ceo-portrait {
+        width: 130px;
+        height: 130px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- AMEXAN CEO LEADERSHIP SECTION -->
+  <section class="amexan-ceo-section">
+    <div class="amexan-section-header">
+      <h1 class="amexan-section-title">Leading Healthcare Innovation</h1>
+      <p class="amexan-section-subtitle">
+        Empowering medical professionals and institutions with cutting-edge solutions 
+        that transform healthcare delivery worldwide
+      </p>
+    </div>
+
+    <!-- Desktop Layout -->
+    <div class="amexan-desktop-layout">
+      <!-- Connection Lines -->
+      <div class="amexan-flow-line amexan-line-vertical-1"></div>
+      <div class="amexan-flow-line amexan-line-horizontal-1"></div>
+      <div class="amexan-flow-line amexan-line-vertical-2"></div>
+      <div class="amexan-flow-line amexan-line-horizontal-2"></div>
+      <div class="amexan-flow-line amexan-line-vertical-3"></div>
+      <div class="amexan-flow-line amexan-line-center-connect"></div>
+
+      <!-- Product Cards -->
+      <div class="amexan-product-card amexan-card-1">
+        <div class="amexan-card-icon">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <h3 class="amexan-card-title">Medical Equipment</h3>
+        <p class="amexan-card-description">
+          State-of-the-art diagnostic and treatment devices engineered for precision and reliability in modern healthcare settings.
+        </p>
+        <span class="amexan-card-audience">For Hospitals & Clinics</span>
+      </div>
+
+      <div class="amexan-product-card amexan-card-2">
+        <div class="amexan-card-icon">
+          <i class="fas fa-procedures"></i>
+        </div>
+        <h3 class="amexan-card-title">Surgical Tools</h3>
+        <p class="amexan-card-description">
+          Precision-crafted surgical instruments trusted by surgeons worldwide for exceptional performance in critical procedures.
+        </p>
+        <span class="amexan-card-audience">For Surgeons & OR Teams</span>
+      </div>
+
+      <!-- CEO Center -->
+      <div class="amexan-ceo-container">
+        <div class="amexan-ceo-portrait"></div>
+        <div class="amexan-ceo-info">
+          <div class="amexan-ceo-title">FOUNDER & CEO</div>
+          <div class="amexan-ceo-name">C.K.M- MD</div>
+          <div class="amexan-ceo-subtitle">Leading Innovation in Healthcare</div>
+        </div>
+      </div>
+
+      <div class="amexan-product-card amexan-card-3">
+        <div class="amexan-card-icon">
+          <i class="fas fa-bed"></i>
+        </div>
+        <h3 class="amexan-card-title">Hospital Furniture</h3>
+        <p class="amexan-card-description">
+          Ergonomic, functional, and durable furniture solutions designed for modern healthcare facilities and patient comfort.
+        </p>
+        <span class="amexan-card-audience">For Healthcare Facilities</span>
+      </div>
+
+      <div class="amexan-product-card amexan-card-4">
+        <div class="amexan-card-icon">
+          <i class="fas fa-building"></i>
+        </div>
+        <h3 class="amexan-card-title">Real Estate</h3>
+        <p class="amexan-card-description">
+          Specialized medical real estate development services from clinics to comprehensive hospital complexes.
+        </p>
+        <span class="amexan-card-audience">For Healthcare Developers</span>
+      </div>
+
+      <div class="amexan-product-card amexan-card-5">
+        <div class="amexan-card-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3 class="amexan-card-title">Health Tech & AI</h3>
+        <p class="amexan-card-description">
+          Revolutionary AI-powered platforms for advanced diagnostics, telemedicine, and intelligent hospital systems.
+        </p>
+        <span class="amexan-card-audience">For Digital Health Leaders</span>
+      </div>
+
+      <div class="amexan-product-card amexan-card-6">
+        <div class="amexan-card-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h3 class="amexan-card-title">Student Resources</h3>
+        <p class="amexan-card-description">
+          Comprehensive educational tools supporting medical students from their first day through residency and beyond.
+        </p>
+        <span class="amexan-card-audience">For Medical Students & Interns</span>
+      </div>
+    </div>
+
+    <!-- Mobile Swiper -->
+    <div class="amexan-mobile-swiper">
+      <div class="swiper amexan-ceo-swiper">
+        <div class="swiper-wrapper">
+          <!-- Medical Equipment -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-heartbeat"></i>
+            </div>
+            <h3 class="amexan-card-title">Medical Equipment</h3>
+            <p class="amexan-card-description">
+              State-of-the-art diagnostic and treatment devices for superior patient outcomes.
+            </p>
+            <span class="amexan-card-audience">For Hospitals & Clinics</span>
+          </div>
+
+          <!-- Surgical Tools -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-procedures"></i>
+            </div>
+            <h3 class="amexan-card-title">Surgical Tools</h3>
+            <p class="amexan-card-description">
+              Precision-crafted instruments trusted by surgeons worldwide.
+            </p>
+            <span class="amexan-card-audience">For Surgeons & OR Teams</span>
+          </div>
+
+          <!-- Hospital Furniture -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-bed"></i>
+            </div>
+            <h3 class="amexan-card-title">Hospital Furniture</h3>
+            <p class="amexan-card-description">
+              Ergonomic and functional furniture for modern healthcare facilities.
+            </p>
+            <span class="amexan-card-audience">For Healthcare Facilities</span>
+          </div>
+
+          <!-- CEO Slide -->
+          <div class="swiper-slide amexan-ceo-slide">
+            <div class="amexan-mobile-ceo-portrait"></div>
+            <div class="amexan-ceo-title">FOUNDER & CEO</div>
+            <div class="amexan-ceo-name">C.K.M-MD</div>
+            <div class="amexan-ceo-subtitle">Leading Innovation in Healthcare</div>
+          </div>
+
+          <!-- Real Estate -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h3 class="amexan-card-title">Real Estate</h3>
+            <p class="amexan-card-description">
+              Specialized medical real estate from clinics to hospital complexes.
+            </p>
+            <span class="amexan-card-audience">For Healthcare Developers</span>
+          </div>
+
+          <!-- Health Tech & AI -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="amexan-card-title">Health Tech & AI</h3>
+            <p class="amexan-card-description">
+              AI-powered platforms for diagnostics and intelligent hospital management.
+            </p>
+            <span class="amexan-card-audience">For Digital Health Leaders</span>
+          </div>
+
+          <!-- Student Resources -->
+          <div class="swiper-slide">
+            <div class="amexan-card-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="amexan-card-title">Student Resources</h3>
+            <p class="amexan-card-description">
+              Educational tools supporting students from medical school through residency.
+            </p>
+            <span class="amexan-card-audience">For Medical Students & Interns</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Custom Blue Dot Pagination -->
+      <div class="amexan-swiper-pagination"></div>
+    </div>
+
+    <!-- Final Message -->
+    <div class="amexan-final-message">
+      <h2 class="amexan-final-title">Together, We Shape Healthcare's Future</h2>
+      <p class="amexan-final-description">
+        Our commitment is built on integrity, innovation, and transformative impact. Whether you're 
+        saving lives in the operating room, advancing your medical education, or building tomorrow's 
+        healthcare infrastructure, Amexan stands as your trusted partner at every step of your journey. 
+        We don't just provide products – we forge partnerships that transform lives.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Mobile Swiper with custom blue dot pagination
+      const amexanSwiper = new Swiper('.amexan-ceo-swiper', {
+        slidesPerView: 1.1,
+        spaceBetween: 20,
+        centeredSlides: true,
+        loop: true,
+        autoplay: {
+          delay: 4500,
+          disableOnInteraction: false,
+        },
+        on: {
+          init: function() {
+            updatePagination(this);
+          },
+          slideChange: function() {
+            updatePagination(this);
+          }
+        }
+      });
+      
+      // Create custom blue dot pagination
+      function updatePagination(swiper) {
+        const paginationContainer = document.querySelector('.amexan-swiper-pagination');
+        paginationContainer.innerHTML = '';
+        
+        for (let i = 0; i < swiper.slides.length; i++) {
+          const bullet = document.createElement('div');
+          bullet.classList.add('amexan-pagination-bullet');
+          if (i === swiper.realIndex) {
+            bullet.classList.add('amexan-pagination-bullet-active');
+          }
+          
+          bullet.addEventListener('click', function() {
+            swiper.slideTo(i);
+          });
+          
+          paginationContainer.appendChild(bullet);
+        }
+      }
+      
+      // Animate desktop cards on scroll
+      const animateDesktopCards = () => {
+        const cards = document.querySelectorAll('.amexan-product-card');
+        cards.forEach((card, index) => {
+          const delay = index * 200;
+          setTimeout(() => {
+            card.classList.add('amexan-animate-in');
+          }, delay);
+        });
+      };
+      
+      // Initialize animations only on desktop
+      if (window.innerWidth > 1024) {
+        animateDesktopCards();
+      }
+      
+      // Handle responsive behavior
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 1024) {
+          document.querySelector('.amexan-mobile-swiper').style.display = 'none';
+          document.querySelector('.amexan-desktop-layout').style.display = 'grid';
+          animateDesktopCards();
+        } else {
+          document.querySelector('.amexan-mobile-swiper').style.display = 'block';
+          document.querySelector('.amexan-desktop-layout').style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amexan Footer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+  html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer {
+  position: relative;
+  background: linear-gradient(135deg, #0b0b22, #1a1a40);
+  color: #f4f4f9;
+  overflow: hidden; /* keeps decorations from creating scrollbars */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.footer-section {
+  flex: 1 1 250px;
+  min-width: 240px;
+}
+
+.footer-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.footer-title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #3ac7e5;
+  margin-top: 0.4rem;
+  border-radius: 2px;
+}
+
+.footer-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #d6d6e8;
+}
+
+.footer-links,
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li,
+.footer-contact li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #cfd4f7;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #3ac7e5;
+}
+
+.footer-contact i {
+  color: #3ac7e5;
+  margin-right: 0.6rem;
+}
+
+.footer-socials {
+  margin-top: 1.2rem;
+}
+
+.footer-socials .social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  color: #fff;
+  margin-right: 0.6rem;
+  transition: all 0.3s ease;
+}
+
+.footer-socials .social-icon:hover {
+  background: #3ac7e5;
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.footer-tagline {
+  font-style: italic;
+  color: #9dbff5;
+  margin: 0.4rem 0;
+}
+
+.legal {
+  margin-top: 0.6rem;
+}
+
+.legal a {
+  color: #cfd4f7;
+  margin: 0 0.5rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.legal a:hover {
+  color: #3ac7e5;
+}
+
+/* Decorative Background Shapes */
+.footer-decoration {
+  position: absolute;
+  z-index: 0;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.decoration-1 {
+  top: -80px;
+  left: -80px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #3ac7e5 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.decoration-2 {
+  bottom: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #8c54ff 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.decoration-3 {
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #ff5ba1 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+  
+</head>
+<body>
+  
+  
+  <!-- Premium Amexan Footer -->
+  <footer class="footer">
+    <div class="footer-decoration decoration-1"></div>
+    <div class="footer-decoration decoration-2"></div>
+    <div class="footer-decoration decoration-3"></div>
+    
+    <div class="footer-container">
+      <!-- About Section -->
+      <div class="footer-section">
+        <h2 class="footer-title">About Amexan</h2>
+        <p class="footer-text">
+          Amexan is your trusted global partner in medical equipment, surgical tools, hospital furniture,
+          health tech, AI solutions, and student resources. We deliver innovation, quality, and seamless service to
+          hospitals, doctors, students, and healthcare facilities worldwide.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h2 class="footer-title">Quick Links</h2>
+        <ul class="footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop Medical Equipment</a></li>
+          <li><a href="#">Surgical Tools</a></li>
+          <li><a href="#">Hospital Furniture</a></li>
+          <li><a href="#">Student Resources</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog & Insights</a></li>
+          <li><a href="#">Contact Support</a></li>
+        </ul>
+      </div>
+      
+      <!-- Products -->
+      <div class="footer-section">
+        <h2 class="footer-title">Our Products</h2>
+        <ul class="footer-links">
+          <li><a href="#">Diagnostic Equipment</a></li>
+          <li><a href="#">Surgical Instruments</a></li>
+          <li><a href="#">Hospital Beds & Furniture</a></li>
+          <li><a href="#">Laboratory Equipment</a></li>
+          <li><a href="#">Health Tech Solutions</a></li>
+          <li><a href="#">AI Medical Tools</a></li>
+          <li><a href="#">Medical Real Estate</a></li>
+          <li><a href="#">Student Kits & Packages</a></li>
+        </ul>
+      </div>
+      
+      <!-- Contact & Newsletter -->
+      <div class="footer-section">
+        <h2 class="footer-title">Contact Us</h2>
+        <ul class="footer-contact">
+          <li>
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Nairobi, Kenya | Global Distribution Centers</span>
+          </li>
+          <li>
+            <i class="fas fa-phone"></i>
+            <span>+254 700 000 000</span>
+          </li>
+          <li>
+            <i class="fas fa-envelope"></i>
+            <span>support@amexan.com</span>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Mon-Fri: 8:00 AM - 6:00 PM EAT</span>
+          </li>
+        </ul>
+        
+        
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <p>© 2025 Amexan Medical Solutions. All rights reserved.</p>
+      <p class="footer-tagline">Empowering healthcare with innovation and excellence</p>
+      <div class="legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Medical Compliance</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Return Policy</a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
+
+  <!-- Firebase Integration and JavaScript -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+      authDomain: "bynexproject.firebaseapp.com",
+      projectId: "bynexproject",
+      storageBucket: "bynexproject.appspot.com",
+      messagingSenderId: "667246369908",
+      appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+      measurementId: "G-7CCRBG0P8D"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Advanced Caching System
+    class AdvancedCache {
+      constructor() {
+        this.CACHE_KEYS = {
+          PRODUCTS: 'bynex_products_v2',
+          IMAGES: 'bynex_images_v2',
+          METADATA: 'bynex_cache_metadata_v2'
+        };
+        this.CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+        this.imageCache = new Map();
+        this.preloadedImages = new Set();
+      }
+
+      // Get cache metadata
+      getCacheMetadata() {
+        try {
+          const metadata = JSON.parse(localStorage.getItem(this.CACHE_KEYS.METADATA) || '{}');
+          return metadata;
+        } catch {
+          return {};
+        }
+      }
+
+      // Update cache metadata
+      updateCacheMetadata(key, data) {
+        const metadata = this.getCacheMetadata();
+        metadata[key] = {
+          timestamp: Date.now(),
+          size: JSON.stringify(data).length,
+          lastAccessed: Date.now()
+        };
+        localStorage.setItem(this.CACHE_KEYS.METADATA, JSON.stringify(metadata));
+      }
+
+      // Check if cache is valid
+      isCacheValid(key) {
+        const metadata = this.getCacheMetadata();
+        if (!metadata[key]) return false;
+        
+        const age = Date.now() - metadata[key].timestamp;
+        return age < this.CACHE_DURATION;
+      }
+
+      // Get cached products
+      getCachedProducts() {
+        if (!this.isCacheValid('products')) return null;
+        
+        try {
+          const cached = localStorage.getItem(this.CACHE_KEYS.PRODUCTS);
+          return cached ? JSON.parse(cached) : null;
+        } catch {
+          return null;
+        }
+      }
+
+      // Cache products
+      cacheProducts(products) {
+        try {
+          localStorage.setItem(this.CACHE_KEYS.PRODUCTS, JSON.stringify(products));
+          this.updateCacheMetadata('products', products);
+          
+          // Preload critical images
+          this.preloadCriticalImages(products);
+        } catch (error) {
+          console.warn('Failed to cache products:', error);
+        }
+      }
+
+      // Preload critical images (first few products)
+      preloadCriticalImages(products) {
+        const criticalProducts = products.slice(0, 20); // First 20 products
+        
+        criticalProducts.forEach(product => {
+          if (product.images && product.images.length > 0) {
+            product.images.slice(0, 2).forEach(img => { // First 2 images per product
+              this.preloadImage(img.url);
+            });
+          }
+        });
+      }
+
+      // Preload single image
+      preloadImage(url) {
+        if (this.preloadedImages.has(url)) return;
+        
+        const img = new Image();
+        img.onload = () => {
+          this.preloadedImages.add(url);
+          this.imageCache.set(url, img);
+        };
+        img.onerror = () => {
+          console.warn('Failed to preload image:', url);
+        };
+        img.src = url;
+      }
+
+      // Get preloaded image
+      getPreloadedImage(url) {
+        return this.imageCache.get(url);
+      }
+
+      // Clean old cache entries
+      cleanCache() {
+        const metadata = this.getCacheMetadata();
+        let cleaned = false;
+        
+        Object.keys(metadata).forEach(key => {
+          const age = Date.now() - metadata[key].timestamp;
+          if (age > this.CACHE_DURATION * 2) { // Clean entries older than 48 hours
+            delete metadata[key];
+            cleaned = true;
+          }
+        });
+        
+        if (cleaned) {
+          localStorage.setItem(this.CACHE_KEYS.METADATA, JSON.stringify(metadata));
+        }
+      }
+    }
+
+    // Intersection Observer for Lazy Loading
+    class LazyLoader {
+      constructor() {
+        this.observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.loadImage(entry.target);
+              this.observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          rootMargin: '50px 0px',
+          threshold: 0.1
+        });
+      }
+
+      observe(img) {
+        this.observer.observe(img);
+      }
+
+      loadImage(img) {
+        const src = img.dataset.src;
+        if (!src) return;
+
+        // Check if image is preloaded
+        const preloaded = cache.getPreloadedImage(src);
+        if (preloaded) {
+          img.src = src;
+          img.classList.add('loaded');
+          img.classList.remove('skeleton');
+          return;
+        }
+
+        // Load image with loading states
+        img.classList.add('image-loading');
+        
+        const tempImg = new Image();
+        tempImg.onload = () => {
+          img.src = src;
+          img.classList.add('loaded');
+          img.classList.remove('skeleton', 'image-loading');
+        };
+        tempImg.onerror = () => {
+          img.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
+          img.classList.add('loaded');
+          img.classList.remove('skeleton', 'image-loading');
+        };
+        tempImg.src = src;
+      }
+    }
+
+    // Performance Monitor
+    class PerformanceMonitor {
+      constructor() {
+        this.metrics = {};
+      }
+
+      startTiming(label) {
+        this.metrics[label] = { start: performance.now() };
+      }
+
+      endTiming(label) {
+        if (this.metrics[label]) {
+          this.metrics[label].duration = performance.now() - this.metrics[label].start;
+          console.log(`${label}: ${this.metrics[label].duration.toFixed(2)}ms`);
+        }
+      }
+
+      logMetrics() {
+        console.table(this.metrics);
+      }
+    }
+
+    // Initialize global instances
+    const cache = new AdvancedCache();
+    const lazyLoader = new LazyLoader();
+    const perfMonitor = new PerformanceMonitor();
+    let allProducts = [];
+    let currentCategory = null;
+
+    // Categories configuration
+    const categories = [
+      { 
+        id: 'student-packages', 
+        name: 'Student Packages', 
+        icon: 'fa-graduation-cap', 
+        color: 'blue',
+        firebaseCategories: ['student-packages', 'Student Packages', 'student_packages', 'StudentPackages']
+      },
+      { 
+        id: 'intern-packages', 
+        name: 'Intern Packages', 
+        icon: 'fa-user-md', 
+        color: 'green',
+        firebaseCategories: ['intern-packages', 'Intern Packages', 'intern_packages', 'InternPackages']
+      },
+      { 
+        id: 'diagnostics', 
+        name: 'Diagnostic Products', 
+        icon: 'fa-stethoscope', 
+        color: 'red',
+        firebaseCategories: ['diagnostics', 'Diagnostics', 'Diagnostic Products', 'diagnostic-products', 'diagnostic_products']
+      },
+      { 
+        id: 'medical-equipment', 
+        name: 'Medical Equipment', 
+        icon: 'fa-heartbeat', 
+        color: 'purple',
+        firebaseCategories: ['medical-equipment', 'Medical Equipment', 'medical_equipment', 'MedicalEquipment', 'medical']
+      },
+      { 
+        id: 'surgical-tools', 
+        name: 'Surgical Tools', 
+        icon: 'fa-solid fa-procedures', 
+        color: 'blue',
+        firebaseCategories: ['surgical-tools', 'Surgical Tools', 'surgical_tools', 'SurgicalTools', 'Surgical']
+      },
+      { 
+        id: 'laboratory', 
+        name: 'Lab Equipment', 
+        icon: 'fa-flask', 
+        color: 'orange',
+        firebaseCategories: ['laboratory', 'Laboratory', 'Lab Equipment', 'lab-equipment', 'lab_equipment']
+      },
+      { 
+        id: 'furniture', 
+        name: 'Hospital Furniture', 
+        icon: 'fa-bed', 
+        color: 'green',
+        firebaseCategories: ['furniture', 'Furniture', 'Hospital Furniture', 'hospital-furniture', 'hospital_furniture']
+      },
+      { 
+        id: 'imaging', 
+        name: 'Imaging Products', 
+        icon: 'fa-x-ray', 
+        color: 'indigo',
+        firebaseCategories: ['imaging', 'Imaging', 'Imaging Products', 'imaging-products', 'imaging_products']
+      },
+      { 
+        id: 'real-estate', 
+        name: 'Real Estate', 
+        icon: 'fa-building', 
+        color: 'teal',
+        firebaseCategories: ['real-estate', 'Real Estate', 'real_estate', 'RealEstate', 'Estate']
+      },
+      { 
+        id: 'health-tech', 
+        name: 'Health Tech', 
+        icon: 'fa-laptop-medical', 
+        color: 'blue',
+        firebaseCategories: ['health-tech', 'Health Tech', 'health_tech', 'HealthTech', 'Tech']
+      }
+    ];
+
+    // Special sections
+    const specialSections = [
+      { id: 'featured', name: 'Featured Products', icon: 'fa-star', color: 'yellow-500' },
+      { id: 'bestSeller', name: 'Best Sellers', icon: 'fa-trophy', color: 'amber-500' },
+      { id: 'newArrival', name: 'New Arrivals', icon: 'fa-bolt', color: 'green-500' }
+    ];
+
+    // Initialize the app with advanced loading
+    document.addEventListener('DOMContentLoaded', async () => {
+      perfMonitor.startTiming('App Initialization');
+      
+      // Clean old cache
+      cache.cleanCache();
+      
+      // Load from cache first
+      await loadFromCache();
+      
+      // Initialize UI
+      renderCategories();
+      renderCategoryProducts();
+      renderSpecialSections();
+      
+      // Load fresh data in background
+      loadFromFirebase();
+      
+      // Show first category by default
+      if (categories.length > 0) {
+        toggleCategory(categories[0].id);
+      }
+      
+      // Hide loading overlay
+      hideLoadingOverlay();
+      
+      perfMonitor.endTiming('App Initialization');
+    });
+
+    // Load from cache with instant display
+    async function loadFromCache() {
+      perfMonitor.startTiming('Cache Load');
+      
+      const cachedProducts = cache.getCachedProducts();
+      if (cachedProducts && cachedProducts.length > 0) {
+        allProducts = cachedProducts;
+        console.log(`Loaded ${allProducts.length} products from cache`);
+        
+        // Trigger UI updates
+        setTimeout(() => {
+          updateAllProductDisplays();
+        }, 100);
+      }
+      
+      perfMonitor.endTiming('Cache Load');
+    }
+
+    // Load from Firebase with caching
+    async function loadFromFirebase() {
+      perfMonitor.startTiming('Firebase Load');
+      
+      try {
+        console.log('Fetching fresh products from Firebase...');
+        const productsRef = collection(db, "products");
+        const q = query(productsRef, where("status", "==", "active"));
+        const querySnapshot = await getDocs(q);
+        
+        const freshProducts = [];
+        querySnapshot.forEach(doc => {
+          freshProducts.push({ id: doc.id, ...doc.data() });
+        });
+        
+        if (freshProducts.length > 0) {
+          allProducts = freshProducts;
+          
+          // Cache the fresh data
+          cache.cacheProducts(freshProducts);
+          
+          // Update UI with fresh data
+          updateAllProductDisplays();
+          
+          console.log(`Updated with ${freshProducts.length} fresh products`);
+        }
+        
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        if (allProducts.length === 0) {
+          showErrorMessage("Unable to load products. Please check your connection and refresh.");
+        }
+      }
+      
+      perfMonitor.endTiming('Firebase Load');
+    }
+
+    // Update all product displays
+    function updateAllProductDisplays() {
+      if (currentCategory) {
+        loadCategoryProducts(currentCategory);
+      }
+      
+      // Update special sections
+      specialSections.forEach(section => {
+        const container = document.getElementById(`${section.id}-products`);
+        if (container) {
+          updateSpecialSection(section, container);
+        }
+      });
+    }
+
+    // Hide loading overlay
+    function hideLoadingOverlay() {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    // Show error message
+    function showErrorMessage(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm';
+      errorDiv.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas fa-exclamation-triangle mr-2"></i>
+          <span>${message}</span>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      document.body.appendChild(errorDiv);
+      setTimeout(() => errorDiv.remove(), 8000);
+    }
+
+    // Render categories
+    function renderCategories() {
+      const container = document.getElementById('categoryScroll');
+      container.innerHTML = '';
+      
+      categories.forEach(category => {
+        const btn = document.createElement('button');
+        btn.className = `category-btn flex-shrink-0 w-28 h-28 sm:w-36 sm:h-36 border-2 border-gray-300 hover:border-${category.color}-500 hover:shadow-lg hover:shadow-${category.color}-200 transition-all rounded-full flex flex-col items-center justify-center text-gray-800 bg-white`;
+        btn.setAttribute('data-category', category.id);
+        btn.onclick = () => toggleCategory(category.id);
+        
+        btn.innerHTML = `
+          <i class="fas ${category.icon} text-xl sm:text-2xl text-${category.color}-500 mb-2"></i>
+          <span class="text-xs sm:text-sm font-semibold text-center px-1">${category.name}</span>
+        `;
+        
+        container.appendChild(btn);
+      });
+    }
+
+    // Render category products structure
+    function renderCategoryProducts() {
+      const container = document.getElementById('categoryProducts');
+      container.innerHTML = '';
+      
+      categories.forEach(category => {
+        const section = document.createElement('div');
+        section.id = category.id;
+        section.className = 'category-section fade-in';
+        section.innerHTML = `
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <i class="fas ${category.icon} text-xl sm:text-2xl text-${category.color}-500 mr-3"></i>
+              <h3 class="text-xl sm:text-2xl font-bold text-gray-800">${category.name}</h3>
+            </div>
+            <a href="shop.html?category=${category.id}" class="text-blue-600 hover:text-blue-800 font-semibold">View All →</a>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" id="${category.id}-products">
+            <!-- Products will be added here -->
+          </div>
+        `;
+        
+        container.appendChild(section);
+      });
+    }
+
+    // Get products for a specific category
+    function getProductsForCategory(categoryId) {
+      const category = categories.find(c => c.id === categoryId);
+      if (!category) return [];
+      
+      return allProducts.filter(product => {
+        if (!product.category) return false;
+        return category.firebaseCategories.some(fbCategory => 
+          product.category.toLowerCase() === fbCategory.toLowerCase()
+        );
+      });
+    }
+
+    // Toggle category with smooth transitions
+    function toggleCategory(categoryId) {
+      currentCategory = categoryId;
+      
+      // Hide all sections with fade out
+      document.querySelectorAll('.category-section').forEach(section => {
+        section.classList.remove('active', 'visible');
+      });
+      
+      // Show selected section with fade in
+      const selectedSection = document.getElementById(categoryId);
+      if (selectedSection) {
+        setTimeout(() => {
+          selectedSection.classList.add('active');
+          setTimeout(() => {
+            selectedSection.classList.add('visible');
+          }, 50);
+        }, 150);
+        
+        // Update active category button
+        document.querySelectorAll('.category-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        const activeBtn = document.querySelector(`[data-category="${categoryId}"]`);
+        if (activeBtn) {
+          activeBtn.classList.add('active');
+        }
+        
+        // Load products for this category
+        loadCategoryProducts(categoryId);
+      }
+    }
+
+    // Load products for a specific category with optimizations
+    function loadCategoryProducts(categoryId) {
+      perfMonitor.startTiming(`Load Category ${categoryId}`);
+      
+      const container = document.getElementById(`${categoryId}-products`);
+      if (!container) return;
+
+      const categoryProducts = getProductsForCategory(categoryId);
+      console.log(`Loading ${categoryProducts.length} products for category: ${categoryId}`);
+
+      // Show loading skeletons first
+      showProductSkeletons(container, 8);
+
+      // Load products with delay for smooth experience
+      setTimeout(() => {
+        container.innerHTML = '';
+
+        if (categoryProducts.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full text-center py-8 text-gray-500">
+              <i class="fas fa-box-open text-4xl mb-4 text-gray-300"></i>
+              <p class="text-lg font-medium">No products available in this category yet.</p>
+              <p class="text-sm mt-2">Check back soon for new arrivals!</p>
+            </div>
+          `;
+        } else {
+          categoryProducts.forEach((product, index) => {
+            setTimeout(() => {
+              const card = createProductCard(product);
+              card.classList.add('fade-in');
+              container.appendChild(card);
+              
+              // Trigger fade in animation
+              setTimeout(() => {
+                card.classList.add('visible');
+              }, 50);
+            }, index * 100); // Stagger animations
+          });
+        }
+        
+        perfMonitor.endTiming(`Load Category ${categoryId}`);
+      }, 200);
+    }
+
+    // Show product loading skeletons
+    function showProductSkeletons(container, count) {
+      container.innerHTML = '';
+      
+      for (let i = 0; i < count; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden w-full max-w-[220px]';
+        skeleton.innerHTML = `
+          <div class="skeleton h-32 bg-gray-200"></div>
+          <div class="p-2 space-y-2">
+            <div class="skeleton h-4 bg-gray-200 rounded"></div>
+            <div class="skeleton h-3 bg-gray-200 rounded w-2/3"></div>
+            <div class="skeleton h-3 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        `;
+        container.appendChild(skeleton);
+      }
+    }
+
+    // Create optimized product card
+    function createProductCard(product) {
+      const card = document.createElement('div');
+      card.className = `
+        bg-gradient-to-b from-white to-blue-50 
+        rounded-xl shadow-lg border border-blue-100 
+        overflow-hidden relative text-[11px] 
+        w-full max-w-[220px] 
+        transform transition-all duration-300 
+        hover:-translate-y-1 hover:shadow-2xl
+      `;
+
+      const hasDiscount = product.discountedPrice && product.discountedPrice < product.originalPrice;
+      const discountAmount = hasDiscount ? (product.originalPrice - product.discountedPrice) : 0;
+      const discountPercent = hasDiscount ? Math.round((1 - product.discountedPrice / product.originalPrice) * 100) : 0;
+
+      const images = product.images?.length ? product.images.map(img => img.url) : ['https://via.placeholder.com/300x200?text=No+Image'];
+
+      // Badge components
+      const verifiedBadge = product.badges?.verified ? `<span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full shadow-sm border border-green-200">✔ Verified</span>` : '';
+      const trustBadge = product.badges?.trust ? `<span class="bg-yellow-100 text-yellow-600 px-1.5 py-0.5 rounded-full shadow-sm border border-yellow-200">⚡ Trust+</span>` : '';
+      const iconBadge = product.badges?.iconic ? `<span class="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full shadow-sm border border-purple-200">★ Iconic</span>` : '';
+      const hotBadge = hasDiscount ? `<span class="absolute top-1 left-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">${discountPercent}% OFF</span>` : '';
+
+      // Create optimized image slides with lazy loading
+      const imageSlides = images.map((url, index) => `
+        <img data-src="${url}" 
+             class="w-full h-full absolute top-0 left-0 transition-all duration-500 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'} object-contain p-2 blur-up skeleton" 
+             alt="${product.name}"
+             loading="lazy">
+      `).join('');
+
+      card.innerHTML = `
+        ${hotBadge}
+        <div class="relative h-32 bg-white overflow-hidden flex items-center justify-center border-b border-blue-100">
+          <div class="image-slider w-full h-full relative">
+            ${imageSlides}
+            ${images.length > 1 ? `
+              <button class="prev absolute left-1 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 text-lg cursor-pointer z-50 bg-white/80 rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"><i class="fas fa-chevron-left"></i></button>
+              <button class="next absolute right-1 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 text-lg cursor-pointer z-50 bg-white/80 rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"><i class="fas fa-chevron-right"></i></button>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="p-2 space-y-0.5">
+          <a href="product.html?id=${product.id}" class="font-semibold text-blue-800 leading-tight text-[12px] hover:underline block">${product.name}</a>
+          <p class="text-gray-500 text-[10px]">Brand: ${product.brand || 'N/A'}</p>
+          <div class="text-yellow-500 flex items-center text-[10px] gap-1">
+            ${'★'.repeat(Math.floor(product.rating || 0))}${'☆'.repeat(5 - Math.floor(product.rating || 0))} 
+            <span class="text-gray-400">(${product.rating || 0})</span>
+          </div>
+
+          <div class="space-y-0.5 mt-1">
+            ${hasDiscount ? `
+              <div class="text-black font-semibold line-through text-[10px]">KES ${product.originalPrice.toLocaleString()}</div>
+              <div class="text-blue-700 font-bold text-[12px]">KES ${product.discountedPrice.toLocaleString()}</div>
+              <div class="text-green-600 text-[10px]">Save KES ${discountAmount.toLocaleString()} (${discountPercent}%)</div>
+            ` : `
+              <div class="text-blue-700 font-bold text-[12px]">KES ${product.originalPrice.toLocaleString()}</div>
+            `}
+          </div>
+
+          <div class="flex gap-1 text-[9px] mt-1 flex-wrap">
+            ${verifiedBadge}
+            ${trustBadge}
+            ${iconBadge}
+          </div>
+
+          <div class="flex justify-between mt-2">
+            <a href="product.html?id=${product.id}" class="text-[10px] px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm transition">Add to Cart</a>
+            <a href="https://wa.me/254793666825?text=Hello%20Amexan%20Team,%20I%20am%20interested%20in%20the%20product:%20${encodeURIComponent(product.name)}" 
+   target="_blank"
+   class="text-[10px] px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded shadow-sm transition">
+   💬
+</a>
+
+          </div>
+        </div>
+      `;
+
+      // Add group class for hover effects
+      card.classList.add('group');
+
+      // Initialize lazy loading for images
+      setTimeout(() => {
+        const images = card.querySelectorAll('img[data-src]');
+        images.forEach(img => {
+          lazyLoader.observe(img);
+        });
+        
+        initializeImageSlider(card);
+      }, 100);
+
+      return card;
+    }
+
+    // Initialize image slider with touch support
+    function initializeImageSlider(card) {
+      const container = card.querySelector('.image-slider');
+      if (!container) return;
+
+      const slides = container.querySelectorAll('img');
+      const prevBtn = container.querySelector('.prev');
+      const nextBtn = container.querySelector('.next');
+      
+      if (slides.length <= 1) return;
+
+      let currentIndex = 0;
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      const showSlide = (index) => {
+        slides.forEach((img, i) => {
+          img.style.opacity = i === index ? '1' : '0';
+          img.style.transform = `translateX(${(i - index) * 100}%)`;
+        });
+      };
+
+      const nextSlide = () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        showSlide(currentIndex);
+      };
+
+      const prevSlide = () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        showSlide(currentIndex);
+      };
+
+      // Button controls
+      if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+      if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+      // Touch controls
+      container.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].clientX;
+        const touchDiff = touchStartX - touchEndX;
+        
+        if (Math.abs(touchDiff) > 50) {
+          if (touchDiff > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+      }, { passive: true });
+
+      // Auto-play (optional)
+      let autoPlayInterval;
+      const startAutoPlay = () => {
+        autoPlayInterval = setInterval(nextSlide, 4000);
+      };
+      
+      const stopAutoPlay = () => {
+        if (autoPlayInterval) {
+          clearInterval(autoPlayInterval);
+          autoPlayInterval = null;
+        }
+      };
+
+      // Start auto-play and pause on hover
+      startAutoPlay();
+      container.addEventListener('mouseenter', stopAutoPlay);
+      container.addEventListener('mouseleave', startAutoPlay);
+    }
+
+// === Search for Explore Categories ===
+
+// Helper to normalize search text (handles plural/singular)
+function normalize(str) {
+  return str.toLowerCase().trim().replace(/(es|s)$/, "");
+}
+
+// Main search logic
+function runCategorySearch() {
+  const categorySelect = document.querySelector(".header-search select");
+  const queryInput = document.querySelector(".header-search input[type='text']");
+  const productsContainer = document.getElementById("categoryProducts");
+
+  if (!categorySelect || !queryInput || !productsContainer) return;
+
+  const query = normalize(queryInput.value);
+  const selectedCategory = categorySelect.value.toLowerCase();
+
+  let results = allProducts;
+
+  // Filter by category
+  if (selectedCategory !== "all categories") {
+    results = results.filter(p => 
+      normalize(p.category || "").includes(normalize(selectedCategory))
+    );
+  }
+
+  // Filter by search query
+  if (query) {
+    results = results.filter(p => {
+      const name = normalize(p.name || "");
+      const brand = normalize(p.brand || "");
+      return name.includes(query) || brand.includes(query);
+    });
+  }
+
+  // Clear container
+  productsContainer.innerHTML = "";
+
+  // Force horizontal row layout
+  productsContainer.className = "flex space-x-4 overflow-x-auto scrollbar-hide py-4";
+
+  if (results.length > 0) {
+    results.forEach(p => {
+      const card = createProductCard(p);
+      card.classList.add("flex-none", "w-60"); // fixed width per card
+      productsContainer.appendChild(card);
+    });
+  } else {
+    productsContainer.className = "w-full";
+    productsContainer.innerHTML = `
+      <div class="text-center py-10 px-4 bg-gray-100 rounded-lg shadow w-full">
+        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-700 mb-2">No products found</h3>
+        <p class="text-gray-600 italic">
+          "When you feel like quitting, remember why you started –
+          keep searching, the right product is waiting for you!"
+        </p>
+      </div>
+    `;
+  }
+  // Attach search events
+document.querySelector(".header-search button")
+  .addEventListener("click", (e) => {
+    e.preventDefault(); // ⛔ stop form submission
+    runCategorySearch();
+  });
+
+document.querySelector(".header-search input[type='text']")
+  .addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // ⛔ stop page reload on Enter
+      runCategorySearch();
+    }
+  });
+
+
+  // Smooth scroll to results
+  productsContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// === Attach search events ===
+document.querySelector(".header-search button")
+  .addEventListener("click", runCategorySearch);
+
+document.querySelector(".header-search input[type='text']")
+  .addEventListener("keyup", (e) => {
+    if (e.key === "Enter") runCategorySearch();
+  });
+
+
+    // Create compact product card for special sections
+    function createCompactProductCard(product) {
+      const card = document.createElement('div');
+      card.className = `
+        min-w-[120px] max-w-[120px] 
+        rounded-lg overflow-hidden snap-start text-[10px] m-0 
+        border border-gray-200 
+        shadow-[0_2px_4px_rgba(0,0,0,0.1),0_6px_12px_rgba(0,0,0,0.05)] 
+        bg-gradient-to-b from-white to-gray-50
+        hover:shadow-[0_4px_8px_rgba(0,0,0,0.15),0_8px_16px_rgba(0,0,0,0.1)] 
+        transition-shadow duration-300 fade-in
+      `;
+
+      const hasDiscount = product.discountedPrice && product.discountedPrice < product.originalPrice;
+      const discountPercent = hasDiscount ? Math.round((1 - product.discountedPrice / product.originalPrice) * 100) : 0;
+      const finalPrice = hasDiscount ? product.discountedPrice : product.originalPrice;
+      const image = product.images?.[0]?.url || 'https://via.placeholder.com/120x80';
+
+      const badgeHTML = hasDiscount
+        ? `<div class="absolute top-1 left-1 bg-red-600 text-white text-[8px] font-bold px-1 py-0.5 rounded shadow">${discountPercent}% OFF</div>`
+        : '';
+
+      card.innerHTML = `
+        <div class="relative">
+          ${badgeHTML}
+          <img data-src="${image}" 
+            class="w-full h-20 object-contain p-1 bg-white blur-up skeleton" 
+            alt="${product.name}" 
+            loading="lazy" />
+        </div>
+
+        <div class="p-1 space-y-0.5">
+          <h3 class="font-semibold text-blue-700 leading-tight truncate">${product.name}</h3>
+
+          <div>
+            ${hasDiscount ? `
+              <p class="line-through text-gray-400">KES ${product.originalPrice.toLocaleString()}</p>
+              <p class="text-blue-600 font-bold">KES ${finalPrice.toLocaleString()}</p>
+            ` : `
+              <p class="text-blue-600 font-bold">KES ${finalPrice.toLocaleString()}</p>
+            `}
+          </div>
+
+          <div class="flex justify-between mt-1">
+            <a href="product.html?id=${product.id}" 
+               class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white text-[9px] px-2 py-0.5 rounded shadow-sm transition-all duration-200">Buy</a>
+           <a href="https://wa.me/254793666825?text=Hello%20Amexan%20Team,%20I%20am%20interested%20in%20the%20product:%20${encodeURIComponent(product.name)}" 
+   target="_blank"
+   class="text-[10px] px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded shadow-sm transition">
+   💬
+</a>
+
+          </div>
+        </div>
+      `;
+
+      // Initialize lazy loading
+      setTimeout(() => {
+        const img = card.querySelector('img[data-src]');
+        if (img) {
+          lazyLoader.observe(img);
+        }
+      }, 100);
+
+      return card;
+    }
+
+    // Render special sections with optimizations
+    function renderSpecialSections() {
+      const container = document.getElementById('specialSections');
+      container.innerHTML = '';
+      
+      specialSections.forEach(section => {
+        const sectionElement = document.createElement('div');
+        sectionElement.className = 'bg-white rounded-xl shadow-sm overflow-hidden fade-in';
+        sectionElement.innerHTML = `
+          <div class="p-4">
+            <div class="flex justify-between items-center mb-4">
+              <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-${section.color} flex items-center justify-center text-white mr-3">
+                  <i class="fas ${section.icon} text-sm"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800">${section.name}</h3>
+              </div>
+              <a href="shop.html?section=${section.id}" class="text-blue-600 hover:text-blue-800 font-semibold">View All →</a>
+            </div>
+            <div id="${section.id}-products" class="flex overflow-x-auto scrollbar-hide space-x-3 pb-2">
+              <!-- Products will be added here -->
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(sectionElement);
+        
+        // Update this section
+        updateSpecialSection(section, sectionElement.querySelector(`#${section.id}-products`));
+        
+        // Add fade-in animation
+        setTimeout(() => {
+          sectionElement.classList.add('visible');
+        }, 100);
+      });
+    }
+
+    // Update special section with products
+    function updateSpecialSection(section, productsContainer) {
+      if (!productsContainer) return;
+      
+      const sectionProducts = allProducts.filter(p => 
+        p.specialSections && p.specialSections[section.id]
+      ).slice(0, 12); // Increased limit
+
+      if (sectionProducts.length === 0) {
+        productsContainer.innerHTML = `
+          <div class="w-full text-center py-8 text-gray-500">
+            <i class="fas ${section.icon} text-2xl mb-2 text-gray-300"></i>
+            <p class="text-sm">No products in this section yet</p>
+          </div>
+        `;
+      } else {
+        productsContainer.innerHTML = '';
+        sectionProducts.forEach((product, index) => {
+          setTimeout(() => {
+            const card = createCompactProductCard(product);
+            productsContainer.appendChild(card);
+            
+            // Trigger fade in
+            setTimeout(() => {
+              card.classList.add('visible');
+            }, 50);
+          }, index * 50);
+        });
+      }
+    }
+
+    // Scroll functions with smooth behavior
+    function scrollCategoriesLeft() {
+      const container = document.getElementById('categoryScroll');
+      container.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+
+    function scrollCategoriesRight() {
+      const container = document.getElementById('categoryScroll');
+      container.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+
+    // View product with loading state
+    function viewProduct(productId) {
+      console.log('Viewing product:', productId);
+      
+      // Show loading state
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+      loadingDiv.innerHTML = `
+        <div class="bg-white p-6 rounded-lg shadow-xl">
+          <div class="animate-spin w-8 h-8 border-4 border-brandBlue border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p class="text-brandBlue font-semibold">Loading product...</p>
+        </div>
+      `;
+      document.body.appendChild(loadingDiv);
+      
+      // Navigate to product page
+      setTimeout(() => {
+        window.location.href = `product.html?id=${productId}`;
+      }, 500);
+    }
+
+    // Performance optimization: Debounced resize handler
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // Recalculate layouts if needed
+        console.log('Window resized, recalculating layouts...');
+      }, 250);
+    });
+
+    // Visibility change optimization
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        // Page is hidden, pause heavy operations
+        console.log('Page hidden, pausing operations...');
+      } else {
+        // Page is visible, resume operations
+        console.log('Page visible, resuming operations...');
+      }
+    });
+
+    // Make functions globally available
+    window.toggleCategory = toggleCategory;
+    window.viewProduct = viewProduct;
+    window.scrollCategoriesLeft = scrollCategoriesLeft;
+    window.scrollCategoriesRight = scrollCategoriesRight;
+
+    // Service Worker registration for offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registered successfully');
+          })
+          .catch(registration => {
+            console.log('ServiceWorker registration failed');
+          });
+      });
+    }
+
+    // Preload critical resources
+    function preloadCriticalResources() {
+      // Preload product page
+      const productPageLink = document.createElement('link');
+      productPageLink.rel = 'prefetch';
+      productPageLink.href = 'product.html';
+      document.head.appendChild(productPageLink);
+      
+      // Preload shop page
+      const shopPageLink = document.createElement('link');
+      shopPageLink.rel = 'prefetch';
+      shopPageLink.href = 'shop.html';
+      document.head.appendChild(shopPageLink);
+    }
+
+    // Initialize preloading
+    setTimeout(preloadCriticalResources, 2000);
+
+    // Log performance metrics
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        perfMonitor.logMetrics();
+        
+        // Log Web Vitals
+        if ('web-vital' in window) {
+          console.log('Web Vitals available for monitoring');
+        }
+      }, 3000);
+    });
+
+  </script>
+
+  <!-- Toggle Script -->
+  <script>
+    // Mobile menu toggle functionality
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const closeMobileMenu = document.getElementById('closeMobileMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+    
+    function toggleMobileMenu() {
+      if (mobileMenu && mobileMenuBackdrop) {
+        mobileMenu.classList.toggle('active');
+        mobileMenuBackdrop.classList.toggle('hidden');
+        document.body.classList.toggle('overflow-hidden');
+      }
+    }
+    
+    // Safe event listener additions
+    if (mobileMenuButton) mobileMenuButton.addEventListener('click', toggleMobileMenu);
+    if (closeMobileMenu) closeMobileMenu.addEventListener('click', toggleMobileMenu);
+    if (mobileMenuBackdrop) mobileMenuBackdrop.addEventListener('click', toggleMobileMenu);
+    
+    // Desktop mega menu toggle with improved logic
+    const menuToggles = document.querySelectorAll('.menu-toggle');
+    const megaMenus = document.querySelectorAll('.mega-menu');
+    let activeMenu = null;
+    
+    function closeAllMenus() {
+      megaMenus.forEach(menu => menu.classList.add('hidden'));
+      menuToggles.forEach(toggle => toggle.classList.remove('active'));
+      activeMenu = null;
+    }
+    
+    menuToggles.forEach(toggle => {
+      const menuId = 'menu-' + toggle.dataset.menu;
+      const menu = document.getElementById(menuId);
+      
+      if (menu) {
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          
+          if (activeMenu === menu) {
+            closeAllMenus();
+            return;
+          }
+          
+          closeAllMenus();
+          menu.classList.remove('hidden');
+          toggle.classList.add('active');
+          activeMenu = menu;
+        });
+      }
+    });
+    
+    // Close menus when clicking outside
+    document.addEventListener('click', (e) => {
+      const isMenuToggle = [...menuToggles].some(toggle => toggle.contains(e.target));
+      const isMegaMenu = [...megaMenus].some(menu => menu.contains(e.target));
+      
+      if (!isMenuToggle && !isMegaMenu) {
+        closeAllMenus();
+      }
+    });
+    
+    // Close menus on window resize to smaller screens
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 768) {
+        closeAllMenus();
+      }
+    });
+    
+    // Mobile accordion functionality
+    const accordionToggles = document.querySelectorAll('.accordion-toggle');
+    
+    accordionToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const content = toggle.nextElementSibling;
+        if (!content) return;
+        
+        const isActive = content.classList.contains('active');
+        
+        // Close all accordions
+        document.querySelectorAll('.accordion-content').forEach(acc => {
+          acc.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.accordion-toggle').forEach(tog => {
+          tog.classList.remove('active');
+        });
+        
+        // Toggle the clicked accordion
+        if (!isActive) {
+          content.classList.add('active');
+          toggle.classList.add('active');
+        }
+      });
+    });
+    
+    
+    
+  </script>
+
+</body>
+</html>
+    

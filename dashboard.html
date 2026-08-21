@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amexan | Medical & Surgical Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" /><script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBlue: '#0000CD',
+                        searchBlue: '#1a1aff',
+                        crimsonRed: '#dc2626',
+                        prestigeGold: '#bfa76f',
+                        brandLightBlue: '#e6e6ff',
+                        brandDarkBlue: '#00008b',
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif']
+                    },
+                    fontSize: {
+                        base: ['1.05rem', '1.6'],
+                        lg: ['1.25rem', '1.5'],
+                        xl: ['1.5rem', '1.4']
+                    },
+                    screens: {
+                        'xs': '475px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .amexan-card {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff; /* Full card base white (or change to whatever you want behind text) */
+  box-shadow:
+    0 18px 30px -10px rgba(10, 15, 43, 0.45),
+    0 6px 10px -6px rgba(10, 15, 43, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.amexan-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 26px 46px -12px rgba(10, 15, 43, 0.45),
+    0 10px 18px -8px rgba(10, 15, 43, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Image window fully transparent */
+.amexan-card .relative.h-48 {
+  background: transparent !important;
+}
+
+/* Info section solid white for readability */
+.amexan-card .p-3 {
+  background: #fff;
+}
+
+.amexan-card button {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+
+.amexan-card button:hover {
+  transform: translateY(-1px);
+}
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            background-color: #f8fafc;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            border-radius: 16px;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 10px;
+            flex-shrink: 0;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            background: white;
+        }
+        .category-btn:hover, .category-btn.active {
+            background: #0000CD;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .category-btn:hover i {
+            color: white !important;
+        }
+        .category-btn.active {
+            border-color: #0000CD;
+            background: linear-gradient(45deg, #0000CD, #1a1aff);
+            color: white;
+        }
+        .category-btn.active i {
+            color: white !important;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            z-index: 100;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .mobile-menu-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            color: #4b5563;
+        }
+        
+        .mobile-menu-btn.active {
+            color: #0000CD;
+        }
+        
+        .mobile-menu-btn i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+            }
+            .desktop-nav {
+                display: none;
+            }
+            .welcome-section {
+                flex-direction: column;
+            }
+            .danilok-message {
+                margin-top: 20px;
+            }
+            .category-btn {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background-color: #10b981;
+        }
+        
+        .notification.error {
+            background-color: #ef4444;
+        }
+        
+        .notification.info {
+            background-color: #3b82f6;
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0000CD;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .category-scroll-container {
+            position: relative;
+            padding: 0 30px;
+        }
+        
+        .scroll-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        .scroll-button.left {
+            left: 0;
+        }
+        
+        .scroll-button.right {
+            right: 0;
+        }
+        
+        .image-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            opacity: 0;
+        }
+        
+        .product-image.active {
+            opacity: 1;
+        }
+        
+        .image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-container:hover .image-nav {
+            opacity: 1;
+        }
+        
+        .image-nav.prev {
+            left: 10px;
+        }
+        
+        .image-nav.next {
+            right: 10px;
+        }
+        
+        .image-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .image-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        
+        .image-dot.active {
+            background: white;
+        }
+        
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .avatar-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-option:hover, .avatar-option.selected {
+            border-color: #0000CD;
+            transform: scale(1.05);
+        }
+        
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .fallback-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #0000CD, #1a1aff);
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .error-card {
+            background: #fff0f0;
+            border: 1px solid #ffcccc;
+            color: #cc0000;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        /* Orders Section Styles */
+        .order-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .order-table th {
+            background-color: #0000CD;
+            color: white;
+            padding: 16px;
+            text-align: left;
+        }
+        
+        .order-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: white;
+        }
+        
+        .order-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .order-table tr:hover td {
+            background-color: #f0f4ff;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background-color: #ffedd5;
+            color: #ea580c;
+        }
+        
+        .status-shipped {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .status-delivered {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .status-cancelled {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .track-btn {
+            background-color: #0000CD;
+            color: white;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .track-btn:hover {
+            background-color: #00008b;
+            transform: translateY(-2px);
+        }
+        
+        .view-details-btn {
+            background-color: transparent;
+            color: #4b5563;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .view-details-btn:hover {
+            background-color: #e6e6ff;
+            color: #0000CD;
+        }
+        
+        .order-details-row {
+            background-color: #f8fafc;
+        }
+        
+        .order-details-content {
+            padding: 20px;
+            border-left: 3px solid #0000CD;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .detail-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .detail-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0000CD;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .download-receipt-btn {
+            background-color: #0000CD;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .download-receipt-btn:hover {
+            background-color: #00008b;
+            transform: translateY(-2px);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+        
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .page-btn.active {
+            background-color: #0000CD;
+            color: white;
+            border-color: #0000CD;
+        }
+        
+        .page-btn:hover:not(.active) {
+            background-color: #f1f5f9;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .no-orders-icon {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        /* Cart Badge Styling */
+        #cartCount {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 text-base pb-16 md:pb-0">
+
+    <!-- Top Info Bar -->
+    <div class="bg-gray-100 text-sm py-2 px-4 md:py-3 md:px-10 flex flex-wrap justify-between items-center">
+        <div class="text-base md:text-lg gap-4 md:gap-6 text-gray-600 flex flex-wrap">
+            <span class="flex items-center">🌐 EN</span>
+            <span class="flex items-center">💱 KES</span>
+        </div>
+        <div class="flex gap-4 md:gap-8 text-base md:text-lg text-gray-700 font-semibold tracking-wide">
+            <button onclick="logout()" class="hover:text-brandBlue transition-colors duration-200">Logout</button>
+            <a href="trial.html" class="hover:text-brandBlue transition-colors duration-200">Help</a>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="bg-gradient-to-r from-brandDarkBlue to-brandBlue text-white py-4 px-4 md:px-12">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="text-xl md:text-2xl font-extrabold tracking-wide">Amexan Dashboard</div>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="hidden md:flex w-full max-w-lg mx-8">
+                <div class="search-bar flex rounded-lg overflow-hidden shadow-md border border-gray-300 bg-white w-full">
+                    <input type="text" id="searchInput" placeholder="Search products..." 
+                           class="flex-1 px-4 py-3 text-base border-0 focus:outline-none placeholder-gray-500 text-black" 
+                           onkeyup="searchProducts()" />
+                    <button class="text-white px-5 py-3 text-base font-semibold bg-searchBlue hover:bg-blue-700 transition-colors duration-200">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="flex items-center gap-4">
+                <div class="relative cursor-pointer" onclick="goToCart()">
+                    <i class="fas fa-shopping-cart text-xl md:text-2xl"></i>
+                    <span id="cartBadge" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold hidden">0</span>
+                </div>
+                <div class="profile-pic w-10 h-10 md:w-12 md:h-12 rounded-full bg-white text-brandBlue flex items-center justify-center cursor-pointer font-bold text-lg overflow-hidden"
+                     id="headerProfilePic" onclick="showSection('profile')">
+                    <div class="fallback-avatar w-full h-full" id="fallbackAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <img id="userAvatar" src="" alt="User Avatar" class="w-full h-full object-cover hidden">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="bg-white py-3 px-2  md:px-8 border-b">
+        <div class="max-w-7xl mx-auto welcome-section">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-brandBlue mb-2" id="welcomeTitle">Welcome back!</h1>
+                    <p class="text-gray-600" id="greetingMessage">Loading your personalized dashboard...</p>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div id="starLevel" class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                            ⭐ Loading...
+                        </div>
+                        <div id="userBadges" class="flex gap-2">
+                            <!-- Badges will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danilok Message -->
+                <div class="danilok-message bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-3 md:p-4 max-w-sm mx-auto">
+    <h3 class="font-bold text-base mb-2">🎉 Exclusive Member Benefits!</h3>
+    <p class="mb-3 text-sm">
+        As a prestigious member of Amexan, you unlock exclusive pricing on high-end medical equipment —
+        because you don't just buy, you invest in excellence!
+    </p>
+    <button class="bg-white text-brandBlue px-4 py-1.5 rounded-md font-semibold hover:bg-green-400 transition text-sm" 
+        onclick="document.getElementById('shopSection').scrollIntoView({ behavior: 'smooth' });" 
+        id="shopNowButton">
+        Shop Now & Save!
+    </button>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation - Desktop -->
+    <nav class="bg-white py-4 px-4 md:px-12 border-b sticky top-0 z-50 desktop-nav">
+        <div class="max-w-7xl mx-auto">
+            <!-- Mobile Search -->
+            <div class="md:hidden mb-4">
+                <input type="text" placeholder="Search products..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-brandBlue"
+                       onkeyup="searchProducts()" />
+            </div>
+
+            <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                <button class="nav-btn bg-brandBlue text-white px-4 py-2 md:px-6 md:py-2 rounded-lg font-semibold active" onclick="showSection('shop')">
+                    <i class="fas fa-shopping-bag mr-2"></i>Shop
+                </button>
+               
+
+<a href="orders.html" 
+   class="nav-btn bg-gray-200 text-gray-700 px-4 py-2 md:px-6 md:py-2 rounded-lg font-semibold flex items-center">
+    <i class="fas fa-box mr-2"></i>Orders
+</a>
+
+                <button class="nav-btn bg-gray-200 text-gray-700 px-4 py-2 md:px-6 md:py-2 rounded-lg font-semibold" onclick="showSection('profile')">
+                    <i class="fas fa-user mr-2"></i>Profile
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 md:px-12 py-8">
+        
+        <!-- Shop Section -->
+        <div id="shopSection" class="content-section active">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-brandBlue mb-6">
+                    <i class="fas fa-shopping-bag mr-3"></i>Shop Medical Equipment
+                </h2>
+                
+                <!-- Categories -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Browse Categories</h3>
+                    <div class="category-scroll-container">
+                        <div class="scroll-button left" onclick="scrollCategories('left')">
+                            <i class="fas fa-chevron-left text-gray-700"></i>
+                        </div>
+                        <div id="categoriesContainer" class="flex gap-3 pb-4 overflow-x-auto scrollbar-hide scroll-smooth">
+                            <!-- Categories will be loaded here -->
+                            <div class="loader" id="categoriesLoader"></div>
+                        </div>
+                        <div class="scroll-button right" onclick="scrollCategories('right')">
+                            <i class="fas fa-chevron-right text-gray-700"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="productsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <!-- Products will be loaded here -->
+                    <div class="loader" id="productsLoader"></div>
+                </div>
+                
+                <!-- Error message -->
+                <div id="productsError" class="hidden">
+                    <div class="error-card">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Unable to Load Products</h3>
+                        <p class="mb-4">We're having trouble loading products at the moment.</p>
+                        <button class="bg-brandBlue text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition" 
+                                onclick="location.reload()">
+                            <i class="fas fa-sync-alt mr-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- Profile Section -->
+        <div id="profileSection" class="content-section">
+            <div class="dashboard-card rounded-xl p-4 md:p-6">
+                <h2 class="text-2xl font-bold text-brandBlue mb-6">
+                    <i class="fas fa-user mr-3"></i>Profile Settings
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="flex flex-col md:flex-row items-center gap-6">
+                        <div class="profile-pic w-32 h-32 rounded-full bg-brandBlue text-white flex items-center justify-center text-3xl font-bold overflow-hidden" 
+                             id="profilePicDisplay">
+                            <div class="fallback-avatar w-full h-full" id="profileFallbackAvatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <img id="profileAvatar" src="" alt="Profile Avatar" class="w-full h-full object-cover hidden">
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h3 id="profileName" class="text-xl font-bold">Loading...</h3>
+                            <p id="profileProfession" class="text-gray-600">Loading...</p>
+                            <button class="bg-brandBlue text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition mt-3" 
+                                    onclick="document.getElementById('avatarModal').classList.remove('hidden')">
+                                Change Avatar
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="profileForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-brandBlue">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-brandBlue">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-brandBlue">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Profession</label>
+                            <input type="text" id="profession" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-brandBlue">
+                        </div>
+                    </form>
+
+                    <button onclick="updateProfile()" class="bg-brandBlue text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+                        <i class="fas fa-save mr-2"></i>Update Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Avatar Selection Modal -->
+    <div id="avatarModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-brandBlue">Choose Your Avatar</h3>
+                <button onclick="document.getElementById('avatarModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="avatar-grid">
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/3135/3135715.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar 1">
+                </div>
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/4140/4140047.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Avatar 2">
+                </div>
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/4140/4140048.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Avatar 3">
+                </div>
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/921/921071.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/921/921071.png" alt="Avatar 4">
+                </div>
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/921/921124.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/921/921124.png" alt="Avatar 5">
+                </div>
+                <div class="avatar-option" onclick="selectAvatar('https://cdn-icons-png.flaticon.com/512/921/921133.png')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/921/921133.png" alt="Avatar 6">
+                </div>
+            </div>
+            
+            <button class="w-full bg-brandBlue text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition mt-6"
+                    onclick="document.getElementById('avatarModal').classList.add('hidden')">
+                Save Avatar
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-menu">
+        <button class="mobile-menu-btn active" onclick="showSection('shop')">
+            <i class="fas fa-shopping-bag"></i>
+            Shop
+        </button>
+       
+
+<a href="orders.html" class="mobile-menu-btn">
+    <i class="fas fa-box"></i>
+    Orders
+</a>
+<a href="fetch.html" class="mobile-menu-btn">
+    <i class="fas fa-box"></i>
+    HOT DEALS
+</a>
+
+        <button class="mobile-menu-btn" onclick="showSection('profile')">
+            <i class="fas fa-user"></i>
+            Profile
+        </button>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Shared Cart Logic Script (Exactly matching cart.html) -->
+    <script>
+        // Shared cart functions - EXACTLY MATCHING cart.html structure
+        const CART_KEY = "amexan_cart";
+        
+        function getCart() {
+            return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        }
+        
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            updateCartBadge();
+        }
+        
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById('cartBadge');
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Go to cart function
+        window.goToCart = function() {
+            window.location.href = 'cart.html';
+        }
+    </script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, collection, getDocs, doc, getDoc, updateDoc, setDoc,
+            query, where, orderBy, addDoc 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { 
+            getAuth, onAuthStateChanged, signOut 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+            authDomain: "bynexproject.firebaseapp.com",
+            projectId: "bynexproject",
+            storageBucket: "bynexproject.appspot.com",
+            messagingSenderId: "667246369908",
+            appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+            measurementId: "G-7CCRBG0P8D"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Global variables
+        let currentUser = null;
+        let allProducts = [];
+        let filteredProducts = [];
+        let userOrders = [];
+        let userBlogs = [];
+        let currentCategory = 'all';
+
+        // Orders specific variables
+        let filteredOrders = [];
+        const ordersPerPage = 5;
+        let currentPage = 1;
+        let lastVisibleDoc = null;
+        let totalOrders = 0;
+        let statusFilter = 'all';
+        let searchQuery = '';
+
+        // Categories configuration - matching your original HTML structure
+        const categories = [
+            { 
+                id: 'all', 
+                name: 'All Products', 
+                icon: 'fa-th',
+                color: 'brandBlue'
+            },
+            { 
+                id: 'student-packages', 
+                name: 'Student Packages', 
+                icon: 'fa-graduation-cap', 
+                color: 'blue',
+                firebaseCategories: ['student-packages', 'Student Packages', 'student_packages', 'StudentPackages']
+            },
+            { 
+                id: 'intern-packages', 
+                name: 'Intern Packages', 
+                icon: 'fa-user-md', 
+                color: 'green',
+                firebaseCategories: ['intern-packages', 'Intern Packages', 'intern_packages', 'InternPackages']
+            },
+            { 
+                id: 'diagnostics', 
+                name: 'Diagnostic Products', 
+                icon: 'fa-stethoscope', 
+                color: 'red',
+                firebaseCategories: ['diagnostics', 'Diagnostics', 'Diagnostic Products', 'diagnostic-products', 'diagnostic_products']
+            },
+            { 
+                id: 'medical-equipment', 
+                name: 'Medical Equipment', 
+                icon: 'fa-heartbeat', 
+                color: 'purple',
+                firebaseCategories: ['medical-equipment', 'Medical Equipment', 'medical_equipment', 'MedicalEquipment', 'medical']
+            },
+            { 
+                id: 'surgical-tools', 
+                name: 'Surgical Tools', 
+                icon: 'fa-procedures', 
+                color: 'blue',
+                firebaseCategories: ['surgical-tools', 'Surgical Tools', 'surgical_tools', 'SurgicalTools', 'Surgical']
+            },
+            { 
+                id: 'laboratory', 
+                name: 'Lab Equipment', 
+                icon: 'fa-flask', 
+                color: 'orange',
+                firebaseCategories: ['laboratory', 'Laboratory', 'Lab Equipment', 'lab-equipment', 'lab_equipment']
+            },
+            {
+                id: 'furniture', 
+                name: 'Hospital Furniture', 
+                icon: 'fa-bed', 
+                color: 'green',
+                firebaseCategories: ['furniture', 'Furniture', 'Hospital Furniture', 'hospital-furniture', 'hospital_furniture']
+            },
+            { 
+                id: 'imaging', 
+                name: 'Imaging Products', 
+                icon: 'fa-x-ray', 
+                color: 'indigo',
+                firebaseCategories: ['imaging', 'Imaging', 'Imaging Products', 'imaging-products', 'imaging_products']
+            },
+            { 
+                id: 'real-estate', 
+                name: 'Real Estate', 
+                icon: 'fa-building', 
+                color: 'teal',
+                firebaseCategories: ['real-estate', 'Real Estate', 'real_estate', 'RealEstate', 'Estate']
+            },
+            { 
+                id: 'health-tech', 
+                name: 'Health Tech', 
+                icon: 'fa-laptop-medical', 
+                color: 'blue',
+                firebaseCategories: ['health-tech', 'Health Tech', 'health_tech', 'HealthTech', 'Tech']
+            }
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Initializing app...');
+            
+            // Initialize cart badge
+            updateCartBadge();
+            
+            // Check authentication state
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    console.log('User authenticated:', user.email);
+                    showNotification('Loading your dashboard...', 'info');
+                    await initializeDashboard();
+                } else {
+                    // Redirect to login page
+                    console.log('User not authenticated, redirecting...');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Initialize dashboard
+        async function initializeDashboard() {
+            try {
+                // Show loading indicators
+                document.getElementById('productsLoader').classList.remove('hidden');
+                document.getElementById('categoriesLoader').classList.remove('hidden');
+                
+                // Load user data
+                await loadUserData();
+                
+                // Load products
+                await loadProducts();
+                
+                // Render categories
+                renderCategories();
+                
+                // Show all products by default
+                filterProducts('all');
+                
+                // Hide loaders
+                document.getElementById('productsLoader').classList.add('hidden');
+                document.getElementById('categoriesLoader').classList.add('hidden');
+                
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                showNotification('Error loading dashboard. Please refresh the page.', 'error');
+                
+                // Show error UI
+                document.getElementById('productsLoader').classList.add('hidden');
+                document.getElementById('categoriesLoader').classList.add('hidden');
+                document.getElementById('productsError').classList.remove('hidden');
+            }
+        }
+
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    console.log('User data loaded:', userData);
+                    
+                    // Update UI with user data
+                    updateGreeting(userData.name || 'User');
+                    document.getElementById('fullName').value = userData.name || '';
+                    document.getElementById('email').value = userData.email || '';
+                    document.getElementById('phone').value = userData.phone || '';
+                    document.getElementById('profession').value = userData.profession || '';
+                    
+                    // Update profile names
+                    document.getElementById('profileName').textContent = userData.name || 'User';
+                    document.getElementById('profileProfession').textContent = userData.profession || '';
+                    
+                    // Update profile picture
+                    if (userData.avatar) {
+                        updateProfilePicDisplay(userData.avatar);
+                    }
+                    
+                    // Update user level and badges
+                    updateUserLevel(userData);
+                    
+                } else {
+                    // Create user document if it doesn't exist
+                    const newUserData = {
+                        email: currentUser.email,
+                        name: currentUser.displayName || 'User',
+                        createdAt: new Date(),
+                        purchaseCount: 0,
+                        blogCount: 0,
+                        level: 1
+                    };
+                    
+                    await setDoc(doc(db, 'users', currentUser.uid), newUserData);
+                    updateGreeting(newUserData.name);
+                    showNotification('Profile created successfully!', 'success');
+                }
+                
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                updateGreeting('User');
+                showNotification('Error loading profile data', 'error');
+            }
+        }
+
+        // Update greeting message
+        function updateGreeting(name) {
+            const hour = new Date().getHours();
+            let greeting;
+            
+            if (hour < 12) {
+                greeting = `Good morning, ${name}! Ready for another productive day?`;
+            } else if (hour < 17) {
+                greeting = `Good afternoon, ${name}! Hope you're having a great day!`;
+            } else if (hour < 21) {
+                greeting = `Good evening, ${name}! Time to review today's achievements!`;
+            } else {
+                greeting = `Good night, ${name}! Rest well and dream of tomorrow's success!`;
+            }
+            
+            document.getElementById('welcomeTitle').textContent = `Welcome back, ${name}!`;
+            document.getElementById('greetingMessage').textContent = greeting;
+        }
+
+        // Update user level and badges
+        function updateUserLevel(userData) {
+            const purchaseCount = userData.purchaseCount || 0;
+            const blogCount = userData.blogCount || 0;
+            
+            let level = 1;
+            let levelText = 'Bronze Member';
+            
+            if (purchaseCount >= 10) {
+                level = 4;
+                levelText = 'Platinum Member';
+            } else if (purchaseCount >= 5) {
+                level = 3;
+                levelText = 'Gold Member';
+            } else if (purchaseCount >= 3) {
+                level = 2;
+                levelText = 'Silver Member';
+            }
+            
+            document.getElementById('starLevel').innerHTML = `⭐ Level ${level} - ${levelText}`;
+            
+            // Update badges
+            const badgesContainer = document.getElementById('userBadges');
+            badgesContainer.innerHTML = '';
+            
+            // Loyal customer badge (3+ purchases)
+            if (purchaseCount >= 3) {
+                badgesContainer.innerHTML += '<span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">👑 Loyal Customer</span>';
+            }
+            
+            // Master blog writer badge (2+ blogs)
+            if (blogCount >= 2) {
+                badgesContainer.innerHTML += '<span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">✍️ Master Writer</span>';
+            }
+        }
+
+        // Load products from Firebase
+        async function loadProducts() {
+            try {
+                console.log('Loading products...');
+                document.getElementById('productsLoader').classList.remove('hidden');
+                
+                const productsRef = collection(db, 'products');
+                const q = query(productsRef, where('status', '==', 'active'));
+                const querySnapshot = await getDocs(q);
+                
+                allProducts = [];
+                querySnapshot.forEach(doc => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+                
+                console.log(`Loaded ${allProducts.length} products`);
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showNotification('Error loading products. Using sample data instead.', 'error');
+                
+                // Load sample products as fallback
+                allProducts = getSampleProducts();
+            }
+        }
+
+        // Get sample products for fallback
+        function getSampleProducts() {
+            return [
+                {
+                    id: "sample-1",
+                    name: "Professional Diagnostic Kit",
+                    brand: "MediTech",
+                    rating: 4.5,
+                    originalPrice: 12500,
+                    discountedPrice: 10625,
+                    badges: {
+                        verified: true,
+                        trust: true
+                    },
+                    images: [
+                        { url: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" },
+                        { url: "https://images.unsplash.com/photo-1581595219319-5b8b331d2d34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
+                    ],
+                    category: "diagnostics"
+                },
+                {
+                    id: "sample-2",
+                    name: "Premium Surgical Instrument Set",
+                    brand: "SurgiPro",
+                    rating: 5.0,
+                    originalPrice: 25900,
+                    badges: {
+                        verified: true,
+                        iconic: true
+                    },
+                    images: [
+                        { url: "https://images.unsplash.com/photo-1592111737599-4b3b0006e3d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" }
+                    ],
+                    category: "surgical-tools"
+                }
+            ];
+        }
+
+        // Render categories
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = `category-btn flex-shrink-0 ${category.id === currentCategory ? 'active' : ''}`;
+                button.onclick = () => filterProducts(category.id);
+                button.innerHTML = `
+                    <i class="fas ${category.icon} text-base sm:text-lg mb-1 text-${category.color}-500"></i>
+                    <span class="text-[10px] sm:text-xs text-center font-medium">${category.name}</span>
+                `;
+                container.appendChild(button);
+            });
+        }
+
+        // Filter products by category
+        function filterProducts(categoryId) {
+            console.log('Filtering products for category:', categoryId);
+            currentCategory = categoryId;
+            
+            // Update active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = document.querySelector(`[onclick="filterProducts('${categoryId}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            if (categoryId === 'all') {
+                filteredProducts = [...allProducts];
+            } else {
+                const category = categories.find(cat => cat.id === categoryId);
+                if (category) {
+                    filteredProducts = allProducts.filter(product => {
+                        const productCategory = product.category || '';
+                        return category.firebaseCategories.some(fbCategory => 
+                            productCategory.toLowerCase().includes(fbCategory.toLowerCase())
+                        );
+                    });
+                }
+            }
+            
+            renderProducts();
+        }
+
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            const loader = document.getElementById('productsLoader');
+            
+            if (loader) loader.style.display = 'none';
+            
+            if (!filteredProducts || filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <i class="fas fa-box-open text-4xl mb-4 text-gray-300"></i>
+                        <p class="text-lg font-medium">No products available in this category yet.</p>
+                        <p class="text-sm mt-2">Check back soon for new arrivals!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white rounded-xl overflow-hidden';
+                
+                const imageUrl = product.images?.[0]?.url || 'https://via.placeholder.com/300?text=No+Image';
+                const hasDiscount = product.discountedPrice && product.discountedPrice < product.originalPrice;
+                const discountPercent = hasDiscount ? 
+                    Math.round((1 - product.discountedPrice / product.originalPrice) * 100) : 0;
+                
+                productCard.innerHTML = `
+<div class="amexan-card">
+    <div class="relative h-48 overflow-hidden">
+        <div class="image-slider">
+            <div class="image-container" id="slider-${product.id}">
+                <!-- Images will be added dynamically -->
+            </div>
+            <div class="image-nav prev">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="image-nav next">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="image-dots" id="dots-${product.id}">
+                <!-- Dots will be added dynamically -->
+            </div>
+        </div>
+        ${hasDiscount ? `
+            <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                ${discountPercent}% OFF
+            </span>
+        ` : ''}
+    </div>
+    <div class="p-3">
+        <a href="product.html?id=${product.id}" class="font-semibold text-blue-800 text-sm leading-tight mb-1 block hover:underline">${product.name}</a>
+        <p class="text-gray-500 text-xs mb-1">Brand: ${product.brand || 'N/A'}</p>
+        <div class="flex items-center mb-2">
+            <div class="text-yellow-400 text-xs">
+                ${'<i class="fas fa-star"></i>'.repeat(Math.floor(product.rating || 0))}
+                ${'<i class="far fa-star"></i>'.repeat(5 - Math.floor(product.rating || 0))}
+            </div>
+            <span class="text-gray-400 text-xs ml-1">(${product.rating || 0})</span>
+        </div>
+        <div class="mb-2">
+            ${hasDiscount ? `
+                <span class="text-black font-semibold line-through text-xs">KES ${(product.originalPrice || 0).toLocaleString()}</span>
+                <div class="text-blue-600 font-bold">KES ${(product.discountedPrice || 0).toLocaleString()}</div>
+                <span class="text-green-600 text-xs">Save KES ${(product.originalPrice - product.discountedPrice).toLocaleString()} (${discountPercent}%)</span>
+            ` : `
+                <div class="text-blue-600 font-bold">KES ${(product.originalPrice || 0).toLocaleString()}</div>
+            `}
+        </div>
+        <div class="flex gap-1 text-xs mb-3">
+            ${product.badges?.verified ? '<span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">✔ Verified</span>' : ''}
+            ${product.badges?.trust ? '<span class="bg-yellow-100 text-yellow-600 px-1.5 py-0.5 rounded-full">⚡ Trust+</span>' : ''}
+            ${product.badges?.iconic ? '<span class="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full">★ Iconic</span>' : ''}
+        </div>
+        <div class="flex justify-between">
+            <button class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded" onclick="addToCart('${product.id}')">Add to Cart</button>
+        <a href="https://wa.me/254793666825?text=Hello%20Amexan%20Team,%20I%20am%20interested%20in%20the%20product:%20${encodeURIComponent(product.name)}" 
+   target="_blank"
+   class="text-[10px] px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded shadow-sm transition">
+   💬
+</a>
+
+        </div>
+    </div>
+</div>
+`;
+
+                container.appendChild(productCard);
+                
+                // Initialize image slider
+                setTimeout(() => {
+                    initializeImageSlider(product.id, product.images);
+                }, 100);
+            });
+        }
+
+        // Updated image slider with swipe + mid-height buttons
+        function initializeImageSlider(productId, images) {
+            const sliderContainer = document.getElementById(`slider-${productId}`);
+            if (!sliderContainer) return;
+
+            // Clear any existing content
+            sliderContainer.innerHTML = '';
+
+            if (!images || images.length === 0) {
+                // Add placeholder if no images
+                const placeholder = document.createElement('div');
+                placeholder.className = 'w-full h-full bg-gray-200 flex items-center justify-center';
+                placeholder.innerHTML = '<i class="fas fa-image text-gray-400 text-3xl"></i>';
+                sliderContainer.appendChild(placeholder);
+                return;
+            }
+
+            // Add images
+            images.forEach((img, index) => {
+                const image = document.createElement('img');
+                image.src = img.url || img;
+                image.alt = `Product Image ${index + 1}`;
+                image.className = `product-image ${index === 0 ? 'active' : ''}`;
+                image.onerror = function () {
+                    this.src = 'https://via.placeholder.com/300?text=No+Image';
+                };
+                sliderContainer.appendChild(image);
+            });
+
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                const allImages = sliderContainer.querySelectorAll('.product-image');
+                allImages.forEach(img => img.classList.remove('active'));
+                allImages[index].classList.add('active');
+                currentSlide = index;
+            }
+
+            // Create Prev Button
+            const prevBtn = document.createElement('div');
+            prevBtn.className = 'absolute left-2 top-1/2 -translate-y-1/2 text-blue-500 text-2xl cursor-pointer z-50';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevBtn.onclick = () => {
+                showSlide((currentSlide - 1 + images.length) % images.length);
+            };
+
+            // Create Next Button
+            const nextBtn = document.createElement('div');
+            nextBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 text-2xl cursor-pointer z-50';
+            nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            nextBtn.onclick = () => {
+                showSlide((currentSlide + 1) % images.length);
+            };
+
+            // Append navigation buttons to image wrapper (parent of slider)
+            sliderContainer.parentElement.appendChild(prevBtn);
+            sliderContainer.parentElement.appendChild(nextBtn);
+
+            // Swipe functionality (mobile)
+            let startX = 0;
+            sliderContainer.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+            sliderContainer.addEventListener('touchend', e => {
+                const endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextBtn.click(); // swipe left
+                else if (endX - startX > 50) prevBtn.click(); // swipe right
+            });
+
+            // Mouse drag functionality (desktop)
+            let isDragging = false, dragStartX = 0;
+            sliderContainer.addEventListener('mousedown', e => {
+                isDragging = true;
+                dragStartX = e.clientX;
+            });
+            sliderContainer.addEventListener('mouseup', e => {
+                if (!isDragging) return;
+                isDragging = false;
+                const dragEndX = e.clientX;
+                if (dragStartX - dragEndX > 50) nextBtn.click();
+                else if (dragEndX - dragStartX > 50) prevBtn.click();
+            });
+        }
+
+        // Add to cart function - EXACTLY matching cart.html structure
+        window.addToCart = async function(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('Product not found', 'error');
+                return;
+            }
+            
+            try {
+                const cart = getCart();
+                
+                // Create cart item with EXACT structure as cart.html expects
+                const cartItem = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.discountedPrice || product.originalPrice || 0,
+                    qty: 1, // Using 'qty' to match cart.html structure
+                    image: product.images?.[0]?.url || 'https://via.placeholder.com/100x100',
+                    color: product.color || 'Default',
+                    brand: product.brand || 'AMEXAN'
+                };
+                
+                // Check if product is already in cart
+                const existingItemIndex = cart.findIndex(item => item.id === productId);
+                
+                if (existingItemIndex > -1) {
+                    cart[existingItemIndex].qty += 1;
+                } else {
+                    cart.push(cartItem);
+                }
+                
+                // Save cart and update badge
+                saveCart(cart);
+                showNotification(`${product.name} added to cart!`, 'success');
+                
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                showNotification('Failed to add item to cart. Please try again.', 'error');
+            }
+        }
+
+        // Show section
+        window.showSection = function(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                // Load orders when orders section is shown
+                if (sectionName === 'orders') {
+                    loadOrders();
+                }
+            }
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brandBlue', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.querySelectorAll('.mobile-menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-brandBlue', 'text-white');
+                activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            }
+            
+            const activeMobileBtn = document.querySelector(`.mobile-menu-btn[onclick="showSection('${sectionName}')"]`);
+            if (activeMobileBtn) {
+                activeMobileBtn.classList.add('active');
+            }
+        }
+        
+        // Scroll categories
+        window.scrollCategories = function(direction) {
+            const container = document.getElementById('categoriesContainer');
+            const scrollAmount = 300;
+            
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Update profile
+        window.updateProfile = async function () {
+            try {
+                const fullName = document.getElementById('fullName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const profession = document.getElementById('profession').value;
+
+                const user = auth.currentUser;
+                if (!user) {
+                    showNotification('You must be logged in to update your profile.', 'error');
+                    return;
+                }
+
+                const userRef = doc(db, "users", user.uid);
+                await setDoc(userRef, {
+                    name: fullName,
+                    email: email,
+                    phone: phone,
+                    profession: profession
+                }, { merge: true });
+
+                document.getElementById('welcomeTitle').textContent = `Welcome back, ${fullName}!`;
+                document.getElementById('profileName').textContent = fullName;
+                document.getElementById('profileProfession').textContent = profession;
+
+                showNotification('Profile updated successfully!', 'success');
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showNotification('Error updating profile. Please try again.', 'error');
+            }
+        };
+
+        // Update profile picture display
+        function updateProfilePicDisplay(imageUrl) {
+            const profilePics = document.querySelectorAll('#userAvatar, #profileAvatar');
+            const fallbacks = document.querySelectorAll('#fallbackAvatar, #profileFallbackAvatar');
+
+            if (imageUrl) {
+                profilePics.forEach(pic => {
+                    pic.src = imageUrl;
+                    pic.classList.remove('hidden');
+                });
+                fallbacks.forEach(fb => fb.classList.add('hidden'));
+            } else {
+                profilePics.forEach(pic => pic.classList.add('hidden'));
+                fallbacks.forEach(fb => fb.classList.remove('hidden'));
+            }
+        }
+
+        // Select avatar & save to Firestore
+        window.selectAvatar = async function (avatarUrl) {
+            const user = auth.currentUser;
+            if (!user) {
+                showNotification('You must be logged in to change your avatar.', 'error');
+                return;
+            }
+
+            try {
+                const userRef = doc(db, "users", user.uid);
+                await setDoc(userRef, { avatar: avatarUrl }, { merge: true });
+
+                updateProfilePicDisplay(avatarUrl);
+                showNotification('Avatar updated successfully!', 'success');
+            } catch (error) {
+                console.error('Error updating avatar:', error);
+                showNotification('Error updating avatar. Please try again.', 'error');
+            }
+        };
+
+        // Logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                showNotification("You have been logged out successfully", "success");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1500);
+            } catch (error) {
+                console.error('Error signing out:', error);
+                showNotification('Error signing out. Please try again.', 'error');
+            }
+        }
+
+        // ================== ORDERS SECTION FUNCTIONS ==================
+        
+        // Load orders from Firebase
+        
+        function filterOrders() {
+            filteredOrders = userOrders.filter(order => {
+                // Apply status filter
+                const statusMatch = statusFilter === 'all' || 
+                                  order.paymentStatus.toLowerCase() === statusFilter ||
+                                  order.trackingStatus.toLowerCase() === statusFilter;
+                
+                // Apply search filter
+                const searchMatch = !searchQuery || 
+                                  order.id.toLowerCase().includes(searchQuery) ||
+                                  order.customer.name.toLowerCase().includes(searchQuery) ||
+                                  order.products.some(p => p.name.toLowerCase().includes(searchQuery));
+                
+                return statusMatch && searchMatch;
+            });
+            
+            renderOrders();
+        }
+
+        // Render orders to the table
+        function renderOrders() {
+            const tableBody = document.getElementById('ordersTableBody');
+            const noOrdersMessage = document.getElementById('noOrdersMessage');
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            if (filteredOrders.length === 0) {
+                noOrdersMessage.classList.remove('hidden');
+                return;
+            }
+            
+            noOrdersMessage.classList.add('hidden');
+            
+            filteredOrders.forEach((order, index) => {
+                const orderDate = order.orderDate.toDate ? order.orderDate.toDate() : new Date(order.orderDate);
+                const formattedDate = orderDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                const formattedTime = orderDate.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const row = document.createElement('tr');
+                row.dataset.orderId = order.id;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="font-medium">${order.id.substring(0, 8)}</td>
+                    <td>
+                        <div class="font-medium">${formattedDate}</div>
+                        <div class="text-sm text-gray-500">${formattedTime}</div>
+                    </td>
+                    <td class="font-semibold">KES ${order.totalAmount.toLocaleString()}</td>
+                    <td>
+                        <span class="status-badge status-${order.paymentStatus.toLowerCase()}">
+                            ${order.paymentStatus}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${order.trackingStatus.toLowerCase()}">
+                            ${order.trackingStatus}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="track-btn" onclick="trackOrder('${order.id}')">
+                            <i class="fas fa-truck mr-1"></i> Track
+                        </button>
+                    </td>
+                    <td>
+                        <button class="view-details-btn" onclick="toggleOrderDetails('${order.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+                
+                // Add details row
+                const detailsRow = document.createElement('tr');
+                detailsRow.id = `details-${order.id}`;
+                detailsRow.className = 'order-details-row hidden';
+                detailsRow.innerHTML = `
+                    <td colspan="8">
+                        <div class="order-details-content">
+                            <div class="detail-grid mb-6">
+                                <div class="detail-card">
+                                    <h3>Customer Details</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Name:</span>
+                                            <span class="font-medium">${order.customer.name}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Email:</span>
+                                            <span class="font-medium">${order.customer.email}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Phone:</span>
+                                            <span class="font-medium">${order.customer.phone}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Shipping:</span>
+                                            <span class="font-medium text-right max-w-[200px]">${order.customer.shippingAddress}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="detail-card">
+                                    <h3>Order Summary</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Subtotal:</span>
+                                            <span class="font-medium">KES ${order.subtotal.toLocaleString()}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Shipping:</span>
+                                            <span class="font-medium">KES ${order.shippingCost.toLocaleString()}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Tax:</span>
+                                            <span class="font-medium">KES ${order.tax.toLocaleString()}</span>
+                                        </div>
+                                        <div class="flex justify-between border-t border-gray-200 pt-2 mt-2">
+                                            <span class="font-semibold">Total:</span>
+                                            <span class="font-semibold text-lg">KES ${order.totalAmount.toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-card mb-6">
+                                <h3>Products</h3>
+                                <div class="space-y-2">
+                                    ${order.products.map(product => `
+                                        <div class="product-item">
+                                            <div>
+                                                <div class="font-medium">${product.name}</div>
+                                                <div class="text-sm text-gray-500">${product.brand || 'No brand'}</div>
+                                            </div>
+                                            <div class="text-right">
+                                                <div>${product.quantity} x KES ${product.price.toLocaleString()}</div>
+                                                <div class="font-medium">KES ${(product.price * product.quantity).toLocaleString()}</div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end">
+                                ${order.paymentStatus === 'Delivered' ? `
+                                    <button class="download-receipt-btn" onclick="downloadReceipt('${order.id}')">
+                                        <i class="fas fa-download"></i> Download Receipt
+                                    </button>
+                                ` : `
+                                    <button class="download-receipt-btn opacity-50 cursor-not-allowed" disabled>
+                                        <i class="fas fa-download"></i> Download Receipt (Available when delivered)
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(detailsRow);
+            });
+        }
+
+        // Render pagination controls
+        function renderPagination() {
+            const totalPages = Math.ceil(totalOrders / ordersPerPage);
+            const paginationContainer = document.getElementById('paginationContainer');
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <button class="page-btn ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}" 
+                        ${currentPage === 1 ? 'disabled' : ''} 
+                        onclick="changePage(${currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+            
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            // Next button
+            paginationHTML += `
+                <button class="page-btn ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" 
+                        ${currentPage === totalPages ? 'disabled' : ''} 
+                        onclick="changePage(${currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        // Toggle order details visibility
+        window.toggleOrderDetails = function(orderId) {
+            const detailsRow = document.getElementById(`details-${orderId}`);
+            const isVisible = !detailsRow.classList.contains('hidden');
+            
+            // Hide all details rows first
+            document.querySelectorAll('.order-details-row').forEach(row => {
+                row.classList.add('hidden');
+            });
+            
+            // Toggle this row if it wasn't visible
+            if (!isVisible) {
+                detailsRow.classList.remove('hidden');
+            }
+        }
+
+        // Track order function
+        window.trackOrder = function(orderId) {
+            showNotification(`Tracking order ${orderId}...`, 'info');
+            // In a real app, this would redirect to a tracking page
+            setTimeout(() => {
+                showNotification(`Redirecting to tracking page for order ${orderId}`, 'success');
+            }, 1000);
+        }
+
+        // Download receipt function
+        window.downloadReceipt = function(orderId) {
+            showNotification(`Generating receipt for order ${orderId}...`, 'info');
+            // In a real app, this would generate and download a PDF receipt
+            setTimeout(() => {
+                showNotification(`Receipt downloaded for order ${orderId}`, 'success');
+            }, 1500);
+        }
+
+        // Change page function
+        window.changePage = async function(page) {
+            if (page < 1 || page > Math.ceil(totalOrders / ordersPerPage)) return;
+            
+            currentPage = page;
+            
+            try {
+                showNotification('Loading orders...', 'info');
+                
+                const ordersRef = collection(db, 'orders');
+                let q = query(
+                    ordersRef, 
+                    where('userId', '==', currentUser.uid),
+                    orderBy('orderDate', 'desc')
+                );
+                
+                // For pages beyond the first
+                if (page > 1) {
+                    // Need to get the last document of the previous page
+                    const prevPageQuery = query(
+                        ordersRef,
+                        where('userId', '==', currentUser.uid),
+                        orderBy('orderDate', 'desc'),
+                        limit((page - 1) * ordersPerPage)
+                    );
+                    
+                    const prevPageSnapshot = await getDocs(prevPageQuery);
+                    lastVisibleDoc = prevPageSnapshot.docs[prevPageSnapshot.docs.length - 1];
+                    
+                    q = query(
+                        ordersRef,
+                        where('userId', '==', currentUser.uid),
+                        orderBy('orderDate', 'desc'),
+                        startAfter(lastVisibleDoc),
+                        limit(ordersPerPage)
+                    );
+                } else {
+                    q = query(
+                        ordersRef,
+                        where('userId', '==', currentUser.uid),
+                        orderBy('orderDate', 'desc'),
+                        limit(ordersPerPage)
+                    );
+                }
+                
+                const querySnapshot = await getDocs(q);
+                userOrders = [];
+                querySnapshot.forEach(doc => {
+                    userOrders.push({ id: doc.id, ...doc.data() });
+                });
+                
+                if (querySnapshot.docs.length > 0) {
+                    lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+                }
+                
+                // Apply filters to new data
+                filteredOrders = [...userOrders];
+                filterOrders();
+                
+                // Render pagination
+                renderPagination();
+                
+            } catch (error) {
+                console.error('Error changing page:', error);
+                showNotification('Error loading orders. Please try again.', 'error');
+            }
+        }
+
+        // Show sample orders when Firebase fails
+        function renderSampleOrders() {
+            const sampleOrders = [
+                {
+                    id: "ORD-12345678",
+                    orderDate: new Date(Date.now() - 86400000 * 2),
+                    customer: {
+                        name: "Dr. Jane Smith",
+                        email: "jane.smith@example.com",
+                        phone: "+254712345678",
+                        shippingAddress: "123 Medical Plaza, Nairobi, Kenya"
+                    },
+                    products: [
+                        { name: "Digital Stethoscope", brand: "Littmann", price: 8500, quantity: 1 },
+                        { name: "Blood Pressure Monitor", brand: "Omron", price: 4200, quantity: 2 }
+                    ],
+                    subtotal: 16900,
+                    shippingCost: 800,
+                    tax: 2535,
+                    totalAmount: 20235,
+                    paymentStatus: "Delivered",
+                    trackingStatus: "Delivered"
+                },
+                {
+                    id: "ORD-87654321",
+                    orderDate: new Date(Date.now() - 86400000 * 5),
+                    customer: {
+                        name: "Dr. John Doe",
+                        email: "john.doe@example.com",
+                        phone: "+254798765432",
+                        shippingAddress: "456 Hospital Road, Mombasa, Kenya"
+                    },
+                    products: [
+                        { name: "Portable Ultrasound", brand: "GE Healthcare", price: 185000, quantity: 1 },
+                        { name: "Ultrasound Gel", brand: "Eco-Med", price: 1500, quantity: 3 }
+                    ],
+                    subtotal: 189500,
+                    shippingCost: 2500,
+                    tax: 28425,
+                    totalAmount: 220425,
+                    paymentStatus: "Pending",
+                    trackingStatus: "Processing"
+                }
+            ];
+            
+            userOrders = sampleOrders;
+            filteredOrders = [...userOrders];
+            totalOrders = sampleOrders.length;
+            
+            renderOrders();
+            renderPagination();
+        }
+        // Normalize helper for plural/singular matching
+function normalize(str) {
+    return str.toLowerCase().trim().replace(/s$/, "");
+}
+
+// Handle search logic
+window.searchProducts = function () {
+    const query = normalize(document.getElementById("searchInput").value);
+    const productsContainer = document.getElementById("productsContainer");
+
+    // Reset container
+    productsContainer.innerHTML = "";
+
+    if (!query) {
+        // If search empty → show all
+        filteredProducts = allProducts;
+        renderProducts(filteredProducts);
+        return;
+    }
+
+    // Filter by name or brand
+    filteredProducts = allProducts.filter((p) => {
+        const name = normalize(p.name || "");
+        const brand = normalize(p.brand || "");
+        return name.includes(query) || brand.includes(query);
+    });
+
+    if (filteredProducts.length > 0) {
+        renderProducts(filteredProducts);
+    } else {
+        productsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10 px-4 bg-gray-100 rounded-lg">
+                <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-700 mb-2">No products found</h3>
+                <p class="text-gray-600 italic">
+                    "When you feel like quitting, remember why you started – 
+                    keep searching, the right product is waiting for you!"
+                </p>
+            </div>
+        `;
+    }
+};
+
+// Attach Enter key search
+document.getElementById("searchInput").addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+        searchProducts();
+    }
+});
+
+// Attach button click search
+document.querySelector(".search-bar button").addEventListener("click", () => {
+    searchProducts();
+
+});
+
+    </script>
+</body>
+</html>

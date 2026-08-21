@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Checkout | Amexan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1d4ed8',
+            secondary: '#3b82f6',
+            success: '#10b981',
+            accent: '#f97316',
+            pending: '#f59e0b',
+            error: '#ef4444'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+    }
+    
+    .payment-option {
+      transition: all 0.3s ease;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .payment-option.active {
+      border-color: #3b82f6;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2), 0 2px 4px -1px rgba(59, 130, 246, 0.06);
+    }
+    
+    .payment-option:hover {
+      border-color: #93c5fd;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #e2e8f0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background-color: #3b82f6;
+      width: 33%;
+      transition: width 0.5s ease;
+    }
+    
+    .expandable {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    
+    .expandable.expanded {
+      max-height: 500px;
+    }
+    
+    .step-indicator {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: #e2e8f0;
+      color: #64748b;
+      font-weight: 600;
+    }
+    
+    .step-indicator.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+    
+    .step-indicator.completed {
+      background-color: #10b981;
+      color: white;
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    
+    .loading-spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid #3b82f6;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .auth-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .auth-card {
+      background: white;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* M-Pesa Status Modal */
+    .mpesa-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    
+    .mpesa-modal-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .mpesa-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .mpesa-success {
+      color: #10b981;
+    }
+    
+    .mpesa-failed {
+      color: #ef4444;
+    }
+    
+    .mpesa-pending {
+      color: #f59e0b;
+    }
+    
+    .manual-payment-details {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      text-align: left;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .payment-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .status-pending {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    
+    .status-success {
+      background-color: #d1fae5;
+      color: #059669;
+    }
+    
+    .status-failed {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .mpesa-modal-content {
+        max-width: 95%;
+        padding: 1rem;
+      }
+      
+      .grid-cols-2 {
+        grid-template-columns: 1fr;
+      }
+      
+      .step-indicator {
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .mpesa-modal-content {
+        max-width: 600px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <p class="mt-4 text-gray-600">Processing your order...</p>
+  </div>
+
+  <!-- M-Pesa Status Modal -->
+  <div id="mpesaModal" class="mpesa-modal hidden">
+    <div class="mpesa-modal-content">
+      <div id="mpesaIcon" class="mpesa-icon">
+        <i class="fas fa-mobile-alt mpesa-pending"></i>
+      </div>
+      <h2 id="mpesaTitle" class="text-2xl font-bold text-gray-800 mb-3">STK Push Sent!</h2>
+      <p id="mpesaMessage" class="text-gray-700 mb-4">Check your phone for the M-Pesa payment prompt. Enter your PIN to complete the payment.</p>
+      
+      <div class="mt-4">
+        <div id="paymentStatus" class="payment-status status-pending">Awaiting Payment</div>
+      </div>
+      
+      <div class="bg-blue-50 p-4 rounded-lg mt-4">
+        <p class="text-sm text-blue-700"><i class="fas fa-info-circle mr-2"></i> Your order has been created. Once payment is complete, we'll process your order immediately.</p>
+      </div>
+
+      <!-- Manual Payment Toggle Button -->
+      <div class="mt-6">
+        <button id="showManualBtn" onclick="toggleManualPayment()" class="text-primary font-medium hover:text-secondary underline">
+          Don't see the STK Push? Click here for manual payment options
+        </button>
+      </div>
+      
+      <div id="manualPaymentSection" class="manual-payment-details hidden">
+        <h3 class="font-bold text-lg text-gray-800 mb-3">Manual Payment Options</h3>
+        
+        <!-- M-Pesa Buy Goods Option -->
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <h4 class="font-semibold text-green-800 mb-3 flex items-center">
+            <i class="fas fa-mobile-alt mr-2"></i>M-Pesa Buy Goods
+          </h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Till Number:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-green-800">6803137</span>
+                <button onclick="copyToClipboard('6803137')" class="text-green-600 hover:text-green-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Business Name:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold">Christopher Mugambi Kaburu</span>
+                <button onclick="copyToClipboard('Christopher Mugambi Kaburu')" class="text-green-600 hover:text-green-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Amount:</span>
+              <div class="flex items-center space-x-2">
+                <span id="mpesaManualAmount" class="font-bold text-primary">KES 0</span>
+                <button onclick="copyAmount('mpesa')" class="text-green-600 hover:text-green-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 p-2 bg-green-100 rounded text-xs text-green-700">
+            <strong>Steps:</strong> Go to M-Pesa → Lipa na M-Pesa → Buy Goods and Services → Enter Till Number
+          </div>
+        </div>
+
+        <!-- Bank Transfer Option -->
+        <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
+            <i class="fas fa-university mr-2"></i>Bank Transfer (Equity Bank)
+          </h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Paybill Number:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-blue-800">247247</span>
+                <button onclick="copyToClipboard('247247')" class="text-blue-600 hover:text-blue-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Account Number:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-blue-800">0370184866959</span>
+                <button onclick="copyToClipboard('0370184866959')" class="text-blue-600 hover:text-blue-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Account Name:</span>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold">Christopher Mugambi Kaburu</span>
+                <button onclick="copyToClipboard('Christopher Mugambi Kaburu')" class="text-blue-600 hover:text-blue-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-700">Amount:</span>
+              <div class="flex items-center space-x-2">
+                <span id="bankManualAmount" class="font-bold text-primary">KES 0</span>
+                <button onclick="copyAmount('bank')" class="text-blue-600 hover:text-blue-800">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 p-2 bg-blue-100 rounded text-xs text-blue-700">
+            <strong>Steps:</strong> Go to M-Pesa → Lipa na M-Pesa → Paybill → Enter Paybill Number → Enter Account Number
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p class="text-sm text-yellow-700">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            After making payment, you can track your order status. We'll update it once payment is confirmed.
+          </p>
+        </div>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+        <button id="mpesaCloseBtn" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition">
+          Continue Shopping
+        </button>
+        <a href="orders.html" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition">
+          View My Orders
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="bg-white shadow-sm py-3">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="progress-bar w-full">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div class="flex justify-between mt-3">
+        <div class="text-center">
+          <div class="step-indicator completed mx-auto">
+            <i class="fas fa-shopping-cart text-xs"></i>
+          </div>
+          <p class="text-xs mt-1 text-gray-600">Cart</p>
+        </div>
+        <div class="text-center">
+          <div id="step2" class="step-indicator active mx-auto">2</div>
+          <p class="text-xs mt-1 font-medium text-primary">Checkout</p>
+        </div>
+        <div class="text-center">
+          <div id="step3" class="step-indicator mx-auto">3</div>
+          <p class="text-xs mt-1 text-gray-600">Payment</p>
+        </div>
+        <div class="text-center">
+          <div id="step4" class="step-indicator mx-auto">4</div>
+          <p class="text-xs mt-1 text-gray-600">Complete</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold text-primary flex items-center">
+        <i class="fas fa-heartbeat text-primary mr-2"></i> Amexan
+      </a>
+      <nav class="space-x-4 hidden md:flex">
+        <a href="index.html" class="text-gray-700 hover:text-primary">Home</a>
+        <a href="products.html" class="text-gray-700 hover:text-primary">Shop</a>
+        <a href="cart.html" class="text-gray-700 hover:text-primary">Cart</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <div id="authButtons" class="auth-hidden">
+          <button onclick="showAuthModal('login')" class="text-primary hover:text-secondary font-medium">
+            <i class="fas fa-sign-in-alt mr-1"></i> Login
+          </button>
+        </div>
+        <div id="userMenu" class="auth-required hidden flex items-center space-x-3">
+          <span id="userEmail" class="text-gray-700 text-sm"></span>
+          <button onclick="logoutUser()" class="text-red-600 hover:text-red-800 text-sm">
+            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+          </button>
+        </div>
+        <button class="md:hidden text-gray-700">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Layout -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Secure Checkout</h1>
+      <div class="text-sm bg-blue-50 text-primary px-3 py-1 rounded-full">
+        <i class="fas fa-lock mr-1"></i> Secure Payment
+      </div>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Shipping Info Form -->
+      <section class="bg-white p-6 rounded-xl shadow-sm">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-truck mr-2 text-primary"></i> Shipping Details
+        </h2>
+        <form id="checkoutForm" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">First Name</label>
+              <input name="firstName" required type="text" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Last Name</label>
+              <input name="lastName" required type="text" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Phone Number</label>
+            <input name="phone" required type="tel" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="07XX XXX XXX"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Email Address</label>
+            <input name="email" required type="email" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Shipping Address</label>
+            <textarea name="address" required rows="3" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Full street address"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Shipping/Packaging Notes</label>
+            <textarea name="notes" rows="2" placeholder="E.g. Fragile item, call before delivery..." class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+          </div>
+        </form>
+      </section>
+
+      <!-- Order Summary Section -->
+      <section class="bg-white p-6 rounded-xl shadow-sm">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-receipt mr-2 text-primary"></i> Order Summary
+        </h2>
+        <div class="border rounded-lg overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="py-3 px-4 text-left">#</th>
+                <th class="py-3 px-4 text-left">Product</th>
+                <th class="py-3 px-4 text-center">Qty</th>
+                <th class="py-3 px-4 text-right">Price</th>
+                <th class="py-3 px-4 text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody" class="divide-y divide-gray-200">
+              <!-- JS will populate this -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 space-y-3">
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>Subtotal</span>
+            <span id="subtotalAmount" class="text-gray-900 font-medium">KES 0</span>
+          </div>
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>Shipping Fee</span>
+            <span id="shippingFee" class="text-gray-900 font-medium">KES 200</span>
+          </div>
+          <div class="flex justify-between text-lg font-bold mt-3 pt-3 border-t">
+            <span>Total</span>
+            <span id="totalAmount" class="text-success">KES 0</span>
+          </div>
+          
+          <button onclick="showPaymentOptions()" class="mt-6 w-full bg-primary text-white py-3 rounded-xl hover:bg-secondary transition flex items-center justify-center">
+            Continue to Payment <i class="fas fa-arrow-right ml-2"></i>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Payment Options Section -->
+    <section id="paymentSection" class="bg-white p-6 rounded-xl shadow-sm mt-8 hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-credit-card mr-2 text-primary"></i> Payment Method
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- M-Pesa Option -->
+        <div id="mpesaOption" class="payment-option active p-5 rounded-xl cursor-pointer" onclick="selectPayment('mpesa')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+              <i class="fas fa-mobile-alt text-blue-600 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800">M-Pesa</h3>
+              <p class="text-sm text-gray-600">Pay via mobile money</p>
+            </div>
+          </div>
+          
+          <div id="mpesaDetails" class="expandable mt-4">
+            <div class="bg-blue-50 p-4 rounded-lg mb-4">
+              <p class="text-sm text-blue-700"><i class="fas fa-info-circle mr-2"></i> You'll receive a payment request on your phone to complete the transaction</p>
+            </div>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-1">M-Pesa Phone Number</label>
+              <input type="tel" id="mpesaPhone" class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="07XX XXX XXX">
+            </div>
+            
+            <button onclick="processMpesaPayment()" class="w-full bg-success text-white py-3 rounded-lg hover:bg-green-600 transition">
+              <i class="fas fa-paper-plane mr-2"></i> Send Payment Request
+            </button>
+          </div>
+        </div>
+        
+        <!-- Bank Transfer Option -->
+        <div id="bankOption" class="payment-option p-5 rounded-xl cursor-pointer" onclick="selectPayment('bank')">
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+              <i class="fas fa-university text-green-600 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-800">Bank Transfer</h3>
+              <p class="text-sm text-gray-600">Direct bank payment</p>
+            </div>
+          </div>
+          
+          <div id="bankDetails" class="expandable mt-4">
+            <div class="space-y-4">
+              <!-- Manual Bank Transfer -->
+              <div class="border rounded-lg p-4">
+                <div class="flex items-start">
+                  <input type="radio" id="manual" name="bankOption" class="mt-1 mr-3" checked>
+                  <div>
+                    <label for="manual" class="font-medium block mb-1">Manual Bank Transfer</label>
+                    <p class="text-sm text-gray-600 mb-3">Transfer directly to our account</p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg text-sm mb-3">
+                      <div class="flex mb-2">
+                        <span class="w-24 text-gray-600">Bank:</span>
+                        <span class="font-medium">Equity Bank Kenya Ltd</span>
+                      </div>
+                      <div class="flex mb-2">
+                        <span class="w-24 text-gray-600">Account Name:</span>
+                        <span class="font-medium">Christopher Mugambi Kaburu</span>
+                      </div>
+                      <div class="flex mb-2">
+                        <span class="w-24 text-gray-600">Account No:</span>
+                        <span class="font-medium">0370184866959</span>
+                      </div>
+                      <div class="flex">
+                        <span class="w-24 text-gray-600">Branch:</span>
+                        <span class="font-medium">Nairobi West</span>
+                      </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-3 rounded-lg text-sm text-yellow-700 mb-3">
+                      <i class="fas fa-exclamation-circle mr-2"></i> 
+                      After payment, email transaction details to payments@amexan.com
+                    </div>
+                    
+                    <button onclick="processBankPayment()" class="w-full bg-accent text-white text-sm py-2 px-4 rounded-lg hover:bg-orange-600 transition">
+                      <i class="fas fa-check-circle mr-1"></i> I've Made Payment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Thank You Modal -->
+  <div id="thankYou" class="fixed inset-0 bg-white bg-opacity-95 z-50 flex items-center justify-center hidden">
+    <div class="text-center p-8 bg-white rounded-xl shadow-xl max-w-md w-full border">
+      <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+        <i class="fas fa-check text-green-600 text-3xl"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-3">Order Created Successfully!</h2>
+      <p class="text-gray-700 mb-4">Thank you for your order. We've received your order and are awaiting payment verification.</p>
+      <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+        <p class="text-sm text-gray-600">Your order ID:</p>
+        <p id="orderIdDisplay" class="font-mono font-bold text-lg text-primary"></p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="index.html" class="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition">
+          Continue Shopping
+        </a>
+        <a href="orders.html" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition">
+          Track My Order
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="auth-modal hidden">
+    <div class="auth-card p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 id="modalTitle" class="text-2xl font-bold text-gray-800">Login</h2>
+        <button onclick="closeAuthModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="authForm" onsubmit="handleAuth(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Email Address</label>
+          <input id="authEmail" type="email" required class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Password</label>
+          <input id="authPassword" type="password" required class="w-full border rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        <button id="authSubmit" type="submit" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition">
+          Login
+        </button>
+        <div class="text-center mt-4">
+          <button type="button" id="authSwitch" onclick="switchAuthMode()" class="text-primary font-medium hover:text-secondary">
+            Don't have an account? Register
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      signOut,
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      serverTimestamp,
+      doc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+      authDomain: "bynexproject.firebaseapp.com",
+      projectId: "bynexproject",
+      storageBucket: "bynexproject.appspot.com",
+      messagingSenderId: "667246369908",
+      appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+      measurementId: "G-7CCRBG0P8D"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Make Firebase accessible globally
+    window.auth = auth;
+    window.db = db;
+    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.signOut = signOut;
+    window.onAuthStateChanged = onAuthStateChanged;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.updateDoc = updateDoc;
+    window.doc = doc;
+    window.serverTimestamp = serverTimestamp;
+    window.currentUser = null;
+
+    // Auth state observer
+    onAuthStateChanged(auth, (user) => {
+      window.currentUser = user;
+      handleAuthStateChange(user);
+    });
+  </script>
+
+  <!-- Application Logic -->
+  <script>
+    // ==================== GLOBAL VARIABLES ====================
+    const cart = JSON.parse(localStorage.getItem("amexan_cart")) || [];
+    let authMode = 'login';
+    let currentFirestoreOrderId = null;
+    
+    // PayHero API credentials
+    const payheroConfig = {
+      endpoint: "https://backend.payhero.co.ke/api/v2/payments",
+      channelId: 3183,
+      apiKey: "hvnbhvq4FBF9Se6CeTVy",
+      apiSecret: "cpq3dSLPH5kF1dgV85XSsXJtQnt4ajUQIqf6CBt4"
+    };
+
+    // ==================== UTILITY FUNCTIONS ====================
+    function showLoading() {
+      document.getElementById('loadingOverlay').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+    }
+
+    function showNotification(message, type = 'info', duration = 3000) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg text-white font-medium shadow-lg ${
+        type === 'success' ? 'bg-green-500' : 
+        type === 'error' ? 'bg-red-500' : 
+        'bg-blue-500'
+      }`;
+      notification.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas ${
+            type === 'success' ? 'fa-check-circle' : 
+            type === 'error' ? 'fa-exclamation-circle' : 
+            'fa-info-circle'
+          } mr-2"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Auto remove after duration
+      setTimeout(() => {
+        notification.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, duration);
+    }
+    
+    // Format phone number to 254 format
+    function formatMpesaPhone(phone) {
+      // Remove all non-digit characters
+      const cleaned = phone.replace(/\D/g, '');
+      
+      // Handle 07... numbers
+      if (cleaned.startsWith('0') && cleaned.length === 10) {
+        return '254' + cleaned.substring(1);
+      }
+      
+      // Handle 7... numbers (without leading 0)
+      if (cleaned.startsWith('7') && cleaned.length === 9) {
+        return '254' + cleaned;
+      }
+      
+      // Handle 254... numbers
+      if (cleaned.startsWith('254') && cleaned.length === 12) {
+        return cleaned;
+      }
+      
+      // Return as-is if it doesn't match known patterns
+      return cleaned;
+    }
+
+    // ==================== CLIPBOARD FUNCTIONS ====================
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showNotification(`Copied: ${text}`, 'success', 2000);
+        }).catch(() => {
+          fallbackCopyTextToClipboard(text);
+        });
+      } else {
+        fallbackCopyTextToClipboard(text);
+      }
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        showNotification(`Copied: ${text}`, 'success', 2000);
+      } catch (err) {
+        showNotification('Failed to copy text', 'error', 2000);
+      }
+      
+      document.body.removeChild(textArea);
+    }
+
+    function copyAmount(type) {
+      if (window.currentAmount) {
+        copyToClipboard(window.currentAmount);
+      } else {
+        showNotification('Amount not available', 'error', 2000);
+      }
+    }
+
+    // ==================== M-PESA FUNCTIONS ====================
+    function showMpesaModal(status, message) {
+      const modal = document.getElementById('mpesaModal');
+      const icon = document.getElementById('mpesaIcon');
+      const title = document.getElementById('mpesaTitle');
+      const msg = document.getElementById('mpesaMessage');
+      const paymentStatus = document.getElementById('paymentStatus');
+      
+      // Clear previous classes
+      icon.className = 'mpesa-icon';
+      icon.innerHTML = '';
+      paymentStatus.className = 'payment-status';
+      
+      // Set based on status (always show as pending since we can't verify immediately)
+      icon.innerHTML = '<i class="fas fa-mobile-alt mpesa-pending"></i>';
+      title.textContent = 'STK Push Sent!';
+      msg.textContent = 'Check your phone for the M-Pesa payment prompt. Enter your PIN to complete the payment.';
+      paymentStatus.textContent = 'Awaiting Payment';
+      paymentStatus.className = 'payment-status status-pending';
+      
+      // Update manual payment amounts
+      const totalText = document.getElementById('totalAmount').textContent;
+      const amountOnly = totalText.replace('KES', '').replace(/,/g, '').trim();
+      document.getElementById('mpesaManualAmount').textContent = totalText;
+      document.getElementById('bankManualAmount').textContent = totalText;
+      
+      // Store amount for copying
+      window.currentAmount = amountOnly;
+      
+      // Show modal
+      modal.classList.remove('hidden');
+    }
+
+    function toggleManualPayment() {
+      const manualSection = document.getElementById('manualPaymentSection');
+      const toggleBtn = document.getElementById('showManualBtn');
+      
+      if (manualSection.classList.contains('hidden')) {
+        manualSection.classList.remove('hidden');
+        toggleBtn.textContent = 'Hide manual payment options';
+      } else {
+        manualSection.classList.add('hidden');
+        toggleBtn.textContent = "Don't see the STK Push? Click here for manual payment options";
+      }
+    }
+
+    function closeMpesaModal() {
+      document.getElementById('mpesaModal').classList.add('hidden');
+      // Show thank you modal after closing
+      showThankYou(window.currentOrderId);
+    }
+
+    async function sendStkPush(phone, amount, orderId, customerName) {
+      try {
+        const payload = {
+          amount: amount,
+          phone_number: phone,
+          channel_id: payheroConfig.channelId,
+          provider: "m-pesa",
+          external_reference: orderId,
+          callback_url: "https://webhook.site/unique-url", // This won't be used for verification
+          customer_name: customerName
+        };
+
+        // Encode credentials for Basic Auth
+        const credentials = btoa(`${payheroConfig.apiKey}:${payheroConfig.apiSecret}`);
+        
+        const response = await fetch(payheroConfig.endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Basic ${credentials}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("STK Push Error:", error);
+        throw new Error("Failed to send STK Push request");
+      }
+    }
+
+    // ==================== AUTH FUNCTIONS ====================
+    function handleAuthStateChange(user) {
+      const authButtons = document.getElementById('authButtons');
+      const userMenu = document.getElementById('userMenu');
+      const userEmail = document.getElementById('userEmail');
+      
+      if (user) {
+        authButtons.classList.add('hidden');
+        userMenu.classList.remove('hidden');
+        userEmail.textContent = user.email;
+      } else {
+        authButtons.classList.remove('hidden');
+        userMenu.classList.add('hidden');
+      }
+    }
+
+    function showAuthModal(mode) {
+      authMode = mode;
+      const modal = document.getElementById('authModal');
+      const title = document.getElementById('modalTitle');
+      const submit = document.getElementById('authSubmit');
+      const switchBtn = document.getElementById('authSwitch');
+      
+     if (mode === 'login') {
+  title.textContent = 'Login';
+  submit.textContent = 'Login';
+  switchBtn.textContent = "Don't have an account? Register";
+
+  // 🔹 Make it redirect instead of opening Register modal
+  switchBtn.onclick = () => {
+    window.location.href = 'regi.html';
+  };
+
+} else {
+  title.textContent = 'Register';
+  submit.textContent = 'Register';
+  switchBtn.textContent = "Already have an account? Login";
+
+  // 🔹 Restore original functionality for going back to login modal
+  switchBtn.onclick = () => {
+    showAuthModal('login');
+  };
+}
+
+      
+      modal.classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+      document.getElementById('authForm').reset();
+    }
+
+    function switchAuthMode() {
+      authMode = authMode === 'login' ? 'register' : 'login';
+      showAuthModal(authMode);
+    }
+
+    async function handleAuth(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('authEmail').value;
+      const password = document.getElementById('authPassword').value;
+      
+      showLoading();
+      
+      try {
+        if (authMode === 'login') {
+          await signInWithEmailAndPassword(auth, email, password);
+          showNotification('Login successful!', 'success');
+        } else {
+          await createUserWithEmailAndPassword(auth, email, password);
+          showNotification('Registration successful!', 'success');
+        }
+        closeAuthModal();
+      } catch (error) {
+        console.error('Auth error:', error);
+        showNotification(error.message, 'error');
+      }
+      
+      hideLoading();
+    }
+
+    async function logoutUser() {
+      try {
+        await signOut(auth);
+        showNotification('Logged out successfully', 'success');
+      } catch (error) {
+        console.error('Logout error:', error);
+        showNotification('Failed to logout', 'error');
+      }
+    }
+
+    // ==================== CHECKOUT FUNCTIONS ====================
+    const summaryBody = document.getElementById("summaryBody");
+    const subtotalAmount = document.getElementById("subtotalAmount");
+    const totalAmount = document.getElementById("totalAmount");
+    const shipping = 0;
+    const progressFill = document.getElementById("progressFill");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+    const step4 = document.getElementById("step4");
+    const paymentSection = document.getElementById("paymentSection");
+    const orderIdDisplay = document.getElementById("orderIdDisplay");
+
+    // Generate unique order ID
+    function generateOrderId() {
+      const timestamp = Date.now().toString(36);
+      const random = Math.random().toString(36).substring(2, 8);
+      return `ORD-${timestamp}-${random}`.toUpperCase();
+    }
+
+    function renderSummary() {
+      summaryBody.innerHTML = "";
+      let subtotal = 0;
+
+      if (cart.length === 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td colspan="5" class="py-8 text-center text-gray-500">
+            <i class="fas fa-shopping-cart text-3xl mb-3 text-gray-300"></i>
+            <p>Your cart is empty</p>
+          </td>
+        `;
+        summaryBody.appendChild(row);
+        subtotalAmount.textContent = `KES 0`;
+        totalAmount.textContent = `KES 0`;
+        return;
+      }
+
+      cart.forEach((item, i) => {
+        const rowTotal = item.price * item.qty;
+        subtotal += rowTotal;
+
+        const row = document.createElement("tr");
+        row.className = "hover:bg-gray-50";
+        row.innerHTML = `
+          <td class="px-4 py-3">${i + 1}</td>
+          <td class="px-4 py-3 font-medium text-gray-800">${item.name}</td>
+          <td class="px-4 py-3 text-center">${item.qty}</td>
+          <td class="px-4 py-3 text-right">KES ${item.price.toLocaleString()}</td>
+          <td class="px-4 py-3 text-right font-medium">KES ${rowTotal.toLocaleString()}</td>
+        `;
+        summaryBody.appendChild(row);
+      });
+
+      const grandTotal = subtotal + shipping;
+      subtotalAmount.textContent = `KES ${subtotal.toLocaleString()}`;
+      totalAmount.textContent = `KES ${grandTotal.toLocaleString()}`;
+    }
+
+    function showPaymentOptions() {
+      if (!currentUser) {
+        showNotification('Please login to proceed with checkout', 'error');
+        showAuthModal('login');
+        return;
+      }
+
+      const form = document.getElementById("checkoutForm");
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      paymentSection.classList.remove("hidden");
+      progressFill.style.width = "66%";
+      step2.classList.remove("active");
+      step2.classList.add("completed");
+      step3.classList.add("active");
+      
+      // Scroll to payment section
+      paymentSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function selectPayment(method) {
+      // Reset all options
+      document.querySelectorAll(".payment-option").forEach(option => {
+        option.classList.remove("active");
+        const details = option.querySelector(".expandable");
+        details.classList.remove("expanded");
+      });
+      
+      // Activate selected option
+      const selectedOption = document.getElementById(`${method}Option`);
+      selectedOption.classList.add("active");
+      const details = selectedOption.querySelector(".expandable");
+      details.classList.add("expanded");
+    }
+
+    async function processMpesaPayment() {
+      const phoneInput = document.getElementById("mpesaPhone");
+      const phone = phoneInput.value.trim();
+      
+      if (!phone || phone.length < 9) {
+        showNotification("Please enter a valid M-Pesa phone number", "error");
+        phoneInput.focus();
+        return;
+      }
+
+      // Format phone number
+      const formattedPhone = formatMpesaPhone(phone);
+      
+      // Get total amount from summary
+      const totalText = document.getElementById('totalAmount').textContent;
+      const totalAmountValue = parseFloat(totalText.replace('KES', '').replace(/,/g, '').trim());
+      
+      if (isNaN(totalAmountValue) || totalAmountValue <= 0) {
+        showNotification("Invalid order total amount", "error");
+        return;
+      }
+      
+      // Collect customer name
+      const firstName = document.querySelector('input[name="firstName"]').value;
+      const lastName = document.querySelector('input[name="lastName"]').value;
+      const customerName = `${firstName} ${lastName}`.trim();
+      
+      if (!customerName) {
+        showNotification("Please enter your name", "error");
+        return;
+      }
+      
+      // Generate order ID
+      const orderId = generateOrderId();
+      window.currentOrderId = orderId;
+      
+      showLoading();
+      
+      try {
+        // Create order in Firebase first
+        const form = document.getElementById('checkoutForm');
+        const formData = new FormData(form);
+        
+        // Calculate totals
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        
+        // Create order object
+        const order = {
+          orderId: orderId,
+          userId: currentUser.uid,
+          customer: {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            phone: formData.get('phone'),
+            email: formData.get('email')
+          },
+          shipping: {
+            address: formData.get('address'),
+            notes: formData.get('notes') || ''
+          },
+          products: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.qty,
+            image: item.image || ''
+          })),
+          subtotal: subtotal,
+          shippingCost: shipping,
+          tax: 0,
+          totalAmount: totalAmountValue,
+          paymentMethod: "M-Pesa",
+          paymentStatus: "pending", // Pending until admin confirms
+          trackingStatus: "pending", // Pending until payment is confirmed
+          orderDate: serverTimestamp(),
+          trackingNumber: "TRK-" + Math.floor(10000000 + Math.random() * 90000000).toString()
+        };
+
+        // Save order to Firebase
+        const docRef = await addDoc(collection(db, "orders"), order);
+        console.log("Order saved with ID: ", docRef.id);
+        currentFirestoreOrderId = docRef.id;
+        
+        // Clear cart after successful order creation
+        localStorage.removeItem("amexan_cart");
+        
+        // Try to send STK Push request (optional)
+        try {
+          const stkResponse = await sendStkPush(formattedPhone, totalAmountValue, orderId, customerName);
+          console.log("STK Response:", stkResponse);
+          
+          if (stkResponse.success) {
+            showNotification('STK push sent to your phone!', 'success');
+          } else {
+            showNotification('Failed to send STK push. Using manual options.', 'error');
+          }
+        } catch (stkError) {
+          console.warn("STK Push failed, but order is created:", stkError);
+          showNotification("STK push failed. Please use manual payment options.", "error");
+        }
+        
+        // Simulate STK push timing
+        setTimeout(() => {
+          showMpesaModal('pending');
+          hideLoading();
+          
+          // Simulate payment completion after 15s
+          setTimeout(completePayment, 15000); 
+        }, 2000);
+        
+      } catch (error) {
+        hideLoading();
+        console.error("Order creation error:", error);
+        showNotification("Failed to create your order. Please try again.", "error");
+      }
+    }
+    
+    function completePayment() {
+      document.getElementById('mpesaIcon').innerHTML = 
+        '<i class="fas fa-check-circle mpesa-success"></i>';
+      document.getElementById('mpesaTitle').textContent = 'Payment Pending Verification!';
+      document.getElementById('mpesaMessage').textContent = 
+        'We’ve received your payment request. Our team is confirming the transaction to ensure accuracy and security. You’ll be updated once cleared in your order history. Order is being processed.';
+      document.getElementById('paymentStatus').className = 
+        'payment-status status- pending';
+      document.getElementById('paymentStatus').textContent = 'Payment is Being Processed';
+    }
+    
+    function showThankYou(orderId) {
+      orderIdDisplay.textContent = orderId;
+      document.getElementById("thankYou").classList.remove("hidden");
+      progressFill.style.width = "100%";
+      step3.classList.remove("active");
+      step3.classList.add("completed");
+      step4.classList.add("active");
+    }
+
+    async function processBankPayment() {
+      showLoading();
+      
+      try {
+        // Collect form data
+        const form = document.getElementById('checkoutForm');
+        const formData = new FormData(form);
+        
+        // Calculate totals
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const total = subtotal + shipping;
+        
+        // Generate unique order ID
+        const orderId = generateOrderId();
+        
+        // Create order object
+        const order = {
+          orderId: orderId,
+          userId: currentUser.uid,
+          customer: {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            phone: formData.get('phone'),
+            email: formData.get('email')
+          },
+          shipping: {
+            address: formData.get('address'),
+            notes: formData.get('notes') || ''
+          },
+          products: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.qty,
+            image: item.image || ''
+          })),
+          subtotal: subtotal,
+          shippingCost: shipping,
+          tax: 0,
+          totalAmount: total,
+          paymentMethod: "Bank Transfer",
+          paymentStatus: "pending", // Pending until admin confirms
+          trackingStatus: "pending", // Pending until payment is confirmed
+          orderDate: serverTimestamp(),
+          trackingNumber: "TRK-" + Math.floor(10000000 + Math.random() * 90000000).toString()
+        };
+
+        // Save order to Firebase
+        const docRef = await addDoc(collection(db, "orders"), order);
+        console.log("Order saved with ID: ", docRef.id);
+
+        // Clear cart
+        localStorage.removeItem("amexan_cart");
+        
+        // Show success UI
+        hideLoading();
+        showThankYou(orderId);
+      } catch (error) {
+        hideLoading();
+        console.error("Error saving order: ", error);
+        showNotification("Failed to process your order. Please try again.", "error");
+      }
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", function() {
+      renderSummary();
+      selectPayment("mpesa"); // Select M-Pesa by default
+      
+      // Setup modal close button
+      document.getElementById('mpesaCloseBtn').addEventListener('click', closeMpesaModal);
+      
+      // Check if user is logged in
+      if (!currentUser) {
+        showNotification('Please login to complete your checkout', 'info');
+      }
+    });
+
+    // Make functions globally available
+    window.selectPayment = selectPayment;
+    window.processMpesaPayment = processMpesaPayment;
+    window.processBankPayment = processBankPayment;
+    window.showPaymentOptions = showPaymentOptions;
+    window.closeMpesaModal = closeMpesaModal;
+    window.showAuthModal = showAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.switchAuthMode = switchAuthMode;
+    window.handleAuth = handleAuth;
+    window.logoutUser = logoutUser;
+    window.toggleManualPayment = toggleManualPayment;
+    window.copyToClipboard = copyToClipboard;
+    window.copyAmount = copyAmount;
+  </script>
+</body>
+</html>

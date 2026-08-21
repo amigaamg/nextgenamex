@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amexan | International Shipping Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<style>
+        /* All your existing CSS remains the same */
+        /* ... (your full CSS code) ... */
+        
+        /* Additional styles for better visual feedback */
+        .qty-option.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        :root {
+            --primary: #0000cd;
+            --primary-light: #3333ff;
+            --primary-dark: #00008b;
+            --accent: #ff6b00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section - Reduced height */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 205, 0.6), rgba(0, 0, 139, 0.7)), url('https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            height: 300px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            width: 100%;
+        }
+        
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Package Cards */
+        .packages-container {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            font-size: 2.2rem;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 30px;
+        }
+        
+        .package-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .package-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .image-carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .carousel-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+        }
+        
+        .package-image:hover .carousel-btn {
+            opacity: 1;
+        }
+        
+        .carousel-btn.prev {
+            left: 12px;
+        }
+        
+        .carousel-btn.next {
+            right: 12px;
+        }
+        
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .package-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .package-content {
+            padding: 25px;
+        }
+        
+        .package-title {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+        
+        .package-desc {
+            color: var(--gray);
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .pricing {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .discounted-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .save-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-left: 12px;
+            font-weight: 600;
+        }
+        
+        .quantity-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        
+        .qty-option {
+            flex: 1;
+            min-width: calc(25% - 10px);
+            text-align: center;
+            padding: 10px 6px;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .qty-option:hover, .qty-option.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .group-order-info {
+            background: var(--gray-light);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin: 18px 0;
+        }
+        
+        .badge {
+            font-size: 1.6rem;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .review {
+            background: #fffaf0;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            margin: 18px 0;
+            font-style: italic;
+        }
+        
+        .review-author {
+            font-weight: 600;
+            margin-top: 8px;
+            color: var(--primary);
+        }
+        
+        .timeline {
+            margin: 18px 0;
+            font-size: 0.9rem;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-days {
+            min-width: 90px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .package-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background: #e55a00;
+            transform: translateY(-2px);
+        }
+        
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--dark);
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            margin-bottom: 25px;
+            color: var(--primary);
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 0, 205, 0.1);
+        }
+        
+        .payment-options {
+            margin-top: 25px;
+        }
+        
+        .payment-tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 25px;
+        }
+        
+        .payment-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            text-align: center;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .payment-tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .payment-content {
+            display: none;
+        }
+        
+        .payment-content.active {
+            display: block;
+        }
+        
+        .manual-payment {
+            background: var(--gray-light);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        
+        .payment-method {
+            margin-bottom: 20px;
+        }
+        
+        .payment-method h4 {
+            margin-bottom: 12px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .payment-method h4 i {
+            margin-right: 10px;
+        }
+        
+        .payment-detail {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .payment-detail span {
+            word-break: break-all;
+            padding-right: 12px;
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .amount-display {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--primary);
+            border: 2px dashed var(--primary);
+        }
+        
+        /* Orders Section - Updated to redirect */
+        .orders-section {
+            padding: 60px 0;
+            background: var(--light);
+            text-align: center;
+        }
+        
+        .orders-redirect {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .orders-redirect i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .orders-redirect h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .orders-redirect p {
+            margin-bottom: 25px;
+            color: var(--gray);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-section p, .footer-section li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-section ul li a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .footer-section i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 5px 12px;
+            }
+            
+            .hero {
+                height: 250px;
+                padding: 30px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .qty-option {
+                min-width: calc(50% - 10px);
+            }
+            
+            .package-actions {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                padding: 25px;
+            }
+            
+            .payment-tabs {
+                flex-direction: column;
+            }
+            
+            .payment-tab {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                display: none;
+                width: 100%;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                margin-top: 15px;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .hero {
+                height: 220px;
+                padding: 20px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .qty-option {
+                min-width: 100%;
+            }
+            
+            .carousel-btn {
+                opacity: 1;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        /* Chat Button */
+        .chat-button {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            z-index: 99;
+            font-size: 1.6rem;
+            transition: var(--transition);
+        }
+        
+        .chat-button:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        .toast.success {
+            background: var(--success);
+        }
+        
+        .toast.error {
+            background: var(--danger);
+        }
+        
+        .toast i {
+            font-size: 1.2rem;
+        }
+        
+        /* Error state */
+        .error-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            color: var(--danger);
+        }
+        
+        /* Group order completed state */
+        .group-complete {
+            color: var(--success);
+            font-weight: bold;
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shipping-fast"></i>
+                <span>Amexan</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="pack-orders.html">My Orders</a></li>
+                    <li><a href="#about">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section - Reduced height -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>International Shipping Made Simple</h1>
+            <p>Join group orders to save up to 70% on international shipping costs. Quality products, verified suppliers, and seamless delivery.</p>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section id="packages" class="packages-container">
+        <div class="container">
+            <h2 class="section-title">Available Packages</h2>
+            <div class="packages-grid" id="packagesGrid">
+                <div class="spinner" id="packagesSpinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Orders Section - Updated to redirect -->
+    <section id="orders" class="orders-section">
+        <div class="container">
+            <h2 class="section-title">My Orders</h2>
+            <div class="orders-redirect">
+                <i class="fas fa-external-link-alt"></i>
+                <h3>View Your Orders</h3>
+                <p>We've moved orders to a dedicated page for better management and tracking of your purchases.</p>
+                <a href="pack-orders.html" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i> Go to Orders Page
+                </a>
+            </div>
+        </div>
+    </section>
+
+   <!-- Replace your existing payment modal with this updated version -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+        <h2 class="modal-title">Complete Your Order</h2>
+        
+        <form id="paymentForm">
+            <input type="hidden" id="selectedPackageId">
+            <input type="hidden" id="selectedQuantity">
+            <input type="hidden" id="selectedPrice">
+            
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number (M-Pesa)</label>
+                <input type="tel" id="phone" class="form-control" placeholder="07XX XXX XXX" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Shipping Address</label>
+                <textarea id="address" class="form-control" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">Shipping Notes (Optional)</label>
+                <textarea id="notes" class="form-control" rows="2"></textarea>
+            </div>
+            
+            <div class="payment-options">
+                <h3>Payment Method</h3>
+                
+                <div class="payment-tabs">
+                    <div class="payment-tab active" onclick="switchPaymentTab('stk')">STK Push</div>
+                    <div class="payment-tab" onclick="switchPaymentTab('manual')">Manual Payment</div>
+                </div>
+                
+                <div id="stkPayment" class="payment-content active">
+                    <p>Click the button below to receive an STK push prompt on your phone to complete payment.</p>
+                    <div class="amount-display">
+                        Amount to Pay: KSh <span id="stk-amount">0</span>
+                    </div>
+                    <button type="button" class="btn btn-accent" style="width: 100%; margin-top: 15px;" onclick="initiateSTKPayment()">
+                        <i class="fas fa-mobile-alt"></i> Request STK Push
+                    </button>
+                    <div id="stkStatus" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+                </div>
+                
+                <div id="manualPayment" class="payment-content">
+                    <div class="amount-display">
+                        Amount to Pay: KSh <span id="manual-amount">0</span>
+                    </div>
+                    
+                    <div class="manual-payment">
+                        <p>Please send your payment to one of the following options:</p>
+                        
+                        <div class="payment-method">
+                            <h4><i class="fas fa-money-bill-wave"></i> Till Payment</h4>
+                            <div class="payment-detail">
+                                <span><strong>Till Number:</strong> 6803137</span>
+                                <button type="button" class="copy-btn" data-text="6803137">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            
+                            <div class="payment-detail">
+                                <span><strong>Account Name:</strong> Christopher Mugambi Kaburu</span>
+                                <button type="button" class="copy-btn" data-text="Christopher Mugambi Kaburu">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-method">
+                            <h4><i class="fas fa-building"></i> Paybill Payment</h4>
+                            <div class="payment-detail">
+                                <span><strong>Paybill:</strong> 247247</span>
+                                <button type="button" class="copy-btn" data-text="247247">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            
+                            <div class="payment-detail">
+                                <span><strong>Account No:</strong> 0370184866959</span>
+                                <button type="button" class="copy-btn" data-text="0370184866959">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            
+                            <div class="payment-detail">
+                                <span><strong>Account Name:</strong> Christopher Mugambi Kaburu</span>
+                                <button type="button" class="copy-btn" data-text="Christopher Mugambi Kaburu">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 15px;">After payment, your order will be processed within 24 hours after confirmation.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                <i class="fas fa-check-circle"></i> Complete Order
+            </button>
+        </form>
+    </div>
+</div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Chat Button -->
+    <div class="chat-button" onclick="openWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Amexan</h3>
+                    <p>International shipping made simple and affordable through group ordering.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#packages">Available Packages</a></li>
+                        <li><a href="pack-orders.html">My Orders</a></li>
+                        <li><a href="#about">How It Works</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-phone"></i> +254 793 666 825</p>
+                    <p><i class="fas fa-envelope"></i> support@amexan.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Amexan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+            authDomain: "bynexproject.firebaseapp.com",
+            projectId: "bynexproject",
+            storageBucket: "bynexproject.firebasestorage.app",
+            messagingSenderId: "667246369908",
+            appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+            measurementId: "G-7CCRBG0P8D"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Global variables
+        let currentPrice = 0;
+        let packages = [];
+        let currentUser = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show loading spinner
+            document.getElementById('packagesSpinner').style.display = 'block';
+            
+            // Initialize authentication
+            initAuth();
+            
+            // Form submission
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                processOrder();
+            });
+            
+            // Close modal if clicked outside
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('paymentModal');
+                if (e.target === modal) {
+                    closePaymentModal();
+                }
+            });
+            
+            // Handle copy to clipboard
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.copy-btn')) {
+                    const button = e.target.closest('.copy-btn');
+                    const text = button.getAttribute('data-text');
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalHtml = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalHtml;
+                        }, 2000);
+                        
+                        showToast('Copied to clipboard!', 'success');
+                    }).catch(() => {
+                        showToast('Failed to copy to clipboard', 'error');
+                    });
+                }
+            });
+        });
+
+        // Initialize authentication
+        function initAuth() {
+            auth.signInAnonymously()
+                .then(() => {
+                    currentUser = auth.currentUser;
+                    loadPackages();
+                })
+                .catch((error) => {
+                    console.error("Authentication error:", error);
+                    loadPackages();
+                });
+        }
+
+        // Load packages from Firebase
+        function loadPackages() {
+            const packagesGrid = document.getElementById('packagesGrid');
+            
+            db.collection('packages').where('status', '==', 'active')
+                .get()
+                .then((querySnapshot) => {
+                    packagesGrid.innerHTML = '';
+                    packages = [];
+                    
+                    if (querySnapshot.empty) {
+                        packagesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No packages available at the moment. Please check back later.</p>';
+                        return;
+                    }
+                    
+                    querySnapshot.forEach((doc) => {
+                        const packageData = doc.data();
+                        packageData.id = doc.id;
+                        packages.push(packageData);
+                        
+                        const packageCard = createPackageCard(packageData);
+                        packagesGrid.appendChild(packageCard);
+                    });
+                    
+                    // Initialize carousels after packages are loaded
+                    setTimeout(initImageCarousels, 100);
+                })
+                .catch((error) => {
+                    console.error('Error loading packages:', error);
+                    packagesGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">Error loading packages. Please try again later.</p>';
+                    showToast('Error loading packages', 'error');
+                })
+                .finally(() => {
+                    document.getElementById('packagesSpinner').style.display = 'none';
+                });
+        }
+
+        // Create package card HTML
+        function createPackageCard(packageData) {
+            const card = document.createElement('div');
+            card.className = 'package-card fade-in';
+            card.setAttribute('data-package-id', packageData.id);
+            
+            // Get images or placeholder
+            const images = packageData.images && packageData.images.length > 0 
+                ? packageData.images 
+                : ['https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'];
+            
+            // Get default quantity option
+            const defaultQtyOption = packageData.quantityOptions && packageData.quantityOptions.length > 0 
+                ? packageData.quantityOptions[0] 
+                : { quantity: 1, price: packageData.discountedPrice || 0 };
+            
+            // Calculate days left for group order
+            let daysLeft = 5;
+            if (packageData.groupOrderEndDate) {
+                const endDate = packageData.groupOrderEndDate.toDate ? 
+                    packageData.groupOrderEndDate.toDate() : 
+                    new Date(packageData.groupOrderEndDate);
+                daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000 * 60 * 60 * 24)));
+            }
+            
+            // Store package data for progress calculation
+            card.dataset.packageData = JSON.stringify({
+                quantityOptions: packageData.quantityOptions || [defaultQtyOption],
+                orderCounts: packageData.orderCounts || {}
+            });
+            
+            card.innerHTML = `
+                <div class="package-image">
+                    <div class="image-carousel">
+                        ${images.map(img => `<img src="${img}" class="carousel-image" alt="${packageData.name}" loading="lazy">`).join('')}
+                    </div>
+                    ${images.length > 1 ? `
+                        <div class="carousel-nav">
+                            ${images.map((_, index) => `<div class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`).join('')}
+                        </div>
+                        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+                    ` : ''}
+                    <div class="package-badge">${packageData.type === 'abroad' ? 'Abroad' : 'Local'}</div>
+                </div>
+                <div class="package-content">
+                    <h3 class="package-title">${packageData.name}</h3>
+                    <div class="package-desc">${packageData.description || 'Premium products at unbeatable prices'}</div>
+                    
+                    <div class="pricing">
+                        <span class="original-price">KSh ${packageData.originalPrice || 0}</span>
+                        <span class="discounted-price">KSh ${defaultQtyOption.price || 0}</span>
+                        <span class="save-badge">Save KSh ${((packageData.originalPrice || 0) - (defaultQtyOption.price || 0)).toFixed(2)}</span>
+                    </div>
+                    
+                    <div class="quantity-options">
+                        ${packageData.quantityOptions ? packageData.quantityOptions.map((option, index) => `
+                            <div class="qty-option ${index === 0 ? 'active' : ''}" 
+                                 data-qty="${option.quantity}" 
+                                 data-price="${option.price}"
+                                 onclick="updatePackageSelection(this, '${packageData.id}')">
+                                <div>${option.quantity} units</div>
+                                <div>KSh ${option.price}</div>
+                            </div>
+                        `).join('') : `
+                            <div class="qty-option active" data-qty="1" data-price="${packageData.discountedPrice || 0}" onclick="updatePackageSelection(this, '${packageData.id}')">
+                                <div>1 unit</div>
+                                <div>KSh ${packageData.discountedPrice || 0}</div>
+                            </div>
+                        `}
+                    </div>
+                    
+                    <div class="group-order-info">
+                        <p>Group order ends in: ${daysLeft} day${daysLeft !== 1 ? 's' : ''}</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <p class="group-info-text">Loading progress...</p>
+                    </div>
+                    
+                    <div class="trust-badges">
+                        <div class="badge"><i class="fas fa-shield-alt" title="Verified"></i></div>
+                        <div class="badge"><i class="fas fa-check-circle" title="Quality Assurance"></i></div>
+                        <div class="badge"><i class="fas fa-truck" title="Fast Shipping"></i></div>
+                        <div class="badge"><i class="fas fa-headset" title="24/7 Support"></i></div>
+                    </div>
+                    
+                    ${packageData.review ? `
+                        <div class="review">
+                            "${packageData.review}"
+                            <div class="review-author">- ${packageData.reviewAuthor || 'Satisfied Customer'}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-days">${packageData.procurementDays || 4} days</span>
+                            <span>Procurement from supplier</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-days">${packageData.shippingDaysMin || 10}-${packageData.shippingDaysMax || 14} days</span>
+                            <span>International shipping</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-days">${packageData.deliveryDays || 3} days</span>
+                            <span>Delivery & confirmation</span>
+                        </div>
+                    </div>
+                    
+                    <div class="package-actions">
+                        <button class="btn btn-outline" onclick="showPackageDetails('${packageData.id}')">
+                            <i class="fas fa-question-circle"></i> Details
+                        </button>
+                        <button class="btn btn-primary" onclick="openPaymentModal('${packageData.id}')">
+                            <i class="fas fa-shopping-cart"></i> Order Now
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Update progress for default selection
+            setTimeout(() => updatePackageProgress(card, defaultQtyOption.quantity), 100);
+            
+            return card;
+        }
+
+        // Initialize image carousels
+        function initImageCarousels() {
+            document.querySelectorAll('.package-image').forEach(container => {
+                const carousel = container.querySelector('.image-carousel');
+                const dots = container.querySelectorAll('.carousel-dot');
+                const prevBtn = container.querySelector('.carousel-btn.prev');
+                const nextBtn = container.querySelector('.carousel-btn.next');
+                
+                if (!dots.length || !prevBtn || !nextBtn) return;
+                
+                let currentIndex = 0;
+                const images = carousel.querySelectorAll('.carousel-image');
+                const totalImages = images.length;
+                
+                function showImage(index) {
+                    if (index < 0) index = totalImages - 1;
+                    if (index >= totalImages) index = 0;
+                    
+                    carousel.style.transform = `translateX(-${index * 100}%)`;
+                    
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    dots[index].classList.add('active');
+                    
+                    currentIndex = index;
+                }
+                
+                prevBtn.addEventListener('click', () => showImage(currentIndex - 1));
+                nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
+                
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => showImage(index));
+                });
+                
+                let carouselInterval = setInterval(() => showImage(currentIndex + 1), 5000);
+                
+                container.addEventListener('mouseenter', () => clearInterval(carouselInterval));
+                container.addEventListener('mouseleave', () => {
+                    carouselInterval = setInterval(() => showImage(currentIndex + 1), 5000);
+                });
+            });
+        }
+
+        // Update package selection and progress
+        function updatePackageSelection(element, packageId) {
+            const card = document.querySelector(`.package-card[data-package-id="${packageId}"]`);
+            if (!card) return;
+            
+            // Update active option
+            const options = card.querySelectorAll('.qty-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Get new values
+            const newQty = parseInt(element.getAttribute('data-qty'));
+            const newPrice = parseFloat(element.getAttribute('data-price'));
+            
+            // Update pricing display
+            const discountedElement = card.querySelector('.discounted-price');
+            const saveElement = card.querySelector('.save-badge');
+            const originalPrice = parseFloat(card.querySelector('.original-price').textContent.replace('KSh ', ''));
+            
+            if (discountedElement) discountedElement.textContent = 'KSh ' + newPrice;
+            if (saveElement) saveElement.textContent = 'Save KSh ' + (originalPrice - newPrice).toFixed(2);
+            
+            // Update progress for this quantity option
+            updatePackageProgress(card, newQty);
+        }
+
+        // Update package progress based on quantity selection
+        function updatePackageProgress(card, selectedQty) {
+            try {
+                const packageData = JSON.parse(card.dataset.packageData);
+                const orderCounts = packageData.orderCounts || {};
+                
+                // Get number of ORDERS placed for this specific quantity option
+                const ordersPlaced = orderCounts[`qty_${selectedQty}`] || 0;
+                const requiredOrders = selectedQty; // 3 units = need 3 orders, 5 units = need 5 orders
+                
+                // Calculate progress based on ORDERS not units
+                const progressPercentage = Math.min(100, (ordersPlaced / requiredOrders) * 100);
+                const ordersLeft = Math.max(0, requiredOrders - ordersPlaced);
+                
+                // Update progress bar
+                const progressFill = card.querySelector('.progress-fill');
+                if (progressFill) {
+                    progressFill.style.width = progressPercentage + '%';
+                }
+                
+                // Update group info text
+                const groupInfoText = card.querySelector('.group-info-text');
+                if (groupInfoText) {
+                    if (ordersPlaced >= requiredOrders) {
+                        groupInfoText.classList.add('group-complete');
+                        groupInfoText.textContent = `${ordersPlaced}/${requiredOrders} orders placed • Group complete! ✅`;
+                    } else {
+                        groupInfoText.classList.remove('group-complete');
+                        groupInfoText.textContent = `${ordersPlaced}/${requiredOrders} orders placed • ${ordersLeft} orders remaining`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating progress:', error);
+            }
+        }
+
+        // Show package details via WhatsApp
+        function showPackageDetails(packageId) {
+            const packageData = packages.find(p => p.id === packageId);
+            if (!packageData) return;
+            
+            const message = `Hi! I'd like to know more details about the package: *${packageData.name}*`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/254793666825?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Payment modal functions
+        function openPaymentModal(packageId) {
+            const card = document.querySelector(`.package-card[data-package-id="${packageId}"]`);
+            if (!card) {
+                showToast('Package not found', 'error');
+                return;
+            }
+            
+            const selectedOption = card.querySelector('.qty-option.active');
+            if (!selectedOption) {
+                showToast('Please select a quantity option', 'error');
+                return;
+            }
+            
+            const price = parseFloat(selectedOption.getAttribute('data-price'));
+            const quantity = parseInt(selectedOption.getAttribute('data-qty'));
+            
+            currentPrice = price;
+            document.getElementById('selectedPackageId').value = packageId;
+            document.getElementById('selectedQuantity').value = quantity;
+            document.getElementById('selectedPrice').value = price;
+            document.getElementById('stk-amount').textContent = price;
+            document.getElementById('manual-amount').textContent = price;
+            
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('paymentForm').reset();
+        }
+
+        // Switch between payment tabs
+        function switchPaymentTab(tabName) {
+            document.querySelectorAll('.payment-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.payment-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            if (tabName === 'stk') {
+                document.querySelector('.payment-tab:first-child').classList.add('active');
+                document.getElementById('stkPayment').classList.add('active');
+            } else {
+                document.querySelector('.payment-tab:last-child').classList.add('active');
+                document.getElementById('manualPayment').classList.add('active');
+            }
+        }
+
+        // Process order and save to Firebase
+        function processOrder() {
+            const submitBtn = document.querySelector('#paymentForm button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; margin-right: 10px; display: inline-block;"></div> Processing...';
+            submitBtn.disabled = true;
+            
+            const packageId = document.getElementById('selectedPackageId').value;
+            const quantity = parseInt(document.getElementById('selectedQuantity').value);
+            const price = parseFloat(document.getElementById('selectedPrice').value);
+            const packageData = packages.find(p => p.id === packageId);
+            
+            // Generate unique order ID
+            const orderId = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            
+            const orderData = {
+                orderId: orderId,
+                packageId: packageId,
+                packageName: packageData.name,
+                quantity: quantity,
+                totalAmount: price,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                notes: document.getElementById('notes').value,
+                status: 'processing',
+                paymentStatus: document.querySelector('.payment-tab.active').textContent.trim().toLowerCase().includes('stk') ? 'confirmed' : 'pending',
+                paymentMethod: document.querySelector('.payment-tab.active').textContent.trim().toLowerCase().includes('stk') ? 'stk' : 'manual',
+                userUID: currentUser ? currentUser.uid : 'anonymous',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Add order to Firebase
+            db.collection('pack-orders').add(orderData)
+                .then((docRef) => {
+                    console.log('Order added with ID: ', docRef.id);
+                    
+                    // Save order ID to localStorage for tracking
+                    const savedOrders = JSON.parse(localStorage.getItem('userOrders') || '[]');
+                    savedOrders.push({
+                        orderId: orderId,
+                        docId: docRef.id,
+                        packageName: packageData.name,
+                        quantity: quantity,
+                        totalAmount: price,
+                        createdAt: new Date().toISOString()
+                    });
+                    localStorage.setItem('userOrders', JSON.stringify(savedOrders));
+                    
+                    // Update package joined count for specific quantity option
+                    updatePackageOrderCount(packageId, quantity);
+                    
+                    showToast(`Order placed successfully! Order ID: ${orderId}`, 'success');
+                    closePaymentModal();
+                    
+                    // Reload packages to update the UI
+                    loadPackages();
+                })
+                .catch((error) => {
+                    console.error('Error adding order: ', error);
+                    showToast('Error placing order. Please try again.', 'error');
+                })
+                .finally(() => {
+                    // Restore button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+        }
+
+        // Update package order count for specific quantity option
+        function updatePackageOrderCount(packageId, quantity) {
+            const packageRef = db.collection('packages').doc(packageId);
+            
+            packageRef.get().then((doc) => {
+                if (doc.exists) {
+                    const currentData = doc.data();
+                    const orderCounts = currentData.orderCounts || {};
+                    const qtyKey = `qty_${quantity}`;
+                    
+                    // Increment the ORDER count for this specific quantity option
+                    // Each order = +1 (not +quantity)
+                    orderCounts[qtyKey] = (orderCounts[qtyKey] || 0) + 1;
+                    
+                    // Update the document
+                    packageRef.update({
+                        orderCounts: orderCounts,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        console.log(`Updated ${qtyKey} count to ${orderCounts[qtyKey]} orders`);
+                    });
+                }
+            }).catch((error) => {
+                console.error('Error updating order count:', error);
+            });
+        }
+
+
+// PayHero configuration
+const payHeroConfig = {
+    apiUrl: 'https://backend.payhero.co.ke/api/v2/payments',
+    authToken: 'Basic aHZuYmh2cTRGQkY5U2U2Q2VUVnk6Y3BxM2RTTFBINWtGMWRnVjg1WFNzWEp0UW50NGFqVVFJcWY2Q0J0NA==',
+    channelId: 3183,
+    tillNumber: 6803137
+};
+
+// Initialize STK Payment
+async function initiateSTKPayment() {
+    const phoneInput = document.getElementById('phone');
+    const amountDisplay = document.getElementById('stk-amount');
+    const stkStatus = document.getElementById('stkStatus');
+
+    const phoneNumber = phoneInput.value.trim();
+    const amount = parseFloat(amountDisplay.textContent);
+
+    // Validate inputs
+    if (!phoneNumber) {
+        showToast('Please enter your phone number', 'error');
+        return;
+    }
+    if (amount <= 0 || isNaN(amount)) {
+        showToast('Invalid amount. Please try again.', 'error');
+        return;
+    }
+
+    // Format phone number to 2547XXXXXXXX
+    let formattedPhone = formatPhoneNumber(phoneNumber);
+    if (!formattedPhone) {
+        showToast('Please enter a valid Kenyan phone number', 'error');
+        return;
+    }
+
+    // Show processing
+    stkStatus.textContent = 'Sending STK push request...';
+    stkStatus.style.display = 'block';
+    stkStatus.style.background = '#fff3cd';
+    stkStatus.style.color = '#856404';
+
+    try {
+        // Build payload
+        const requestData = {
+            amount: amount,
+            phone_number: formattedPhone,
+            channel_id: payHeroConfig.channelId,
+            till_number: payHeroConfig.tillNumber,
+            provider: "m-pesa",
+            external_reference: "ORDER-" + Date.now(),
+            customer_name: (document.getElementById('firstName')?.value || '') + ' ' +
+                           (document.getElementById('lastName')?.value || ''),
+            callback_url: "https://yourwebsite.com/callback.php" // replace with real callback
+        };
+
+        console.log("STK Payload:", requestData);
+
+        // Send request
+        const response = await fetch(payHeroConfig.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': payHeroConfig.authToken
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        // Capture both raw and parsed response
+        const rawText = await response.text();
+        console.log("HTTP Status:", response.status);
+        console.log("Raw Response:", rawText);
+
+        let data;
+        try {
+            data = JSON.parse(rawText);
+        } catch (e) {
+            throw new Error("Invalid JSON response: " + rawText);
+        }
+
+        // Handle success / failure
+        if ((data.success === true) || data.status === 'pending') {
+            stkStatus.textContent = 'STK push sent! Check your phone to complete payment.';
+            stkStatus.style.background = '#d4edda';
+            stkStatus.style.color = '#155724';
+            showToast('STK push sent. Please enter your Mpesa PIN.', 'success');
+
+            // Monitor payment
+            checkPaymentStatus(data.reference || data.data?.reference);
+        } else {
+            stkStatus.textContent = 'Failed: ' + (data.message || rawText);
+            stkStatus.style.background = '#f8d7da';
+            stkStatus.style.color = '#721c24';
+            showToast('Failed to send STK. Try manual payment.', 'error');
+        }
+    } catch (error) {
+        console.error('STK Push Error:', error);
+        stkStatus.textContent = 'Error: ' + error.message;
+        stkStatus.style.background = '#f8d7da';
+        stkStatus.style.color = '#721c24';
+        showToast('Network or API error. Check console logs.', 'error');
+    }
+}
+
+// Format phone number to 254 format
+function formatPhoneNumber(phone) {
+    phone = phone.replace(/\D/g, '');
+    if (phone.startsWith('0')) return '254' + phone.substring(1);
+    if (phone.length === 9 && (phone.startsWith('7') || phone.startsWith('1'))) return '254' + phone;
+    if (phone.startsWith('254') && phone.length === 12) return phone;
+    return null;
+}
+
+// Dummy payment status checker (replace with backend webhook)
+function checkPaymentStatus(reference) {
+    console.log('Monitoring payment for reference:', reference);
+    setTimeout(() => {
+        const stkStatus = document.getElementById('stkStatus');
+        stkStatus.textContent = 'Payment confirmed! Thank you.';
+        stkStatus.style.background = '#d4edda';
+        stkStatus.style.color = '#155724';
+        showToast('Payment confirmed successfully!', 'success');
+    }, 30000);
+}
+
+// Simple alert-based toast (replace with nicer UI if needed)
+function showToast(message, type) {
+    alert(type.toUpperCase() + ": " + message);
+}
+
+// Update the openPaymentModal function to prefill phone number if available
+function openPaymentModal(packageId) {
+    const card = document.querySelector(`.package-card[data-package-id="${packageId}"]`);
+    if (!card) {
+        showToast('Package not found', 'error');
+        return;
+    }
+    
+    const selectedOption = card.querySelector('.qty-option.active');
+    if (!selectedOption) {
+        showToast('Please select a quantity option', 'error');
+        return;
+    }
+    
+    const price = parseFloat(selectedOption.getAttribute('data-price'));
+    const quantity = parseInt(selectedOption.getAttribute('data-qty'));
+    
+    currentPrice = price;
+    document.getElementById('selectedPackageId').value = packageId;
+    document.getElementById('selectedQuantity').value = quantity;
+    document.getElementById('selectedPrice').value = price;
+    document.getElementById('stk-amount').textContent = price;
+    document.getElementById('manual-amount').textContent = price;
+    
+    // Try to prefill phone number if available
+    const phoneInput = document.getElementById('phone');
+    if (!phoneInput.value) {
+        // You could implement logic to get the user's last used phone number
+        // from localStorage or user profile
+    }
+    
+    document.getElementById('paymentModal').style.display = 'flex';
+}
+
+// Add this to your existing processOrder function to handle manual payments
+function processOrder() {
+    const submitBtn = document.querySelector('#paymentForm button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    const paymentMethod = document.querySelector('.payment-tab.active').textContent.trim();
+    
+    // Show loading state
+    submitBtn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; margin-right: 10px; display: inline-block;"></div> Processing...';
+    submitBtn.disabled = true;
+    
+    const packageId = document.getElementById('selectedPackageId').value;
+    const quantity = parseInt(document.getElementById('selectedQuantity').value);
+    const price = parseFloat(document.getElementById('selectedPrice').value);
+    const packageData = packages.find(p => p.id === packageId);
+    
+    // For manual payments, we need to set payment status as pending
+    const isManualPayment = paymentMethod.toLowerCase().includes('manual');
+    
+    // Generate unique order ID
+    const orderId = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    const orderData = {
+        orderId: orderId,
+        packageId: packageId,
+        packageName: packageData.name,
+        quantity: quantity,
+        totalAmount: price,
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        notes: document.getElementById('notes').value,
+        status: isManualPayment ? 'pending_payment' : 'processing',
+        paymentStatus: isManualPayment ? 'pending' : 'confirmed',
+        paymentMethod: isManualPayment ? 'manual' : 'stk',
+        userUID: currentUser ? currentUser.uid : 'anonymous',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    // Add order to Firebase
+    db.collection('pack-orders').add(orderData)
+        .then((docRef) => {
+            console.log('Order added with ID: ', docRef.id);
+            
+            // Save order ID to localStorage for tracking
+            const savedOrders = JSON.parse(localStorage.getItem('userOrders') || '[]');
+            savedOrders.push({
+                orderId: orderId,
+                docId: docRef.id,
+                packageName: packageData.name,
+                quantity: quantity,
+                totalAmount: price,
+                createdAt: new Date().toISOString(),
+                paymentMethod: isManualPayment ? 'manual' : 'stk'
+            });
+            localStorage.setItem('userOrders', JSON.stringify(savedOrders));
+            
+            if (isManualPayment) {
+                showToast(`Order placed! Please complete payment to Till Number: 6803137. Order ID: ${orderId}`, 'success');
+            } else {
+                // Update package joined count for specific quantity option
+                updatePackageOrderCount(packageId, quantity);
+                showToast(`Order placed successfully! Order ID: ${orderId}`, 'success');
+            }
+            
+            closePaymentModal();
+            
+            // Reload packages to update the UI
+            loadPackages();
+        })
+        .catch((error) => {
+            console.error('Error adding order: ', error);
+            showToast('Error placing order. Please try again.', 'error');
+        })
+        .finally(() => {
+            // Restore button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+}
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 4000);
+        }
+
+        // Get user orders from localStorage
+        function getUserOrders() {
+            return JSON.parse(localStorage.getItem('userOrders') || '[]');
+        }
+
+        // Clear user orders (for testing)
+        function clearUserOrders() {
+            localStorage.removeItem('userOrders');
+            showToast('Order history cleared', 'success');
+        }
+
+        // Utility function to format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-KE', {
+                style: 'currency',
+                currency: 'KES',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Handle window resize for responsive design
+        window.addEventListener('resize', function() {
+            // Reinitialize carousels if needed
+            setTimeout(initImageCarousels, 100);
+        });
+
+        // Open WhatsApp chat
+        function openWhatsApp() {
+            const message = "Hi! I need help with my order on Amexan.";
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/254793666825?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Add some sample data for testing (remove in production)
+        function addSamplePackage() {
+            const samplePackage = {
+                name: "Premium Smartphone Bundle",
+                description: "Latest smartphone with accessories at unbeatable group buying prices",
+                originalPrice: 45000,
+                discountedPrice: 35000,
+                type: "abroad",
+                status: "active",
+                images: [
+                    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80",
+                    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80"
+                ],
+                quantityOptions: [
+                    { quantity: 3, price: 32000 },
+                    { quantity: 5, price: 30000 },
+                    { quantity: 10, price: 28000 }
+                ],
+                orderCounts: {
+                    qty_3: 1,    // 1 order placed for 3-unit option (2 orders remaining)
+                    qty_5: 2,    // 2 orders placed for 5-unit option (3 orders remaining)
+                    qty_10: 3    // 3 orders placed for 10-unit option (7 orders remaining)
+                },
+                groupOrderEndDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
+                procurementDays: 3,
+                shippingDaysMin: 7,
+                shippingDaysMax: 10,
+                deliveryDays: 2,
+                review: "Amazing quality and fast delivery!",
+                reviewAuthor: "John D.",
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            db.collection('packages').add(samplePackage)
+                .then((docRef) => {
+                    console.log('Sample package added with ID: ', docRef.id);
+                    loadPackages();
+                })
+                .catch((error) => {
+                    console.error('Error adding sample package: ', error);
+                });
+        }
+
+        // Uncomment to add sample data (for testing only)
+        // setTimeout(addSamplePackage, 2000);
+    </script>
+</body>
+</html>

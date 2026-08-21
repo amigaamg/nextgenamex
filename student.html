@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amexan | Medical Student Resources</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    
+    <!-- Preload hero image -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />  
+    <!-- Inline critical CSS -->
+    <style>
+        /* Critical CSS to render above-the-fold content */
+        :root {
+            --brand-blue: #0000cd;
+            --brand-blue-light: #4d4dff;
+            --brand-blue-dark: #00008b;
+            --accent-teal: #20B2AA;
+            --accent-orange: #FFA500;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --text-color: #212529;
+            --white: #ffffff;
+            --shadow: 0 4px 8px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+            --card-border: 1px solid #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .logo-icon i {
+            color: var(--brand-blue);
+            font-size: 1.8rem;
+        }
+
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--accent-teal);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 25px;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--brand-blue);
+            color: var(--white);
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+        }
+ .btn:hover {
+            background: var(--brand-blue-light);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            margin-left: 15px;
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--brand-blue);
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--brand-blue-dark);
+            display: inline-block;
+            padding: 0 20px;
+            background: var(--light-gray);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--brand-blue);
+            z-index: 0;
+        }
+
+        .years-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .year-tab {
+            padding: 12px 25px;
+            margin: 0 8px 15px;
+            background: var(--white);
+            border: 2px solid var(--brand-blue);
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--brand-blue);
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .year-tab:hover, .year-tab.active {
+            background: var(--brand-blue);
+            color: var(--white);
+        }
+
+        .year-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.year-content.active {
+    display: block;
+}
+
+.motivational {
+    background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark));
+    color: var(--white);
+    padding: 0.75rem;          /* reduced from 2.5rem (≈70% smaller) */
+    border-radius: 8px;        /* slightly smaller to match compact look */
+    margin-bottom: 0.6rem;     /* reduced spacing */
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.motivational::before {
+    content: '"';
+    font-family: Georgia, serif;
+    font-size: 3rem;           /* reduced from 10rem */
+    position: absolute;
+    top: -15px;                /* adjusted to fit reduced height */
+    left: 10px;
+    opacity: 0.1;
+    line-height: 1;
+}
+
+.motivational p {
+    font-size: 0.9rem;         /* reduced from 1.4rem */
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+    max-width: 600px;          /* reduced width for balance */
+    margin: 0 auto;
+    text-align: center;
+    line-height: 1.4;          /* tighter line height */
+}
+
+.motivational .author {
+    text-align: right;
+    font-style: normal;
+    margin-top: 8px;           /* reduced from 20px */
+    font-weight: 600;
+    font-size: 0.75rem;        /* reduced from 1.1rem */
+}
+
+        .units-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 3rem;
+        }
+
+        .unit-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-left: 5px solid var(--brand-blue);
+        }
+
+        .unit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .unit-header {
+            background: var(--white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .unit-header:hover {
+            background: var(--medium-gray);
+        }
+
+        .unit-header h3 {
+            color: var(--brand-blue-dark);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .unit-header i {
+            color: var(--brand-blue);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .unit-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .unit-card.active .unit-content {
+            max-height: 5000px;
+            padding: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .unit-card.active .unit-header i {
+            transform: rotate(180deg);
+        }
+
+        .resource-section {
+            margin-bottom: 25px;
+        }
+
+        .resource-section h4 {
+            color: var(--brand-blue-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--medium-gray);
+        }
+
+        .resource-section h4 i {
+            margin-right: 10px;
+            color: var(--brand-blue);
+            background: var(--medium-gray);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .book-item {
+            text-align: center;
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 12px;
+            transition: var(--transition);
+            border: var(--card-border);
+        }
+
+        .book-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .book-cover {
+            height: 160px;
+            background: var(--medium-gray);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-gray);
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .book-item a {
+            display: block;
+            background: var(--brand-blue);
+            color: var(--white);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            margin-top: 8px;
+        }
+
+        .book-item a:hover {
+            background: var(--brand-blue-dark);
+        }
+
+        .book-item a i {
+            margin-right: 5px;
+        }
+
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .channel-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            background: var(--light-gray);
+            transition: var(--transition);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .channel-item:hover {
+            background: #e0e8ff;
+            transform: translateX(5px);
+        }
+
+        .channel-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--brand-blue);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .channel-info {
+            overflow: hidden;
+        }
+
+        .channel-name {
+            font-weight: 600;
+            color: var(--dark-gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .channel-topic {
+            font-size: 0.9rem;
+            color: var(--brand-blue);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-container {
+            display: flex;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 15px 25px;
+            border: 2px solid var(--brand-blue);
+            border-radius: 50px 0 0 50px;
+            font-size: 1rem;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-container button {
+            background: var(--brand-blue);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .search-container button:hover {
+            background: var(--brand-blue-dark);
+        }
+
+        footer {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--brand-blue);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-column ul li i {
+            margin-right: 10px;
+            color: var(--brand-blue);
+            width: 20px;
+        }
+
+        .footer-column a {
+            color: #bbb;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .social-icons {
+            display: flex;
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #444;
+            color: var(--white);
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background: var(--brand-blue);
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .year-description {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent-teal);
+        }
+
+        .year-description h3 {
+            color: var(--brand-blue);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+        }
+
+        h4 .icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .units-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 868px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+                justify-content: center;
+            }
+            
+            nav ul {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav li {
+                margin: 5px 10px;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .motivational p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .years-tabs {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+            }
+            
+            .year-tab {
+                margin: 0 5px 10px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: 100px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 25px;
+            }
+            
+            nav {
+                width: 100%;
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+            
+            nav li {
+                margin: 5px 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav a {
+                display: block;
+                padding: 10px;
+            }
+            
+            .header-content {
+                flex-direction: row;
+                justify-content: center;
+                position: relative;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .book-cover {
+                height: 140px;
+            }
+            
+            .book-title {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-container input {
+                border-radius: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .search-container button {
+                border-radius: 50px;
+                padding: 12px;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .book-item {
+                padding: 10px;
+            }
+            
+            .book-cover {
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .books-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .book-cover {
+                height: 120px;
+            }
+            
+            .book-title {
+                font-size: 0.8rem;
+            }
+        }
+        .channels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.channel-item:hover {
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.channel-icon img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;   /* makes them circular like YouTube */
+  object-fit: contain;  /* keeps logos from stretching */
+  background: #f9f9f9;
+  padding: 5px;
+}
+
+.channel-info .channel-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.channel-info .channel-topic {
+  font-size: 12px;
+  color: #666;
+}
+.year-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.year-content.active {
+    display: block;
+}
+
+.coming-soon {
+    text-align: center;
+    padding: 3rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border-left: 5px solid var(--accent-orange);
+}
+
+.coming-soon i {
+    font-size: 3rem;
+    color: var(--accent-teal);
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+.coming-soon h3 {
+    color: var(--brand-blue);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.coming-soon p {
+    color: var(--dark-gray);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+        /* Above-the-fold styles only - remaining CSS will be loaded asynchronously */
+    </style>
+    
+    <!-- Load non-critical CSS asynchronously -->
+    <link rel="stylesheet" href="data:text/css;base64,<?php echo base64_encode(file_get_contents('non-critical.css')); ?>" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="non-critical.css"></noscript>
+    
+    <!-- Preload LazyLoad library -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.8.3/lazyload.min.js" as="script">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h1>Amexan <span>Resources</span></h1>
+                </div>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Resources</a></li>
+                        <li><a href="#">Study Tools</a></li>
+                        <li><a href="#">Clinical Cases</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Medical Mastery Starts Here</h2>
+            <p>Amexan provides comprehensive resources for medical students from Year 1 to Year 6. Everything you need to excel in your medical journey.</p>
+            <a href="#resources" class="btn">Explore Resources</a>
+            <a href="index.html" class="btn btn-outline">Join Community</a>
+        </div>
+    </section>
+
+    
+
+    <!-- Main Resources Section -->
+    <section id="resources" class="container">
+        <div class="section-title">
+            <h2>Medical Year Resources</h2>
+        </div>
+
+        <!-- Year Tabs -->
+        <div class="years-tabs">
+            <div class="year-tab active" data-year="year1">Year 1</div>
+            <div class="year-tab" data-year="year2">Year 2</div>
+            <div class="year-tab" data-year="year3">Year 3</div>
+            <div class="year-tab" data-year="year4">Year 4</div>
+            <div class="year-tab" data-year="year5">Year 5</div>
+            <div class="year-tab" data-year="year6">Year 6</div>
+        </div>
+
+        <!-- Year 1 Content -->
+        <div id="year1" class="year-content active">
+            <!-- Motivational Message -->
+            <div class="motivational">
+                <p>"Welcome to the beginning of your medical journey! This is where you lay the foundation. Embrace the challenge, absorb knowledge like a sponge, and remember - every great physician started right where you are now. Your dedication today builds the healer of tomorrow."</p>
+                <div class="author">- Amexan Founder's Message</div>
+            </div>
+
+            <!-- Year Description -->
+            <div class="year-description">
+                <h3>Year 1 Focus Areas</h3>
+                <p>First year medical students focus on foundational sciences including anatomy, physiology, biochemistry, and histology. This year establishes the fundamental knowledge required for clinical practice.</p>
+            </div>
+
+            <!-- Units -->
+            <div class="units-container">
+                <!-- Unit 1 -->
+                <div class="unit-card active">
+                    <div class="unit-header">
+                        <h3>Human Anatomy</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Gross Anatomy Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <h4>
+                                <img src="images/gross.png" alt="Textbooks" class="icon" loading="lazy">
+                                Gross Anatomy
+                            </h4>
+
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/upper limb.png" alt="SAMMEH DOSS UPPER LIMB" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Upper Limb Anatomy- Sameh Doss</div>
+                                    <a href="https://docs.google.com/uc?export=download&id=1AlilZA6-1bgwTpmMJif4OgXXL-bN9HV4&authuser=0&usp=drive_link
+
+" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/THORAX.png" alt="SAMMEH DOSS THORAX" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Thorax Anatomy- Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1PmlqH4pYQaadRECEf2qhncapFg4_8aE8" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/lower-limb samme.png" alt="SAMMEH DOSS LOWER LIMB" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Lower Limb- Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1AABo3ULqMJiHFQmlaM4lVTyRS1S9SHZD" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ABDOMEN.jpeg" alt="SAMMEH DOSS ABDOMEN" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Abdomen Anatomy- Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=11ZERgO_W1RqdjbBQwomN86rJgWCd7nMN" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/head.webp" alt="SAMMEH DOSS HEAD & NECK" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Head & Neck Anatomy- Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=17Kii_Paoal9YxU2uTKwTHvNU_p_lHyZk" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/pelvis.png" alt="Netter's Atlas" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">  Pelvis & Perinium Anatomy- Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1ZJA-ueckMyAWlr5l-k93lQW7S7khHJNc" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/neuro.png" alt="Clinically Oriented Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Neuroanatomy - Sameh Doss</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1RUlhxbQnByJJK4P5duzWJSZE_A0PSxDg" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <!-- Additional books -->
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/GENERAL VISH.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Vishram Singh General Anatomy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=18hRxXV9Wws5ZLv61JCGPHiGA06BRQqW_" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/vish lower.png" alt="Color Atlas of Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Vishram lower limb and abdomen Anatomy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1LtYpAQhaaDky46xKbsaKtkf146OxDj-Y" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/vish upper.png" alt="Color Atlas of Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Vishram upper limb and thorax Anatomy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1vDC_wnz3Ky4_WcTl-AoXzB2i0NTqddC3" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/vish head.png" alt="Color Atlas of Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Vishram Head, Neck and Brain Anatomy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1LIs2jyD8FnIa38ele0eeagMLDQe4qQAu" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/moore.png" alt="Color Atlas of Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Moore's Clinically Oriented Anatomyy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1ZxnCE0zKhPTk9m62ykkhJw70Ifv35LwF" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/Gray.png" alt="Color Atlas of Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Gray's Aatomy for Students</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1UegpGOI0beHEO4r6TenLoagMuI4lzC4R" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/LOWER MCQS.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Lower Limb Anatomy MCQS</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1eCt_-wzOnO7vILK0MhmvU_h_MXzAQaFk" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/netter attlas.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Netter Atlas of Human Anatomy</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Pv8D1RXipvFd_qh1Pgra5lohxH4inseQ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Embryology Books -->
+                        <div class="resource-section">  
+                            <h4>
+                                <img src="images/gross.png" alt="Textbooks" class="icon" loading="lazy">
+                                Embryology
+                            </h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/keith moore.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">The Developing Human clinically oriented embryology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1psMx4ul26c81K3oN7I5XYdTnfiH2vBfQ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/GENERAL VISH.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Langman's Medical Embryology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=118_l6JVpfIayebPWYE82omJtGgvqXQgP" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/baestt.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Best Crash Embryology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1sApN3MdaV_GDY5t8Qxcu7uXJsUhWv72v" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/vishra embryo.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Textbook of Clinical Embryology Vishram Singh</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1cDb5ZwfRGBtT1yN0qC5LsNDnkR0o0-YZ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                 <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/brs embryo.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Brs Embryology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1TN67oOvApkv269Bjs7LRVigAchi9CP9L" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                 <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/netter embryo.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Netter's Atlas of Human Embryology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1tfhcaipYOrdYCq0-4TDlkneyocuZVYBn" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Histology Books -->
+                        <div class="resource-section">
+                            <h4>
+                                <img src="images/gross.png" alt="Textbooks" class="icon" loading="lazy">
+                                Histology
+                            </h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ross.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Ross Textbook of Histology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1utQnZ_JRgvL-qBn3bKmpkhEnyYFk0uJz" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/indebri.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Inderbir Singh'S Textbook Of Human Histology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Fzsru-Wx5UGRr7i5_zcFmeKb99oEAOEE" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/sontakle.png" alt="Gray's Anatomy" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Santakke Yogesh Textbook of Human Histology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1WjAUMPx3yqJPxzKt5hNhjmwWZIZ6a2VK" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- YouTube Channels -->
+<div class="resource-section">
+    <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+    <div class="channels-grid">
+        
+        <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/viva vocee.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Viva Voce of Anatomy</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@vivavoceofanatomy?si=lr-GBhr4K9nzRKy5" style="color:#0000cd;">
+      cadaveric anatomy tutorial
+    </a>
+  </div>
+</div>
+        </div>
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/adel.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr Adel Bondok Anatomy Channel</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@adelbondok?si=4kWJOgZqRfQgzC-e" style="color:#0000cd;">
+      The best Anatomy Lecturer!
+    </a>
+  </div>
+</div>
+        </div>
+        <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/prakash.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr.G Bhanu Prakash</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@doctorbhanuprakash?si=27G2Xd804ySn9L92" style="color:#0000cd;">
+      Detailed Anatomy Lectures!
+    </a>
+  </div>
+</div>
+        </div>
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/angiee.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+Angelina Issac</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@doctorbhanuprakash?si=27G2Xd804ySn9L92" style="color:#0000cd;">
+      Detailed Anatomy of Bones
+    </a>
+  </div>
+</div>
+        </div>
+
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/minas.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+Embryology Dr. Minas</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@minass?si=YfeYJR4i4Cd8JICW" style="color:#0000cd;">
+      Embryology
+    </a>
+  </div>
+</div>
+        </div>
+
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/rose.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+LIFE IN THE WOMB DR ROSE</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@drrose-lifeinthewomb?si=WM9Dz8jdM0kVSzeZ" style="color:#0000cd;">
+      Detailed Embryology
+    </a>
+  </div>
+</div>
+        </div>
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/BEDA.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+DR. BEDA OLABU</div>
+  <div class="channel-topic">
+    <a href="https://youtu.be/wa9hdg9MQtU?si=fATYpZMDSH0tYCv2" style="color:#0000cd;">
+    From UON Lecturer!
+    </a>
+  </div>
+</div>
+        </div>
+<!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/AKRAM.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+Human Anatomy Education</div>
+  <div class="channel-topic">
+    <a href="https://youtu.be/wa9hdg9MQtU?si=fATYpZMDSH0tYCv2" style="color:#0000cd;">
+   Great for ANATOMY SPOT EXAMS!
+    </a>
+  </div>
+</div>
+        </div>
+
+        <div class="resource-section">
+  <h4><i class="fas fa-link"></i> Extra Resources</h4>
+  <div class="channels-grid">
+
+    <!-- Telegram -->
+    <div class="channel-item">
+      <div class="channel-icon">
+        <i class="fab fa-telegram-plane" style="font-size:40px; color:#eff7f8;"></i>
+      </div>
+      <div class="channel-info">
+        <div class="channel-name">Join Telegram</div>
+        <div class="channel-topic">
+          <a href="https://t.me/Kenyan_medic_students" style="color:#0000cd;" target="_blank">
+            Download More Study Materials
+          </a>
+        </div>
+      </div>
+    </div>
+     <!-- Telegram -->
+    <div class="channel-item">
+      <div class="channel-icon">
+        <i class="fab fa-telegram-plane" style="font-size:40px; color:#f2f6f8;"></i>
+      </div>
+      <div class="channel-info">
+        <div class="channel-name">Join Telegram YEAR 1</div>
+        <div class="channel-topic">
+          <a href="https://t.me/+DC7UwrWyMb0zYzU0" style="color:#0000cd;" target="_blank">
+            Download More Study Materials
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Website -->
+    <div class="channel-item">
+      <div class="channel-icon">
+        <i class="fas fa-globe" style="font-size:40px; color:#e1e1e7;"></i>
+      </div>
+      <div class="channel-info">
+        <div class="channel-name">More books to Download</div>
+        <div class="channel-topic">
+          <a href="https://emedicodiary.com/" style="color:#0000cd;" target="_blank">
+            Access More Downloads
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+       
+                <!-- Unit 2 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Medical Physiology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/guyton big.png" alt="Guyton and Hall" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Guyton and Hall Textbook of Physiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1WyrRzTBn0_6L3ed-A3FJ99wuQqhZ08kT" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ganong.png" alt="Costanzo Physiology" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Ganong's Textbook of Physiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=18IJ2al5BC5odWSDzWD5K8Vfn6GRSY43I" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/sembuligan.png" alt="Berne and Levy Physiology" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">K-sembuligam Essentials of Physiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1X7lSPTUzkCN87T7Wb6umjvUASJFl_T0Y" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/milliy.png" alt="Ganong's Review" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Millie's Comprehensive Textbook of Physiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1YYYbxHd7OZb3xrb35eLK4YkZfLpAAxW2" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/Indu Khurana Textbook of physiology.png" alt="Ganong's Review" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Indu Khurana Textbook of Physiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=13nDeR7gBxQga_tO4PwXB5thH3F9xey0Y" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/GUY QUIZ.png" alt="Ganong's Review" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Guyton's Review Questions</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1SY-zq_LQTXfneOfKMld9lARxjviPTpBN" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        
+
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/NINJA.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+NINJA NERD</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@ninjanerdofficial?si=Ifvd8TjxjL9DaW2-" style="color:#0000cd;">
+      THE GURU OF MEDICAL PHYSIOLOGY
+    </a>
+  </div>
+</div>
+        </div>
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/OPEN.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">
+Physiology Open</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@physiologyopen?si=MPreb3trBQnk3FxJ" style="color:#0000cd;">
+      Detailed Physiology Lectures
+    </a>
+  </div>
+</div>
+        </div>
+         <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/najeeb.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. NAJEEB
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@doctornajeeb?si=Pdh_Lqn7jqNCxNn2" style="color:#0000cd;">
+      Physiology lectures
+    </a>
+  </div>
+</div>
+        </div>
+                                
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+
+                <!-- Unit 3 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Medical Biochemistry</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/satyra.png" alt="Lippincott Biochemistry" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Satyanarayana Biochemistry</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Pffv8ftpgIZ_5ebJmARYv3M-6iwhSr_A" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/mn cahta.png" alt="Lehninger Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">MN Chatterjea-Textbook of Medical Biochemistry </div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1WDcPfhH0sd7IKUcQgejgx6sXrt8LfYxz" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/jaypee.png" alt="Textbook of Biochemistry" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Jaypee Essentials of Biochemistry</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1LGfPILos6eMlmjPiFtAl418pzajGaj-R" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                       
+
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                 <!-- AnatomyZone -->
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/RAJESH.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Biochemistry by Dr Rajesh Jambhulkar
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@rajesh_jambhulkar?si=_Wv-5OVz68FZKvA3" style="color:#0000cd;">
+      BIOCHEMISTRY GURU!
+    </a>
+  </div>
+</div>
+        </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                        </div>
+               </div>
+                       
+                </div>
+
+
+            <!-- Year 3 Content -->
+         <div id="year2" class="year-content">
+            <!-- Motivational Message -->
+            <div class="motivational">
+                <p>"Year 2 is grind time. Master the basics, sharp
+            en your focus, and build habits that will carry you into clinics. Discipline now means dominance later.
+                      "</p>
+                <div class="author">- Amexan Clinical Director</div>
+            </div>
+
+            <!-- Year Description -->
+            <div class="year-description">
+                <h3>Year 2 Focus Areas</h3>
+                <p>Second year medical students continue with core pre-clinical
+                     sciences including Anatomy, Physiology, and Biochemistry. The emphasis is on building a stronger 
+                     foundation in body systems, integrating knowledge, and preparing for the transition into clinical years.</p>
+            </div>
+
+            <!-- Units -->
+            <div class="units-container">
+                <!-- Unit 1 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Medical Microbiology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/PANIKERS.png" alt="Harrison's Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Paniker’s Textbook of MEDICAL PARASITOLOGY</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1vzdY_ujV_7nK369rdlHIc6pOHgqQ-g5L" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ANAN.png" alt="Step Up to Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Ananthanarayan and Panikers Microbiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Upgh7yG944gKjOdQm0-WjXAw6t-8-JtJ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ESSEN.png" alt="Davidson's Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Jaypee Essentials of Microbiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1WUtVKUFSamuNZ3l69bqy-Wk5KNAZVDdz" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/LANGE MIC.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">LangeReview of Medical Microbiology and Immunology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Eqe6F5jbU7PMrVLEGFbJgeah5vJi8vsG" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/MICROBB.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Medical Microbiology- Jawetz</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1TCZninKyTHxgniyR_3QRLCe_fusCPQve" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/SHERRIS.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Sherris' Medical Microbiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1ymRee9PP5W1kFuEp5V5XHzavOwoU0XbG" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/TEXT MICROB.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Text Book of Microbiology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1gPno3kk34OI83aF-OIhyfj0J_f5CqnMp" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                           
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/priyanka.png" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr.Priyanka Sachdev
+</div>
+  <div class="channel-topic">
+    <a href="https://www.youtube.com/live/xppLXCUBF4Y?si=tQ5aKLYlVm3fhlpD" style="color:#0000cd;">
+    Crash Microbiology
+    </a>
+  </div>
+</div>
+        </div>
+        <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/krishna.png" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Krishna Sahith
+</div>
+  <div class="channel-topic">
+    <a href="https://www.youtube.com/live/2Y30XMVtk-Y?si=wOlEHo8uNL93pDDB" style="color:#0000cd;">
+      Crash Microbiology
+    </a>
+  </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Unit 2 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Immunology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/IMMUNOLOGY ROI.png" alt="Schwartz Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"></div>Roitt's Essential Immunology
+                                    <a href="https://drive.google.com/uc?export=download&id=1Yx8Uw7XykabCWDA-vsODZWtrAGgyy4Eq" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/BOOK.png" alt="Bailey and Love" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Book of Immunology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1B37TsyJlm8maQspV9caowRZMynMsL9k5" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                               
+                               
+                            </div>
+                        </div>
+                      
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                               <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/pryii.png" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Priyanka Sachdev
+</div>
+  <div class="channel-topic">
+    <a href="  https://www.youtube.com/live/vWOhJgjN-vA?si=yxpcW8mc0S91pHtT" style="color:#0000cd;">
+      One Shot Immunology
+    </a>
+  </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+                       
+                        
+        
+     
+
+
+       
+                               
+    <!-- Year 3 Content -->
+         <div id="year3" class="year-content">
+            <!-- Motivational Message -->
+            <div class="motivational">
+                <p>"Year 3 is not about trying—it’s about scaling. You’ve proven you can survive, now it’s time to dominate. Eliminate excuses, sharpen your focus, 
+                    and execute with discipline. Success doesn’t come to those who wait, it comes to those who decide."</p>
+                <div class="author">- Amexan Clinical Director</div>
+            </div>
+
+            <!-- Year Description -->
+            <div class="year-description">
+                <h3>Year 3 Focus Areas</h3>
+                <p>Year 3 is where medicine gets real—Pharmacology and Pathology. This is not about memorizing, it’s about mastering. Drugs and diseases are the language of a doctor, and this year you either dominate them or get dominated.
+                     Stay disciplined, stay sharp, and own your craft—because lives will depend on it.</p>
+            </div>
+
+            <!-- Units -->
+            <div class="units-container">
+                <!-- Unit 1 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Human Pathology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/robby essen.png" alt="Harrison's Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Robbins Essential Pathology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1vUU1_if12byefHOKp3bHLBU3T2eUczMS" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/robby.png" alt="Step Up to Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Robbins & Cotran Pathologic Basics of Diseases</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1179hzjiWcX_nVr3ltPXdShaHe6qi_Uqg" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/Hash mohan.png" alt="Davidson's Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Harsh Mohan Textbook of Pathology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1_cewKzLEQeeUUnzJE6vU7SVmEMaZBPPd" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/brspatho.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">BRS Pathology (5th Ed)</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1WfKjreZZgS1D7OnjtVCpP_c2tpcNCXmZ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/atlas patho.png" alt="Kumar and Clark" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Color Atlas of Anatomical Pathology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1ytv-FyI1fTwFLyDUnwqMOvosuuNcmPf_" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                 <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/JIBRAN.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Jibran Ahmed
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@drjibranahmed?si=h-FJSsBkV0ZCBCGe" style="color:#0000cd;">
+     Detailed Pathology Lectures!
+    </a>
+  </div>
+  </div>
+  </div> <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/i loove.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">I Love Pathology
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@ilovepathologyvijaypatho?si=Nc-jvXgQkMYjU-yy" style="color:#0000cd;">
+    Detailed Pathology Lectures.
+    </a>
+  </div>
+  </div>
+  </div>
+   <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/pryii.png" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Priyanka Sachdev
+</div>
+  <div class="channel-topic">
+    <a href="https://youtu.be/6f1Hcp0nni8?si=C7Pw-g4YpA4RXrSH" style="color:#0000cd;">
+      Crash Pathology Lectures.
+    </a>
+  </div>
+  </div>
+  </div>
+                               <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/prakash.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Prakash Bhanu
+</div>
+  <div class="channel-topic">
+    <a href="https://www.youtube.com/live/1MSElqujmy4?si=Fq6w352yxjRyKfYV" style="color:#0000cd;">
+  Crash Pathology Lectures.
+    </a>
+  </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit 2 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Medical Pharmacology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/kd trip.png" alt="Schwartz Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">KDT-Essentials of Medical Pharmacology(8th Ed)</div>
+                                    <a href="" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/kd essen.png" alt="Bailey and Love" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">KD Tripathi Medical Pharmacology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1LJq2vodsXUqyOFT26uxi_pJgdm5M9DFz" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/katzung.png" alt="Sabiston Textbook" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">katzung-pharmacology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1aqS4bo0e_YXmJNXMsXyxu2v7QyfYlwHM" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/kd mcqs.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">KD Tripathi MCQs in Pharmacology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=19Xgu99SA5pEStkyKCSI9p3hg0MnpmtVE" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                               
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/kd class.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Pharmacological CLASSIFICATION OF DRUGS with Doses and PreparationsKDT</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1X1w0muk001T75fi4IdTMsQzy06u_JOuu" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/Rang dale.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Rang and Dale Pharmacology Flashcards</div>
+                                    <a href="" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/NINJA.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Ninja Nerd
+</div>
+  <div class="channel-topic">
+    <a href="https://youtu.be/kkUxUBoM-hM?si=Gmu0aGKhAFqJK0W0" style="color:#0000cd;">
+    Pharmacology lectures.
+    </a>
+  </div>
+  </div>
+  </div>
+                                <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/pryii.png" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr. Priyanka Sachdev
+</div>
+  <div class="channel-topic">
+    <a href="https://youtu.be/SXhMXl0sXcM?si=H0tC59D3vk81Ypof" style="color:#0000cd;">
+      Crash Pharmacology lectures
+    </a>
+  </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    <!-- Year 4 Content -->
+        <div id="year4" class="year-content">
+            <!-- Motivational Message -->
+            <div class="motivational">
+                <p>"This is where theory meets reality! Clinical rotations are your proving ground. Step into the wards with confidence, learn from every patient encounter, and remember - compassion is as vital as knowledge. You're not just studying medicine anymore; you're becoming a physician."</p>
+                <div class="author">- Amexan Clinical Director</div>
+            </div>
+
+            <!-- Year Description -->
+            <div class="year-description">
+                <h3>Year 4 Focus Areas</h3>
+                <p>Fourth year medical students focus on clinical rotations in specialties like internal medicine, surgery, pediatrics, and obstetrics. This year emphasizes clinical decision-making and patient management.</p>
+            </div>
+
+            <!-- Units -->
+            <div class="units-container">
+                <!-- Unit 1 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Internal Medicine</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/kumar.png" alt="Harrison's Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Kumar and Clark's Clinical Medicine 10th Edition</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Qu9dtFsN0E5rCpGA0d1hUtNJpZQichO-" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/davidson.png" alt="Step Up to Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Davidson's Principles and Practice of Medicine 24th Ed Full version</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=14FB8O49ED34AjQEUFt8sMwyprNbLmnyK" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/hutchi.png" alt="Davidson's Medicine" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Hutchison Clinical Methods</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Pz-csy9Q75yqW_raZMtXFgpV_khHdaW1" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div> 
+                            </div>
+                        </div>
+
+                        <!-- YouTube Channels -->
+                        <div class="resource-section">
+                            <h4><i class="fab fa-youtube"></i> Video Resources</h4>
+                            <div class="channels-grid">
+                                <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/white army.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">THE WHITE ARMY
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@thewhitearmy?si=SU6-090p9wHtaX_z" style="color:#0000cd;">
+     Internal Medicine Case Presentations & Discussions
+    </a>
+  </div>
+  </div></div>
+  <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/geeky.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Geeky Medics
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@geekymedics?si=bxG0hKrD_WSxhuck" style="color:#0000cd;">
+      Examination Videos
+    </a>
+  </div>
+  </div></div>
+  <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/aetcm.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">AETCM Emergency Medicine 
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@aetcmemergencymedicine?si=e29liA5OgtKKGJuS" style="color:#0000cd;">
+    Emercency Cases Prentations!
+    </a>
+  </div>
+  </div></div>
+  <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/MK7.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">Dr MK 7
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@drmk7?si=dMnUgRG8qCiGwJPG" style="color:#0000cd;">
+     LECTURES ON INTERNAL MEDICINE
+    </a>
+  </div>
+  </div></div>
+                                <div class="channel-item">
+            <div class="channel-icon">
+                <img src="images/NINJA.jpg" alt="AnatomyZone" loading="lazy" width="60" height="60">
+            </div>
+           <div class="channel-info">
+  <div class="channel-name">NINJA NERD
+</div>
+  <div class="channel-topic">
+    <a href="https://youtube.com/@ninjanerdofficial?si=CWSJJCjMAyj3_w45" style="color:#0000cd;">
+        LECTURES ON INTERNAL MEDICINE
+    </a>
+  </div>
+  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit 2 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>General Surgery</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/OKELS.png" alt="Schwartz Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Okell's Notes Surgery </div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1C3BWY4jJAG-v7eJdNoBReZEiHkYUaJ9q" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/MED BEAR.png" alt="Bailey and Love" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Med bear_082611</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=12A4Q7g9J8uLK2PJfP6KWoMPIZsPBkH58" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/BAY LOVE.png" alt="Sabiston Textbook" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Williams, Bailey and Love's Short Practice of Surgery</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1HoGFP_2cr5MgQyTUDMS5gtnKtYXN-id3" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/HAMILTON.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Hamilton Bailey's Physical Signs Demonstrations of Physical Signs in Clinical Surgery</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1_ECjtFzfsRhMLSLjRMPI5ug9K5rQvx6D" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+
+</div></div>
+
+                        <!-- Unit 3 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Pediatrics</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/nelson.png" alt="Schwartz Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Nelson essentials of pediatrics</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1gvyFafoXXExwH_Z949NfTmM7xDK2mRgx" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/baby nelson.png" alt="Bailey and Love" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Baby Nelson Pediatrics</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1TkJJeUntKgiRChCDb6Ehj-eu6blF5XK6" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/protocal.png" alt="Sabiston Textbook" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Basic Paediatric protocal 5th edition 24th Oct  2022</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1j_7Yw7dRk3nuO5TZl9f8GfqfeRH2fju6" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/neo protocao.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> Comprehensive Newborn Care Protocols Book November 2022</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1fafr2e3kEQ7SBakKYUCYp6qzwpA7NdnI" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/neonatology.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Neonatology Management, Procedures, On-Call Problems, Diseases, and Drugs</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=10dpNcOMwEfOz1bLAcd20JeW8ozBcUUIw" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/immun.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Immunization Manual for Medical and Nursing Students final smaller</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1rodaPl1GLalKfHhf6t3M-4vnebqcqX5Y" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                       </div></div>
+
+
+                         <!-- Unit 2 -->
+                <div class="unit-card">
+                    <div class="unit-header">
+                        <h3>Obstetrics & Gynecology</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="unit-content">
+                        <!-- Books -->
+                        <div class="resource-section">
+                            <h4><i class="fas fa-book"></i> Textbooks</h4>
+                            <div class="books-grid">
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/dc duta.png" alt="Schwartz Principles" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title"> DC Dutta's Textbook of Obstetrics_ Including Perinatology and Contraception</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=182J1DxSQv8odzY1PCHuuya5CM_joJi5r" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/cofee.png" alt="Bailey and Love" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">current diagnosis amp-treatment obstetrics-amp gynecology</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=182J1DxSQv8odzY1PCHuuya5CM_joJi5r" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/obs natio.png" alt="Sabiston Textbook" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Nationl Guidelines for Quality Obstetrics and Perinatal Care</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1uh520QjBbQV8GM5YxO8VCD0GdnWEmzx3" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="images/ten ticha.png" alt="Washington Manual" loading="lazy" width="140" height="160">
+                                    </div>
+                                    <div class="book-title">Gynaecology by Ten Teachers</div>
+                                    <a href="https://drive.google.com/uc?export=download&id=1Y2Qt_3YVVs3VfMkoloYe3gKsMx5fW1cZ" download><i class="fas fa-download"></i> Download PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    
+        <!-- Year 5 Content -->
+        <div id="year5" class="year-content">
+            <div class="coming-soon">
+                <i class="fas fa-tools"></i>
+                <h3>Year 5 Resources Coming Soon</h3>
+                <p>We're currently curating the best resources for Year 5. Check back soon for updates!</p>
+            </div>
+        </div>
+
+        <!-- Year 6 Content -->
+        <div id="year6" class="year-content">
+            <div class="coming-soon">
+                <i class="fas fa-tools"></i>
+                <h3>Year 6 Resources Coming Soon</h3>
+                <p>We're currently curating the best resources for Year 6. Check back soon for updates!</p>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Amexan Resources</h3>
+                    <p>Your comprehensive medical education resource hub, supporting students from pre-clinical years through clinical rotations and beyond.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Home</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Year 1 Resources</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Clinical Cases</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Study Guides</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Faculty Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Textbooks Library</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Video Lectures</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Rotation Guides</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">Research Tools</a></li>
+                        <li><i class="fas fa-chevron-right"></i><a href="#">OSCE Preparation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@amexan.edu</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Medical Education Hub, Suite 405</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 9AM - 5PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Amexan Medical Education Resources. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load LazyLoad library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/17.8.3/lazyload.min.js"></script>
+    
+    <script>
+        // Initialize lazy loading
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: "[loading=lazy]",
+            threshold: 0
+        });
+        
+        // Year Tabs Functionality
+        document.querySelectorAll('.year-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.year-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const yearId = tab.getAttribute('data-year');
+                document.getElementById(yearId).classList.add('active');
+                
+                // Update lazy loading for newly visible content
+                lazyLoadInstance.update();
+            });
+        });
+
+        // Unit Accordion Functionality
+        document.querySelectorAll('.unit-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const unitCard = header.parentElement;
+                unitCard.classList.toggle('active');
+                
+                // Adjust max-height for smooth expansion
+                const content = header.nextElementSibling;
+                if (unitCard.classList.contains('active')) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    // Update lazy loading when content becomes visible
+                    setTimeout(() => lazyLoadInstance.update(), 300);
+                } else {
+                    content.style.maxHeight = "0";
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            
+            // Change icon
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mainNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Search Functionality
+        const searchInput = document.querySelector('.search-container input');
+        const searchButton = document.querySelector('.search-container button');
+        
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                alert(`Searching for: ${searchTerm}\nThis functionality would search the database in a full implementation.`);
+                // In a real implementation, this would filter resources
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize max-height for already active units
+        document.querySelectorAll('.unit-card.active .unit-content').forEach(content => {
+            content.style.maxHeight = content.scrollHeight + "px";
+        });
+       
+    </script>
+</body>
+</html>

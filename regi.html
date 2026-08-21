@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - Amexan Medical</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+  <style>
+    .text-brandBlue {
+      color: #0000CD;
+    }
+
+    .bg-brandBlue {
+      background-color: #0000CD;
+    }
+
+    /* Sharp, professional focus states */
+    input:focus {
+      box-shadow: 0 0 0 3px rgba(0, 0, 205, 0.1);
+      border-color: #0000CD !important;
+    }
+
+    /* Sharp button hover effects */
+    button:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 205, 0.3);
+    }
+
+    /* Professional checkbox styling */
+    input[type="checkbox"]:checked {
+      background-color: #0000CD;
+      border-color: #0000CD;
+    }
+
+    input[type="checkbox"]:focus {
+      ring-color: #0000CD;
+      box-shadow: 0 0 0 3px rgba(0, 0, 205, 0.1);
+    }
+
+    /* Password strength indicator colors */
+    .strength-weak { color: #ef4444; }
+    .strength-medium { color: #f59e0b; }
+    .strength-strong { color: #10b981; }
+
+    /* Mobile responsiveness for background */
+    @media (max-width: 1023px) {
+      body {
+        background: linear-gradient(135deg, #0000CD 0%, #0033FF 100%);
+        background-attachment: fixed;
+      }
+      
+      .min-h-screen > div:first-child {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(15px);
+        border-radius: 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 205, 0.1);
+      }
+    }
+
+    /* Sharp, professional transitions */
+    * {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Enhanced focus states for accessibility */
+    button:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 2px solid #0000CD;
+      outline-offset: 2px;
+    }
+
+    /* Professional shadows */
+    .shadow-xl {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 205, 0.1), 0 10px 10px -5px rgba(0, 0, 205, 0.04);
+    }
+
+    /* Sharp gradient for right side */
+    .bg-gradient-to-br {
+      background: linear-gradient(135deg, #0000CD 0%, #0033FF 50%, #003399 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <!-- Success Message Popup -->
+  <div id="successPopup" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transition-all duration-300">
+    <div class="flex items-center gap-2">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>
+      <span id="successMessage">Registration successful!</span>
+    </div>
+  </div>
+
+  <div class="min-h-screen flex">
+    <!-- Left Side - Registration Form -->
+    <div class="w-full lg:w-[45%] flex items-center justify-center px-6 py-12 bg-white">
+      <div class="w-full max-w-md">
+        <!-- Logo/Brand -->
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-black text-brandBlue mb-3 tracking-tight">AMEXAN</h1>
+          <p class="text-gray-700 font-medium">Join Our Healthcare Community</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl shadow-xl border-2 border-gray-100">
+          <h2 class="text-2xl font-bold text-center text-brandBlue mb-8 uppercase tracking-wide">Create Your Account</h2>
+          
+          <div id="message" class="mb-4 text-sm text-center min-h-[20px]"></div>
+
+          <form id="registerForm" class="space-y-5">
+            <div class="space-y-2">
+              <label for="name" class="text-sm font-semibold text-gray-800 uppercase tracking-wide">Full Name</label>
+              <input type="text" id="name" required placeholder="Enter your full name" 
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition-all duration-150 font-medium"/>
+            </div>
+
+            <div class="space-y-2">
+              <label for="email" class="text-sm font-semibold text-gray-800 uppercase tracking-wide">Email Address</label>
+              <input type="email" id="email" required placeholder="Enter your email address" 
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition-all duration-150 font-medium"/>
+            </div>
+
+            <div class="space-y-2">
+              <label for="phone" class="text-sm font-semibold text-gray-800 uppercase tracking-wide">Phone Number</label>
+              <input type="tel" id="phone" placeholder="+254 700 000 000" 
+                     class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition-all duration-150 font-medium"/>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label for="password" class="text-sm font-semibold text-gray-800 uppercase tracking-wide">Password</label>
+                <input type="password" id="password" required placeholder="Create password" 
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition-all duration-150 font-medium"/>
+              </div>
+
+              <div class="space-y-2">
+                <label for="confirmPassword" class="text-sm font-semibold text-gray-800 uppercase tracking-wide">Confirm Password</label>
+                <input type="password" id="confirmPassword" required placeholder="Repeat password" 
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brandBlue focus:border-brandBlue transition-all duration-150 font-medium"/>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <label class="flex items-center">
+                <input type="checkbox" id="showPassword" class="w-4 h-4 text-brandBlue bg-gray-100 border-gray-300 rounded focus:ring-brandBlue focus:ring-2">
+                <span class="ml-2 text-sm text-gray-700">Show passwords</span>
+              </label>
+              <div class="text-sm">
+                <span class="text-gray-600">Password strength:</span>
+                <span id="passwordStrength" class="font-medium">Weak</span>
+              </div>
+            </div>
+
+            <button type="submit" 
+                    class="w-full bg-brandBlue hover:bg-blue-700 text-white py-3 rounded-lg font-bold uppercase tracking-wide transition-all duration-150 transform hover:scale-[1.01] focus:outline-none focus:ring-3 focus:ring-blue-300 shadow-lg hover:shadow-xl">
+              Create Account
+            </button>
+          </form>
+
+          <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-4 bg-white text-gray-500">or continue with</span>
+            </div>
+          </div>
+
+          <button id="googleSignIn" 
+                  class="w-full flex justify-center items-center gap-3 bg-white border-2 border-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-50 hover:border-brandBlue hover:shadow-lg font-semibold transition-all duration-150 transform hover:scale-[1.01]">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5" alt="Google"/>
+            Continue with Google
+          </button>
+
+          <div class="text-center mt-6">
+            <p class="text-sm text-gray-600">
+              Already have an account? 
+              <a href="login.html" class="text-brandBlue hover:text-blue-800 font-medium hover:underline transition-colors">Sign in here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Welcome Section -->
+    <div class="hidden lg:flex lg:w-[55%] relative bg-gradient-to-br from-brandBlue to-blue-900">
+      <!-- Background Image Overlay -->
+      <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+           style="background-image: url('images/sign\ up.png');">
+      </div>
+      
+     <!-- Content -->
+<div class="relative z-10 flex flex-col justify-center items-start px-12 text-white">
+  <div class="max-w-lg">
+    <h2 class="text-4xl text-brandBlue  mb-6">Join Amexan Medical Today</h2>
+    <p class="text-xl mb-8 leading-relaxed text-black">
+      Become part of our trusted network of healthcare professionals and access premium medical supplies with confidence.
+    </p>
+    
+    <!-- Benefits List -->
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <span class="text-black font-semibold text-lg">Access to premium medical equipment</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <span class="text-black font-semibold text-lg">Competitive pricing & bulk discounts</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <span class="text-black font-semibold text-lg">24/7 expert customer support</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <span class="text-black font-semibold text-lg">Fast & reliable delivery nationwide</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- Bottom Pattern -->
+      <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-brandBlue to-transparent"></div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+      authDomain: "bynexproject.firebaseapp.com",
+      projectId: "bynexproject",
+      storageBucket: "bynexproject.appspot.com",
+      messagingSenderId: "667246369908",
+      appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+      measurementId: "G-7CCRBG0P8D"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const messageBox = document.getElementById("message");
+    const successPopup = document.getElementById("successPopup");
+    const successMessage = document.getElementById("successMessage");
+    const passwordField = document.getElementById("password");
+    const passwordStrengthIndicator = document.getElementById("passwordStrength");
+
+    // Show success popup
+    function showSuccessPopup(message = 'Registration successful!') {
+      successMessage.textContent = message;
+      successPopup.classList.remove('hidden');
+      setTimeout(() => {
+        successPopup.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      let strengthText = 'Weak';
+      let strengthClass = 'strength-weak';
+
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      if (strength >= 4) {
+        strengthText = 'Strong';
+        strengthClass = 'strength-strong';
+      } else if (strength >= 2) {
+        strengthText = 'Medium';
+        strengthClass = 'strength-medium';
+      }
+
+      passwordStrengthIndicator.textContent = strengthText;
+      passwordStrengthIndicator.className = `font-medium ${strengthClass}`;
+    }
+
+    // Password strength monitoring
+    passwordField.addEventListener('input', function() {
+      checkPasswordStrength(this.value);
+    });
+
+    // Show/hide passwords
+    document.getElementById('showPassword').addEventListener('change', function () {
+      const pwd = document.getElementById('password');
+      const confirm = document.getElementById('confirmPassword');
+      pwd.type = confirm.type = this.checked ? 'text' : 'password';
+    });
+
+    // Handle registration
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      messageBox.textContent = '';
+      messageBox.className = '';
+
+      // Validation
+      if (!name) {
+        messageBox.textContent = "Full name is required!";
+        messageBox.className = "text-red-600";
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        messageBox.textContent = "Passwords do not match!";
+        messageBox.className = "text-red-600";
+        return;
+      }
+
+      if (password.length < 6) {
+        messageBox.textContent = "Password must be at least 6 characters long!";
+        messageBox.className = "text-red-600";
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = document.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Creating Account...';
+      submitBtn.disabled = true;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          return user.updateProfile({ displayName: name }).then(() => {
+            return user.sendEmailVerification().then(() => {
+              return db.collection("users").doc(user.uid).set({
+                uid: user.uid,
+                fullName: name,
+                email: user.email,
+                phone: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            });
+          });
+        })
+        .then(() => {
+          messageBox.textContent = "Registration successful! Please check your email to verify your account.";
+          messageBox.className = "text-green-600";
+          showSuccessPopup("Account created successfully! Please verify your email.");
+          document.getElementById('registerForm').reset();
+          passwordStrengthIndicator.textContent = 'Weak';
+          passwordStrengthIndicator.className = 'font-medium strength-weak';
+          setTimeout(() => window.location.href = 'verify.html', 2000);
+        })
+        .catch(error => {
+          messageBox.textContent = error.message;
+          messageBox.className = "text-red-600";
+        })
+        .finally(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        });
+    });
+
+    // Google Sign-In
+    document.getElementById('googleSignIn').addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const googleBtn = document.getElementById('googleSignIn');
+      const originalText = googleBtn.innerHTML;
+      
+      googleBtn.innerHTML = '<div class="w-5 h-5 border-2 border-brandBlue border-t-transparent rounded-full animate-spin"></div> Signing in...';
+      googleBtn.disabled = true;
+
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const user = result.user;
+          return db.collection("users").doc(user.uid).set({
+            uid: user.uid,
+            fullName: user.displayName || "",
+            email: user.email,
+            phone: user.phoneNumber || "",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        })
+        .then(() => {
+          showSuccessPopup("Google sign-in successful! Redirecting...");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1000);
+        })
+        .catch(error => {
+          messageBox.textContent = error.message;
+          messageBox.className = "text-red-600";
+        })
+        .finally(() => {
+          googleBtn.innerHTML = originalText;
+          googleBtn.disabled = false;
+        });
+    });
+  </script>
+</body>
+</html>

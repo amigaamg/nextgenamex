@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Amexan — My Orders (Realtime)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+
+  <style>
+    
+    /* Minimal, clean styles - adapt to your theme */
+    :root { --brand: #1e66d0; --muted:#6b7280; --card:#fff; --bg:#f7fafc; --danger:#ef4444; }
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin:0; background:var(--bg); color:#111; }
+    .container { max-width:1100px; margin:28px auto; padding:16px; }
+    header { display:flex; align-items:center; gap:12px; padding:12px 0; }
+    h1 { margin:0; font-size:20px; color:var(--brand); }
+    .card { background:var(--card); border-radius:10px; padding:16px; box-shadow:0 6px 18px rgba(20,30,60,0.06); margin-bottom:18px; }
+    .controls { display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+    select, input { padding:8px 10px; border-radius:8px; border:1px solid #e6e9ef; }
+    .orders-list { width:100%; border-collapse:collapse; }
+    .orders-list tr { border-bottom:1px solid #eef2f7; }
+    .orders-list td, .orders-list th { padding:12px 8px; text-align:left; vertical-align:middle; }
+    .btn { background:var(--brand); color:#fff; padding:8px 12px; border-radius:8px; border:0; cursor:pointer; }
+    .btn.secondary { background:#f3f4f6; color:#111; border:1px solid #e6e9ef; }
+    .muted { color:var(--muted); font-size:13px; }
+    .status { display:inline-block; padding:6px 8px; border-radius:999px; color:#fff; font-size:12px; }
+    .s-paid { background:#10b981; } .s-pending { background:#f59e0b; } .s-delivered { background:var(--brand);} .s-cancel { background:var(--danger);}
+    .order-details { background:#fafafa; padding:12px; border-radius:8px; margin-top:8px; }
+    .product-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #eee; }
+    .tracking-steps { list-style:none; padding-left:0; margin:0; }
+    .tracking-steps li { padding:8px 0; border-bottom:1px dashed #eee; }
+    .small { font-size:13px; color:var(--muted); }
+    .hidden { display:none; }
+    @media (max-width:720px) {
+      .product-row { flex-direction:column; gap:6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>My Orders</h1>
+    </header>
+
+    <div id="signedOutCard" class="card hidden">
+      <div class="muted">Please sign in to view your orders.</div>
+      <div style="margin-top:12px"><button class="btn" onclick="location.href='login.html'">Sign In</button></div>
+    </div>
+
+    <div id="ordersCard" class="card hidden">
+      <div class="controls">
+        <select id="statusFilter" aria-label="Filter by status">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        <input id="searchInput" placeholder="Search (order id, product, name, phone)" style="min-width:280px" />
+
+        <div style="margin-left:auto" class="small muted" id="ordersCount">Loading…</div>
+      </div>
+
+      <table class="orders-list" aria-live="polite" role="table">
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th style="width:180px">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTbody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+
+      <div id="noOrders" class="muted hidden" style="padding:12px;">You have no orders yet.</div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK — use your provided snippet (modular) -->
+  <script type="module">
+    // Your provided SDK snippet (kept as-is, then we import additional functions)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+      authDomain: "bynexproject.firebaseapp.com",
+      projectId: "bynexproject",
+      storageBucket: "bynexproject.firebasestorage.app",
+      messagingSenderId: "667246369908",
+      appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+      measurementId: "G-7CCRBG0P8D"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Additional imports we need
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import {
+      getFirestore, collection, query, where, orderBy, onSnapshot,
+      doc, getDoc
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ---------- App state ----------
+    let currentUser = null;
+    let ordersUnsub = null;                   // top-level orders listener
+    const orderDocUnsubs = {};                // per-order listeners for expanded orders
+    let ordersList = [];                      // local cache of orders (real-time maintained)
+    const ordersCard = document.getElementById('ordersCard');
+    const signedOutCard = document.getElementById('signedOutCard');
+    const ordersTbody = document.getElementById('ordersTbody');
+    const noOrdersEl = document.getElementById('noOrders');
+    const ordersCountEl = document.getElementById('ordersCount');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+
+    // ---------- Utility functions ----------
+    function formatCurrency(n){ return 'KES ' + (Number(n)||0).toLocaleString(); }
+    function tsToString(ts){
+      if (!ts) return '-';
+      if (typeof ts.toDate === 'function') return ts.toDate().toLocaleString();
+      return new Date(ts).toLocaleString();
+    }
+    function statusClass(s){
+      if (!s) return 's-pending';
+      s = String(s).toLowerCase();
+      if (s.includes('paid')) return 's-paid';
+      if (s.includes('deliv')) return 's-delivered';
+      if (s.includes('cancel')) return 's-cancel';
+      return 's-pending';
+    }
+
+    function clearOrderListeners(){
+      if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
+      for (const k in orderDocUnsubs){ try { orderDocUnsubs[k](); } catch(e){} }
+      Object.keys(orderDocUnsubs).forEach(k => delete orderDocUnsubs[k]);
+    }
+
+    // ---------- Auth state & top-level real-time listener ----------
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      clearOrderListeners();
+      ordersList = [];
+      renderEmptyState();
+
+      if (!user) {
+        signedOutCard.classList.remove('hidden');
+        ordersCard.classList.add('hidden');
+        return;
+      }
+
+      signedOutCard.classList.add('hidden');
+      ordersCard.classList.remove('hidden');
+      subscribeToUserOrders(user.uid);
+    });
+
+    // ---------- Subscribe to user's orders collection (real-time) ----------
+    function subscribeToUserOrders(uid){
+      // Clean previous
+      if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
+
+      // Base query: orders belonging to this user, newest first.
+      // This single equality + single orderBy typically does NOT require composite index.
+      const ordersRef = collection(db, 'orders');
+      const q = query(ordersRef, where('userId', '==', uid), orderBy('orderDate', 'desc'));
+
+      ordersUnsub = onSnapshot(q, snapshot => {
+        // maintain local cache by mapping doc changes
+        snapshot.docChanges().forEach(change => {
+          const id = change.doc.id;
+          const data = { id, ...change.doc.data() };
+          if (change.type === 'added') {
+            ordersList.unshift(data); // newest first (snapshot is already ordered desc)
+          } else if (change.type === 'modified') {
+            const idx = ordersList.findIndex(o => o.id === id);
+            if (idx > -1) ordersList[idx] = data;
+            else ordersList.unshift(data);
+          } else if (change.type === 'removed') {
+            ordersList = ordersList.filter(o => o.id !== id);
+            // if we were listening to the removed order document, unsubscribe
+            if (orderDocUnsubs[id]) { orderDocUnsubs[id](); delete orderDocUnsubs[id]; }
+          }
+        });
+
+        // Re-sort to guarantee order (defensive)
+        ordersList.sort((a, b) => {
+          const ta = a.orderDate && typeof a.orderDate.toMillis === 'function' ? a.orderDate.toMillis() : (a.orderDate ? new Date(a.orderDate).getTime() : 0);
+          const tb = b.orderDate && typeof b.orderDate.toMillis === 'function' ? b.orderDate.toMillis() : (b.orderDate ? new Date(b.orderDate).getTime() : 0);
+          return tb - ta;
+        });
+
+        renderOrders();
+      }, err => {
+        console.error('Orders onSnapshot error:', err);
+        ordersTbody.innerHTML = `<tr><td colspan="6" class="muted">Failed to load orders. Check console.</td></tr>`;
+      });
+    }
+
+    // ---------- Render orders table (with client-side search & status filter) ----------
+    function renderOrders(){
+      const q = (searchInput.value || '').trim().toLowerCase();
+      const status = (statusFilter.value || 'all').toLowerCase();
+
+      const filtered = ordersList.filter(order => {
+        // status filter:
+        const s = (order.status || '').toLowerCase();
+        if (status !== 'all' && s !== status && (order.tracking && String(order.tracking.status || '').toLowerCase() !== status)) return false;
+
+        // search: order id, customer name, phone, product names
+        if (!q) return true;
+        const idStr = (order.orderId || order.id || '').toLowerCase();
+        if (idStr.includes(q)) return true;
+        const custName = ((order.customer && order.customer.name) || '').toLowerCase();
+        if (custName.includes(q)) return true;
+        const phone = ((order.customer && order.customer.phone) || order.phone || '').toLowerCase();
+        if (phone.includes(q)) return true;
+        const products = (order.items || order.products || []).map(p => {
+          if (typeof p === 'string') return p.toLowerCase();
+          return ((p.name||'') + ' ' + (p.brand||'')).toLowerCase();
+        }).join(' ');
+        if (products.includes(q)) return true;
+        return false;
+      });
+
+      // update counters
+      ordersCountEl.textContent = `${filtered.length} of ${ordersList.length} orders`;
+
+      // render rows
+      if (!filtered.length) {
+        ordersTbody.innerHTML = `<tr><td colspan="6" class="muted">No orders match your filters.</td></tr>`;
+        if (ordersList.length === 0) {
+          noOrdersEl.classList.remove('hidden');
+        } else {
+          noOrdersEl.classList.add('hidden');
+        }
+        return;
+      }
+      noOrdersEl.classList.add('hidden');
+
+      ordersTbody.innerHTML = '';
+      filtered.forEach((order, idx) => {
+        const tr = document.createElement('tr');
+
+        const orderIdText = order.orderId || order.id || '';
+        const dateText = tsToString(order.orderDate || order.createdAt || null);
+        const total = (order.totals && (order.totals.total ?? order.totals.grandTotal)) || order.total || order.totalAmount || 0;
+        const statusText = order.status || (order.payment && order.payment.status) || (order.tracking && order.tracking.status) || 'unknown';
+
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td>
+            <div style="font-weight:600">${escapeHtml(orderIdText)}</div>
+            <div class="small muted">${escapeHtml((order.customer && order.customer.name) || '')}</div>
+          </td>
+          <td>${escapeHtml(dateText)}</td>
+          <td style="font-weight:700">${formatCurrency(total)}</td>
+          <td><span class="status ${statusClass(statusText)}">${escapeHtml(statusText)}</span></td>
+          <td>
+            <button class="btn secondary" data-action="toggle" data-id="${order.id}">Details</button>
+            <button class="btn" data-action="track" data-id="${order.id}">Track</button>
+            <button class="btn" data-action="receipt" data-id="${order.id}" ${!(String(statusText).toLowerCase().includes('paid')) ? 'disabled' : ''}>Receipt</button>
+          </td>
+        `;
+
+        // append row and details row
+        ordersTbody.appendChild(tr);
+
+        const detTr = document.createElement('tr');
+        detTr.id = `details-${order.id}`;
+        detTr.className = 'hidden';
+        detTr.innerHTML = `<td colspan="6"><div class="order-details" id="order-details-${order.id}"></div></td>`;
+        ordersTbody.appendChild(detTr);
+      });
+
+      // attach event handlers for buttons (delegation)
+      ordersTbody.querySelectorAll('button').forEach(btn => {
+        btn.onclick = handleOrderButtonClick;
+      });
+    }
+
+    // ---------- Button click handler (delegated) ----------
+    function handleOrderButtonClick(e){
+      const b = e.currentTarget;
+      const action = b.dataset.action;
+      const orderId = b.dataset.id;
+      if (!action || !orderId) return;
+      if (action === 'toggle') toggleOrderDetails(orderId);
+      else if (action === 'track') goToTracking(orderId);
+      else if (action === 'receipt') openReceipt(orderId);
+    }
+
+    // ---------- Toggle order details display and attach per-order real-time listener ----------
+    async function toggleOrderDetails(orderId){
+      const detRow = document.getElementById(`details-${orderId}`);
+      if (!detRow) return;
+      const container = detRow.querySelector(`#order-details-${orderId}`);
+
+      const isHidden = detRow.classList.contains('hidden');
+      // hide all other detail rows and unsubscribe other listeners
+      document.querySelectorAll('tr[id^="details-"]').forEach(r => {
+        if (r.id !== `details-${orderId}`) {
+          r.classList.add('hidden');
+          const otherId = r.id.replace('details-','');
+          if (orderDocUnsubs[otherId]) { orderDocUnsubs[otherId](); delete orderDocUnsubs[otherId]; }
+        }
+      });
+
+      if (!isHidden) {
+        // collapse current
+        detRow.classList.add('hidden');
+        if (orderDocUnsubs[orderId]) { orderDocUnsubs[orderId](); delete orderDocUnsubs[orderId]; }
+        return;
+      }
+
+      // expand
+      detRow.classList.remove('hidden');
+      // Attach a real-time listener to the single order doc so updates flow into the details
+      // If already listening, keep it.
+      if (orderDocUnsubs[orderId]) return;
+      const docRef = doc(db, 'orders', orderId);
+      orderDocUnsubs[orderId] = onSnapshot(docRef, docSnap => {
+        if (!docSnap.exists()) {
+          container.innerHTML = `<div class="muted">This order no longer exists.</div>`;
+          return;
+        }
+        const order = { id: docSnap.id, ...docSnap.data() };
+        renderOrderDetails(container, order);
+        // also update the ordersList cache (so table reflects change)
+        const idx = ordersList.findIndex(o=> o.id === order.id);
+        if (idx > -1) ordersList[idx] = order;
+        else ordersList.unshift(order);
+        // re-render table row status/button enable state
+        renderOrders();
+      }, err => {
+        container.innerHTML = `<div class="muted">Failed to load order details.</div>`;
+        console.error('order doc onSnapshot error', err);
+      });
+    }
+
+    // ---------- Render order details HTML into container ----------
+    function renderOrderDetails(container, order){
+      // Build product listing
+      const products = order.items || order.products || [];
+      const productsHtml = products.map(p => {
+        const name = escapeHtml(p.name || p.title || p.productName || '');
+        const brand = escapeHtml(p.brand || '');
+        const qty = p.quantity || p.qty || 1;
+        const price = p.price ?? p.unitPrice ?? 0;
+        const lineTotal = Number(qty) * Number(price);
+        return `<div class="product-row">
+                  <div>
+                    <div style="font-weight:600">${name}</div>
+                    <div class="small muted">${brand}</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div class="small">${qty} × ${formatCurrency(price)}</div>
+                    <div style="font-weight:700">${formatCurrency(lineTotal)}</div>
+                  </div>
+                </div>`;
+      }).join('');
+
+      // tracking timeline
+      const tracking = order.tracking || {};
+      let trackingHtml = '<div class="small muted">No tracking data yet.</div>';
+      if (Array.isArray(tracking.events) && tracking.events.length){
+        const steps = tracking.events.map(ev => {
+          const step = escapeHtml(ev.step || ev.status || '');
+          const note = escapeHtml(ev.note || '');
+          const ts = tsToString(ev.ts || ev.timestamp || ev.time);
+          return `<li><div style="font-weight:600">${step}</div><div class="small muted">${note}</div><div class="small muted">${ts}</div></li>`;
+        }).join('');
+        trackingHtml = `<ul class="tracking-steps">${steps}</ul>`;
+      } else if (tracking.status || tracking.current){
+        trackingHtml = `<div style="font-weight:600">${escapeHtml(tracking.status || tracking.current)}</div>`;
+      }
+
+      // totals & customer
+      const totals = order.totals || {};
+      const customer = order.customer || {};
+      const orderDate = tsToString(order.orderDate || order.createdAt || order.orderTimestamp);
+
+      container.innerHTML = `
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start;">
+          <div style="flex:1; min-width:280px;">
+            <div class="small muted">Order</div>
+            <div style="font-weight:700; margin-bottom:6px">${escapeHtml(order.orderId || order.id || '')}</div>
+            <div class="small muted">Placed</div>
+            <div style="margin-bottom:6px">${escapeHtml(orderDate)}</div>
+
+            <div class="small muted">Customer</div>
+            <div style="font-weight:600">${escapeHtml(customer.name || '')}</div>
+            <div class="small muted">${escapeHtml(customer.email || '')} • ${escapeHtml(customer.phone || '')}</div>
+            <div style="margin-top:8px">${escapeHtml(customer.address || '')}</div>
+          </div>
+
+          <div style="width:320px;">
+            <div class="small muted">Summary</div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px">
+              <div class="small muted">Subtotal</div><div>${formatCurrency(totals.subtotal || order.subtotal || 0)}</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:6px">
+              <div class="small muted">Shipping</div><div>${formatCurrency(totals.shipping || order.shipping || 0)}</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px; border-top:1px solid #eee; padding-top:8px; font-weight:700">
+              <div>Total</div><div>${formatCurrency(totals.total || order.total || order.totalAmount || 0)}</div>
+            </div>
+            <div style="margin-top:10px; display:flex; gap:8px;">
+              <button class="btn" onclick="openReceipt('${order.id}')"
+                ${String(order.status || '').toLowerCase().includes('paid') ? '' : 'disabled'}>Receipt</button>
+              <button class="btn secondary" onclick="downloadOrderJson('${order.id}')">Download JSON</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-weight:700; margin-bottom:8px">Products</div>
+          ${productsHtml || '<div class="muted">No product details.</div>'}
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-weight:700; margin-bottom:8px">Delivery & Tracking</div>
+          ${trackingHtml}
+        </div>
+      `;
+    }
+
+    // ---------- Navigate to a dedicated tracking page (optional) ----------
+    function goToTracking(orderId){
+      // You can change to an internal modal instead. For now open tracking page and pass orderId.
+      location.href = `tracking.html?orderId=${encodeURIComponent(orderId)}`;
+    }
+
+    // ---------- Open printable receipt (new window) ----------
+    // Builds a clean HTML receipt and opens print dialog; user can Save as PDF.
+    async function openReceipt(orderId){
+      try {
+        // fetch latest order doc (single-get)
+        const docRef = doc(db, 'orders', orderId);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) { alert('Order not found'); return; }
+        const order = { id: snap.id, ...snap.data() };
+        const html = buildReceiptHtml(order);
+        const w = window.open('', '_blank', 'noopener,noreferrer');
+        w.document.write(html);
+        w.document.close();
+        // Give browser time to render then call print (user will see print dialog)
+        setTimeout(()=> w.print(), 600);
+      } catch (err) {
+        console.error('openReceipt error', err);
+        alert('Failed to open receipt. Check console.');
+      }
+    }
+
+    // ---------- Download JSON of order ----------
+    async function downloadOrderJson(orderId){
+      try {
+        const docRef = doc(db, 'orders', orderId);
+        const snap = await getDoc(docRef);
+        if (!snap.exists()) { alert('Order not found'); return; }
+        const order = { id: snap.id, ...snap.data() };
+        const blob = new Blob([JSON.stringify(order, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `amexan-order-${orderId}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error('downloadOrderJson error', err);
+        alert('Failed to download JSON.');
+      }
+    }
+
+    // ---------- Build printable receipt HTML (simple, clean) ----------
+    function buildReceiptHtml(order){
+      const companyName = 'Amexan';
+      const items = order.items || order.products || [];
+      const rows = items.map(p => {
+        const name = escapeHtml(p.name || p.title || '');
+        const qty = p.quantity || p.qty || 1;
+        const price = p.price ?? p.unitPrice ?? 0;
+        const line = (Number(qty) * Number(price)) || 0;
+        return `<tr>
+                  <td style="padding:6px 8px">${name}</td>
+                  <td style="padding:6px 8px; text-align:center">${qty}</td>
+                  <td style="padding:6px 8px; text-align:right">KES ${Number(price).toLocaleString()}</td>
+                  <td style="padding:6px 8px; text-align:right">KES ${line.toLocaleString()}</td>
+                </tr>`;
+      }).join('');
+
+      const totals = order.totals || {};
+      const orderId = escapeHtml(order.orderId || order.id || '');
+      const dateStr = tsToString(order.orderDate || order.createdAt || null);
+      const customer = order.customer || {};
+      return `<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Receipt ${orderId}</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;color:#111;padding:20px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  h2{margin:0;color:#1e66d0}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border-bottom:1px solid #eee;padding:8px}
+  .right{text-align:right}
+  .muted{color:#666;font-size:13px}
+  .totals{margin-top:12px;width:100%}
+  .totals td{padding:6px}
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h2>${companyName}</h2>
+      <div class="muted">Medical & Surgical Marketplace</div>
+    </div>
+    <div style="text-align:right">
+      <div>Order: <strong>${orderId}</strong></div>
+      <div class="muted">${escapeHtml(dateStr)}</div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px">
+    <div style="font-weight:600">Customer</div>
+    <div>${escapeHtml(customer.name || '')}</div>
+    <div class="muted">${escapeHtml(customer.email || '')} • ${escapeHtml(customer.phone || '')}</div>
+    <div class="muted">${escapeHtml(customer.address || '')}</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="text-align:left">Item</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit</th><th style="text-align:right">Line</th></tr>
+    </thead>
+    <tbody>
+      ${rows || '<tr><td colspan="4" class="muted">No items</td></tr>'}
+    </tbody>
+  </table>
+
+  <table class="totals" style="margin-top:12px">
+    <tr><td style="width:70%"></td><td class="right muted">Subtotal</td><td class="right">KES ${(totals.subtotal||order.subtotal||0).toLocaleString()}</td></tr>
+    <tr><td></td><td class="right muted">Shipping</td><td class="right">KES ${(totals.shipping||order.shipping||0).toLocaleString()}</td></tr>
+    <tr><td></td><td class="right" style="font-weight:700">Total</td><td class="right" style="font-weight:700">KES ${(totals.total||order.total||order.totalAmount||0).toLocaleString()}</td></tr>
+  </table>
+
+  <div style="margin-top:18px" class="muted">This is a system-generated receipt. If you need assistance, contact support@amexan.example</div>
+</body>
+</html>`;
+    }
+
+    // ---------- Helpers ----------
+    function escapeHtml(str){
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/[&<>"'`]/g, s => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'
+      }[s]));
+    }
+
+    // ---------- Wire search & status change to re-render ----------
+    searchInput.addEventListener('input', () => { renderOrders(); });
+    statusFilter.addEventListener('change', () => { renderOrders(); });
+
+    // ---------- Render simple empty UI while waiting for auth -------
+    function renderEmptyState(){
+      signedOutCard.classList.add('hidden');
+      ordersCard.classList.add('hidden');
+      ordersTbody.innerHTML = '';
+      ordersCountEl.textContent = '';
+      noOrdersEl.classList.add('hidden');
+    }
+
+    // ---------- Clean up when unloading page ----------
+    window.addEventListener('beforeunload', () => { clearOrderListeners(); });
+
+    // Expose a couple functions for buttons to call from markup
+    window.openReceipt = openReceipt;
+    window.downloadOrderJson = downloadOrderJson;
+  </script>
+</body>
+</html>

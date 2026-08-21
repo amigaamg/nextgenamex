@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Orders Panel | Amexan Medical</title>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+<link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1d4ed8',
+                        secondary: '#3b82f6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        accent: '#f97316',
+                        admin: '#6366f1',
+                        adminDark: '#4f46e5'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            min-height: 100vh;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5, #4338ca);
+            color: white;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b, #334155);
+            min-height: calc(100vh - 80px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item {
+            padding: 12px 24px;
+            margin: 4px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .status-pending { 
+            background: linear-gradient(135deg, #fef3c7, #fde68a); 
+            color: #92400e; 
+            border: 1px solid #f59e0b;
+        }
+        .status-processing { 
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
+            color: #1e40af; 
+            border: 1px solid #3b82f6;
+        }
+        .status-paid { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            color: #166534; 
+            border: 1px solid #10b981;
+        }
+        .status-shipped { 
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe); 
+            color: #4338ca; 
+            border: 1px solid #6366f1;
+        }
+        .status-delivered { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            color: #166534; 
+            border: 1px solid #10b981;
+        }
+        .status-cancelled { 
+            background: linear-gradient(135deg, #fee2e2, #fecaca); 
+            color: #dc2626; 
+            border: 1px solid #ef4444;
+        }
+        .status-refunded {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #7c3aed;
+            border: 1px solid #a855f7;
+        }
+
+        .priority-high { border-left: 4px solid #ef4444; }
+        .priority-medium { border-left: 4px solid #f59e0b; }
+        .priority-low { border-left: 4px solid #10b981; }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            font-size: 14px;
+        }
+
+        .btn-admin:hover {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .orders-table {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-header th {
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row {
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .table-row:hover {
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        .table-row td {
+            padding: 16px 12px;
+            vertical-align: middle;
+            color: #374151;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+        }
+        .notification.error { 
+            background: linear-gradient(135deg, #ef4444, #dc2626); 
+        }
+        .notification.info { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+        }
+        .notification.warning { 
+            background: linear-gradient(135deg, #f59e0b, #d97706); 
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .page-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #6366f1;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 3px solid #6366f1;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #6366f1;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white;
+        }
+
+        .timeline-item.completed::before {
+            background: #10b981;
+        }
+
+        .timeline-item.cancelled::before {
+            background: #ef4444;
+        }
+
+        .search-filter-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 80px;
+                z-index: 40;
+                width: 280px;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Hide Firebase debug info */
+        .firebase-debug, [data-firebase-debug], .firebase-warning {
+            display: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Admin Header -->
+    <header class="admin-header sticky top-0 z-40">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="md:hidden text-white mr-4">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt mr-3 text-2xl"></i>
+                        <div>
+                            <h1 class="text-2xl font-bold">Admin Panel</h1>
+                            <p class="text-sm opacity-80">Order Management System</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 text-sm">
+                        <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        <span>Real-time Updates</span>
+                    </div>
+                    <button onclick="refreshOrders()" class="btn-admin" title="Refresh Orders">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                        <div class="hidden md:block">
+                            <span class="text-sm font-medium">Admin User</span>
+                            <div class="text-xs opacity-80">System Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar w-80 flex-shrink-0">
+            <div class="p-6">
+                <nav class="space-y-2">
+                    <div class="sidebar-item active" onclick="setActiveTab('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('orders')">
+                        <i class="fas fa-box"></i>
+                        <span>All Orders</span>
+                        <span id="ordersCount" class="ml-auto bg-admin text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('pending')">
+                        <i class="fas fa-clock"></i>
+                        <span>Pending Orders</span>
+                        <span id="pendingCount" class="ml-auto bg-warning text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('processing')">
+                        <i class="fas fa-cog"></i>
+                        <span>Processing</span>
+                        <span id="processingCount" class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('shipped')">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Shipped Orders</span>
+                        <span id="shippedCount" class="ml-auto bg-admin text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('completed')">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Completed</span>
+                        <span id="completedCount" class="ml-auto bg-success text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('analytics')">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </div>
+                    <div class="sidebar-item" onclick="setActiveTab('settings')">
+                        <i class="fas fa-cogs"></i>
+                        <span>Settings</span>
+                    </div>
+                </nav>
+                
+                <div class="mt-8 p-4 bg-gradient-to-r from-admin to-adminDark rounded-xl text-white">
+                    <div class="text-sm font-medium mb-2">Quick Stats</div>
+                    <div class="text-2xl font-bold" id="todayOrdersCount">0</div>
+                    <div class="text-xs opacity-80">Orders Today</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content flex-1 ml-0 md:ml-0 p-6">
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content">
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stats-card" style="--gradient-start: #3b82f6; --gradient-end: #1d4ed8;">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Total Orders</p>
+                                <p class="text-3xl font-bold text-gray-900" id="totalOrdersStats">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-primary bg-opacity-10 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-box text-primary text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <span class="text-success font-medium">+12%</span> from last month
+                        </div>
+                    </div>
+
+                    <div class="stats-card" style="--gradient-start: #10b981; --gradient-end: #059669;">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Revenue</p>
+                                <p class="text-3xl font-bold text-gray-900" id="totalRevenueStats">KES 0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-success bg-opacity-10 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-coins text-success text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <span class="text-success font-medium">+8%</span> from last month
+                        </div>
+                    </div>
+
+                    <div class="stats-card" style="--gradient-start: #f59e0b; --gradient-end: #d97706;">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Pending</p>
+                                <p class="text-3xl font-bold text-gray-900" id="pendingOrdersStats">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-warning bg-opacity-10 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clock text-warning text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <span class="text-warning font-medium">Needs attention</span>
+                        </div>
+                    </div>
+
+                    <div class="stats-card" style="--gradient-start: #6366f1; --gradient-end: #4f46e5;">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Customers</p>
+                                <p class="text-3xl font-bold text-gray-900" id="totalCustomersStats">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-admin bg-opacity-10 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-users text-admin text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <span class="text-success font-medium">+5</span> new this week
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="orders-table">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-xl font-bold text-gray-900">Recent Orders</h3>
+                        <p class="text-gray-500">Latest orders requiring attention</p>
+                    </div>
+                    <div id="dashboardOrdersList">
+                        <!-- Recent orders will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div id="ordersTab" class="tab-content hidden">
+                <!-- Search and Filters -->
+                <div class="search-filter-bar">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="md:col-span-2">
+                            <label for="searchOrders" class="block text-sm font-semibold text-gray-700 mb-2">Search Orders</label>
+                            <input 
+                                type="text" 
+                                id="searchOrders" 
+                                placeholder="Search by order ID, customer, product..."
+                                class="form-input"
+                                onkeyup="handleOrderSearch(this.value)"
+                            >
+                        </div>
+                        <div>
+                            <label for="statusFilter" class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                            <select id="statusFilter" class="form-select" onchange="handleStatusFilter(this.value)">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending Payment</option>
+                                <option value="paid">Paid</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="dateFilter" class="block text-sm font-semibold text-gray-700 mb-2">Date Range</label>
+                            <select id="dateFilter" class="form-select" onchange="handleDateFilter(this.value)">
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="bulkUpdateStatus('processing')" class="btn-admin">
+                            <i class="fas fa-cog"></i> Bulk Process
+                        </button>
+                        <button onclick="bulkUpdateStatus('shipped')" class="btn-success">
+                            <i class="fas fa-shipping-fast"></i> Bulk Ship
+                        </button>
+                        <button onclick="exportOrders()" class="btn-warning">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <button onclick="printOrders()" class="btn-admin">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="orders-table">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" class="rounded">
+                                </th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Amount</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Loading/Error States -->
+                <div id="ordersLoading" class="text-center py-20">
+                    <div class="page-spinner loading-spinner mx-auto mb-6"></div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Loading Orders</h3>
+                    <p class="text-gray-500">Fetching the latest order data...</p>
+                </div>
+
+                <div id="ordersEmpty" class="text-center py-20 hidden">
+                    <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <i class="fas fa-inbox text-gray-400 text-5xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">No Orders Found</h3>
+                    <p class="text-gray-500 mb-8 max-w-md mx-auto">No orders match your current filter criteria.</p>
+                </div>
+            </div>
+
+            <!-- Other Tabs -->
+            <div id="pendingTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Pending Orders</h2>
+                    <p class="text-gray-600">Orders awaiting payment confirmation</p>
+                </div>
+                <div id="pendingOrdersList"></div>
+            </div>
+
+            <div id="processingTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Processing Orders</h2>
+                    <p class="text-gray-600">Orders being prepared for shipment</p>
+                </div>
+                <div id="processingOrdersList"></div>
+            </div>
+
+            <div id="shippedTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Shipped Orders</h2>
+                    <p class="text-gray-600">Orders in transit to customers</p>
+                </div>
+                <div id="shippedOrdersList"></div>
+            </div>
+
+            <div id="completedTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Completed Orders</h2>
+                    <p class="text-gray-600">Successfully delivered orders</p>
+                </div>
+                <div id="completedOrdersList"></div>
+            </div>
+
+            <div id="analyticsTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Analytics & Reports</h2>
+                    <p class="text-gray-600">Order insights and performance metrics</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="stats-card">
+                        <h3 class="text-lg font-bold mb-4">Order Status Distribution</h3>
+                        <div id="statusChart" class="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+                            <p class="text-gray-500">Chart will be rendered here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <h3 class="text-lg font-bold mb-4">Revenue Trends</h3>
+                        <div id="revenueChart" class="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+                            <p class="text-gray-500">Chart will be rendered here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settingsTab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Admin Settings</h2>
+                    <p class="text-gray-600">Configure order management preferences</p>
+                </div>
+                
+                <div class="stats-card">
+                    <h3 class="text-lg font-bold mb-4">Notification Settings</h3>
+                    <div class="space-y-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded mr-3" checked>
+                            <span>Email notifications for new orders</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded mr-3" checked>
+                            <span>SMS alerts for urgent orders</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded mr-3">
+                            <span>Daily summary reports</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center z-10">
+                <h2 id="orderModalTitle" class="text-2xl font-bold text-gray-900">Order Details</h2>
+                <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="orderModalContent" class="p-6">
+                <!-- Order details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content max-w-md">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-bold">Update Order Status</h3>
+            </div>
+            <div class="p-6">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
+                    <select id="paymentStatusSelect" class="form-select">
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
+                        <option value="failed">Failed</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Order Status</label>
+                    <select id="orderStatusSelect" class="form-select">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tracking Number (Optional)</label>
+                    <input type="text" id="trackingNumberInput" class="form-input" placeholder="Enter tracking number">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes</label>
+                    <textarea id="adminNotesInput" class="form-input" rows="3" placeholder="Add internal notes..."></textarea>
+                </div>
+                <div class="flex gap-3 justify-end">
+                    <button onclick="closeStatusModal()" class="btn-secondary">Cancel</button>
+                    <button onclick="saveStatusUpdate()" class="btn-admin">Update Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Action Modal -->
+    <div id="bulkModal" class="modal">
+        <div class="modal-content max-w-md">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-bold">Bulk Action</h3>
+            </div>
+            <div class="p-6">
+                <p class="mb-4">Selected <span id="selectedCount">0</span> orders for bulk update.</p>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">New Status</label>
+                    <select id="bulkStatusSelect" class="form-select">
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 justify-end">
+                    <button onclick="closeBulkModal()" class="btn-secondary">Cancel</button>
+                    <button onclick="saveBulkUpdate()" class="btn-admin">Update Orders</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Hide Firebase console warnings
+        const originalConsole = console;
+        const hiddenMethods = ['warn', 'log', 'debug', 'info'];
+        hiddenMethods.forEach(method => {
+            console[method] = function(...args) {
+                const message = args.join(' ');
+                if (!message.includes('Firebase') && !message.includes('firestore') && !message.includes('auth')) {
+                    originalConsole[method](...args);
+                }
+            };
+        });
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc,
+            getDocs,
+            getDoc,
+            updateDoc,
+            onSnapshot,
+            query,
+            where,
+            orderBy,
+            serverTimestamp,
+            writeBatch
+        } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCet4LIMVEHc8w1hrHhrFvg-Zw-9H7TN-k",
+            authDomain: "bynexproject.firebaseapp.com",
+            projectId: "bynexproject",
+            storageBucket: "bynexproject.firebasestorage.app",
+            messagingSenderId: "667246369908",
+            appId: "1:667246369908:web:1cbbbe51da7673246c8521",
+            measurementId: "G-7CCRBG0P8D"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Make Firebase services globally available
+        window.db = db;
+        window.firebaseImports = {
+            collection, doc, getDocs, getDoc, updateDoc, onSnapshot,
+            query, where, orderBy, serverTimestamp, writeBatch
+        };
+
+        console.log('Firebase initialized for admin panel');
+    </script>
+
+    <!-- Admin Application Logic -->
+    <script>
+        // ==================== GLOBAL VARIABLES ====================
+        let allOrders = [];
+        let filteredOrders = [];
+        let selectedOrders = new Set();
+        let currentOrderId = null;
+        let activeTab = 'dashboard';
+        let searchQuery = '';
+        let statusFilter = 'all';
+        let dateFilter = 'all';
+        let ordersListener = null;
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function showNotification(message, type = 'info', duration = 4000) {
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${icons[type]} mr-3 text-lg"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 400);
+            }, duration);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-KE', {
+                style: 'currency',
+                currency: 'KES'
+            }).format(amount || 0);
+        }
+
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            const dateObj = date.toDate ? date.toDate() : new Date(date);
+            return dateObj.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function getStatusColor(status) {
+            const statusMap = {
+                'pending': 'warning',
+                'paid': 'success',
+                'processing': 'primary',
+                'shipped': 'admin',
+                'delivered': 'success',
+                'cancelled': 'danger',
+                'refunded': 'purple'
+            };
+            return statusMap[status?.toLowerCase()] || 'secondary';
+        }
+
+        function getCustomerName(customerInfo) {
+            if (!customerInfo) return 'Unknown Customer';
+            
+            const firstName = customerInfo.firstName || '';
+            const lastName = customerInfo.lastName || '';
+            const name = customerInfo.name || '';
+            
+            if (firstName && lastName) {
+                return `${firstName} ${lastName}`;
+            } else if (name) {
+                return name;
+            } else {
+                return 'Unknown Customer';
+            }
+        }
+
+        // ==================== TAB MANAGEMENT ====================
+        function setActiveTab(tab) {
+            // Update sidebar
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event?.target?.classList.add('active') || 
+            document.querySelector(`[onclick="setActiveTab('${tab}')"]`)?.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tab}Tab`).classList.remove('hidden');
+
+            activeTab = tab;
+
+            // Load tab-specific content
+            switch(tab) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'orders':
+                    renderOrdersTable();
+                    break;
+                case 'pending':
+                    renderFilteredOrders('pending');
+                    break;
+                case 'processing':
+                    renderFilteredOrders('processing');
+                    break;
+                case 'shipped':
+                    renderFilteredOrders('shipped');
+                    break;
+                case 'completed':
+                    renderFilteredOrders('delivered');
+                    break;
+            }
+
+            // Close mobile sidebar
+            closeMobileSidebar();
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        function closeMobileSidebar() {
+            document.getElementById('sidebar').classList.remove('show');
+        }
+
+        // ==================== DATA LOADING ====================
+        async function loadOrders() {
+            try {
+                // If we already have a listener, remove it
+                if (ordersListener) {
+                    ordersListener();
+                }
+
+                const ordersRef = window.firebaseImports.collection(db, 'orders');
+                const q = window.firebaseImports.query(
+                    ordersRef,
+                    window.firebaseImports.orderBy('orderDate', 'desc')
+                );
+
+                showNotification('Connecting to Firestore...', 'info');
+                document.getElementById('ordersLoading').classList.remove('hidden');
+                document.getElementById('ordersEmpty').classList.add('hidden');
+
+                ordersListener = window.firebaseImports.onSnapshot(q, (querySnapshot) => {
+                    const orders = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        orders.push({ 
+                            id: doc.id, 
+                            ...data 
+                        });
+                    });
+
+                    allOrders = orders;
+                    applyFilters();
+                    updateStatistics();
+                    updateSidebarCounts();
+                    
+                    document.getElementById('ordersLoading').classList.add('hidden');
+                    
+                    if (activeTab === 'dashboard') {
+                        loadDashboardData();
+                    }
+                    
+                    showNotification(`Loaded ${orders.length} orders from Firestore`, 'success');
+                    
+                }, (error) => {
+                    console.error('Error loading orders:', error);
+                    document.getElementById('ordersLoading').classList.add('hidden');
+                    showNotification('Error loading orders: ' + error.message, 'error');
+                });
+
+            } catch (error) {
+                console.error('Error setting up orders listener:', error);
+                document.getElementById('ordersLoading').classList.add('hidden');
+                showNotification('Error setting up real-time updates', 'error');
+            }
+        }
+
+        function applyFilters() {
+            let filtered = [...allOrders];
+
+            // Search filter
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filtered = filtered.filter(order => {
+                    return (order.orderId?.toLowerCase().includes(query)) ||
+                           (order.id?.toLowerCase().includes(query)) ||
+                           (getCustomerName(order.customerInfo).toLowerCase().includes(query)) ||
+                           (order.customerInfo?.email?.toLowerCase().includes(query)) ||
+                           (order.items?.some(item => item.name?.toLowerCase().includes(query)));
+                });
+            }
+
+            // Status filter
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(order => {
+                    const paymentStatus = order.paymentStatus?.toLowerCase();
+                    const orderStatus = order.orderStatus?.toLowerCase();
+                    return paymentStatus === statusFilter || orderStatus === statusFilter;
+                });
+            }
+
+            // Date filter
+            if (dateFilter !== 'all') {
+                const now = new Date();
+                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const startOfWeek = new Date(startOfDay);
+                startOfWeek.setDate(startOfDay.getDate() - startOfDay.getDay());
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+                filtered = filtered.filter(order => {
+                    const orderDate = order.orderDate?.toDate ? order.orderDate.toDate() : new Date(order.orderDate);
+                    
+                    switch(dateFilter) {
+                        case 'today':
+                            return orderDate >= startOfDay;
+                        case 'week':
+                            return orderDate >= startOfWeek;
+                        case 'month':
+                            return orderDate >= startOfMonth;
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            filteredOrders = filtered;
+        }
+
+        function updateStatistics() {
+            const totalOrders = allOrders.length;
+            const totalRevenue = allOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+            const pendingOrders = allOrders.filter(order => 
+                order.paymentStatus?.toLowerCase() === 'pending' || 
+                order.orderStatus?.toLowerCase() === 'pending'
+            ).length;
+            
+            const uniqueCustomers = new Set(allOrders.map(order => order.customerInfo?.email)).size;
+
+            document.getElementById('totalOrdersStats').textContent = totalOrders;
+            document.getElementById('totalRevenueStats').textContent = formatCurrency(totalRevenue);
+            document.getElementById('pendingOrdersStats').textContent = pendingOrders;
+            document.getElementById('totalCustomersStats').textContent = uniqueCustomers;
+
+            // Today's orders
+            const today = new Date();
+            const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const todayOrders = allOrders.filter(order => {
+                const orderDate = order.orderDate?.toDate ? order.orderDate.toDate() : new Date(order.orderDate);
+                return orderDate >= startOfDay;
+            }).length;
+            
+            document.getElementById('todayOrdersCount').textContent = todayOrders;
+        }
+
+        function updateSidebarCounts() {
+            const counts = {
+                orders: allOrders.length,
+                pending: allOrders.filter(o => 
+                    o.paymentStatus?.toLowerCase() === 'pending' || 
+                    o.orderStatus?.toLowerCase() === 'pending'
+                ).length,
+                processing: allOrders.filter(o => o.orderStatus?.toLowerCase() === 'processing').length,
+                shipped: allOrders.filter(o => o.orderStatus?.toLowerCase() === 'shipped').length,
+                completed: allOrders.filter(o => o.orderStatus?.toLowerCase() === 'delivered').length
+            };
+
+            Object.entries(counts).forEach(([key, count]) => {
+                const element = document.getElementById(`${key}Count`);
+                if (element) {
+                    element.textContent = count;
+                }
+            });
+        }
+
+        function loadDashboardData() {
+            const recentOrders = allOrders.slice(0, 10);
+            const dashboardList = document.getElementById('dashboardOrdersList');
+            
+            if (recentOrders.length === 0) {
+                dashboardList.innerHTML = `
+                    <div class="p-12 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl mb-4 block"></i>
+                        <p>No recent orders to display</p>
+                    </div>
+                `;
+                return;
+            }
+
+            dashboardList.innerHTML = recentOrders.map(order => {
+                const customerName = getCustomerName(order.customerInfo);
+                const orderId = order.orderId || order.id;
+                const itemCount = order.items?.length || 0;
+                
+                return `
+                    <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="viewOrderDetails('${order.id}')">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-admin to-adminDark rounded-xl flex items-center justify-center text-white font-bold">
+                                    ${customerName.charAt(0)}
+                                </div>
+                               
+<td>
+    <div class="font-semibold text-gray-900">${getCustomerName(order.customer)}</div>
+    <div class="text-sm text-gray-500">${order.customer?.email || 'N/A'}</div>
+    <div class="text-sm text-gray-500">${order.customer?.phone || 'N/A'}</div>
+</td>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-lg">${formatCurrency(order.totalAmount)}</div>
+                                <div class="flex gap-2 mt-1">
+                                    <span class="status-badge status-${order.paymentStatus?.toLowerCase()}">${order.paymentStatus}</span>
+                                    <span class="status-badge status-${order.orderStatus?.toLowerCase()}">${order.orderStatus}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== TABLE RENDERING ====================
+        function renderOrdersTable() {
+            const tableBody = document.getElementById('ordersTableBody');
+            const loading = document.getElementById('ordersLoading');
+            const empty = document.getElementById('ordersEmpty');
+
+            // Hide loading and empty states
+            loading.classList.add('hidden');
+            empty.classList.add('hidden');
+
+            if (filteredOrders.length === 0) {
+                empty.classList.remove('hidden');
+                tableBody.innerHTML = '';
+                return;
+            }
+
+            tableBody.innerHTML = filteredOrders.map(order => {
+                const customerName = getCustomerName(order.customerInfo);
+                const orderId = order.orderId || order.id;
+                const itemCount = order.items?.length || 0;
+                const isSelected = selectedOrders.has(order.id);
+                
+                return `
+                    <tr class="table-row ${isSelected ? 'bg-blue-50' : ''}" data-order-id="${order.id}">
+                        <td>
+                            <input type="checkbox" class="order-checkbox rounded" 
+                                   ${isSelected ? 'checked' : ''} 
+                                   onchange="toggleOrderSelection('${order.id}')">
+                        </td>
+                        <td>
+                            <div class="font-mono font-bold text-admin cursor-pointer" onclick="viewOrderDetails('${order.id}')">
+                                #${orderId}
+                            </div>
+                        </td>
+                     
+    <div class="font-semibold text-gray-900">${getCustomerName(order.customer)}</div>
+    <div class="text-sm text-gray-500">${order.customer?.email || 'N/A'}</div>
+    <div class="text-sm text-gray-500">${order.customer?.phone || 'N/A'}</div>
+</td>
+                        <td class="text-gray-600">${formatDate(order.orderDate)}</td>
+                        <td class="text-center font-semibold">${itemCount}</td>
+                        <td class="font-bold text-lg">${formatCurrency(order.totalAmount)}</td>
+                        <td>
+                            <span class="status-badge status-${order.paymentStatus?.toLowerCase() || 'pending'}" 
+                                  onclick="updateOrderStatus('${order.id}')">
+                                ${order.paymentStatus || 'Pending'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-${order.orderStatus?.toLowerCase() || 'processing'}" 
+                                  onclick="updateOrderStatus('${order.id}')">
+                                ${order.orderStatus || 'Processing'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex gap-1">
+                                <button onclick="viewOrderDetails('${order.id}')" class="btn-admin" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="updateOrderStatus('${order.id}')" class="btn-success" title="Update Status">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="printOrderLabel('${order.id}')" class="btn-warning" title="Print Label">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderFilteredOrders(status) {
+            const filtered = allOrders.filter(order => {
+                const paymentStatus = order.paymentStatus?.toLowerCase();
+                const orderStatus = order.orderStatus?.toLowerCase();
+                return paymentStatus === status || orderStatus === status;
+            });
+
+            const containerId = `${status}OrdersList`;
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20">
+                        <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <i class="fas fa-inbox text-gray-400 text-5xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">No ${status.charAt(0).toUpperCase() + status.slice(1)} Orders</h3>
+                        <p class="text-gray-500">No orders with ${status} status found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="orders-table">
+                    <table class="w-full">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filtered.map(order => {
+                                const customerName = getCustomerName(order.customerInfo);
+                                const orderId = order.orderId || order.id;
+                                const itemCount = order.items?.length || 0;
+                                
+                                return `
+                                    <tr class="table-row">
+                                        <td class="font-mono font-bold text-admin">#${orderId}</td>
+                                   
+    <div class="font-semibold text-gray-900">${getCustomerName(order.customer)}</div>
+    <div class="text-sm text-gray-500">${order.customer?.email || 'N/A'}</div>
+    <div class="text-sm text-gray-500">${order.customer?.phone || 'N/A'}</div>
+</td>
+                                        <td class="text-gray-600">${formatDate(order.orderDate)}</td>
+                                        <td class="text-center font-semibold">${itemCount}</td>
+                                        <td class="font-bold text-lg">${formatCurrency(order.totalAmount)}</td>
+                                        <td>
+                                            <span class="status-badge status-${order.orderStatus?.toLowerCase() || 'processing'}">
+                                                ${order.orderStatus || 'Processing'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="flex gap-1">
+                                                <button onclick="viewOrderDetails('${order.id}')" class="btn-admin">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button onclick="updateOrderStatus('${order.id}')" class="btn-success">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // ==================== ORDER MANAGEMENT ====================
+        function viewOrderDetails(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            currentOrderId = orderId;
+            const modal = document.getElementById('orderModal');
+            const title = document.getElementById('orderModalTitle');
+            const content = document.getElementById('orderModalContent');
+            
+            const customerInfo = order.customerInfo || {};
+            const customerName = getCustomerName(customerInfo);
+            const shippingAddress = customerInfo.shippingAddress || customerInfo.address || 'Not provided';
+            
+            title.textContent = `Order #${order.orderId || order.id}`;
+            
+            content.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="text-lg font-bold mb-4">Customer Information</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Name:</span>
+                                <span class="font-semibold">${customerName}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Email:</span>
+                                <span class="font-semibold">${customerInfo.email || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Phone:</span>
+                                <span class="font-semibold">${customerInfo.phone || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Shipping Address:</span>
+                                <span class="font-semibold text-right max-w-xs">${shippingAddress}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Order Date:</span>
+                                <span class="font-semibold">${formatDate(order.orderDate)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Payment Status:</span>
+                                <span class="status-badge status-${order.paymentStatus?.toLowerCase()}">${order.paymentStatus}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Order Status:</span>
+                                <span class="status-badge status-${order.orderStatus?.toLowerCase()}">${order.orderStatus}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Payment Method:</span>
+                                <span class="font-semibold">${order.paymentMethod || 'N/A'}</span>
+                            </div>
+                            ${order.trackingNumber ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Tracking Number:</span>
+                                <span class="font-semibold">${order.trackingNumber}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-xl mb-6">
+                    <h3 class="text-lg font-bold mb-4">Order Items</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="text-left p-3">Product</th>
+                                    <th class="text-right p-3">Price</th>
+                                    <th class="text-center p-3">Qty</th>
+                                    <th class="text-right p-3">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${(order.items || []).map(item => `
+                                    <tr>
+                                        <td class="p-3 border-b border-gray-200">
+                                            <div class="font-semibold">${item.name}</div>
+                                            <div class="text-sm text-gray-500">${item.brand || ''} ${item.category ? '• ' + item.category : ''}</div>
+                                        </td>
+                                        <td class="p-3 border-b border-gray-200 text-right">${formatCurrency(item.price)}</td>
+                                        <td class="p-3 border-b border-gray-200 text-center">${item.quantity}</td>
+                                        <td class="p-3 border-b border-gray-200 text-right font-semibold">${formatCurrency(item.price * item.quantity)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="p-3 text-right font-semibold">Subtotal:</td>
+                                    <td class="p-3 text-right">${formatCurrency(order.subtotal || order.totalAmount)}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="p-3 text-right font-semibold">Shipping:</td>
+                                    <td class="p-3 text-right">${formatCurrency(order.shippingCost || 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="p-3 text-right font-semibold">Tax:</td>
+                                    <td class="p-3 text-right">${formatCurrency(order.tax || 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="p-3 text-right font-bold text-lg">Total:</td>
+                                    <td class="p-3 text-right font-bold text-lg text-success">${formatCurrency(order.totalAmount)}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-bold mb-4">Shipping & Notes</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 font-medium">Delivery Method:</span>
+                            <span class="font-semibold">${order.deliveryMethod || 'Standard'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500 font-medium">Estimated Delivery:</span>
+                            <span class="font-semibold">${order.estimatedDelivery || 'TBD'}</span>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="font-medium text-gray-500 mb-2">Customer Notes:</h4>
+                            <p class="bg-white p-4 rounded-lg">${order.deliveryNotes || order.notes || 'No special instructions provided'}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-3 mt-8">
+                    <button onclick="printOrderDetails('${order.id}')" class="btn-admin">
+                        <i class="fas fa-print mr-2"></i> Print Order
+                    </button>
+                    <button onclick="updateOrderStatus('${order.id}')" class="btn-success">
+                        <i class="fas fa-edit mr-2"></i> Update Status
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('show');
+        }
+
+        function updateOrderStatus(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            currentOrderId = orderId;
+            const modal = document.getElementById('statusModal');
+            const paymentSelect = document.getElementById('paymentStatusSelect');
+            const statusSelect = document.getElementById('orderStatusSelect');
+            const trackingInput = document.getElementById('trackingNumberInput');
+            const notesInput = document.getElementById('adminNotesInput');
+            
+            // Set current values
+            paymentSelect.value = order.paymentStatus?.toLowerCase() || 'pending';
+            statusSelect.value = order.orderStatus?.toLowerCase() || 'pending';
+            trackingInput.value = order.trackingNumber || '';
+            notesInput.value = '';
+            
+            modal.classList.add('show');
+        }
+
+        function closeStatusModal() {
+            document.getElementById('statusModal').classList.remove('show');
+        }
+
+        async function saveStatusUpdate() {
+            const paymentStatus = document.getElementById('paymentStatusSelect').value;
+            const orderStatus = document.getElementById('orderStatusSelect').value;
+            const trackingNumber = document.getElementById('trackingNumberInput').value;
+            const adminNotes = document.getElementById('adminNotesInput').value;
+            
+            if (!currentOrderId) return;
+            
+            try {
+                // Update the order in Firestore
+                const orderRef = window.firebaseImports.doc(db, 'orders', currentOrderId);
+                
+                const updateData = {
+                    paymentStatus: paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1),
+                    orderStatus: orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1),
+                    updatedAt: window.firebaseImports.serverTimestamp()
+                };
+                
+                if (trackingNumber) {
+                    updateData.trackingNumber = trackingNumber;
+                }
+                
+                // Add admin note to order history
+                if (adminNotes) {
+                    if (!updateData.adminNotes) updateData.adminNotes = [];
+                    updateData.adminNotes.push({
+                        note: adminNotes,
+                        date: new Date().toISOString(),
+                        admin: "Admin User"
+                    });
+                }
+                
+                await window.firebaseImports.updateDoc(orderRef, updateData);
+                
+                showNotification('Order status updated successfully', 'success');
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                showNotification('Error updating order: ' + error.message, 'error');
+            }
+            
+            closeStatusModal();
+        }
+
+        function toggleOrderSelection(orderId) {
+            if (selectedOrders.has(orderId)) {
+                selectedOrders.delete(orderId);
+            } else {
+                selectedOrders.add(orderId);
+            }
+            
+            // Update UI
+            const row = document.querySelector(`[data-order-id="${orderId}"]`);
+            if (row) {
+                if (selectedOrders.has(orderId)) {
+                    row.classList.add('bg-blue-50');
+                } else {
+                    row.classList.remove('bg-blue-50');
+                }
+            }
+            
+            // Update select all checkbox
+            document.getElementById('selectAll').checked = selectedOrders.size === filteredOrders.length;
+            
+            // Update bulk action button text
+            document.getElementById('selectedCount').textContent = selectedOrders.size;
+        }
+
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll').checked;
+            
+            if (selectAll) {
+                filteredOrders.forEach(order => selectedOrders.add(order.id));
+            } else {
+                selectedOrders.clear();
+            }
+            
+            // Update UI
+            renderOrdersTable();
+            document.getElementById('selectedCount').textContent = selectedOrders.size;
+        }
+
+        function bulkUpdateStatus() {
+            if (selectedOrders.size === 0) {
+                showNotification('Please select orders to update', 'warning');
+                return;
+            }
+            
+            document.getElementById('bulkModal').classList.add('show');
+        }
+
+        function closeBulkModal() {
+            document.getElementById('bulkModal').classList.remove('show');
+        }
+
+        async function saveBulkUpdate() {
+            const status = document.getElementById('bulkStatusSelect').value;
+            const newStatus = status.charAt(0).toUpperCase() + status.slice(1);
+            
+            try {
+                // Create a write batch
+                const batch = window.firebaseImports.writeBatch(db);
+                
+                selectedOrders.forEach(orderId => {
+                    const orderRef = window.firebaseImports.doc(db, 'orders', orderId);
+                    batch.update(orderRef, {
+                        orderStatus: newStatus,
+                        updatedAt: window.firebaseImports.serverTimestamp()
+                    });
+                });
+                
+                // Commit the batch
+                await batch.commit();
+                
+                showNotification(`Updated ${selectedOrders.size} orders to ${newStatus}`, 'success');
+                
+                // Clear selection
+                selectedOrders.clear();
+                
+                // Update UI
+                renderOrdersTable();
+                
+            } catch (error) {
+                console.error('Error updating orders in bulk:', error);
+                showNotification('Error updating orders: ' + error.message, 'error');
+            }
+            
+            closeBulkModal();
+        }
+
+        function refreshOrders() {
+            showNotification('Refreshing orders...', 'info');
+            loadOrders();
+        }
+
+        function handleOrderSearch(query) {
+            searchQuery = query;
+            applyFilters();
+            
+            if (activeTab === 'orders') {
+                renderOrdersTable();
+            }
+        }
+
+        function handleStatusFilter(status) {
+            statusFilter = status;
+            applyFilters();
+            
+            if (activeTab === 'orders') {
+                renderOrdersTable();
+            }
+        }
+
+        function handleDateFilter(range) {
+            dateFilter = range;
+            applyFilters();
+            
+            if (activeTab === 'orders') {
+                renderOrdersTable();
+            }
+        }
+
+        function printOrderLabel(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            showNotification(`Printing shipping label for order ${order.orderId || order.id}`, 'info');
+        }
+
+        function printOrderDetails(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            showNotification(`Printing order details for order ${order.orderId || order.id}`, 'info');
+        }
+
+        function exportOrders() {
+            showNotification('Exporting orders to CSV...', 'info');
+        }
+
+        function printOrders() {
+            showNotification('Printing orders...', 'info');
+        }
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin orders panel initialized');
+            
+            // Set up event listeners
+            document.getElementById('sidebarToggle').addEventListener('click', toggleMobileSidebar);
+            
+            // Load initial data
+            loadOrders();
+            
+            // Set active tab
+            setActiveTab('dashboard');
+            
+            // Close modals on outside click
+            document.getElementById('orderModal').addEventListener('click', function(e) {
+                if (e.target === this) closeOrderModal();
+            });
+            
+            document.getElementById('statusModal').addEventListener('click', function(e) {
+                if (e.target === this) closeStatusModal();
+            });
+            
+            document.getElementById('bulkModal').addEventListener('click', function(e) {
+                if (e.target === this) closeBulkModal();
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeOrderModal();
+                    closeStatusModal();
+                    closeBulkModal();
+                }
+            });
+        });
+        function viewOrderDetails(orderId) {
+    const order = allOrders.find(o => o.id === orderId);
+    if (!order) return;
+
+    currentOrderId = orderId;
+    const modal = document.getElementById('orderModal');
+    const title = document.getElementById('orderModalTitle');
+    const content = document.getElementById('orderModalContent');
+    
+    // PROPERLY ACCESS CUSTOMER INFORMATION
+    const customer = order.customer || {};
+    const shipping = order.shipping || {};
+    
+    const customerName = `${customer.firstName || ''} ${customer.lastName || ''}`.trim() || 'Unknown Customer';
+    const shippingAddress = shipping.address || 'Not provided';
+    const shippingNotes = shipping.notes || 'No special instructions provided';
+    
+    title.textContent = `Order #${order.orderId || order.id}`;
+    
+    content.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-gray-50 p-6 rounded-xl">
+                <h3 class="text-lg font-bold mb-4">Customer Information</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Name:</span>
+                        <span class="font-semibold">${customerName}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Email:</span>
+                        <span class="font-semibold">${customer.email || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Phone:</span>
+                        <span class="font-semibold">${customer.phone || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Shipping Address:</span>
+                        <span class="font-semibold text-right max-w-xs">${shippingAddress}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-xl">
+                <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Order Date:</span>
+                        <span class="font-semibold">${formatDate(order.orderDate)}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Payment Status:</span>
+                        <span class="status-badge status-${order.paymentStatus?.toLowerCase()}">${order.paymentStatus}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Order Status:</span>
+                        <span class="status-badge status-${order.trackingStatus?.toLowerCase()}">${order.trackingStatus}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Payment Method:</span>
+                        <span class="font-semibold">${order.paymentMethod || 'N/A'}</span>
+                    </div>
+                    ${order.trackingNumber ? `
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 font-medium">Tracking Number:</span>
+                        <span class="font-semibold">${order.trackingNumber}</span>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gray-50 p-6 rounded-xl mb-6">
+            <h3 class="text-lg font-bold mb-4">Order Items</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="text-left p-3">Product</th>
+                            <th class="text-right p-3">Price</th>
+                            <th class="text-center p-3">Qty</th>
+                            <th class="text-right p-3">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(order.products || []).map(item => `
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">
+                                    <div class="font-semibold">${item.name}</div>
+                                    ${item.image ? `<img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain mt-2">` : ''}
+                                </td>
+                                <td class="p-3 border-b border-gray-200 text-right">${formatCurrency(item.price)}</td>
+                                <td class="p-3 border-b border-gray-200 text-center">${item.quantity}</td>
+                                <td class="p-3 border-b border-gray-200 text-right font-semibold">${formatCurrency(item.price * item.quantity)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="p-3 text-right font-semibold">Subtotal:</td>
+                            <td class="p-3 text-right">${formatCurrency(order.subtotal || order.totalAmount)}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="p-3 text-right font-semibold">Shipping:</td>
+                            <td class="p-3 text-right">${formatCurrency(order.shippingCost || 0)}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="p-3 text-right font-semibold">Tax:</td>
+                            <td class="p-3 text-right">${formatCurrency(order.tax || 0)}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="p-3 text-right font-bold text-lg">Total:</td>
+                            <td class="p-3 text-right font-bold text-lg text-success">${formatCurrency(order.totalAmount)}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        <div class="bg-gray-50 p-6 rounded-xl">
+            <h3 class="text-lg font-bold mb-4">Shipping & Notes</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-500 font-medium">Shipping Cost:</span>
+                    <span class="font-semibold">${formatCurrency(order.shippingCost || 0)}</span>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-medium text-gray-500 mb-2">Customer Notes:</h4>
+                    <p class="bg-white p-4 rounded-lg">${shippingNotes}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 mt-8">
+            <button onclick="printOrderDetails('${order.id}')" class="btn-admin">
+                <i class="fas fa-print mr-2"></i> Print Order
+            </button>
+            <button onclick="updateOrderStatus('${order.id}')" class="btn-success">
+                <i class="fas fa-edit mr-2"></i> Update Status
+            </button>
+        </div>
+    `;
+    
+    modal.classList.add('show');
+}
+
+        // Make functions globally available
+        window.setActiveTab = setActiveTab;
+        window.viewOrderDetails = viewOrderDetails;
+        window.closeOrderModal = closeOrderModal;
+        window.updateOrderStatus = updateOrderStatus;
+        window.closeStatusModal = closeStatusModal;
+        window.saveStatusUpdate = saveStatusUpdate;
+        window.toggleOrderSelection = toggleOrderSelection;
+        window.toggleSelectAll = toggleSelectAll;
+        window.bulkUpdateStatus = bulkUpdateStatus;
+        window.closeBulkModal = closeBulkModal;
+        window.saveBulkUpdate = saveBulkUpdate;
+        window.refreshOrders = refreshOrders;
+        window.handleOrderSearch = handleOrderSearch;
+        window.handleStatusFilter = handleStatusFilter;
+        window.handleDateFilter = handleDateFilter;
+        window.printOrderLabel = printOrderLabel;
+        window.printOrderDetails = printOrderDetails;
+        window.exportOrders = exportOrders;
+        window.printOrders = printOrders;
+    </script>
+</body>
+</html>

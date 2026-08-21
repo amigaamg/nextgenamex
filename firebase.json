@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/", "destination": "/index.html" },
+      { "source": "/login", "destination": "/login.html" },
+      { "source": "/register", "destination": "/regi.html" },
+      { "source": "/dashboard", "destination": "/dashboard.html" },
+      { "source": "/verify", "destination": "/verify.html" },
+      { "source": "/reset", "destination": "/reset.html" },
+      { "source": "/student", "destination": "/student.html" },
+      { "source": "/checkout", "destination": "/checkout.html" },
+      { "source": "/cart", "destination": "/cart.html" },
+      { "source": "/history", "destination": "/history.html" },
+      { "source": "/product", "destination": "/product.html" },
+      { "source": "/user-package", "destination": "/user-package.html" },
+      { "source": "/pack-orders", "destination": "/pack-orders.html" }
+    ]
+  }
+}
