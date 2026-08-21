@@ -40,7 +40,7 @@ import type {
 // API CONFIGURATION
 // =============================================================================
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '/api';
 
 const ENDPOINTS = {
   encounters: '/clinical/encounters',
