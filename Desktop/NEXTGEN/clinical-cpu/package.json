@@ -10,12 +10,13 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "build": "tsc -p tsconfig.json",
+    "start": "node dist/server/server.js",
+    "dev": "tsx server/server.ts",
     "benchmark": "tsx test/benchmark.ts",
     "verify:governance": "tsx test/verify-governance-runtime.ts",
     "verify:replay": "tsx test/verify-replay.ts",
     "verify:paediatric": "tsx test/verify-live-paediatric.ts",
-    "verify:universal": "tsx test/verify-universal-formats.ts",
-    "server": "tsx server/server.ts"
+    "verify:universal": "tsx test/verify-universal-formats.ts"
   },
   "dependencies": {
     "pg": "^8.13.1"
